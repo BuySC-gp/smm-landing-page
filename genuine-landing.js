@@ -673,6 +673,101 @@ window.addEventListener('load', function() {
     </div>
   </div>
 </div>
+
+        <!-- WHY GENUINE PROMOTION - PREMIUM OPTIMIZED -->
+    <div style="background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%); padding: 100px 20px; position: relative;">
+      <div style="max-width: 1400px; margin: 0 auto;">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 70px;">
+          <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,166,126,0.1)); border-radius: 50px; margin-bottom: 20px; border: 1px solid rgba(0,102,255,0.15);">
+            <span style="font-size: 13px; font-weight: 600; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-transform: uppercase; letter-spacing: 0.05em;">Why Choose Us</span>
+          </div>
+          <h2 style="font-size: 48px; font-weight: 700; margin-bottom: 20px; color: #1a1a1a; line-height: 1.2;">Why <span style="background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Genuine Promotion</span> Leads the Industry</h2>
+          <p style="font-size: 18px; color: #666; max-width: 600px; margin: 0 auto; line-height: 1.6;">Trusted by 2,500+ agencies and creators worldwide</p>
+        </div>
+        
+        <!-- Grid 3 colonnes -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 60px;">
+          
+          <!-- Card 1 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">Instant Order Processing</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">Orders start within 60 seconds. Our infrastructure processes 12,000+ concurrent orders without delays.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">99.8%</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">Uptime guarantee</span>
+            </div>
+          </div>
+          
+          <!-- Card 2 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">Enterprise-Grade API</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">Battle-tested infrastructure handling 5M+ API calls monthly with sub-200ms response times.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">165ms</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">Avg response time</span>
+            </div>
+          </div>
+          
+          <!-- Card 3 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">Smart Volume Pricing</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">No hidden fees. Transparent tiered pricing with automatic discounts up to 50% as you scale.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">$0</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">Setup or monthly fees</span>
+            </div>
+          </div>
+          
+          <!-- Card 4 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">24/7 Priority Support</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">Dedicated success team responds in under 2 minutes. Real humans, not bots.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">98%</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">Customer satisfaction</span>
+            </div>
+          </div>
+          
+          <!-- Card 5 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">Bank-Level Security</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">SSL encrypted, GDPR compliant, never ask for passwords. Your data is protected by enterprise-grade security.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">256-bit</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">SSL encryption</span>
+            </div>
+          </div>
+          
+          <!-- Card 6 -->
+          <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border: 1px solid rgba(0,102,255,0.1); border-radius: 20px; padding: 40px; transition: all 0.3s ease;">
+            <div style="width: 72px; height: 72px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,102,255,0.2);">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; line-height: 1.3;">Real-Time Analytics</h3>
+            <p style="font-size: 15px; color: #666; line-height: 1.7; margin-bottom: 20px;">Track every order with live dashboards. Detailed reports, performance insights, and ROI tracking built-in.</p>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.1);">
+              <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Live</span>
+              <span style="font-size: 13px; color: #666; font-weight: 500;">Order tracking</span>
+            </div>
+          </div>
+        </div>
         
         <!-- Trust Bar Stats -->
         <div style="background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,166,126,0.05)); border-radius: 20px; padding: 48px; border: 1px solid rgba(0,102,255,0.12); text-align: center;">
