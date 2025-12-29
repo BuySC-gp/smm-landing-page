@@ -1,3 +1,31 @@
+// === WRAPPER GLOBAL - LANDING PAGE UNIQUEMENT ===
+(function() {
+  
+  // Détection état logged out
+  const checkLandingPage = () => {
+    const isLoggedOut = 
+      !document.querySelector('[href*="logout"]') && 
+      !document.querySelector('.sidebar') &&
+      (document.querySelector('.block-signin') || 
+       document.querySelector('#block_3'));
+    return isLoggedOut;
+  };
+
+  // Attendre que DOM soit prêt pour vérifier
+  const initCheck = setInterval(() => {
+    if (document.body) {
+      clearInterval(initCheck);
+      if (!checkLandingPage()) {
+        console.log('User logged in - all landing elements skipped');
+        return; // Stop tout
+      }
+      // Si on arrive ici = logged out, exécuter le code
+      initLandingPage();
+    }
+  }, 50);
+
+function initLandingPage() {
+  
 document.addEventListener('DOMContentLoaded', function() {
   
   // === INJECTION CSS DEPTH & ELEVATION ===
@@ -2131,3 +2159,5 @@ window.addEventListener('load', function() {
   
   console.log('✅ ALL sections loaded');
 });
+}
+})();
