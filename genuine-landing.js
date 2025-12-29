@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
   // === HERO SECTION SPLIT VERSION - MÉTHODE CORRECTE ===
-  const heroForm = document.querySelector('.block-signin-text .component__card');
+  const heroForm = document.querySelector('.block-signin-text .component_card');
   if (heroForm && heroForm.parentElement) {
     const heroContainer = heroForm.parentElement;
     
