@@ -588,17 +588,46 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    // AJOUT 3: Change "Remember me"
-    setTimeout(() => {
-      const labels = document.querySelectorAll('.block-signin-text label');
-      labels.forEach(label => {
-        if (label.textContent.toLowerCase().includes('remember')) {
-          label.textContent = 'Stay signed in';
-        }
-      });
-    }, 500);
+setTimeout(() => {
+  const forgotLink = document.querySelector('.block-signin-text a[href*="forgot"], .block-signin-text a[href*="password"]');
+  const passwordLabel = document.querySelector('.block-signin-text label[for*="password"]');
+  
+  if (forgotLink && passwordLabel && passwordLabel.parentElement) {
+    // Crée un wrapper pour le label
+    const labelWrapper = document.createElement('div');
+    labelWrapper.style.display = 'flex';
+    labelWrapper.style.justifyContent = 'space-between';
+    labelWrapper.style.alignItems = 'center';
+    labelWrapper.style.marginBottom = '8px';
+    
+    // Insère le wrapper avant le label
+    passwordLabel.parentElement.insertBefore(labelWrapper, passwordLabel);
+    
+    // Déplace le label et le lien dans le wrapper
+    labelWrapper.appendChild(passwordLabel);
+    labelWrapper.appendChild(forgotLink);
+    
+    // Style le lien
+    forgotLink.style.position = 'static';
+    forgotLink.style.fontSize = '13px';
+    forgotLink.style.color = '#0066FF';
+    forgotLink.style.fontWeight = '600';
+    forgotLink.style.textDecoration = 'none';
+    
+    // Style le label
+    passwordLabel.style.margin = '0';
   }
-});
+}, 500);
+
+// Change "Remember me" en "Stay signed in"
+setTimeout(() => {
+  const labels = document.querySelectorAll('.block-signin-text label');
+  labels.forEach(label => {
+    if (label.textContent.toLowerCase().includes('remember')) {
+      label.textContent = 'Stay signed in';
+    }
+  });
+}, 500);
 
 window.addEventListener('load', function() {
   const logos = [
