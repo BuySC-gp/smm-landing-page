@@ -438,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
-  // === HERO SECTION SPLIT VERSION - MÉTHODE CORRECTE ===
+  // === HERO SECTION AVEC BOUTON SIGN IN ===
   const heroForm = document.querySelector('.block-signin-text .component_card');
   if (heroForm && heroForm.parentElement) {
     const heroContainer = heroForm.parentElement;
@@ -472,6 +472,11 @@ document.addEventListener('DOMContentLoaded', function() {
             Create Free Account
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
+          
+          <button id="showLoginBtn" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; border: 1.5px solid #e5e5e5; cursor: pointer; transition: all 0.3s;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
+            Sign In
+          </button>
           
           <a href="/api" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; text-decoration: none; border: 1.5px solid #e5e5e5; transition: all 0.3s;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
@@ -519,13 +524,39 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
   </section>
 `;
-    // MÉTHODE CORRECTE: insertAdjacentHTML au lieu de innerHTML
+    
+    // Injecte le nouveau hero
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-    // Cache le formulaire natif
+    
+    // Cache le formulaire natif au départ
     heroForm.style.display = 'none';
+    
+    // JavaScript pour le bouton Sign In
+    const showLoginBtn = document.getElementById('showLoginBtn');
+    if (showLoginBtn) {
+      showLoginBtn.addEventListener('click', function() {
+        if (heroForm.style.display === 'none') {
+          // Affiche le formulaire
+          heroForm.style.display = 'block';
+          heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Change le bouton en "Hide Form"
+          this.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            Hide Form
+          `;
+        } else {
+          // Cache le formulaire
+          heroForm.style.display = 'none';
+          // Remet le bouton en "Sign In"
+          this.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
+            Sign In
+          `;
+        }
+      });
+    }
   }
 });
-
 window.addEventListener('load', function() {
   const logos = [
     ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
