@@ -901,9 +901,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
 setTimeout(() => {
-  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  if (!document.querySelector('.block-signin')) return;
   
-  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
+  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
   );
@@ -1091,10 +1091,10 @@ window.addEventListener('load', function() {
   
   // === STATS MARQUEE DIAGONAL ===
 setTimeout(() => {
-  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  if (!document.querySelector('.block-signin')) return;
   
   const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
-    div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
+    div.textContent.includes('Top Selling')
   );
   
   if (servicesSection) {
@@ -1148,7 +1148,7 @@ setTimeout(() => {
 
   // === HOW IT WORKS TIMELINE ===
 setTimeout(() => {
-  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  if (!document.querySelector('.block-signin')) return;
   
   const statsMarquee = document.querySelector('.stats-marquee-wrapper');
   
