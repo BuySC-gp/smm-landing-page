@@ -809,8 +809,20 @@ document.addEventListener('DOMContentLoaded', function() {
   document.head.appendChild(elevationStyles);
 
   // === LOGO ===
-  const logo = document.querySelector('.component-navbar-brand');
-  if (logo) logo.textContent = 'GENUINE PROMOTION';
+const logo = document.querySelector('.component-navbar-brand');
+if (logo) logo.textContent = 'GENUINE PROMOTION';
+
+// === DÉTECTION LOGGED OUT - LANDING PAGE UNIQUEMENT ===
+const isLoggedOut = 
+  !document.querySelector('[href*="logout"]') && // Pas de bouton logout
+  !document.querySelector('a[href*="/orders"]') && // Pas de menu orders
+  (document.querySelector('.block-signin') || // Bloc signup existe
+   document.querySelector('#block_3')); // Ou navbar landing
+
+if (!isLoggedOut) {
+  console.log('User logged in - landing elements skipped');
+  return; // Stop tout si user logged in
+}
   
   // === HERO SECTION SPLIT VERSION ===
   const heroForm = document.querySelector('.block-signin-text .component_card');
