@@ -1,4 +1,112 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // === INJECTION CSS DEPTH & ELEVATION ===
+  const elevationStyles = document.createElement('style');
+  elevationStyles.textContent = `
+    /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
+    
+    :root {
+      --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* === SECTIONS BACKGROUNDS === */
+    #services-section {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%) !important;
+    }
+    
+    /* === CARDS ELEVATION === */
+    .service-card {
+      box-shadow: var(--shadow-low) !important;
+      backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(0, 102, 255, 0.08) !important;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    .service-card:hover {
+      box-shadow: var(--shadow-hover) !important;
+      transform: translateY(-12px) scale(1.02) !important;
+      border-color: rgba(0, 102, 255, 0.2) !important;
+    }
+    
+    /* Why Section Cards */
+    div[style*="backdrop-filter: blur(10px)"] {
+      box-shadow: var(--shadow-low) !important;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    div[style*="backdrop-filter: blur(10px)"]:hover {
+      box-shadow: var(--shadow-mid) !important;
+      transform: translateY(-8px) !important;
+      border-color: rgba(0, 102, 255, 0.15) !important;
+    }
+    
+    /* FAQ Items */
+    .faq-item {
+      box-shadow: var(--shadow-low) !important;
+      backdrop-filter: blur(12px) !important;
+      transition: all 0.3s ease !important;
+    }
+    
+    .faq-item:hover {
+      box-shadow: var(--shadow-mid) !important;
+      transform: translateX(4px) !important;
+    }
+    
+    .faq-item.active {
+      box-shadow: var(--shadow-mid) !important;
+      border-color: #0066FF !important;
+    }
+    
+    /* Buttons */
+    button, a[href*="signup"], .service-cta, .nav-btn {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+    
+    button:hover, .service-cta:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3) !important;
+    }
+    
+    /* Navigation Buttons */
+    .nav-btn {
+      box-shadow: var(--shadow-mid) !important;
+      backdrop-filter: blur(12px) !important;
+    }
+    
+    .nav-btn:hover {
+      box-shadow: var(--shadow-high) !important;
+      transform: scale(1.1) !important;
+    }
+    
+    /* Stats Bar Glassmorphism */
+    div[style*="8.7M"] {
+      background: rgba(255, 255, 255, 0.7) !important;
+      backdrop-filter: blur(20px) !important;
+      box-shadow: var(--shadow-mid) !important;
+    }
+    
+    /* Footer */
+    div[style*="background: #F8F9FF"] {
+      background: linear-gradient(180deg, #F8F9FF 0%, #E8EBFF 100%) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    /* GPU Acceleration */
+    .service-card, .faq-item, .nav-btn, button {
+      transform: translateZ(0);
+      will-change: transform, box-shadow;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .service-card:hover {
+        transform: translateY(-8px) scale(1.01) !important;
+      }
+    }
+  `;
+  document.head.appendChild(elevationStyles);
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
