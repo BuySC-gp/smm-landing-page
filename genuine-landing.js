@@ -328,7 +328,19 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .how-step-icon {
-  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #0066FF, #00A67E);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.2);
+}
+
+.how-step-icon svg {
+  color: white;
 }
 
 .how-step-description {
@@ -1140,9 +1152,9 @@ setTimeout(() => {
           </div>
           
           <div class="how-tabs">
-            <button class="how-tab active" data-tab="getting-started">🚀 Getting Started</button>
-            <button class="how-tab" data-tab="api-integration">⚙️ API Integration</button>
-            <button class="how-tab" data-tab="pricing-guide">💰 Pricing Guide</button>
+            <button class="how-tab active" data-tab="getting-started">Getting Started</button>
+            <button class="how-tab" data-tab="api-integration">API Integration</button>
+            <button class="how-tab" data-tab="pricing-guide">Pricing Guide</button>
           </div>
           
           <div class="how-content active" data-content="getting-started">
@@ -1151,7 +1163,12 @@ setTimeout(() => {
                 <div class="how-step-number">1</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">👤</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    </div>
                     Create Account
                   </div>
                   <div class="how-step-description">Register in 30 seconds with email verification. No credit card required to start exploring our services.</div>
@@ -1162,7 +1179,12 @@ setTimeout(() => {
                 <div class="how-step-number">2</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">💳</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                      </svg>
+                    </div>
                     Add Funds
                   </div>
                   <div class="how-step-description">Multiple payment methods accepted: Credit Card, Crypto, PayPal. Secure transactions with instant balance updates.</div>
@@ -1173,7 +1195,12 @@ setTimeout(() => {
                 <div class="how-step-number">3</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">🎯</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </div>
                     Select Service
                   </div>
                   <div class="how-step-description">Browse 5,000+ services across 15 platforms. Filter by category, quality tier, and delivery speed to find your perfect match.</div>
@@ -1184,7 +1211,14 @@ setTimeout(() => {
                 <div class="how-step-number">4</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">📊</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/>
+                        <path d="M18 17V9"/>
+                        <path d="M13 17V5"/>
+                        <path d="M8 17v-3"/>
+                      </svg>
+                    </div>
                     Track Results
                   </div>
                   <div class="how-step-description">Real-time dashboard with live progress tracking. Get instant notifications and analytics for every order.</div>
@@ -1199,7 +1233,12 @@ setTimeout(() => {
                 <div class="how-step-number">1</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">🔑</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      </svg>
+                    </div>
                     Get API Key
                   </div>
                   <div class="how-step-description">Generate your unique API key from dashboard settings. Secure authentication with token-based access control.</div>
@@ -1210,7 +1249,12 @@ setTimeout(() => {
                 <div class="how-step-number">2</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">📚</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                      </svg>
+                    </div>
                     Read Documentation
                   </div>
                   <div class="how-step-description">Comprehensive API docs with endpoints, parameters, and code examples. Rate limits: 1000 requests/hour included.</div>
@@ -1221,7 +1265,12 @@ setTimeout(() => {
                 <div class="how-step-number">3</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">🧪</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                      </svg>
+                    </div>
                     Test Sandbox
                   </div>
                   <div class="how-step-description">Free testing environment with demo data. Validate integration before going live without spending credits.</div>
@@ -1232,7 +1281,12 @@ setTimeout(() => {
                 <div class="how-step-number">4</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">🚀</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                    </div>
                     Go Production
                   </div>
                   <div class="how-step-description">Deploy in minutes with 99.8% uptime guarantee. Enterprise-grade infrastructure handles millions of requests daily.</div>
@@ -1247,7 +1301,11 @@ setTimeout(() => {
                 <div class="how-step-number">1</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">⭐</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </div>
                     Quality Tiers
                   </div>
                   <div class="how-step-description">Premium vs Standard services clearly explained. Higher quality = real accounts, better retention, safer delivery methods.</div>
@@ -1258,7 +1316,12 @@ setTimeout(() => {
                 <div class="how-step-number">2</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">📈</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                      </svg>
+                    </div>
                     Volume Discounts
                   </div>
                   <div class="how-step-description">Bulk orders unlock better rates automatically. Save up to 30% on large packages with our tiered pricing system.</div>
@@ -1269,7 +1332,11 @@ setTimeout(() => {
                 <div class="how-step-number">3</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">✅</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
                     No Hidden Fees
                   </div>
                   <div class="how-step-description">Transparent pricing, what you see is what you get. No surprise charges, processing fees, or minimum deposits required.</div>
@@ -1280,7 +1347,12 @@ setTimeout(() => {
                 <div class="how-step-number">4</div>
                 <div class="how-step-card">
                   <div class="how-step-title">
-                    <span class="how-step-icon">💸</span>
+                    <div class="how-step-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                      </svg>
+                    </div>
                     Flexible Budget
                   </div>
                   <div class="how-step-description">Start from just $1 and scale to enterprise. Pay-as-you-go model with no subscription fees or contracts.</div>
@@ -1309,7 +1381,6 @@ setTimeout(() => {
     });
   }
 }, 600);
-
 });
 
 window.addEventListener('load', function() {
