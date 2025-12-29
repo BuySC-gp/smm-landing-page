@@ -84,12 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
     /* === STATS MARQUEE DIAGONAL === */
 .stats-marquee-wrapper {
   position: relative;
-  width: 100%;
+  width: 110%; /* Dépasse pour couvrir rotation */
+  left: -5%; /* Centre la barre */
   overflow: hidden;
   margin: 80px 0;
   transform: rotate(-2deg);
   box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
 }
+
 
 .stats-marquee {
   background: linear-gradient(135deg, #0066FF 0%, #0052CC 50%, #00A67E 100%);
