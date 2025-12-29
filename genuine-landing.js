@@ -10,156 +10,146 @@ document.addEventListener('DOMContentLoaded', function() {
       --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
       --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
     }
-
-  /* === OPTIMISATION FORMULAIRE LOGIN === */
-  .block-signin-text .component_card {
-    padding: 32px !important;
-    border-radius: 16px !important;
-    box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
-    border: 2px solid #0066FF !important;
-    background: white !important;
-    max-width: 480px !important;
-    margin: 40px auto !important;
-  }
   
-  /* Titres du formulaire */
-  .block-signin-text .component_card h2,
-  .block-signin-text .component_card h3 {
-    font-size: 24px !important;
-    font-weight: 700 !important;
-    color: #1a1a1a !important;
-    margin-bottom: 24px !important;
-    text-align: center !important;
-  }
-  
-  /* Labels des champs */
-  .block-signin-text .component_card label {
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    color: #333 !important;
-    margin-bottom: 8px !important;
-    display: block !important;
-  }
-  
-  /* Conteneur des champs input */
-  .block-signin-text .component_card .component_form_group,
-  .block-signin-text .component_card > div {
-    margin-bottom: 20px !important;
-    position: relative !important;
-  }
-  
-  /* Champs input */
-  .block-signin-text .component_card input[type="text"],
-  .block-signin-text .component_card input[type="password"],
-  .block-signin-text .component_card input[type="email"] {
-    width: 100% !important;
-    padding: 14px 16px !important;
-    border: 1.5px solid #e5e5e5 !important;
-    border-radius: 10px !important;
-    font-size: 15px !important;
-    transition: all 0.3s !important;
-    background: white !important;
-  }
-  
-  .block-signin-text .component_card input:focus {
-    border-color: #0066FF !important;
-    outline: none !important;
-    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
-  }
-  
-  /* Forgot Password - repositionné */
-  .block-signin-text .component_card a[href*="forgot"],
-  .block-signin-text .component_card a[href*="password"] {
-    position: absolute !important;
-    right: 0 !important;
-    top: 0 !important;
-    font-size: 13px !important;
-    color: #0066FF !important;
-    text-decoration: none !important;
-    font-weight: 600 !important;
-    z-index: 10 !important;
-  }
-  
-  .block-signin-text .component_card a[href*="forgot"]:hover,
-  .block-signin-text .component_card a[href*="password"]:hover {
-    text-decoration: underline !important;
-  }
-  
-  /* Remember me checkbox - modernisé */
-  .block-signin-text .component_card .component_checkbox_remember_me,
-  .block-signin-text .component_card input[type="checkbox"] {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 8px !important;
-    margin: 16px 0 !important;
-  }
-  
-  .block-signin-text .component_card input[type="checkbox"] {
-    width: 18px !important;
-    height: 18px !important;
-    border-radius: 4px !important;
-    cursor: pointer !important;
-  }
-  
-  /* Change "Remember me" text */
-  .block-signin-text .component_card label[for*="remember"] {
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    color: #666 !important;
-    cursor: pointer !important;
-  }
-  
-  /* Bouton Sign In */
-  .block-signin-text .component_card .component_button_submit,
-  .block-signin-text .component_card button[type="submit"],
-  .block-signin-text .component_card input[type="submit"] {
-    width: 100% !important;
-    padding: 16px !important;
-    background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    transition: all 0.3s !important;
-    box-shadow: 0 4px 16px rgba(0, 102, 255, 0.3) !important;
-    margin-top: 8px !important;
-  }
-  
-  .block-signin-text .component_card button[type="submit"]:hover,
-  .block-signin-text .component_card input[type="submit"]:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 24px rgba(0, 102, 255, 0.4) !important;
-  }
-  
-  /* Lien "Sign up" en bas */
-  .block-signin-text .component_card p,
-  .block-signin-text .component_card .text-center {
-    text-align: center !important;
-    margin-top: 20px !important;
-    font-size: 14px !important;
-    color: #666 !important;
-  }
-  
-  .block-signin-text .component_card p a,
-  .block-signin-text .component_card .text-center a {
-    color: #0066FF !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-  }
-  
-  .block-signin-text .component_card p a:hover {
-    text-decoration: underline !important;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
+    /* === OPTIMISATION FORMULAIRE LOGIN === */
     .block-signin-text .component_card {
-      padding: 24px !important;
-      margin: 20px auto !important;
+      padding: 32px !important;
+      border-radius: 16px !important;
+      box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
+      border: 2px solid #0066FF !important;
+      background: white !important;
+      max-width: 480px !important;
+      margin: 40px auto !important;
     }
-  }
+    
+    .block-signin-text .component_card h2,
+    .block-signin-text .component_card h3 {
+      font-size: 24px !important;
+      font-weight: 700 !important;
+      color: #1a1a1a !important;
+      margin-bottom: 24px !important;
+      text-align: center !important;
+    }
+    
+    .block-signin-text .component_card label {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      color: #333 !important;
+      margin-bottom: 8px !important;
+      display: block !important;
+    }
+    
+    .block-signin-text .component_card .component_form_group,
+    .block-signin-text .component_card > div {
+      margin-bottom: 20px !important;
+      position: relative !important;
+    }
+    
+    .block-signin-text .component_card input[type="text"],
+    .block-signin-text .component_card input[type="password"],
+    .block-signin-text .component_card input[type="email"] {
+      width: 100% !important;
+      padding: 14px 16px !important;
+      border: 1.5px solid #e5e5e5 !important;
+      border-radius: 10px !important;
+      font-size: 15px !important;
+      transition: all 0.3s !important;
+      background: white !important;
+    }
+    
+    .block-signin-text .component_card input:focus {
+      border-color: #0066FF !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
+    }
+    
+    .block-signin-text .component_card a[href*="forgot"],
+    .block-signin-text .component_card a[href*="password"] {
+      position: absolute !important;
+      right: 0 !important;
+      top: 0 !important;
+      font-size: 13px !important;
+      color: #0066FF !important;
+      text-decoration: none !important;
+      font-weight: 600 !important;
+      z-index: 10 !important;
+    }
+    
+    .block-signin-text .component_card a[href*="forgot"]:hover,
+    .block-signin-text .component_card a[href*="password"]:hover {
+      text-decoration: underline !important;
+    }
+    
+    .block-signin-text .component_card .component_checkbox_remember_me,
+    .block-signin-text .component_card input[type="checkbox"] {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin: 16px 0 !important;
+    }
+    
+    .block-signin-text .component_card input[type="checkbox"] {
+      width: 18px !important;
+      height: 18px !important;
+      border-radius: 4px !important;
+      cursor: pointer !important;
+    }
+    
+    .block-signin-text .component_card label[for*="remember"] {
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: #666 !important;
+      cursor: pointer !important;
+    }
+    
+    .block-signin-text .component_card .component_button_submit,
+    .block-signin-text .component_card button[type="submit"],
+    .block-signin-text .component_card input[type="submit"] {
+      width: 100% !important;
+      padding: 16px !important;
+      background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+      color: white !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      cursor: pointer !important;
+      transition: all 0.3s !important;
+      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.3) !important;
+      margin-top: 8px !important;
+    }
+    
+    .block-signin-text .component_card button[type="submit"]:hover,
+    .block-signin-text .component_card input[type="submit"]:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 24px rgba(0, 102, 255, 0.4) !important;
+    }
+    
+    .block-signin-text .component_card p,
+    .block-signin-text .component_card .text-center {
+      text-align: center !important;
+      margin-top: 20px !important;
+      font-size: 14px !important;
+      color: #666 !important;
+    }
+    
+    .block-signin-text .component_card p a,
+    .block-signin-text .component_card .text-center a {
+      color: #0066FF !important;
+      font-weight: 600 !important;
+      text-decoration: none !important;
+    }
+    
+    .block-signin-text .component_card p a:hover {
+      text-decoration: underline !important;
+    }
+    
+    @media (max-width: 768px) {
+      .block-signin-text .component_card {
+        padding: 24px !important;
+        margin: 20px auto !important;
+      }
+    }
     
     .service-card {
       box-shadow: var(--shadow-low) !important;
@@ -231,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    /* === HERO PREMIUM SPLIT VERSION === */
     .hero-premium {
       background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 50%, #0f1629 100%);
       padding: 120px 20px 100px;
@@ -290,272 +279,10 @@ document.addEventListener('DOMContentLoaded', function() {
       to { opacity: 1; transform: translateX(0); }
     }
     
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 20px;
-      background: rgba(0, 102, 255, 0.1);
-      border: 1px solid rgba(0, 102, 255, 0.3);
-      border-radius: 50px;
-      backdrop-filter: blur(10px);
-      margin-bottom: 24px;
-      animation: glow 2s ease-in-out infinite;
-    }
-    
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.3); }
-      50% { box-shadow: 0 0 30px rgba(0, 102, 255, 0.5); }
-    }
-    
-    .hero-badge-dot {
-      width: 8px;
-      height: 8px;
-      background: #00FF88;
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.6; transform: scale(1.2); }
-    }
-    
-    .hero-badge-text {
-      font-size: 13px;
-      font-weight: 600;
-      color: #00FF88;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .hero-title {
-      font-size: 56px;
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      color: white;
-      letter-spacing: -0.02em;
-    }
-    
-    .hero-title-gradient {
-      background: linear-gradient(135deg, #0066FF 0%, #00A67E 50%, #00FFAA 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 3s ease-in-out infinite;
-      background-size: 200% auto;
-    }
-    
-    @keyframes shimmer {
-      0%, 100% { background-position: 0% center; }
-      50% { background-position: 100% center; }
-    }
-    
-    .hero-subtitle {
-      font-size: 18px;
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.7);
-      margin-bottom: 40px;
-      max-width: 560px;
-    }
-    
-    .hero-cta-group {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 48px;
-      flex-wrap: wrap;
-    }
-    
-    .hero-cta-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 40px;
-      background: linear-gradient(135deg, #0066FF, #0052CC);
-      color: white;
-      font-size: 18px;
-      font-weight: 700;
-      border-radius: 12px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .hero-cta-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s;
-    }
-    
-    .hero-cta-primary:hover::before {
-      left: 100%;
-    }
-    
-    .hero-cta-primary:hover {
-      transform: translateY(-2px) !important;
-      box-shadow: 0 12px 40px rgba(0, 102, 255, 0.6) !important;
-    }
-    
-    .hero-cta-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 32px;
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
-      text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      cursor: pointer;
-      transition: all 0.3s;
-      backdrop-filter: blur(10px);
-    }
-    
-    .hero-cta-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-    }
-    
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-      padding: 32px;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-    }
-    
-    .hero-stat {
-      text-align: center;
-    }
-    
-    .hero-stat-value {
-      font-size: 36px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #00FFAA, #0066FF);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 4px;
-      display: block;
-    }
-    
-    .hero-stat-label {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.6);
-      font-weight: 500;
-    }
-    
-    .hero-right {
-      animation: slideInRight 1s ease-out 0.2s backwards;
-      position: relative;
-    }
-    
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    
-    .hero-dashboard-preview {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 0.5s;
-      background: #fff;
-    }
-    
-    .hero-dashboard-preview:hover {
-      transform: translateY(-10px) rotateY(2deg);
-    }
-    
-    .hero-dashboard-preview img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    
-    .hero-floating-badge {
-      position: absolute;
-      padding: 16px 24px;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-      animation: floatBadge 3s ease-in-out infinite;
-      text-align: center;
-    }
-    
-    @keyframes floatBadge {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    
-    .hero-floating-badge-1 {
-      top: 40px;
-      right: -30px;
-    }
-    
-    .hero-floating-badge-2 {
-      bottom: 60px;
-      left: -40px;
-      animation-delay: 1.5s;
-    }
-    
-    .hero-badge-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .hero-badge-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: #0066FF;
-      display: block;
-      margin-bottom: 4px;
-    }
-    
-    .hero-badge-label {
-      font-size: 11px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 600;
-    }
-    
     @media (max-width: 1200px) {
       .hero-content {
         grid-template-columns: 1fr;
         gap: 60px;
-      }
-      
-      .hero-title {
-        font-size: 48px;
-      }
-      
-      .hero-floating-badge-1 {
-        right: 20px;
-      }
-      
-      .hero-floating-badge-2 {
-        left: 20px;
       }
     }
     
@@ -563,77 +290,47 @@ document.addEventListener('DOMContentLoaded', function() {
       .hero-premium {
         padding: 80px 20px 60px;
       }
-      
-      .hero-title {
-        font-size: 36px;
-      }
-      
-      .hero-cta-group {
-        flex-direction: column;
-      }
-      
-      .hero-stats {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-      
-      .hero-floating-badge {
-        display: none;
-      }
     }
   `;
   document.head.appendChild(elevationStyles);
 
-  // === LOGO ===
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
-  // === HERO SECTION AVEC BOUTON SIGN IN ===
   const heroForm = document.querySelector('.block-signin-text .component_card');
   if (heroForm && heroForm.parentElement) {
     const heroContainer = heroForm.parentElement;
-    
-    // Récupère l'image existante du bloc natif
     const nativeImage = document.querySelector('.block-signin-text img');
     const imageUrl = nativeImage ? nativeImage.src : '';
     
     const heroHTML = `
   <section class="hero-premium" style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FF 100%); padding: 60px 20px; position: relative;">
     <div class="hero-content" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;">
-      
-      <!-- LEFT SIDE -->
       <div class="hero-left">
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 166, 126, 0.08)); border: 1px solid rgba(0, 102, 255, 0.15); border-radius: 50px; margin-bottom: 20px;">
           <span style="width: 6px; height: 6px; background: #00FF88; border-radius: 50%;"></span>
           <span style="font-size: 11px; font-weight: 700; color: #0066FF; text-transform: uppercase; letter-spacing: 0.05em;">🚀 Trusted by 2,500+ Agencies</span>
         </div>
-        
         <h1 style="font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: #1a1a1a; letter-spacing: -0.02em;">
-          Scale Your SMM<br>
-          Business <span style="background: linear-gradient(135deg, #0066FF 0%, #00A67E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Like a Pro</span>
+          Scale Your SMM<br>Business <span style="background: linear-gradient(135deg, #0066FF 0%, #00A67E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Like a Pro</span>
         </h1>
-        
         <p style="font-size: 17px; line-height: 1.6; color: #666; margin-bottom: 32px; max-width: 540px;">
           5,000+ premium services • 15+ platforms • Enterprise API • 99.8% uptime • Instant delivery
         </p>
-        
         <div style="display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;">
           <a href="/signup" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #0066FF, #0052CC); color: white; font-size: 17px; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 6px 24px rgba(0, 102, 255, 0.3); transition: all 0.3s;">
             Create Free Account
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          
           <button id="showLoginBtn" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; border: 1.5px solid #e5e5e5; cursor: pointer; transition: all 0.3s;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
             Sign In
           </button>
-          
           <a href="/api" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; text-decoration: none; border: 1.5px solid #e5e5e5; transition: all 0.3s;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             View API
           </a>
         </div>
-        
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 24px; background: white; border: 1px solid #e5e5e5; border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);">
           <div style="text-align: center;">
             <div style="font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px;">500K+</div>
@@ -649,20 +346,14 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       </div>
-      
-      <!-- RIGHT SIDE -->
       <div class="hero-right">
         <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border: 1px solid #e5e5e5; background: #fff; transform: perspective(1000px) rotateY(-5deg); transition: transform 0.5s;">
           <img src="${imageUrl}" alt="Dashboard" style="width: 100%; height: auto; display: block;">
-          
-          <!-- Floating Badge 1 -->
           <div style="position: absolute; top: 30px; right: -25px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 102, 255, 0.1); text-align: center;">
             <div style="font-size: 22px; margin-bottom: 4px;">⚡</div>
             <div style="font-size: 18px; font-weight: 800; color: #0066FF; margin-bottom: 2px;">&lt;200ms</div>
             <div style="font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">API Speed</div>
           </div>
-          
-          <!-- Floating Badge 2 -->
           <div style="position: absolute; bottom: 40px; left: -30px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 166, 126, 0.1); text-align: center;">
             <div style="font-size: 22px; margin-bottom: 4px;">🎯</div>
             <div style="font-size: 18px; font-weight: 800; color: #00A67E; margin-bottom: 2px;">5,247</div>
@@ -670,51 +361,29 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       </div>
-      
     </div>
   </section>
 `;
     
-    // Injecte le nouveau hero
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-    
-    // Cache le formulaire natif au départ
     heroForm.style.display = 'none';
     
-    // JavaScript pour le bouton Sign In
     const showLoginBtn = document.getElementById('showLoginBtn');
     if (showLoginBtn) {
       showLoginBtn.addEventListener('click', function() {
         if (heroForm.style.display === 'none') {
-          // Affiche le formulaire
           heroForm.style.display = 'block';
           heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Change le bouton en "Hide Form"
-          this.innerHTML = `
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            Hide Form
-          `;
+          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Hide Form';
         } else {
-          // Cache le formulaire
           heroForm.style.display = 'none';
-          // Remet le bouton en "Sign In"
-          this.innerHTML = `
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
-            Sign In
-          `;
+          this.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg> Sign In';
         }
       });
     }
   }
-  // === OPTIMISATION DU TEXTE "REMEMBER ME" ===
+  
   setTimeout(() => {
-    // Change "Remember me" en "Stay signed in"
-    const rememberLabel = document.querySelector('.block-signin-text label[for*="remember"]');
-    if (rememberLabel) {
-      rememberLabel.textContent = 'Stay signed in';
-    }
-    
-    // Alternative: cherche par texte
     const labels = document.querySelectorAll('.block-signin-text label');
     labels.forEach(label => {
       if (label.textContent.toLowerCase().includes('remember')) {
