@@ -635,60 +635,59 @@ document.addEventListener('DOMContentLoaded', function() {
 `;
     
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
+heroForm.style.display = 'none';
 
 // === STATS MARQUEE DIAGONAL ===
-// Attendre que le DOM soit mis à jour, puis cibler la vraie section hero
-setTimeout(() => {
-  const heroSection = document.querySelector('.hero-premium');
-  if (heroSection) {
-    heroSection.insertAdjacentHTML('afterend', `
-      <div class="stats-marquee-wrapper">
-        <div class="stats-marquee">
-          <div class="stats-marquee-track">
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-            </span>
-            
-            <!-- Duplicate pour loop infini -->
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-            </span>
-          </div>
+// Trouve la première section APRÈS .block-signin-text et insère AVANT
+const nextSection = heroContainer.nextElementSibling;
+if (nextSection) {
+  nextSection.insertAdjacentHTML('beforebegin', `
+    <div class="stats-marquee-wrapper">
+      <div class="stats-marquee">
+        <div class="stats-marquee-track">
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+          </span>
+          
+          <!-- Duplicate pour loop infini -->
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+          </span>
+          <span class="stats-marquee-item">
+            <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+          </span>
         </div>
       </div>
-    `);
-  }
-}, 100);
+    </div>
+  `);
+}
     heroForm.style.display = 'none';
     
     // AJOUT 2: Bouton toggle login
