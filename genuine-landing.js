@@ -10,6 +10,170 @@ document.addEventListener('DOMContentLoaded', function() {
       --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
       --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
     }
+
+    🎨 PARFAIT ! ON VA OPTIMISER LE FORMULAIRE
+Ajoute ce CSS au début de ton elevationStyles.textContent (juste après :root {}):
+
+javascript
+const elevationStyles = document.createElement('style');
+elevationStyles.textContent = `
+  /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
+  :root {
+    --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* === OPTIMISATION FORMULAIRE LOGIN === */
+  .block-signin-text .component_card {
+    padding: 32px !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
+    border: 2px solid #0066FF !important;
+    background: white !important;
+    max-width: 480px !important;
+    margin: 40px auto !important;
+  }
+  
+  /* Titres du formulaire */
+  .block-signin-text .component_card h2,
+  .block-signin-text .component_card h3 {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #1a1a1a !important;
+    margin-bottom: 24px !important;
+    text-align: center !important;
+  }
+  
+  /* Labels des champs */
+  .block-signin-text .component_card label {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+  }
+  
+  /* Conteneur des champs input */
+  .block-signin-text .component_card .component_form_group,
+  .block-signin-text .component_card > div {
+    margin-bottom: 20px !important;
+    position: relative !important;
+  }
+  
+  /* Champs input */
+  .block-signin-text .component_card input[type="text"],
+  .block-signin-text .component_card input[type="password"],
+  .block-signin-text .component_card input[type="email"] {
+    width: 100% !important;
+    padding: 14px 16px !important;
+    border: 1.5px solid #e5e5e5 !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    transition: all 0.3s !important;
+    background: white !important;
+  }
+  
+  .block-signin-text .component_card input:focus {
+    border-color: #0066FF !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
+  }
+  
+  /* Forgot Password - repositionné */
+  .block-signin-text .component_card a[href*="forgot"],
+  .block-signin-text .component_card a[href*="password"] {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    font-size: 13px !important;
+    color: #0066FF !important;
+    text-decoration: none !important;
+    font-weight: 600 !important;
+    z-index: 10 !important;
+  }
+  
+  .block-signin-text .component_card a[href*="forgot"]:hover,
+  .block-signin-text .component_card a[href*="password"]:hover {
+    text-decoration: underline !important;
+  }
+  
+  /* Remember me checkbox - modernisé */
+  .block-signin-text .component_card .component_checkbox_remember_me,
+  .block-signin-text .component_card input[type="checkbox"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 16px 0 !important;
+  }
+  
+  .block-signin-text .component_card input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+  }
+  
+  /* Change "Remember me" text */
+  .block-signin-text .component_card label[for*="remember"] {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: #666 !important;
+    cursor: pointer !important;
+  }
+  
+  /* Bouton Sign In */
+  .block-signin-text .component_card .component_button_submit,
+  .block-signin-text .component_card button[type="submit"],
+  .block-signin-text .component_card input[type="submit"] {
+    width: 100% !important;
+    padding: 16px !important;
+    background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    transition: all 0.3s !important;
+    box-shadow: 0 4px 16px rgba(0, 102, 255, 0.3) !important;
+    margin-top: 8px !important;
+  }
+  
+  .block-signin-text .component_card button[type="submit"]:hover,
+  .block-signin-text .component_card input[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 24px rgba(0, 102, 255, 0.4) !important;
+  }
+  
+  /* Lien "Sign up" en bas */
+  .block-signin-text .component_card p,
+  .block-signin-text .component_card .text-center {
+    text-align: center !important;
+    margin-top: 20px !important;
+    font-size: 14px !important;
+    color: #666 !important;
+  }
+  
+  .block-signin-text .component_card p a,
+  .block-signin-text .component_card .text-center a {
+    color: #0066FF !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+  }
+  
+  .block-signin-text .component_card p a:hover {
+    text-decoration: underline !important;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .block-signin-text .component_card {
+      padding: 24px !important;
+      margin: 20px auto !important;
+    }
+  }
     
     .service-card {
       box-shadow: var(--shadow-low) !important;
@@ -556,7 +720,23 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   }
-});
+  // === OPTIMISATION DU TEXTE "REMEMBER ME" ===
+  setTimeout(() => {
+    // Change "Remember me" en "Stay signed in"
+    const rememberLabel = document.querySelector('.block-signin-text label[for*="remember"]');
+    if (rememberLabel) {
+      rememberLabel.textContent = 'Stay signed in';
+    }
+    
+    // Alternative: cherche par texte
+    const labels = document.querySelectorAll('.block-signin-text label');
+    labels.forEach(label => {
+      if (label.textContent.toLowerCase().includes('remember')) {
+        label.textContent = 'Stay signed in';
+      }
+    });
+  }, 500);
+  
 window.addEventListener('load', function() {
   const logos = [
     ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
