@@ -590,30 +590,24 @@ document.addEventListener('DOMContentLoaded', function() {
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
 setTimeout(() => {
-  // 1. DÉPLACE FORGOT PASSWORD
   const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
   );
   
   if (forgotLink && passwordLabel) {
-    // Crée un wrapper flex
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important;';
+    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;'; // ← baseline au lieu de center
     
-    // Insère le wrapper avant le label
     passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
     
-    // Déplace le label et le lien dans le wrapper
     wrapper.appendChild(passwordLabel);
     wrapper.appendChild(forgotLink);
     
-    // Reset les styles
     passwordLabel.style.margin = '0';
-    forgotLink.style.cssText = 'font-size: 13px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 600 !important; position: static !important;';
+    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;'; // ← Plus petit + nowrap
   }
   
-  // 2. CHANGE "REMEMBER ME"
   const labels = document.querySelectorAll('.block-signin-text label');
   labels.forEach(label => {
     if (label.textContent.toLowerCase().includes('remember')) {
@@ -621,8 +615,6 @@ setTimeout(() => {
     }
   });
 }, 800);
-  }
-});
 
 window.addEventListener('load', function() {
   const logos = [
