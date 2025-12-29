@@ -932,7 +932,7 @@ setTimeout(() => {
 
 window.addEventListener('load', function() {
 
-  // === DÉTECTION PAGE STATE ===
+  // === DÉTECTION LANDING PAGE ===
   function detectPageState(callback) {
     let attempts = 0;
     const maxAttempts = 30;
@@ -940,27 +940,19 @@ window.addEventListener('load', function() {
     const checkInterval = setInterval(() => {
       attempts++;
 
-      const hasNewOrderLink = Array.from(document.querySelectorAll('a')).some(a => 
-        a.textContent.trim() === 'New order'
-      );
+      // Landing page = formulaire signup existe ET pas de sidebar/logout
+      const hasSignupForm = document.querySelector('.block-signin-text .component_card');
+      const hasSidebar = document.querySelector('.sidebar');
+      const hasLogoutButton = document.querySelector('a[href*="logout"]');
 
-      const hasServicesLink = Array.from(document.querySelectorAll('a')).some(a => 
-        a.textContent.trim() === 'Services'
-      );
+      // Si formulaire existe ET pas sidebar ET pas logout = LANDING PAGE
+      const isLandingPage = hasSignupForm && !hasSidebar && !hasLogoutButton;
 
-      const hasSignupForm = document.querySelector('.block-signin-text .component_card input[type="text"]');
-
-      const hasSigninButton = Array.from(document.querySelectorAll('button')).some(btn => 
-        btn.textContent.toLowerCase().includes('sign in')
-      );
-
-      const isLoggedIn = hasNewOrderLink || hasServicesLink;
-      const isLoggedOut = hasSignupForm && hasSigninButton && !isLoggedIn;
-
-      if (isLoggedOut || isLoggedIn || attempts >= maxAttempts) {
+      // Réponse claire OU timeout
+      if (isLandingPage || hasSidebar || hasLogoutButton || attempts >= maxAttempts) {
         clearInterval(checkInterval);
-        callback(isLoggedOut);
-        console.log(`[DETECTION] ${isLoggedOut ? 'LANDING' : 'PANEL'} after ${attempts} attempts`);
+        callback(isLandingPage);
+        console.log(`[DETECTION] ${isLandingPage ? 'LANDING PAGE ✅' : 'PANEL (skip)'} after ${attempts} attempts`);
       }
     }, 100);
   }
@@ -968,11 +960,11 @@ window.addEventListener('load', function() {
   // === INJECTION CONDITIONNELLE ===
   detectPageState(function(isLandingPage) {
     if (!isLandingPage) {
-      console.log('[SKIP] User logged in');
+      console.log('[SKIP] Not landing page - no injection');
       return;
     }
 
-    console.log('[INJECT] Landing elements...');
+    console.log('[INJECT] Landing elements starting...');
 
 const logos = [
     ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
