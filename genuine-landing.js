@@ -443,22 +443,24 @@ window.addEventListener('load', function() {
         display: block;
         width: 100%;
         padding: 16px;
-        background: linear-gradient(135deg, #0066FF, #0052CC);
-        color: white;
+        background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+        color: #FFFFFF !important;
         text-align: center;
         border-radius: 12px;
         text-decoration: none;
-        font-weight: 700;
-        font-size: 15px;
+        font-weight: 700 !important;
+        font-size: 16px !important;
         transition: all 0.3s;
         border: none;
         cursor: pointer;
         box-shadow: 0 4px 16px rgba(0, 102, 255, 0.25);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
       
       .service-cta:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(0, 102, 255, 0.35);
+        color: #FFFFFF !important;
       }
       
       .nav-btn {
@@ -528,7 +530,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.25<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$0.25<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
@@ -554,7 +556,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.50<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$0.50<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
@@ -580,7 +582,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$15.00<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$15.00<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
@@ -606,7 +608,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$1.20<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$1.20<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
@@ -632,7 +634,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.75<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$0.75<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
@@ -658,7 +660,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.80<span style="font-size: 18px; opacity: 0.7;">/1K</span></div>
+              <div class="service-price-value">$0.80<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
