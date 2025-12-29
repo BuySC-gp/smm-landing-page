@@ -1117,6 +1117,191 @@ window.addEventListener('load', function() {
       `);
     }
   }, 500);
+
+  // === HOW IT WORKS TIMELINE ===
+setTimeout(() => {
+  const statsMarquee = document.querySelector('.stats-marquee-wrapper');
+  
+  if (statsMarquee) {
+    statsMarquee.insertAdjacentHTML('afterend', `
+      <section class="how-it-works-section">
+        <div class="how-it-works-container">
+          <div class="how-it-works-header">
+            <h2 class="how-it-works-title">How It Works</h2>
+            <p class="how-it-works-subtitle">Choose your path and follow simple steps to start growing your social media presence</p>
+          </div>
+          
+          <div class="how-tabs">
+            <button class="how-tab active" data-tab="getting-started">🚀 Getting Started</button>
+            <button class="how-tab" data-tab="api-integration">⚙️ API Integration</button>
+            <button class="how-tab" data-tab="pricing-guide">💰 Pricing Guide</button>
+          </div>
+          
+          <div class="how-content active" data-content="getting-started">
+            <div class="how-timeline">
+              <div class="how-step">
+                <div class="how-step-number">1</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">👤</span>
+                    Create Account
+                  </div>
+                  <div class="how-step-description">Register in 30 seconds with email verification. No credit card required to start exploring our services.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">2</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">💳</span>
+                    Add Funds
+                  </div>
+                  <div class="how-step-description">Multiple payment methods accepted: Credit Card, Crypto, PayPal. Secure transactions with instant balance updates.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">3</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">🎯</span>
+                    Select Service
+                  </div>
+                  <div class="how-step-description">Browse 5,000+ services across 15 platforms. Filter by category, quality tier, and delivery speed to find your perfect match.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">4</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">📊</span>
+                    Track Results
+                  </div>
+                  <div class="how-step-description">Real-time dashboard with live progress tracking. Get instant notifications and analytics for every order.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="how-content" data-content="api-integration">
+            <div class="how-timeline">
+              <div class="how-step">
+                <div class="how-step-number">1</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">🔑</span>
+                    Get API Key
+                  </div>
+                  <div class="how-step-description">Generate your unique API key from dashboard settings. Secure authentication with token-based access control.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">2</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">📚</span>
+                    Read Documentation
+                  </div>
+                  <div class="how-step-description">Comprehensive API docs with endpoints, parameters, and code examples. Rate limits: 1000 requests/hour included.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">3</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">🧪</span>
+                    Test Sandbox
+                  </div>
+                  <div class="how-step-description">Free testing environment with demo data. Validate integration before going live without spending credits.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">4</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">🚀</span>
+                    Go Production
+                  </div>
+                  <div class="how-step-description">Deploy in minutes with 99.8% uptime guarantee. Enterprise-grade infrastructure handles millions of requests daily.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="how-content" data-content="pricing-guide">
+            <div class="how-timeline">
+              <div class="how-step">
+                <div class="how-step-number">1</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">⭐</span>
+                    Quality Tiers
+                  </div>
+                  <div class="how-step-description">Premium vs Standard services clearly explained. Higher quality = real accounts, better retention, safer delivery methods.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">2</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">📈</span>
+                    Volume Discounts
+                  </div>
+                  <div class="how-step-description">Bulk orders unlock better rates automatically. Save up to 30% on large packages with our tiered pricing system.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">3</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">✅</span>
+                    No Hidden Fees
+                  </div>
+                  <div class="how-step-description">Transparent pricing, what you see is what you get. No surprise charges, processing fees, or minimum deposits required.</div>
+                </div>
+              </div>
+              
+              <div class="how-step">
+                <div class="how-step-number">4</div>
+                <div class="how-step-card">
+                  <div class="how-step-title">
+                    <span class="how-step-icon">💸</span>
+                    Flexible Budget
+                  </div>
+                  <div class="how-step-description">Start from just $1 and scale to enterprise. Pay-as-you-go model with no subscription fees or contracts.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    `);
+    
+    // Tab switching logic
+    const tabs = document.querySelectorAll('.how-tab');
+    const contents = document.querySelectorAll('.how-content');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetTab = tab.dataset.tab;
+        
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
+      });
+    });
+  }
+}, 600);
+
 });
 
 window.addEventListener('load', function() {
