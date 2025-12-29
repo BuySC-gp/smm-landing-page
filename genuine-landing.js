@@ -80,27 +80,451 @@ document.addEventListener('DOMContentLoaded', function() {
         transform: translateY(-8px) scale(1.01) !important;
       }
     }
+
+    /* === HERO PREMIUM SPLIT VERSION === */
+    .hero-premium {
+      background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 50%, #0f1629 100%);
+      padding: 120px 20px 100px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-premium::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      right: -100px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 102, 255, 0.15), transparent 60%);
+      border-radius: 50%;
+      animation: float 20s ease-in-out infinite;
+      filter: blur(60px);
+    }
+    
+    .hero-premium::after {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      left: -150px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 166, 126, 0.12), transparent 60%);
+      border-radius: 50%;
+      animation: float 25s ease-in-out infinite reverse;
+      filter: blur(80px);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -30px) scale(1.1); }
+    }
+    
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-left {
+      animation: slideInLeft 1s ease-out;
+    }
+    
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      background: rgba(0, 102, 255, 0.1);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 24px;
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 102, 255, 0.3); }
+      50% { box-shadow: 0 0 30px rgba(0, 102, 255, 0.5); }
+    }
+    
+    .hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      background: #00FF88;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+    
+    .hero-badge-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #00FF88;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .hero-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+    
+    .hero-title-gradient {
+      background: linear-gradient(135deg, #0066FF 0%, #00A67E 50%, #00FFAA 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+      background-size: 200% auto;
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 100% center; }
+    }
+    
+    .hero-subtitle {
+      font-size: 18px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 40px;
+      max-width: 560px;
+    }
+    
+    .hero-cta-group {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    
+    .hero-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 40px;
+      background: linear-gradient(135deg, #0066FF, #0052CC);
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 12px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(0, 102, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-cta-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .hero-cta-primary:hover::before {
+      left: 100%;
+    }
+    
+    .hero-cta-primary:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 12px 40px rgba(0, 102, 255, 0.6) !important;
+    }
+    
+    .hero-cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 32px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    
+    .hero-cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      padding: 32px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+    }
+    
+    .hero-stat {
+      text-align: center;
+    }
+    
+    .hero-stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00FFAA, #0066FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 4px;
+      display: block;
+    }
+    
+    .hero-stat-label {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 500;
+    }
+    
+    .hero-right {
+      animation: slideInRight 1s ease-out 0.2s backwards;
+      position: relative;
+    }
+    
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .hero-dashboard-preview {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.5s;
+      background: #fff;
+    }
+    
+    .hero-dashboard-preview:hover {
+      transform: translateY(-10px) rotateY(2deg);
+    }
+    
+    .hero-dashboard-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    .hero-floating-badge {
+      position: absolute;
+      padding: 16px 24px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      animation: floatBadge 3s ease-in-out infinite;
+      text-align: center;
+    }
+    
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .hero-floating-badge-1 {
+      top: 40px;
+      right: -30px;
+    }
+    
+    .hero-floating-badge-2 {
+      bottom: 60px;
+      left: -40px;
+      animation-delay: 1.5s;
+    }
+    
+    .hero-badge-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .hero-badge-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0066FF;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    .hero-badge-label {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    
+    @media (max-width: 1200px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+      
+      .hero-title {
+        font-size: 48px;
+      }
+      
+      .hero-floating-badge-1 {
+        right: 20px;
+      }
+      
+      .hero-floating-badge-2 {
+        left: 20px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .hero-premium {
+        padding: 80px 20px 60px;
+      }
+      
+      .hero-title {
+        font-size: 36px;
+      }
+      
+      .hero-cta-group {
+        flex-direction: column;
+      }
+      
+      .hero-stats {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      
+      .hero-floating-badge {
+        display: none;
+      }
+    }
   `;
   document.head.appendChild(elevationStyles);
 
+  // === LOGO ===
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
-  const heroForm = document.querySelector('.block-signin-text .component_card');
+  // === HERO SECTION SPLIT VERSION - MÉTHODE CORRECTE ===
+  const heroForm = document.querySelector('.block-signin-text .component__card');
   if (heroForm && heroForm.parentElement) {
     const heroContainer = heroForm.parentElement;
-    const ctaHTML = `
-      <div style="text-align: left; max-width: 400px;">
-        <a href="/signup" class="btn btn-big-primary" style="display: inline-block; text-decoration: none; width: 100%; text-align: center; padding: 16px 32px; font-size: 18px; font-weight: 700; background: var(--primary-blue); color: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,71,171,0.3);">Create Free Account →</a>
-        <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="font-size: 14px; color: #666;">✓ <strong style="color: var(--primary-blue);">500K+</strong> orders processed</span>
-          <span style="font-size: 14px; color: #666;">✓ <strong style="color: var(--primary-blue);">2,500+</strong> active users</span>
-          <span style="font-size: 14px; color: #666;">✓ <strong style="color: var(--primary-blue);">15+</strong> platforms</span>
+    
+    // Récupère l'image existante du bloc natif
+    const nativeImage = document.querySelector('.block-signin-text img');
+    const imageUrl = nativeImage ? nativeImage.src : '';
+    
+    const heroHTML = `
+      <section class="hero-premium">
+        <div class="hero-content">
+          <div class="hero-left">
+            <div class="hero-badge">
+              <span class="hero-badge-dot"></span>
+              <span class="hero-badge-text">🚀 Trusted by 2,500+ Agencies</span>
+            </div>
+            
+            <h1 class="hero-title">
+              Scale Your SMM<br>
+              Business <span class="hero-title-gradient">Like a Pro</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+              Access 5,000+ premium services across 15+ platforms. Automated delivery, 
+              enterprise API, and 99.8% uptime. Built for resellers who demand excellence.
+            </p>
+            
+            <div class="hero-cta-group">
+              <a href="/signup" class="hero-cta-primary">
+                Create Free Account
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </a>
+              
+              <a href="/api" class="hero-cta-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+                  <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+                  <line x1="6" y1="6" x2="6.01" y2="6"/>
+                  <line x1="6" y1="18" x2="6.01" y2="18"/>
+                </svg>
+                View API Docs
+              </a>
+            </div>
+            
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-value">500K+</span>
+                <span class="hero-stat-label">Orders Processed</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">2,500+</span>
+                <span class="hero-stat-label">Active Users</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">99.8%</span>
+                <span class="hero-stat-label">Uptime SLA</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="hero-right">
+            <div class="hero-dashboard-preview">
+              <img src="${imageUrl}" alt="Dashboard Preview">
+              
+              <div class="hero-floating-badge hero-floating-badge-1">
+                <span class="hero-badge-icon">⚡</span>
+                <span class="hero-badge-value">&lt; 200ms</span>
+                <span class="hero-badge-label">API Response</span>
+              </div>
+              
+              <div class="hero-floating-badge hero-floating-badge-2">
+                <span class="hero-badge-icon">🎯</span>
+                <span class="hero-badge-value">5,247</span>
+                <span class="hero-badge-label">Services</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <p style="margin-top: 20px; text-align: center; font-size: 14px; color: #666;">Already a member? <a href="/signin" style="color: var(--primary-blue); font-weight: 600; text-decoration: none;">Sign in →</a></p>
-      </div>
+      </section>
     `;
-    heroContainer.insertAdjacentHTML('beforeend', ctaHTML);
+    
+    // MÉTHODE CORRECTE: insertAdjacentHTML au lieu de innerHTML
+    heroContainer.insertAdjacentHTML('beforeend', heroHTML);
+    // Cache le formulaire natif
     heroForm.style.display = 'none';
   }
 });
