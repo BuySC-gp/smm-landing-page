@@ -588,18 +588,40 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
     
-    // AJOUT 3: Change "Remember me"
-    setTimeout(() => {
-      const labels = document.querySelectorAll('.block-signin-text label');
-      labels.forEach(label => {
-        if (label.textContent.toLowerCase().includes('remember')) {
-          label.textContent = 'Stay signed in';
-        }
-      });
-    }, 500);
+// AJOUT 3: Déplace "Forgot password?" et change "Remember me"
+setTimeout(() => {
+  // 1. DÉPLACE FORGOT PASSWORD
+  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
+  const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
+    label.textContent.trim().toLowerCase() === 'password'
+  );
+  
+  if (forgotLink && passwordLabel) {
+    // Crée un wrapper flex
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important;';
+    
+    // Insère le wrapper avant le label
+    passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
+    
+    // Déplace le label et le lien dans le wrapper
+    wrapper.appendChild(passwordLabel);
+    wrapper.appendChild(forgotLink);
+    
+    // Reset les styles
+    passwordLabel.style.margin = '0';
+    forgotLink.style.cssText = 'font-size: 13px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 600 !important; position: static !important;';
   }
-});
-
+  
+  // 2. CHANGE "REMEMBER ME"
+  const labels = document.querySelectorAll('.block-signin-text label');
+  labels.forEach(label => {
+    if (label.textContent.toLowerCase().includes('remember')) {
+      label.textContent = 'Stay signed in';
+    }
+  });
+}, 800);
+    
 window.addEventListener('load', function() {
   const logos = [
     ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
