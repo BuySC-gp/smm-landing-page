@@ -1,9 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // === INJECTION CSS DEPTH & ELEVATION ===
+  // === INJECTION CSS DEPTH & ELEVATION + FIXES ESPACES ===
   const elevationStyles = document.createElement('style');
   elevationStyles.textContent = `
-    /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
+    /* === FIXES ESPACES BLANCS === */
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
     
+    main {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+    
+    nav, header, .component-navbar {
+      margin-top: 0 !important;
+    }
+    
+    .block-signin-text {
+      padding-top: 80px !important;
+      padding-bottom: 60px !important;
+      margin-top: 0 !important;
+    }
+    
+    /* Logos carousel sans gap énorme */
+    div[style*="background:#F8F9FF;padding:48px 0"] {
+      padding: 48px 0 !important;
+      margin-top: 0 !important;
+    }
+    
+    /* Services section */
+    div[style*="padding: 100px 0"] {
+      padding: 80px 0 !important;
+    }
+    
+    /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
     :root {
       --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
       --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -11,12 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
       --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
     }
     
-    /* === SECTIONS BACKGROUNDS === */
-    #services-section {
-      background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%) !important;
-    }
-    
-    /* === CARDS ELEVATION === */
     .service-card {
       box-shadow: var(--shadow-low) !important;
       backdrop-filter: blur(16px) !important;
@@ -30,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
       border-color: rgba(0, 102, 255, 0.2) !important;
     }
     
-    /* Why Section Cards */
     div[style*="backdrop-filter: blur(10px)"] {
       box-shadow: var(--shadow-low) !important;
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
@@ -42,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function() {
       border-color: rgba(0, 102, 255, 0.15) !important;
     }
     
-    /* FAQ Items */
     .faq-item {
       box-shadow: var(--shadow-low) !important;
       backdrop-filter: blur(12px) !important;
@@ -59,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
       border-color: #0066FF !important;
     }
     
-    /* Buttons */
     button, a[href*="signup"], .service-cta, .nav-btn {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
@@ -69,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function() {
       box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3) !important;
     }
     
-    /* Navigation Buttons */
     .nav-btn {
       box-shadow: var(--shadow-mid) !important;
       backdrop-filter: blur(12px) !important;
@@ -80,29 +101,19 @@ document.addEventListener('DOMContentLoaded', function() {
       transform: scale(1.1) !important;
     }
     
-    /* Stats Bar Glassmorphism */
-    div[style*="8.7M"] {
-      background: rgba(255, 255, 255, 0.7) !important;
-      backdrop-filter: blur(20px) !important;
-      box-shadow: var(--shadow-mid) !important;
-    }
-    
-    /* Footer */
-    div[style*="background: #F8F9FF"] {
-      background: linear-gradient(180deg, #F8F9FF 0%, #E8EBFF 100%) !important;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-    }
-    
-    /* GPU Acceleration */
     .service-card, .faq-item, .nav-btn, button {
       transform: translateZ(0);
       will-change: transform, box-shadow;
     }
     
-    /* Responsive */
     @media (max-width: 768px) {
       .service-card:hover {
         transform: translateY(-8px) scale(1.01) !important;
+      }
+      
+      .block-signin-text {
+        padding-top: 60px !important;
+        padding-bottom: 40px !important;
       }
     }
   `;
