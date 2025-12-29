@@ -511,9 +511,9 @@ window.addEventListener('load', function() {
       
       <div class="services-scroll" id="servicesScroll">
         <!-- TikTok -->
-        <div class="service-card" style="--card-color-1: #00f2fe; --card-color-2: #4facfe;">
+        <div class="service-card" style="--card-color-1: #000000; --card-color-2: #EE1D52;">
           <div class="service-header">
-            <span class="badge" style="color: #00f2fe;">⚡ POPULAR</span>
+            <span class="badge" style="color: #000000;">⚡ POPULAR</span>
             <div class="service-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="white">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
@@ -530,16 +530,16 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.25<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$0.25<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #000000">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
         </div>
         
         <!-- Instagram -->
-        <div class="service-card" style="--card-color-1: #f09433; --card-color-2: #e6683c;">
+        <div class="service-card" style="--card-color-1: #F58529; --card-color-2: #DD2A7B;">
           <div class="service-header">
-            <span class="badge" style="color: #f09433;">🔥 HOT</span>
+            <span class="badge" style="color: #E4405F;">🔥 HOT</span>
             <div class="service-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="white">
                 <path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/>
@@ -556,16 +556,16 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.50<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$0.50<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #E4405F">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
         </div>
         
         <!-- YouTube -->
-        <div class="service-card" style="--card-color-1: #ff0844; --card-color-2: #ff5858;">
+        <div class="service-card" style="--card-color-1: #FF0000; --card-color-2: #CC0000;">
           <div class="service-header">
-            <span class="badge" style="color: #ff0844;">✓ VERIFIED</span>
+            <span class="badge" style="color: #FF0000;">✓ VERIFIED</span>
             <div class="service-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="white">
                 <path d="M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z"/>
@@ -582,16 +582,16 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$15.00<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$15.00<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #FF0000">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
         </div>
         
         <!-- Spotify -->
-        <div class="service-card" style="--card-color-1: #1db954; --card-color-2: #1ed760;">
+        <div class="service-card" style="--card-color-1: #1DB954; --card-color-2: #1ED760;">
           <div class="service-header">
-            <span class="badge" style="color: #1db954;">🎵 TRENDING</span>
+            <span class="badge" style="color: #1DB954;">🎵 TRENDING</span>
             <div class="service-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="white">
                 <path d="M17.9,10.9C14.7,9 9.35,8.8 6.3,9.75C5.8,9.9 5.3,9.6 5.15,9.15C5,8.65 5.3,8.15 5.75,8C9.3,6.95 15.15,7.15 18.85,9.35C19.3,9.6 19.45,10.2 19.2,10.65C18.95,11 18.35,11.15 17.9,10.9M17.8,13.7C17.55,14.05 17.1,14.2 16.75,13.95C14.05,12.3 9.95,11.8 6.8,12.8C6.4,12.9 5.95,12.7 5.85,12.3C5.75,11.9 5.95,11.45 6.35,11.35C10,10.25 14.5,10.8 17.6,12.7C17.9,12.85 18.05,13.35 17.8,13.7M16.6,16.45C16.4,16.75 16.05,16.85 15.75,16.65C13.4,15.2 10.45,14.9 6.95,15.7C6.6,15.8 6.3,15.55 6.2,15.25C6.1,14.9 6.35,14.6 6.65,14.5C10.45,13.65 13.75,14 16.35,15.6C16.7,15.75 16.75,16.15 16.6,16.45M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
@@ -608,16 +608,16 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$1.20<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$1.20<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #1DB954">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
         </div>
         
         <!-- Facebook -->
-        <div class="service-card" style="--card-color-1: #667eea; --card-color-2: #764ba2;">
+        <div class="service-card" style="--card-color-1: #1877F2; --card-color-2: #0D65D9;">
           <div class="service-header">
-            <span class="badge" style="color: #667eea;">⭐ TRUSTED</span>
+            <span class="badge" style="color: #1877F2;">⭐ TRUSTED</span>
             <div class="service-icon">
               <svg width="44" height="44" viewBox="0 0 24 24" fill="white">
                 <path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/>
@@ -634,14 +634,14 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.75<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$0.75<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #1877F2">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
         </div>
         
         <!-- Twitter/X -->
-        <div class="service-card" style="--card-color-1: #1DA1F2; --card-color-2: #0d8bd9;">
+        <div class="service-card" style="--card-color-1: #1DA1F2; --card-color-2: #0C85D0;">
           <div class="service-header">
             <span class="badge" style="color: #1DA1F2;">⚡ FAST</span>
             <div class="service-icon">
@@ -660,7 +660,7 @@ window.addEventListener('load', function() {
             </ul>
             <div class="service-price">
               <div class="service-price-label">Starting from</div>
-              <div class="service-price-value">$0.80<span style="font-size: 20px; opacity: 0.9; font-weight: 600; margin-left: 2px">/1K</span></div>
+              <div class="service-price-value">$0.80<span style="font-size: 18px; opacity: 1; font-weight: 600; color: #1DA1F2">/1000</span></div>
             </div>
             <a href="/services" class="service-cta">Explore Services →</a>
           </div>
