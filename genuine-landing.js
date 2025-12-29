@@ -901,16 +901,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
 setTimeout(() => {
-  if (!document.querySelector('.block-signin')) return;
-  
-  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"]');
+  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
   );
   
   if (forgotLink && passwordLabel) {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;';
+    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;'; // ← baseline au lieu de center
     
     passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
     
@@ -918,9 +916,8 @@ setTimeout(() => {
     wrapper.appendChild(forgotLink);
     
     passwordLabel.style.margin = '0';
-    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;';
+    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;'; // ← Plus petit + nowrap
   }
-}, 100);
   
   const labels = document.querySelectorAll('.block-signin-text label');
   labels.forEach(label => {
@@ -933,7 +930,52 @@ setTimeout(() => {
 }); 
 
 window.addEventListener('load', function() {
-  const logos = [
+
+
+  // === FONCTION DE DÉTECTION PAGE STATE ===
+  function detectPageState(callback) {
+    let attempts = 0;
+    const maxAttempts = 30;
+
+    const checkInterval = setInterval(() => {
+      attempts++;
+
+      const hasNewOrderLink = Array.from(document.querySelectorAll('a')).some(a => 
+        a.textContent.trim() === 'New order'
+      );
+
+      const hasServicesLink = Array.from(document.querySelectorAll('a')).some(a => 
+        a.textContent.trim() === 'Services'
+      );
+
+      const hasSignupForm = document.querySelector('.block-signin-text .component_card input[type="text"]');
+
+      const hasSigninButton = Array.from(document.querySelectorAll('button')).some(btn => 
+        btn.textContent.toLowerCase().includes('sign in')
+      );
+
+      const isLoggedIn = hasNewOrderLink || hasServicesLink;
+      const isLoggedOut = hasSignupForm && hasSigninButton && !isLoggedIn;
+
+      if (isLoggedOut || isLoggedIn || attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        callback(isLoggedOut);
+        console.log(`[DETECTION] Page state: ${isLoggedOut ? 'LANDING (logged out)' : 'PANEL (logged in)'} after ${attempts} attempts`);
+      }
+    }, 100);
+  }
+
+  // === LANCEMENT CONDITIONNEL ===
+  detectPageState(function(isLandingPage) {
+
+    if (!isLandingPage) {
+      console.log('[SKIP] User logged in - no landing elements injected');
+      return;
+    }
+
+    console.log('[INJECT] Landing page confirmed - injecting custom elements...');
+
+      const logos = [
     ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
     ['#E4405F', 'M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z'], // Instagram
     ['#FF0000', 'M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z'], // YouTube
@@ -948,9 +990,9 @@ window.addEventListener('load', function() {
     ['#FF4500', 'M14.5 15.41C14.58 15.5 14.58 15.69 14.5 15.8C13.77 16.5 12.41 16.56 12 16.56C11.61 16.56 10.25 16.5 9.54 15.8C9.44 15.69 9.44 15.5 9.54 15.41C9.65 15.31 9.82 15.31 9.92 15.41C10.38 15.87 11.33 16 12 16C12.69 16 13.66 15.87 14.1 15.41C14.21 15.31 14.38 15.31 14.5 15.41M10.75 13.04C10.75 12.47 10.28 12 9.71 12C9.14 12 8.67 12.47 8.67 13.04C8.67 13.61 9.14 14.09 9.71 14.09C10.28 14.09 10.75 13.61 10.75 13.04M14.29 12C13.72 12 13.25 12.5 13.25 13.05C13.25 13.62 13.72 14.09 14.29 14.09C14.86 14.09 15.33 13.61 15.33 13.04C15.33 12.47 14.86 12 14.29 12M22 12C22 17.5 17.5 22 12 22S2 17.5 2 12C2 6.5 6.5 2 12 2S22 6.5 22 12M18.67 12C18.67 11.19 18 10.54 17.22 10.54C16.82 10.54 16.46 10.7 16.2 10.95C15.2 10.23 13.83 9.77 12.3 9.71L12.97 6.58L15.14 7.05C15.16 7.6 15.62 8.04 16.18 8.04C16.75 8.04 17.22 7.57 17.22 7C17.22 6.43 16.75 5.96 16.18 5.96C15.77 5.96 15.41 6.2 15.25 6.55L12.82 6.03C12.75 6 12.68 6.03 12.63 6.07C12.57 6.11 12.54 6.17 12.53 6.24L11.79 9.72C10.24 9.77 8.84 10.23 7.82 10.96C7.56 10.71 7.2 10.56 6.81 10.56C6 10.56 5.35 11.21 5.35 12C5.35 12.61 5.71 13.11 6.21 13.34C6.19 13.5 6.18 13.62 6.18 13.78C6.18 16 8.79 17.85 12 17.85C15.23 17.85 17.85 16.03 17.85 13.78C17.85 13.64 17.84 13.5 17.81 13.34C18.31 13.11 18.67 12.6 18.67 12Z'], // Reddit
     ['#FFFC00', 'M12.206,2.003h0a10.511,10.511,0,0,1,7.42,3.074,10.5,10.5,0,0,1,0,14.846,10.511,10.511,0,0,1-7.42,3.074h0a10.511,10.511,0,0,1-7.42-3.074,10.5,10.5,0,0,1,0-14.846A10.511,10.511,0,0,1,12.206,2.003M8.5,9.5A1.5,1.5,0,1,0,10,11,1.5,1.5,0,0,0,8.5,9.5m7,0A1.5,1.5,0,1,0,17,11,1.5,1.5,0,0,0,15.5,9.5M6.93,14.77c.11-.08.46-.32,1.44.07A5.24,5.24,0,0,0,12,16a5.24,5.24,0,0,0,3.63-1.16c.98-.39,1.33-.15,1.44-.07.52.38.21,1.17-.07,1.57A6.78,6.78,0,0,1,12,18.5a6.78,6.78,0,0,1-5-.16C6.72,15.94,6.41,15.15,6.93,14.77Z'], // Snapchat
     ['#FF6900', 'M21.93,12.7H21.87C21.88,12.47 21.9,12.24 21.9,12C21.9,11.76 21.88,11.53 21.87,11.3H21.93C22.46,8.84 22.05,6.72 20.86,5.36C19.68,4 17.78,3.43 15.34,3.69C13.85,1.95 12.07,1 10,1C7.93,1 6.15,1.95 4.66,3.69C2.22,3.43 0.32,4 -0.86,5.36C-2.05,6.72 -2.46,8.84 -1.93,11.3H-1.87C-1.88,11.53 -1.9,11.76 -1.9,12C-1.9,12.24 -1.88,12.47 -1.87,12.7H-1.93C-2.46,15.16 -2.05,17.28 -0.86,18.64C0.32,20 2.22,20.57 4.66,20.31C6.15,22.05 7.93,23 10,23C12.07,23 13.85,22.05 15.34,20.31C17.78,20.57 19.68,20 20.86,18.64C22.05,17.28 22.46,15.16 21.93,12.7M20.27,17.5C19.5,18.45 18.09,18.85 16.15,18.66C15.57,17.67 14.84,16.74 14,15.92L14.25,14.77C15.52,15.97 16.62,17.31 17.38,18.71C18.64,18.63 19.38,18.28 19.72,17.71C20.27,16.84 20.08,15.42 19.25,13.64C18.33,11.66 16.76,9.76 14.79,8.23L14,8.77L13.21,8.23C11.24,9.76 9.67,11.66 8.75,13.64C7.92,15.42 7.73,16.84 8.28,17.71C8.66,18.32 9.46,18.7 10.8,18.69C10.82,18.89 10.86,19.08 10.9,19.27C9.12,19.39 7.86,19.09 7.04,18.31C6,17.31 5.65,15.59 6.05,13.39C5.59,11.45 5.76,9.9 6.55,8.88C7.35,7.88 8.76,7.42 10.66,7.59C10.94,7.3 11.22,7 11.5,6.74C9.87,6.43 8.64,6.57 7.89,7.15C7,7.85 6.58,9.05 6.62,10.75L6.46,10.92C4.9,10.64 3.85,10.85 3.3,11.59C2.77,12.3 2.76,13.44 3.23,14.94C4.17,18.03 6.13,20.42 8.91,21.53C11.68,22.64 14.88,22.32 17.5,20.67C19.54,19.38 20.86,17.5 21.28,15.09C21.31,14.95 21.32,14.82 21.34,14.68C21.23,15.71 20.88,16.67 20.27,17.5Z'] // Threads
-  ];
+      ];
 
-  const trustedHTML = `
+      const trustedHTML = `
     <div style="
       background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 50%, #F0F4FF 100%);
       padding: 32px 0;
@@ -1056,15 +1098,15 @@ window.addEventListener('load', function() {
         </div>
       </div>
     </div>
-  `;
+      `;
 
-  const mainContent = document.querySelector('main') || document.body;
-  mainContent.insertAdjacentHTML('beforeend', trustedHTML);
+      const mainContent = document.querySelector('main') || document.body;
+      mainContent.insertAdjacentHTML('beforeend', trustedHTML);
 
-  const container1 = document.getElementById('logosContainer');
-  const container2 = document.getElementById('logosContainer2');
+      const container1 = document.getElementById('logosContainer');
+      const container2 = document.getElementById('logosContainer2');
 
-  logos.forEach(([color, path]) => {
+      logos.forEach(([color, path]) => {
     const logoHTML = `
       <div style="
         width: 48px;
@@ -1087,72 +1129,67 @@ window.addEventListener('load', function() {
     container1.insertAdjacentHTML('beforeend', logoHTML);
     container2.insertAdjacentHTML('beforeend', logoHTML);
 
-  });
-  
-  // === STATS MARQUEE DIAGONAL ===
-setTimeout(() => {
-  if (!document.querySelector('.block-signin')) return;
-  
-  const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
-    div.textContent.includes('Top Selling')
-  );
-  
-  if (servicesSection) {
-    servicesSection.insertAdjacentHTML('afterend', `
-      <div class="stats-marquee-wrapper">
-        <div class="stats-marquee">
-          <div class="stats-marquee-track">
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-            </span>
-            
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-            </span>
-            <span class="stats-marquee-item">
-              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-            </span>
+      });
+       // === STATS MARQUEE DIAGONAL ===
+      setTimeout(() => {
+    const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
+      div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
+    );
+    
+    if (servicesSection) {
+      servicesSection.insertAdjacentHTML('afterend', `
+        <div class="stats-marquee-wrapper">
+          <div class="stats-marquee">
+            <div class="stats-marquee-track">
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+              </span>
+              
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+              </span>
+              <span class="stats-marquee-item">
+                <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    `);
-  }
-}, 500);
+      `);
+    }
+      }, 500);
 
-  // === HOW IT WORKS TIMELINE ===
-setTimeout(() => {
-  if (!document.querySelector('.block-signin')) return;
+      // === HOW IT WORKS TIMELINE ===
+    setTimeout(() => {
+      const statsMarquee = document.querySelector('.stats-marquee-wrapper');
   
-  const statsMarquee = document.querySelector('.stats-marquee-wrapper');
-  
-  if (statsMarquee) {
+      if (statsMarquee) {
     statsMarquee.insertAdjacentHTML('afterend', `
       <section class="how-it-works-section">
         <div class="how-it-works-container">
@@ -1389,24 +1426,24 @@ setTimeout(() => {
         document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
       });
     });
-  }
-}, 600);
-});
+      }
+    }, 600);
+    });
 
-window.addEventListener('load', function() {
-  const mainContent = document.querySelector('main') || document.body;
-  const footer = document.querySelector('footer');
+    window.addEventListener('load', function() {
+      const mainContent = document.querySelector('main') || document.body;
+      const footer = document.querySelector('footer');
   
-  const allSectionsHTML = `
+      const allSectionsHTML = `
     <!-- SERVICES CAROUSEL - PREMIUM VERSION -->
-<div style="background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%); padding: 100px 0; overflow: hidden; position: relative;">
-  <!-- Decorative elements -->
-  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden;">
+    <div style="background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%); padding: 100px 0; overflow: hidden; position: relative;">
+      <!-- Decorative elements -->
+      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden;">
     <div style="position: absolute; top: 20%; right: 10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,102,255,0.08) 0%, transparent 70%); border-radius: 50%; filter: blur(80px);"></div>
     <div style="position: absolute; bottom: 10%; left: 5%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,166,126,0.06) 0%, transparent 70%); border-radius: 50%; filter: blur(100px);"></div>
-  </div>
+      </div>
   
-  <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1;">
+      <div style="max-width: 1400px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1;">
     <div style="text-align: center; margin-bottom: 70px;">
       <div style="display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,166,126,0.1)); border-radius: 50px; margin-bottom: 20px;">
         <span style="font-size: 14px; font-weight: 600; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">PREMIUM SERVICES</span>
@@ -1802,8 +1839,8 @@ window.addEventListener('load', function() {
         <svg width="24" height="24" viewBox="0 0 24 24" fill="#1a1a1a"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
       </button>
     </div>
-  </div>
-</div>
+      </div>
+    </div>
 
         <!-- WHY GENUINE PROMOTION - PREMIUM OPTIMIZED -->
     <div style="background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%); padding: 100px 20px; position: relative;">
@@ -1975,16 +2012,16 @@ window.addEventListener('load', function() {
           </form>
         </div>
         <div style="flex: 1; text-align: center;">
-  <svg style="width: 120px; height: 120px; opacity: 0.6;" viewBox="0 0 24 24" fill="#0066FF">
+      <svg style="width: 120px; height: 120px; opacity: 0.6;" viewBox="0 0 24 24" fill="#0066FF">
     <path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"/>
-  </svg>
-</div>
+      </svg>
+    </div>
       </div>
     </div>
 
     <!-- FOOTER MEGA -->
-<div style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
-  <div style="max-width: 1400px; margin: 0 auto;">
+    <div style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
+      <div style="max-width: 1400px; margin: 0 auto;">
     <!-- Top Section: Logo + Colonnes de liens -->
     <div style="display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 60px; margin-bottom: 60px;">
       
@@ -2097,9 +2134,9 @@ window.addEventListener('load', function() {
         </div>
       </div>
     </div>
-  </div>
+      </div>
   
-  <style>
+      <style>
     /* Footer hover effects */
     div[style*="background: #F8F9FF"] a:hover { color: #0066FF !important; transform: translateX(4px); }
     div[style*="background: #F8F9FF"] a[style*="width: 40px"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,102,255,0.2); border-color: #0066FF; }
@@ -2115,15 +2152,15 @@ window.addEventListener('load', function() {
     @media (max-width: 480px) {
       div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: 1fr !important; }
     }
-  </style>
-</div>
-  `;
+      </style>
+    </div>
+      `;
   
-  if (footer) {
+      if (footer) {
     footer.insertAdjacentHTML('beforebegin', allSectionsHTML);
-  } else {
+      } else {
     mainContent.insertAdjacentHTML('beforeend', allSectionsHTML);
-  }
+      }
   
-  console.log('✅ ALL sections loaded');
-});
+      console.log('✅ ALL sections loaded');
+  });
