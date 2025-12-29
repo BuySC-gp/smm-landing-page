@@ -635,8 +635,9 @@ document.addEventListener('DOMContentLoaded', function() {
 `;
     
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-    // === STATS MARQUEE DIAGONAL ===
-heroContainer.insertAdjacentHTML('beforeend', `
+
+// Insérer APRÈS le heroContainer complet (sortir du parent)
+heroContainer.insertAdjacentHTML('afterend', `
   <div class="stats-marquee-wrapper">
     <div class="stats-marquee">
       <div class="stats-marquee-track">
