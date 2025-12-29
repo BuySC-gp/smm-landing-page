@@ -1,123 +1,176 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // === INJECTION CSS DEPTH & ELEVATION + FIXES ESPACES ===
-  const elevationStyles = document.createElement('style');
-  elevationStyles.textContent = `
-    /* === FIXES ESPACES BLANCS === */
-    body {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    
-    main {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-    
-    nav, header, .component-navbar {
-      margin-top: 0 !important;
+// === INJECTION CSS DEPTH & ELEVATION + FIXES ESPACES ===
+const elevationStyles = document.createElement('style');
+elevationStyles.textContent = `
+  /* === FIXES ESPACES BLANCS - VERSION AGRESSIVE === */
+  
+  /* Forcer body et html à 0 margin/padding */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Tous les conteneurs parents de la navbar */
+  body > *:first-child,
+  body > div:first-child,
+  main:first-child,
+  .main-wrapper,
+  .page-wrapper {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Navbar et header - ciblage large */
+  nav, 
+  header, 
+  [class*="navbar"],
+  [class*="header"],
+  .component-navbar,
+  .block-navbar,
+  nav[class*="component"] {
+    margin: 0 !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Supprimer gap entre navbar et premier élément */
+  nav + *,
+  header + *,
+  [class*="navbar"] + * {
+    margin-top: 0 !important;
+  }
+  
+  /* Hero section */
+  .block-signin-text {
+    padding-top: 80px !important;
+    padding-bottom: 60px !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Logos carousel sans gap énorme */
+  div[style*="background:#F8F9FF;padding:48px 0"] {
+    padding: 48px 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Services section */
+  div[style*="padding: 100px 0"] {
+    padding: 80px 0 !important;
+  }
+  
+  /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
+  :root {
+    --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+    --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .service-card {
+    box-shadow: var(--shadow-low) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(0, 102, 255, 0.08) !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .service-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+    transform: translateY(-12px) scale(1.02) !important;
+    border-color: rgba(0, 102, 255, 0.2) !important;
+  }
+  
+  div[style*="backdrop-filter: blur(10px)"] {
+    box-shadow: var(--shadow-low) !important;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  div[style*="backdrop-filter: blur(10px)"]:hover {
+    box-shadow: var(--shadow-mid) !important;
+    transform: translateY(-8px) !important;
+    border-color: rgba(0, 102, 255, 0.15) !important;
+  }
+  
+  .faq-item {
+    box-shadow: var(--shadow-low) !important;
+    backdrop-filter: blur(12px) !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .faq-item:hover {
+    box-shadow: var(--shadow-mid) !important;
+    transform: translateX(4px) !important;
+  }
+  
+  .faq-item.active {
+    box-shadow: var(--shadow-mid) !important;
+    border-color: #0066FF !important;
+  }
+  
+  button, a[href*="signup"], .service-cta, .nav-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  button:hover, .service-cta:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3) !important;
+  }
+  
+  .nav-btn {
+    box-shadow: var(--shadow-mid) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+  
+  .nav-btn:hover {
+    box-shadow: var(--shadow-high) !important;
+    transform: scale(1.1) !important;
+  }
+  
+  .service-card, .faq-item, .nav-btn, button {
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+  }
+  
+  @media (max-width: 768px) {
+    .service-card:hover {
+      transform: translateY(-8px) scale(1.01) !important;
     }
     
     .block-signin-text {
-      padding-top: 80px !important;
-      padding-bottom: 60px !important;
-      margin-top: 0 !important;
+      padding-top: 60px !important;
+      padding-bottom: 40px !important;
     }
-    
-    /* Logos carousel sans gap énorme */
-    div[style*="background:#F8F9FF;padding:48px 0"] {
-      padding: 48px 0 !important;
-      margin-top: 0 !important;
-    }
-    
-    /* Services section */
-    div[style*="padding: 100px 0"] {
-      padding: 80px 0 !important;
-    }
-    
-    /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
-    :root {
-      --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
-      --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
-      --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
-      --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
-    
-    .service-card {
-      box-shadow: var(--shadow-low) !important;
-      backdrop-filter: blur(16px) !important;
-      border: 1px solid rgba(0, 102, 255, 0.08) !important;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    
-    .service-card:hover {
-      box-shadow: var(--shadow-hover) !important;
-      transform: translateY(-12px) scale(1.02) !important;
-      border-color: rgba(0, 102, 255, 0.2) !important;
-    }
-    
-    div[style*="backdrop-filter: blur(10px)"] {
-      box-shadow: var(--shadow-low) !important;
-      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    
-    div[style*="backdrop-filter: blur(10px)"]:hover {
-      box-shadow: var(--shadow-mid) !important;
-      transform: translateY(-8px) !important;
-      border-color: rgba(0, 102, 255, 0.15) !important;
-    }
-    
-    .faq-item {
-      box-shadow: var(--shadow-low) !important;
-      backdrop-filter: blur(12px) !important;
-      transition: all 0.3s ease !important;
-    }
-    
-    .faq-item:hover {
-      box-shadow: var(--shadow-mid) !important;
-      transform: translateX(4px) !important;
-    }
-    
-    .faq-item.active {
-      box-shadow: var(--shadow-mid) !important;
-      border-color: #0066FF !important;
-    }
-    
-    button, a[href*="signup"], .service-cta, .nav-btn {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-    
-    button:hover, .service-cta:hover {
-      transform: translateY(-2px) !important;
-      box-shadow: 0 8px 24px rgba(0, 102, 255, 0.3) !important;
-    }
-    
-    .nav-btn {
-      box-shadow: var(--shadow-mid) !important;
-      backdrop-filter: blur(12px) !important;
-    }
-    
-    .nav-btn:hover {
-      box-shadow: var(--shadow-high) !important;
-      transform: scale(1.1) !important;
-    }
-    
-    .service-card, .faq-item, .nav-btn, button {
-      transform: translateZ(0);
-      will-change: transform, box-shadow;
-    }
-    
-    @media (max-width: 768px) {
-      .service-card:hover {
-        transform: translateY(-8px) scale(1.01) !important;
-      }
-      
-      .block-signin-text {
-        padding-top: 60px !important;
-        padding-bottom: 40px !important;
-      }
-    }
-  `;
-  document.head.appendChild(elevationStyles);
+  }
+`;
+document.head.appendChild(elevationStyles);
+
+// Force remove top spacing via JavaScript
+setTimeout(() => {
+  const body = document.body;
+  const firstElement = body.firstElementChild;
+  const nav = document.querySelector('nav, header, [class*="navbar"]');
+  
+  if (body) {
+    body.style.marginTop = '0';
+    body.style.paddingTop = '0';
+  }
+  
+  if (firstElement) {
+    firstElement.style.marginTop = '0';
+    firstElement.style.paddingTop = '0';
+  }
+  
+  if (nav && nav.parentElement) {
+    nav.style.marginTop = '0';
+    nav.parentElement.style.paddingTop = '0';
+    nav.parentElement.style.marginTop = '0';
+  }
+}, 100);
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
