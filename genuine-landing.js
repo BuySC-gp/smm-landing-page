@@ -901,6 +901,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
 setTimeout(() => {
+  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  
   const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
@@ -908,7 +910,7 @@ setTimeout(() => {
   
   if (forgotLink && passwordLabel) {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;'; // ← baseline au lieu de center
+    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;';
     
     passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
     
@@ -916,8 +918,9 @@ setTimeout(() => {
     wrapper.appendChild(forgotLink);
     
     passwordLabel.style.margin = '0';
-    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;'; // ← Plus petit + nowrap
+    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;';
   }
+}, 100);
   
   const labels = document.querySelectorAll('.block-signin-text label');
   labels.forEach(label => {
@@ -1085,63 +1088,68 @@ window.addEventListener('load', function() {
     container2.insertAdjacentHTML('beforeend', logoHTML);
 
   });
-   // === STATS MARQUEE DIAGONAL ===
-  setTimeout(() => {
-    const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
-      div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
-    );
-    
-    if (servicesSection) {
-      servicesSection.insertAdjacentHTML('afterend', `
-        <div class="stats-marquee-wrapper">
-          <div class="stats-marquee">
-            <div class="stats-marquee-track">
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-              </span>
-              
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-              </span>
-              <span class="stats-marquee-item">
-                <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-              </span>
-            </div>
+  
+  // === STATS MARQUEE DIAGONAL ===
+setTimeout(() => {
+  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  
+  const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
+    div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
+  );
+  
+  if (servicesSection) {
+    servicesSection.insertAdjacentHTML('afterend', `
+      <div class="stats-marquee-wrapper">
+        <div class="stats-marquee">
+          <div class="stats-marquee-track">
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+            </span>
+            
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> 5,247 Premium Services
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
+            </span>
+            <span class="stats-marquee-item">
+              <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
+            </span>
           </div>
         </div>
-      `);
-    }
-  }, 500);
+      </div>
+    `);
+  }
+}, 500);
 
   // === HOW IT WORKS TIMELINE ===
 setTimeout(() => {
+  if (document.querySelector('a[href*="logout"]') || document.querySelector('.sidebar')) return;
+  
   const statsMarquee = document.querySelector('.stats-marquee-wrapper');
   
   if (statsMarquee) {
