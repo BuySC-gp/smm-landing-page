@@ -431,6 +431,37 @@ document.addEventListener('DOMContentLoaded', function() {
         display: none;
       }
     }
+    
+    /* === AJOUT 1: STYLE FORMULAIRE LOGIN === */
+    .block-signin-text .component_card {
+      padding: 32px !important;
+      border-radius: 16px !important;
+      box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
+      border: 2px solid #0066FF !important;
+      max-width: 480px !important;
+      margin: 40px auto !important;
+    }
+    
+    .block-signin-text .component_card input[type="text"],
+    .block-signin-text .component_card input[type="password"] {
+      padding: 14px 16px !important;
+      border: 1.5px solid #e5e5e5 !important;
+      border-radius: 10px !important;
+      font-size: 15px !important;
+    }
+    
+    .block-signin-text .component_card input:focus {
+      border-color: #0066FF !important;
+      outline: none !important;
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
+    }
+    
+    .block-signin-text .component_card button[type="submit"] {
+      background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+      padding: 16px !important;
+      border-radius: 10px !important;
+      font-weight: 700 !important;
+    }
   `;
   document.head.appendChild(elevationStyles);
 
@@ -438,47 +469,41 @@ document.addEventListener('DOMContentLoaded', function() {
   const logo = document.querySelector('.component-navbar-brand');
   if (logo) logo.textContent = 'GENUINE PROMOTION';
   
-  // === HERO SECTION SPLIT VERSION - MÉTHODE CORRECTE ===
+  // === HERO SECTION SPLIT VERSION ===
   const heroForm = document.querySelector('.block-signin-text .component_card');
   if (heroForm && heroForm.parentElement) {
     const heroContainer = heroForm.parentElement;
-    
-    // Récupère l'image existante du bloc natif
     const nativeImage = document.querySelector('.block-signin-text img');
     const imageUrl = nativeImage ? nativeImage.src : '';
     
     const heroHTML = `
   <section class="hero-premium" style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FF 100%); padding: 60px 20px; position: relative;">
     <div class="hero-content" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;">
-      
-      <!-- LEFT SIDE -->
       <div class="hero-left">
         <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: linear-gradient(135deg, rgba(0, 102, 255, 0.08), rgba(0, 166, 126, 0.08)); border: 1px solid rgba(0, 102, 255, 0.15); border-radius: 50px; margin-bottom: 20px;">
           <span style="width: 6px; height: 6px; background: #00FF88; border-radius: 50%;"></span>
           <span style="font-size: 11px; font-weight: 700; color: #0066FF; text-transform: uppercase; letter-spacing: 0.05em;">🚀 Trusted by 2,500+ Agencies</span>
         </div>
-        
         <h1 style="font-size: 52px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; color: #1a1a1a; letter-spacing: -0.02em;">
-          Scale Your SMM<br>
-          Business <span style="background: linear-gradient(135deg, #0066FF 0%, #00A67E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Like a Pro</span>
+          Scale Your SMM<br>Business <span style="background: linear-gradient(135deg, #0066FF 0%, #00A67E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Like a Pro</span>
         </h1>
-        
         <p style="font-size: 17px; line-height: 1.6; color: #666; margin-bottom: 32px; max-width: 540px;">
           5,000+ premium services • 15+ platforms • Enterprise API • 99.8% uptime • Instant delivery
         </p>
-        
         <div style="display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap;">
           <a href="/signup" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 36px; background: linear-gradient(135deg, #0066FF, #0052CC); color: white; font-size: 17px; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 6px 24px rgba(0, 102, 255, 0.3); transition: all 0.3s;">
             Create Free Account
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          
+          <button id="toggleLoginBtn" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; border: 1.5px solid #e5e5e5; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg>
+            Sign In
+          </button>
           <a href="/api" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: white; color: #0066FF; font-size: 15px; font-weight: 600; border-radius: 12px; text-decoration: none; border: 1.5px solid #e5e5e5; transition: all 0.3s;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
             View API
           </a>
         </div>
-        
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 24px; background: white; border: 1px solid #e5e5e5; border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);">
           <div style="text-align: center;">
             <div style="font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px;">500K+</div>
@@ -494,20 +519,14 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       </div>
-      
-      <!-- RIGHT SIDE -->
       <div class="hero-right">
         <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border: 1px solid #e5e5e5; background: #fff; transform: perspective(1000px) rotateY(-5deg); transition: transform 0.5s;">
           <img src="${imageUrl}" alt="Dashboard" style="width: 100%; height: auto; display: block;">
-          
-          <!-- Floating Badge 1 -->
           <div style="position: absolute; top: 30px; right: -25px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 102, 255, 0.1); text-align: center;">
             <div style="font-size: 22px; margin-bottom: 4px;">⚡</div>
             <div style="font-size: 18px; font-weight: 800; color: #0066FF; margin-bottom: 2px;">&lt;200ms</div>
             <div style="font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">API Speed</div>
           </div>
-          
-          <!-- Floating Badge 2 -->
           <div style="position: absolute; bottom: 40px; left: -30px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 166, 126, 0.1); text-align: center;">
             <div style="font-size: 22px; margin-bottom: 4px;">🎯</div>
             <div style="font-size: 18px; font-weight: 800; color: #00A67E; margin-bottom: 2px;">5,247</div>
@@ -515,14 +534,37 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       </div>
-      
     </div>
   </section>
 `;
-    // MÉTHODE CORRECTE: insertAdjacentHTML au lieu de innerHTML
+    
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-    // Cache le formulaire natif
     heroForm.style.display = 'none';
+    
+    // AJOUT 2: Bouton toggle login
+    const toggleBtn = document.getElementById('toggleLoginBtn');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        if (heroForm.style.display === 'none') {
+          heroForm.style.display = 'block';
+          heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          toggleBtn.textContent = '✕ Hide';
+        } else {
+          heroForm.style.display = 'none';
+          toggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg> Sign In';
+        }
+      });
+    }
+    
+    // AJOUT 3: Change "Remember me"
+    setTimeout(() => {
+      const labels = document.querySelectorAll('.block-signin-text label');
+      labels.forEach(label => {
+        if (label.textContent.toLowerCase().includes('remember')) {
+          label.textContent = 'Stay signed in';
+        }
+      });
+    }, 500);
   }
 });
 
