@@ -144,7 +144,232 @@ document.addEventListener('DOMContentLoaded', function() {
     animation-duration: 20s;
   }
 }
-    
+
+    /* === HOW IT WORKS TIMELINE === */
+.how-it-works-section {
+  padding: 100px 20px;
+  background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 50%, #0f1629 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.how-it-works-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.1), transparent 70%);
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.how-it-works-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.how-it-works-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.how-it-works-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.how-it-works-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.how-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+
+.how-tab {
+  padding: 14px 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.how-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 102, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.how-tab.active {
+  background: linear-gradient(135deg, #0066FF, #00A67E);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 102, 255, 0.3);
+}
+
+.how-content {
+  display: none;
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+.how-content.active {
+  display: block;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.how-timeline {
+  position: relative;
+  padding-left: 80px;
+}
+
+.how-timeline::before {
+  content: '';
+  position: absolute;
+  left: 27px;
+  top: 20px;
+  bottom: 20px;
+  width: 2px;
+  background: linear-gradient(180deg, #0066FF, #00A67E);
+  opacity: 0.3;
+}
+
+.how-step {
+  position: relative;
+  margin-bottom: 40px;
+  animation: fadeUp 0.5s ease-out backwards;
+}
+
+.how-step:nth-child(1) { animation-delay: 0.1s; }
+.how-step:nth-child(2) { animation-delay: 0.2s; }
+.how-step:nth-child(3) { animation-delay: 0.3s; }
+.how-step:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.how-step-number {
+  position: absolute;
+  left: -80px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #0066FF, #00A67E);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.4);
+  z-index: 1;
+}
+
+.how-step-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 28px 32px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.how-step-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 102, 255, 0.3);
+  transform: translateX(8px);
+  box-shadow: 0 12px 40px rgba(0, 102, 255, 0.15);
+}
+
+.how-step-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.how-step-icon {
+  font-size: 28px;
+}
+
+.how-step-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 768px) {
+  .how-it-works-section {
+    padding: 60px 20px;
+  }
+  
+  .how-it-works-title {
+    font-size: 32px;
+  }
+  
+  .how-timeline {
+    padding-left: 60px;
+  }
+  
+  .how-step-number {
+    left: -60px;
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .how-timeline::before {
+    left: 19px;
+  }
+  
+  .how-step-card {
+    padding: 20px 24px;
+  }
+  
+  .how-step-title {
+    font-size: 18px;
+  }
+}
+
     /* === HERO PREMIUM SPLIT VERSION === */
     .hero-premium {
       background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 50%, #0f1629 100%);
