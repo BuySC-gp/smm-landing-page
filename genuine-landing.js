@@ -147,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* === HOW IT WORKS TIMELINE === */
 .how-it-works-section {
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 50%, #0f1629 100%);
+  padding: 70px 20px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FF 100%);
   position: relative;
   overflow: hidden;
 }
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
   right: -100px;
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, rgba(0, 102, 255, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(0, 102, 255, 0.06), transparent 70%);
   border-radius: 50%;
   filter: blur(80px);
 }
@@ -174,20 +174,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .how-it-works-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
 .how-it-works-title {
-  font-size: 48px;
+  font-size: 40px;
   font-weight: 800;
-  color: white;
-  margin-bottom: 16px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
   letter-spacing: -0.02em;
 }
 
 .how-it-works-subtitle {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 17px;
+  color: #666;
   max-width: 600px;
   margin: 0 auto;
 }
@@ -196,34 +196,35 @@ document.addEventListener('DOMContentLoaded', function() {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   flex-wrap: wrap;
 }
 
 .how-tab {
-  padding: 14px 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 28px;
+  background: white;
+  border: 1.5px solid #e5e5e5;
   border-radius: 50px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .how-tab:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: #f8f9ff;
   border-color: rgba(0, 102, 255, 0.3);
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
 }
 
 .how-tab.active {
   background: linear-gradient(135deg, #0066FF, #00A67E);
   border-color: transparent;
   color: white;
-  box-shadow: 0 8px 32px rgba(0, 102, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.3);
 }
 
 .how-content {
@@ -248,23 +249,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .how-timeline {
   position: relative;
-  padding-left: 80px;
+  padding-left: 70px;
 }
 
 .how-timeline::before {
   content: '';
   position: absolute;
-  left: 27px;
+  left: 23px;
   top: 20px;
   bottom: 20px;
   width: 2px;
   background: linear-gradient(180deg, #0066FF, #00A67E);
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .how-step {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   animation: fadeUp 0.5s ease-out backwards;
 }
 
@@ -286,41 +287,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .how-step-number {
   position: absolute;
-  left: -80px;
-  width: 56px;
-  height: 56px;
+  left: -70px;
+  width: 48px;
+  height: 48px;
   background: linear-gradient(135deg, #0066FF, #00A67E);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 800;
   color: white;
-  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.3);
   z-index: 1;
 }
 
 .how-step-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: white;
+  border: 1px solid #e5e5e5;
   border-radius: 16px;
-  padding: 28px 32px;
+  padding: 24px 28px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
 }
 
 .how-step-card:hover {
-  background: rgba(255, 255, 255, 0.08);
   border-color: rgba(0, 102, 255, 0.3);
   transform: translateX(8px);
-  box-shadow: 0 12px 40px rgba(0, 102, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
 }
 
 .how-step-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  color: white;
+  color: #1a1a1a;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
@@ -328,45 +328,53 @@ document.addEventListener('DOMContentLoaded', function() {
 }
 
 .how-step-icon {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .how-step-description {
   font-size: 15px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.7);
+  color: #666;
 }
 
 @media (max-width: 768px) {
   .how-it-works-section {
-    padding: 60px 20px;
+    padding: 50px 20px;
   }
   
   .how-it-works-title {
-    font-size: 32px;
+    font-size: 28px;
+  }
+  
+  .how-it-works-subtitle {
+    font-size: 15px;
   }
   
   .how-timeline {
-    padding-left: 60px;
+    padding-left: 55px;
   }
   
   .how-step-number {
-    left: -60px;
-    width: 48px;
-    height: 48px;
-    font-size: 20px;
+    left: -55px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
   
   .how-timeline::before {
-    left: 19px;
+    left: 15px;
   }
   
   .how-step-card {
-    padding: 20px 24px;
+    padding: 18px 20px;
   }
   
   .how-step-title {
-    font-size: 18px;
+    font-size: 17px;
+  }
+  
+  .how-step-description {
+    font-size: 14px;
   }
 }
 
