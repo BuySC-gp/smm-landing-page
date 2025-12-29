@@ -433,35 +433,67 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     /* === AJOUT 1: STYLE FORMULAIRE LOGIN === */
-    .block-signin-text .component_card {
-      padding: 32px !important;
-      border-radius: 16px !important;
-      box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
-      border: 2px solid #0066FF !important;
-      max-width: 480px !important;
-      margin: 40px auto !important;
-    }
-    
-    .block-signin-text .component_card input[type="text"],
-    .block-signin-text .component_card input[type="password"] {
-      padding: 14px 16px !important;
-      border: 1.5px solid #e5e5e5 !important;
-      border-radius: 10px !important;
-      font-size: 15px !important;
-    }
-    
-    .block-signin-text .component_card input:focus {
-      border-color: #0066FF !important;
-      outline: none !important;
-      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
-    }
-    
-    .block-signin-text .component_card button[type="submit"] {
-      background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-      padding: 16px !important;
-      border-radius: 10px !important;
-      font-weight: 700 !important;
-    }
+.block-signin-text .component_card {
+  padding: 32px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 12px 48px rgba(0, 102, 255, 0.15) !important;
+  border: 2px solid #0066FF !important;
+  max-width: 480px !important;
+  margin: 40px auto !important;
+  background: white !important;
+}
+
+.block-signin-text .component_card > div {
+  margin-bottom: 20px !important;
+  position: relative !important;
+}
+
+.block-signin-text .component_card label {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin-bottom: 8px !important;
+  display: block !important;
+}
+
+.block-signin-text .component_card input[type="text"],
+.block-signin-text .component_card input[type="password"] {
+  width: 100% !important;
+  padding: 14px 16px !important;
+  border: 1.5px solid #e5e5e5 !important;
+  border-radius: 10px !important;
+  font-size: 15px !important;
+  box-sizing: border-box !important;
+}
+
+.block-signin-text .component_card input:focus {
+  border-color: #0066FF !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1) !important;
+}
+
+.block-signin-text .component_card a[href*="forgot"],
+.block-signin-text .component_card a[href*="password"] {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  font-size: 13px !important;
+  color: #0066FF !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  z-index: 10 !important;
+}
+
+.block-signin-text .component_card button[type="submit"] {
+  width: 100% !important;
+  background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+  padding: 16px !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: white !important;
+  border: none !important;
+}
   `;
   document.head.appendChild(elevationStyles);
 
