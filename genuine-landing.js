@@ -84,11 +84,11 @@ document.addEventListener('DOMContentLoaded', function() {
     /* === STATS MARQUEE DIAGONAL === */
 .stats-marquee-wrapper {
   position: relative;
-  width: calc(100% + 100px); /* Ajoute 100px de chaque côté */
-  left: -50px; /* Décale pour centrer */
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
   overflow: hidden;
   margin: 80px 0;
-  transform: rotate(-2deg);
   box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
 }
 
