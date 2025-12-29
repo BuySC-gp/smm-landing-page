@@ -1,31 +1,3 @@
-// === WRAPPER GLOBAL - LANDING PAGE UNIQUEMENT ===
-(function() {
-  
-  // Détection état logged out
-  const checkLandingPage = () => {
-    const isLoggedOut = 
-      !document.querySelector('[href*="logout"]') && 
-      !document.querySelector('.sidebar') &&
-      (document.querySelector('.block-signin') || 
-       document.querySelector('#block_3'));
-    return isLoggedOut;
-  };
-
-  // Attendre que DOM soit prêt pour vérifier
-  const initCheck = setInterval(() => {
-    if (document.body) {
-      clearInterval(initCheck);
-      if (!checkLandingPage()) {
-        console.log('User logged in - all landing elements skipped');
-        return; // Stop tout
-      }
-      // Si on arrive ici = logged out, exécuter le code
-      initLandingPage();
-    }
-  }, 50);
-
-function initLandingPage() {
-  
 document.addEventListener('DOMContentLoaded', function() {
   
   // === INJECTION CSS DEPTH & ELEVATION ===
@@ -837,20 +809,8 @@ document.addEventListener('DOMContentLoaded', function() {
   document.head.appendChild(elevationStyles);
 
   // === LOGO ===
-const logo = document.querySelector('.component-navbar-brand');
-if (logo) logo.textContent = 'GENUINE PROMOTION';
-
-// === DÉTECTION LOGGED OUT - LANDING PAGE UNIQUEMENT ===
-const isLoggedOut = 
-  !document.querySelector('[href*="logout"]') && // Pas de bouton logout
-  !document.querySelector('a[href*="/orders"]') && // Pas de menu orders
-  (document.querySelector('.block-signin') || // Bloc signup existe
-   document.querySelector('#block_3')); // Ou navbar landing
-
-if (!isLoggedOut) {
-  console.log('User logged in - landing elements skipped');
-  return; // Stop tout si user logged in
-}
+  const logo = document.querySelector('.component-navbar-brand');
+  if (logo) logo.textContent = 'GENUINE PROMOTION';
   
   // === HERO SECTION SPLIT VERSION ===
   const heroForm = document.querySelector('.block-signin-text .component_card');
@@ -2159,5 +2119,3 @@ window.addEventListener('load', function() {
   
   console.log('✅ ALL sections loaded');
 });
-}
-})();
