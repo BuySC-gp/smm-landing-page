@@ -615,6 +615,8 @@ setTimeout(() => {
     }
   });
 }, 800);
+  }
+}); 
 
 window.addEventListener('load', function() {
   const logos = [
