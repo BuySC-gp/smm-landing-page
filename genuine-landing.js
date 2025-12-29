@@ -80,70 +80,6 @@ document.addEventListener('DOMContentLoaded', function() {
         transform: translateY(-8px) scale(1.01) !important;
       }
     }
-    
-    /* === STATS MARQUEE DIAGONAL === */
-.stats-marquee-wrapper {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  margin: 80px 0;
-  transform: rotate(-2deg);
-  box-shadow: 0 8px 32px rgba(0, 102, 255, 0.15);
-}
-
-.stats-marquee {
-  background: linear-gradient(135deg, #0066FF 0%, #0052CC 50%, #00A67E 100%);
-  padding: 24px 0;
-  white-space: nowrap;
-  overflow: hidden;
-  position: relative;
-}
-
-.stats-marquee-track {
-  display: inline-flex;
-  animation: marqueeScroll 30s linear infinite;
-  will-change: transform;
-}
-
-.stats-marquee:hover .stats-marquee-track {
-  animation-play-state: paused;
-}
-
-.stats-marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 40px;
-  font-size: 18px;
-  font-weight: 700;
-  color: white;
-  letter-spacing: 0.02em;
-}
-
-.stats-marquee-icon {
-  font-size: 24px;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@media (max-width: 768px) {
-  .stats-marquee-wrapper {
-    margin: 40px 0;
-  }
-  
-  .stats-marquee-item {
-    font-size: 14px;
-    padding: 0 24px;
-  }
-  
-  .stats-marquee-track {
-    animation-duration: 20s;
-  }
-}
 
     /* === HERO PREMIUM SPLIT VERSION === */
     .hero-premium {
@@ -635,59 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
 `;
     
     heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-heroForm.style.display = 'none';
-
-// === STATS MARQUEE DIAGONAL ===
-// Trouve la première section APRÈS .block-signin-text et insère AVANT
-const nextSection = heroContainer.nextElementSibling;
-if (nextSection) {
-  nextSection.insertAdjacentHTML('beforebegin', `
-    <div class="stats-marquee-wrapper">
-      <div class="stats-marquee">
-        <div class="stats-marquee-track">
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-          </span>
-          
-          <!-- Duplicate pour loop infini -->
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> 24/7 Live Support
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> 5,247 Premium Services
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> &lt;200ms API Response
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> 500K+ Orders Delivered
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">⚡</span> 99.8% Uptime Guarantee
-          </span>
-          <span class="stats-marquee-item">
-            <span class="stats-marquee-icon">★</span> Enterprise-Grade Security
-          </span>
-        </div>
-      </div>
-    </div>
-  `);
-}
     heroForm.style.display = 'none';
     
     // AJOUT 2: Bouton toggle login
