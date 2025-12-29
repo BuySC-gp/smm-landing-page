@@ -81,6 +81,29 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
+    /* === FIX ESPACE BLANC HERO === */
+.block-signin-text {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.block-signin-text > div:first-child {
+  padding-top: 0 !important;
+}
+
+.block-signin-text .block-bg {
+  padding-top: 0 !important;
+}
+
+/* Cache les éléments natifs vides */
+.block-signin-text h1,
+.block-signin-text h2,
+.block-signin-text > p,
+.block-signin-text .block-signin-text__title,
+.block-signin-text .block-signin-text__description {
+  display: none !important;
+}
+
     /* === STATS MARQUEE DIAGONAL === */
 .stats-marquee-wrapper {
   position: relative;
