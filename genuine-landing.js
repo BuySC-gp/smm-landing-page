@@ -11,20 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
       --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
-    🎨 PARFAIT ! ON VA OPTIMISER LE FORMULAIRE
-Ajoute ce CSS au début de ton elevationStyles.textContent (juste après :root {}):
-
-javascript
-const elevationStyles = document.createElement('style');
-elevationStyles.textContent = `
-  /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
-  :root {
-    --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
-    --shadow-mid: 0 4px 16px rgba(0, 102, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
-    --shadow-high: 0 12px 32px rgba(0, 102, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 20px 48px rgba(0, 102, 255, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-  
   /* === OPTIMISATION FORMULAIRE LOGIN === */
   .block-signin-text .component_card {
     padding: 32px !important;
