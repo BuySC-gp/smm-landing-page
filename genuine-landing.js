@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
     /* === STATS MARQUEE DIAGONAL === */
 .stats-marquee-wrapper {
   position: relative;
-  width: 110%; /* Dépasse pour couvrir rotation */
-  left: -5%; /* Centre la barre */
+  width: calc(100% + 100px); /* Ajoute 100px de chaque côté */
+  left: -50px; /* Décale pour centrer */
   overflow: hidden;
   margin: 80px 0;
   transform: rotate(-2deg);
