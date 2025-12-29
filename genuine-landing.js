@@ -837,7 +837,8 @@ window.addEventListener('load', function() {
     container1.insertAdjacentHTML('beforeend', logoHTML);
     container2.insertAdjacentHTML('beforeend', logoHTML);
 
-      // === STATS MARQUEE DIAGONAL ===
+  });
+   // === STATS MARQUEE DIAGONAL ===
   setTimeout(() => {
     const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
       div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
@@ -891,8 +892,6 @@ window.addEventListener('load', function() {
       `);
     }
   }, 500);
-
-  });
 });
 
 window.addEventListener('load', function() {
