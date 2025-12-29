@@ -1,3 +1,54 @@
+(function() {
+  function removeTopSpacing() {
+    // Reset HTML et Body
+    document.documentElement.style.margin = '0';
+    document.documentElement.style.padding = '0';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.paddingTop = '0';
+    
+    // Tous les éléments avant la navbar
+    const bodyChildren = document.body.children;
+    for (let i = 0; i < bodyChildren.length; i++) {
+      bodyChildren[i].style.marginTop = '0';
+      bodyChildren[i].style.paddingTop = '0';
+    }
+    
+    // Navbar et ses parents
+    const nav = document.querySelector('nav, header, [class*="navbar"]');
+    if (nav) {
+      nav.style.marginTop = '0';
+      nav.style.paddingTop = '0';
+      
+      let parent = nav.parentElement;
+      while (parent && parent !== document.body) {
+        parent.style.marginTop = '0';
+        parent.style.paddingTop = '0';
+        parent = parent.parentElement;
+      }
+    }
+    
+    // Cacher tout élément avant la navbar
+    if (nav && nav.previousElementSibling) {
+      const prevElement = nav.previousElementSibling;
+      if (prevElement.offsetHeight < 100) { // Si c'est un petit élément (banner/spacer)
+        prevElement.style.display = 'none';
+      }
+    }
+  }
+  
+  // Exécuter immédiatement
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeTopSpacing);
+  } else {
+    removeTopSpacing();
+  }
+  
+  // Re-exécuter après 100ms au cas où
+  setTimeout(removeTopSpacing, 100);
+  setTimeout(removeTopSpacing, 300);
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
 // === INJECTION CSS DEPTH & ELEVATION + FIXES ESPACES ===
 const elevationStyles = document.createElement('style');
