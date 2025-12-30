@@ -1,79 +1,104 @@
 // =============================================================================
-// NEW ORDER = FULL PREMIUM REDESIGN (comme landing)
+// NEW ORDER = SPLIT LAYOUT (LEFT + RIGHT PREMIUM PANEL)
 // =============================================================================
 (function() {
   setTimeout(() => {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
-    const formContainer = searchInput?.closest('form') || document.querySelector('form');
+    const form = searchInput?.closest('form');
     
-    if (formContainer && !formContainer.dataset.premiumApplied) {
-      formContainer.dataset.premiumApplied = 'true';
-      console.log('🚀 [GENUINE] NEW ORDER PREMIUM DASHBOARD ACTIVATED');
+    if (form && !form.dataset.splitLayout) {
+      form.dataset.splitLayout = 'true';
+      console.log('🚀 [GENUINE] NEW ORDER SPLIT LAYOUT ACTIVATED');
       
-      // === 1. FORM CONTAINER GLASS ===
-      formContainer.style.cssText = `
-        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,255,0.95)) !important;
-        backdrop-filter: blur(24px) !important;
-        border-radius: 32px !important;
+      // === 1. FULL PAGE SPLIT CONTAINER ===
+      const pageContainer = form.parentElement;
+      pageContainer.style.cssText = `
+        display: flex !important;
+        gap: 40px !important;
         padding: 40px !important;
-        box-shadow: 0 24px 80px rgba(0,102,255,0.12) !important;
-        border: 1px solid rgba(0,102,255,0.15) !important;
-        max-width: 600px !important;
-        margin: 20px auto !important;
+        max-width: 1600px !important;
+        margin: 0 auto !important;
       `;
       
-      // === 2. SERVICE SELECT BADGE ===
-      const serviceSelect = formContainer.querySelector('select');
-      if (serviceSelect) {
-        serviceSelect.insertAdjacentHTML('beforebegin', '<div style="position:absolute;top:-12px;left:20px;padding:4px 12px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.05em;">PREMIUM</div>');
-      }
+      // === 2. LEFT SIDEBAR (form actuel collé à gauche) ===
+      form.style.cssText = `
+        flex: 1 !important;
+        max-width: 480px !important;
+        background: rgba(255,255,255,0.92) !important;
+        backdrop-filter: blur(24px) !important;
+        border-radius: 24px !important;
+        padding: 40px !important;
+        box-shadow: 0 16px 64px rgba(0,102,255,0.12) !important;
+        border: 1px solid rgba(0,102,255,0.15) !important;
+        position: sticky !important;
+        top: 40px !important;
+      `;
       
-      // === 3. INPUT SEARCH + ICON ===
-      if (searchInput) {
-        const wrapper = document.createElement('div');
-        wrapper.style.cssText = 'position:relative;margin-bottom:24px;display:block;';
-        searchInput.parentNode.insertBefore(wrapper, searchInput);
-        wrapper.appendChild(searchInput);
+      // === 3. RIGHT PREMIUM PANEL ===
+      const rightPanel = document.createElement('div');
+      rightPanel.style.cssText = `
+        flex: 1 !important;
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,255,0.95)) !important;
+        backdrop-filter: blur(28px) !important;
+        border-radius: 28px !important;
+        padding: 48px !important;
+        box-shadow: 0 24px 80px rgba(0,102,255,0.15) !important;
+        border: 1px solid rgba(0,102,255,0.2) !important;
+      `;
+      form.parentNode.insertBefore(rightPanel, form.nextSibling);
+      
+      // === 4. RIGHT PANEL CONTENT (comme concurrent) ===
+      rightPanel.innerHTML = `
+        <div style="position:absolute;top:-16px;left:32px;padding:8px 20px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:24px;font-size:13px;font-weight:800;letter-spacing:0.05em;box-shadow:0 8px 24px rgba(0,102,255,0.3);">PREMIUM ORDER DASHBOARD</div>
         
-        searchInput.style.cssText = `
-          background: rgba(255,255,255,0.98) !important;
-          backdrop-filter: blur(28px) !important;
-          border: 2px solid rgba(0,102,255,0.2) !important;
-          border-radius: 24px !important;
-          padding: 24px 32px 24px 80px !important;
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-bottom:32px;">
+          <div style="text-align:center;padding:24px;background:rgba(255,255,255,0.7);border-radius:20px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 8px 32px rgba(0,102,255,0.08);">
+            <div style="font-size:36px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">${Math.floor(Math.random()*5000)+1000}</div>
+            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Services</div>
+          </div>
+          <div style="text-align:center;padding:24px;background:rgba(255,255,255,0.7);border-radius:20px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 8px 32px rgba(0,102,255,0.08);">
+            <div style="font-size:36px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">99.8%</div>
+            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Uptime</div>
+          </div>
+        </div>
+        
+        <div style="margin-bottom:24px;">
+          <h3 style="font-size:22px;font-weight:800;color:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+            <span style="width:44px;height:44px;background:linear-gradient(135deg,#0066FF,#00A67E);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 8px 24px rgba(0,102,255,0.3);">⚡</span>
+            Instant Delivery
+          </h3>
+          <p style="font-size:15px;color:#666;line-height:1.6;">Orders start within <strong style="color:#0066FF;">60 seconds</strong>. Real-time tracking with live updates.</p>
+        </div>
+        
+        <div style="padding:24px;background:rgba(0,102,255,0.03);border-radius:20px;border:1px solid rgba(0,102,255,0.1);">
+          <h4 style="font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:12px;">💎 Premium Quality</h4>
+          <ul style="font-size:14px;color:#666;line-height:1.6;padding-left:20px;">
+            <li>✓ Real & active accounts</li>
+            <li>✓ Lifetime guarantee</li>
+            <li>✓ Drip-feed delivery</li>
+            <li>✓ 24/7 support</li>
+          </ul>
+        </div>
+      `;
+      
+      // === 5. FORM ELEMENTS ENHANCED ===
+      const inputs = form.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.style.cssText += `
+          background: rgba(255,255,255,0.95) !important;
+          border: 2px solid rgba(0,102,255,0.15) !important;
+          border-radius: 16px !important;
+          padding: 20px 24px !important;
           font-size: 16px !important;
-          box-shadow: 0 8px 32px rgba(0,102,255,0.1) !important;
-          width: 100% !important;
-          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+          box-shadow: 0 4px 20px rgba(0,102,255,0.06) !important;
+          transition: all 0.3s !important;
         `;
-        
-        const icon = document.createElement('span');
-        icon.textContent = '🔍';
-        icon.style.cssText = `
-          position: absolute; left: 36px; top: 50%; transform: translateY(-50%);
-          font-size: 22px; color: #0066FF; z-index: 10; pointer-events: none;
-        `;
-        wrapper.appendChild(icon);
-      }
-      
-      // === 4. QUANTITY + PRICE CARDS ===
-      const inputs = formContainer.querySelectorAll('input');
-      inputs.forEach((input, i) => {
-        if (input.type === 'number' || input.placeholder.includes('Quantity') || input.name.includes('quantity')) {
-          input.style.cssText = `
-            background: rgba(255,255,255,0.9) !important;
-            border: 2px solid rgba(0,102,255,0.15) !important;
-            border-radius: 16px !important;
-            padding: 20px 24px !important;
-            font-size: 18px !important;
-            font-weight: 600 !important;
-            box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
-          `;
-        }
+        input.onfocus = () => input.style.borderColor = '#0066FF';
+        input.onblur = () => input.style.borderColor = 'rgba(0,102,255,0.15)';
       });
       
-      // === 5. SUBMIT BUTTON PREMIUM ===
-      const submitBtn = formContainer.querySelector('button[type="submit"]');
+      // === 6. SUBMIT BUTTON ===
+      const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           background: linear-gradient(135deg, #0066FF, #0052CC) !important;
@@ -85,15 +110,15 @@
           color: white !important;
           border: none !important;
           width: 100% !important;
-          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+          margin-top: 32px !important;
         `;
         submitBtn.onmouseover = () => submitBtn.style.transform = 'translateY(-6px) scale(1.02)';
         submitBtn.onmouseout = () => submitBtn.style.transform = '';
       }
       
-      console.log('✅ [GENUINE] FULL NEW ORDER PREMIUM DASHBOARD ACTIVATED');
+      console.log('✅ [GENUINE] SPLIT LAYOUT + PREMIUM PANEL ACTIVATED');
     }
-  }, 1200);
+  }, 800);
 })();
 
 // =============================================================================
