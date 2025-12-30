@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - VERSION AMÉLIORÉE GENUINE PROMOTION
+// NEW ORDER PAGE - FIXED VERSION (Senior Frontend Developer)
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,16 +8,54 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] Layout optimisé activé');
+      console.log('🎯 [NEW ORDER] Fixed layout activated');
       
-      // === 1. CACHER LA DESCRIPTION NATIVE ===
+      // === 1. HIDE NATIVE DESCRIPTION FROM LEFT FORM ===
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
-                                form.querySelector('[id*="description"]')?.closest('.form-group');
+                                form.querySelector('[id*="description"]')?.closest('.form-group') ||
+                                form.querySelector('#service_description')?.parentElement;
       if (nativeDescription) {
-        nativeDescription.style.display = 'none';
+        nativeDescription.style.cssText = 'display: none !important; visibility: hidden !important;';
       }
       
-      // === 2. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
+      // === 2. FIX SEARCH BAR - Move icon or adjust padding ===
+      if (searchInput) {
+        searchInput.style.cssText = `
+          width: 100% !important;
+          padding: 14px 16px 14px 45px !important;
+          border: 1.5px solid rgba(0,102,255,0.15) !important;
+          border-radius: 10px !important;
+          font-size: 14px !important;
+          background: #FAFBFC !important;
+          transition: all 0.3s !important;
+          color: #1a1a1a !important;
+          font-weight: 500 !important;
+        `;
+        
+        // Wrap search in container for proper icon positioning
+        const searchContainer = searchInput.closest('.form-group') || searchInput.parentElement;
+        if (searchContainer && !searchContainer.querySelector('.search-icon-wrapper')) {
+          searchContainer.style.position = 'relative';
+          
+          const iconWrapper = document.createElement('span');
+          iconWrapper.className = 'search-icon-wrapper';
+          iconWrapper.innerHTML = '🔍';
+          iconWrapper.style.cssText = `
+            position: absolute !important;
+            left: 16px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            font-size: 16px !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+          `;
+          
+          searchContainer.style.position = 'relative';
+          searchContainer.insertBefore(iconWrapper, searchInput);
+        }
+      }
+      
+      // === 3. MAIN CONTAINER (FLEX HORIZONTAL WITH PROPER HEIGHT) ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
@@ -26,9 +64,11 @@
         max-width: 1800px !important;
         margin: 0 auto !important;
         align-items: flex-start !important;
+        min-height: 100vh !important;
+        height: auto !important;
       `;
       
-      // === 3. FORMULAIRE GAUCHE (COMPACT ~32%) ===
+      // === 4. LEFT FORM (COMPACT, STICKY) ===
       form.style.cssText = `
         flex: 0 0 420px !important;
         background: white !important;
@@ -43,7 +83,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT (INFO + TABS) - SUPPRESSION MTP Badge & Service Updates ===
+      // === 5. RIGHT PANEL (FULL WIDTH, NO GUARANTEE/SPEED CARDS) ===
       const rightPanel = document.createElement('div');
       rightPanel.id = 'order-info-panel';
       rightPanel.style.cssText = `
@@ -55,10 +95,11 @@
         border: 1px solid rgba(0,102,255,0.1) !important;
         overflow: hidden !important;
         min-height: 600px !important;
+        height: auto !important;
       `;
       
       rightPanel.innerHTML = `
-        <!-- Tabs Navigation (2 tabs seulement) -->
+        <!-- Tabs Navigation (2 tabs only: Service Info + Read Before Order) -->
         <div style="display: flex; border-bottom: 2px solid #F0F4FF; background: #FAFBFC;">
           <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 18px 24px; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
             <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
@@ -75,29 +116,12 @@
         </div>
         
         <!-- Tab Content -->
-        <div id="tab-content" style="padding: 32px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px);">
+        <div id="tab-content" style="padding: 32px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px); height: auto;">
           
-          <!-- SERVICE INFO TAB -->
+          <!-- SERVICE INFO TAB (NO GUARANTEE/SPEED CARDS) -->
           <div class="tab-panel active" data-panel="service-info">
-            <!-- Stats Cards -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;">
-              <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(0, 102, 255, 0.06), rgba(0, 102, 255, 0.02)); border-radius: 16px; border: 1.5px solid rgba(0, 102, 255, 0.15); transition: all 0.3s;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,102,255,0.25);">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                </div>
-                <div style="font-size: 13px; color: #0066FF; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Guarantee</div>
-                <div id="guarantee-value" style="font-size: 20px; font-weight: 800; color: #1a1a1a;">-</div>
-              </div>
-              <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(0, 166, 126, 0.06), rgba(0, 166, 126, 0.02)); border-radius: 16px; border: 1.5px solid rgba(0, 166, 126, 0.15); transition: all 0.3s;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,166,126,0.25);">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                </div>
-                <div style="font-size: 13px; color: #00A67E; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Speed</div>
-                <div id="speed-value" style="font-size: 20px; font-weight: 800; color: #1a1a1a;">Loading...</div>
-              </div>
-            </div>
             
-            <!-- Description Card -->
+            <!-- Description Card (Will be dynamically populated) -->
             <div id="dynamic-description" style="background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 100%); padding: 28px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.12); margin-bottom: 24px;">
               <h4 style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
                 <span style="font-size: 22px;">📋</span> Service Description
@@ -193,69 +217,53 @@
       
       container.appendChild(rightPanel);
       
-      // === 5. OBSERVER POUR CAPTURER LA DESCRIPTION NATIVE ===
+      // === 6. DYNAMICALLY MOVE SERVICE DESCRIPTION TO RIGHT PANEL ===
       function updateServiceDescription() {
-        const descriptionField = document.querySelector('#service_description, [name*="description"]');
+        const descriptionField = document.querySelector('#service_description, [name*="description"], textarea[id*="description"]');
         const descriptionContent = document.getElementById('description-content');
-        const speedValue = document.getElementById('speed-value');
-        const guaranteeValue = document.getElementById('guarantee-value');
         
         if (descriptionField && descriptionContent) {
-          const descText = descriptionField.value || descriptionField.textContent;
+          const descText = descriptionField.value || descriptionField.textContent || descriptionField.innerText;
           
           if (descText && descText.trim() && descText.trim() !== '') {
-            // Convertir texte brut en HTML avec formatage
+            // Format description text into HTML
             const formattedDesc = descText
               .split('\n')
               .map(line => {
                 line = line.trim();
                 if (!line) return '';
                 
-                // Détection de patterns
-                if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
-                  return `<p style="margin-bottom: 10px;">${line}</p>`;
-                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
+                // Pattern detection for better formatting
+                if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️|💰|⚡|🎯|📈)/)) {
+                  return `<p style="margin-bottom: 10px; color: #1a1a1a;">${line}</p>`;
+                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill|Guarantee|Quality|Start Time)/i)) {
                   return `<p style="margin-bottom: 14px;"><strong style="color: #0066FF;">${line}</strong></p>`;
                 } else {
-                  return `<p style="margin-bottom: 12px;">${line}</p>`;
+                  return `<p style="margin-bottom: 12px; color: #666;">${line}</p>`;
                 }
               })
               .filter(Boolean)
               .join('');
             
-            descriptionContent.innerHTML = formattedDesc || descText;
-            
-            // Extraire Speed si présent
-            const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
-            if (speedMatch && speedValue) {
-              speedValue.textContent = speedMatch[1].trim();
-            }
-            
-            // Extraire Guarantee/Refill si présent
-            const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
-            if (refillMatch && guaranteeValue) {
-              guaranteeValue.textContent = refillMatch[1].trim();
-            }
-            
+            descriptionContent.innerHTML = formattedDesc || `<p style="color: #666;">${descText}</p>`;
           } else {
             descriptionContent.innerHTML = '<p style="color: #999; font-style: italic;">Select a service to view its description...</p>';
-            if (speedValue) speedValue.textContent = 'N/A';
-            if (guaranteeValue) guaranteeValue.textContent = '-';
           }
         }
       }
       
-      // Observer sur le select de service
-      const serviceSelect = form.querySelector('select[name*="service"], #service');
+      // Watch for service selection changes
+      const serviceSelect = form.querySelector('select[name*="service"], #service, select[id*="service"]');
       if (serviceSelect) {
         serviceSelect.addEventListener('change', () => {
           setTimeout(updateServiceDescription, 300);
         });
       }
       
-      // Observer sur le champ description (mutation)
-      const descField = document.querySelector('#service_description, [name*="description"]');
+      // Watch for description field changes
+      const descField = document.querySelector('#service_description, [name*="description"], textarea[id*="description"]');
       if (descField) {
+        // MutationObserver for dynamic updates
         const observer = new MutationObserver(updateServiceDescription);
         observer.observe(descField, { 
           childList: true, 
@@ -265,15 +273,16 @@
           attributeFilter: ['value']
         });
         
-        // Event listeners classiques
+        // Standard event listeners
         descField.addEventListener('input', updateServiceDescription);
         descField.addEventListener('change', updateServiceDescription);
+        descField.addEventListener('DOMSubtreeModified', updateServiceDescription);
       }
       
-      // Update initial
+      // Initial update
       setTimeout(updateServiceDescription, 500);
       
-      // === 6. OPTIMISATION INPUTS FORMULAIRE ===
+      // === 7. OPTIMIZE FORM INPUTS ===
       const formGroups = form.querySelectorAll('.form-group, div:has(> input), div:has(> select)');
       formGroups.forEach(group => {
         group.style.cssText = `
@@ -281,8 +290,11 @@
         `;
       });
       
-      const inputs = form.querySelectorAll('input, select, textarea');
+      const inputs = form.querySelectorAll('input:not([type="submit"]), select, textarea');
       inputs.forEach(input => {
+        // Skip search input as it's already styled
+        if (input === searchInput) return;
+        
         input.style.cssText = `
           width: 100% !important;
           padding: 14px 16px !important;
@@ -308,7 +320,7 @@
         });
       });
       
-      // === 7. LABELS FORMULAIRE ===
+      // === 8. STYLE FORM LABELS ===
       const labels = form.querySelectorAll('label');
       labels.forEach(label => {
         label.style.cssText = `
@@ -322,8 +334,8 @@
         `;
       });
       
-      // === 8. TITRE DU FORMULAIRE ===
-      const formTitle = form.querySelector('h1, h2, h3, .card-title');
+      // === 9. STYLE FORM TITLE ===
+      const formTitle = form.querySelector('h1, h2, h3, .card-title, .panel-title');
       if (formTitle) {
         formTitle.style.cssText = `
           font-size: 24px !important;
@@ -334,12 +346,11 @@
           border-bottom: 2px solid #F0F4FF !important;
         `;
         
-        // Ajouter un gradient au titre
         formTitle.innerHTML = `<span style="background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">New Order</span>`;
       }
       
-      // === 9. BOUTON SUBMIT ===
-      const submitBtn = form.querySelector('button[type="submit"]');
+      // === 10. STYLE SUBMIT BUTTON ===
+      const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           width: 100% !important;
@@ -369,7 +380,7 @@
         });
       }
       
-      // === 10. SYSTÈME D'ONGLETS ===
+      // === 11. TAB SYSTEM ===
       setTimeout(() => {
         const tabs = document.querySelectorAll('.info-tab');
         const panels = document.querySelectorAll('.tab-panel');
@@ -378,19 +389,19 @@
           tab.addEventListener('click', function() {
             const targetPanel = this.dataset.tab;
             
-            // Reset tabs
+            // Reset all tabs
             tabs.forEach(t => {
               t.style.color = '#666';
               t.style.background = 'transparent';
               t.style.borderBottom = 'none';
             });
             
-            // Active tab
+            // Activate clicked tab
             this.style.color = '#0066FF';
             this.style.background = 'white';
             this.style.borderBottom = '3px solid #0066FF';
             
-            // Show panel
+            // Show corresponding panel
             panels.forEach(p => p.style.display = 'none');
             const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
             if (targetPanelEl) {
@@ -400,7 +411,7 @@
           });
         });
         
-        // Active premier tab par défaut
+        // Activate first tab by default
         if (tabs[0]) {
           tabs[0].style.color = '#0066FF';
           tabs[0].style.background = 'white';
@@ -408,7 +419,7 @@
         }
       }, 100);
       
-      // === 11. ANIMATIONS CSS ===
+      // === 12. ANIMATIONS & SCROLLBAR STYLES ===
       const animStyle = document.createElement('style');
       animStyle.textContent = `
         @keyframes fadeIn {
@@ -426,27 +437,31 @@
           background: rgba(0, 102, 255, 0.05) !important;
         }
         
-        #order-info-panel::-webkit-scrollbar {
+        #tab-content::-webkit-scrollbar,
+        form::-webkit-scrollbar {
           width: 8px;
         }
         
-        #order-info-panel::-webkit-scrollbar-track {
+        #tab-content::-webkit-scrollbar-track,
+        form::-webkit-scrollbar-track {
           background: #F0F4FF;
           border-radius: 10px;
         }
         
-        #order-info-panel::-webkit-scrollbar-thumb {
+        #tab-content::-webkit-scrollbar-thumb,
+        form::-webkit-scrollbar-thumb {
           background: #0066FF;
           border-radius: 10px;
         }
         
-        #order-info-panel::-webkit-scrollbar-thumb:hover {
+        #tab-content::-webkit-scrollbar-thumb:hover,
+        form::-webkit-scrollbar-thumb:hover {
           background: #0052CC;
         }
       `;
       document.head.appendChild(animStyle);
       
-      // === 12. RESPONSIVE ===
+      // === 13. RESPONSIVE LAYOUT ===
       const mediaQuery = window.matchMedia('(max-width: 1100px)');
       
       function handleResponsive(e) {
@@ -468,7 +483,7 @@
       handleResponsive(mediaQuery);
       mediaQuery.addEventListener('change', handleResponsive);
       
-      console.log('✅ [NEW ORDER] Layout optimisé + Style Genuine Promotion appliqué');
+      console.log('✅ [NEW ORDER] Fixed layout applied successfully');
     }
   }, 300);
 })();
