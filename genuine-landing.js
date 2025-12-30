@@ -1,29 +1,24 @@
-// GENUINE PANEL - Landing Page Customization + Mobile Fix
-// Detection + V1 code + Responsive Mobile
-
-// =============================================================================
-// 1. DÉTECTION CONDITIONNELLE (landing page only)
-// =============================================================================
-
+// GENUINE PANEL - Landing + New Order
 (function() {
+  // === NEW ORDER STYLING (AVANT détection landing) ===
+  setTimeout(function(){
+    if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
+      console.log('[GENUINE] New Order detected - styling');
+      // Inject CSS classes + stats hero
+    }
+  }, 500);
+
+  // === DÉTECTION LANDING (APRÈS) ===
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
 
-  // Si pas landing page, skip tout
   if (!hasSignup || hasSidebar || hasLogout) {
     console.log('[GENUINE] Panel detected - skipping');
     return;
   }
 
   console.log('[GENUINE] Landing page detected - loading');
-
-  // === NEW ORDER STYLING (PANEL SAFE) ===
-setTimeout(function(){
-  if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
-    console.log('[GENUINE] New Order detected - styling');
-  }
-}, 500);
 
 // =============================================================================
 // 2. CODE V1 ORIGINAL
