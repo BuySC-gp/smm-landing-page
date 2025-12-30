@@ -32,13 +32,26 @@
       const nativeDescription = form.querySelector('.form-group:has(#service_description)');
       if (nativeDescription) nativeDescription.style.display = 'none';
       
-      // FORM GAUCHE
-      form.style.cssText = `
-        flex: 0 0 calc(50% - 12px) !important;
-        max-width: calc(50% - 12px) !important;
-        width: calc(50% - 12px) !important;
-        /* reste identique */
-      `;
+      // === 3. FORM GAUCHE COMPLÈTE ===
+form.style.cssText = `
+  flex: 0 0 calc(50% - 12px) !important;
+  max-width: calc(50% - 12px) !important;
+  width: calc(50% - 12px) !important;
+  min-width: 280px !important;
+  margin-left: 0 !important;
+  min-width: 0 !important;
+  background: white !important;
+  border-radius: 0 12px 12px 0 !important;
+  padding: 32px !important;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.06) !important;
+  border: 1px solid #e5e7eb !important;
+  border-left: none !important;
+  box-sizing: border-box !important;
+  height: fit-content !important;
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+`;
+
       
       // PANEL DROIT (identique ton original)
       let rightPanel = document.getElementById('order-info-panel');
