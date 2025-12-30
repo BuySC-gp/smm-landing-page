@@ -1,5 +1,5 @@
 // =============================================================================
-// TON CODE ORIGINAL - UNIQUEMENT 4PX FIX (COPIE ÇA COMPLET)
+// SOLUTION BULLETPROOF - FORCE PARENTS + 50/50 PUR
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,54 +8,46 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] 50/50 +4PX FIX');
+      console.log('🧠 BRAIN MODE - FORCE PARENTS');
       
-      // === 0. BODY + MAIN (IDENTIQUE) ===
-      document.body.style.cssText = `
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100vw !important;
-        overflow-x: hidden !important;
-      `;
+      // === 0. FORCER TOUS LES PARENTS À 100% (CLEF) ===
+      document.body.style.cssText = `margin:0 !important;padding:0 !important;width:100% !important;overflow-x:hidden !important;`;
       
-      const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
-      if (mainContainer) {
-        mainContainer.style.cssText = `
-          width: 100vw !important;
-          max-width: 100vw !important;
+      let parent = form.parentElement;
+      let depth = 0;
+      while (parent && depth < 10) {
+        parent.style.cssText = `
+          width: 100% !important;
+          max-width: 100% !important;
           margin: 0 !important;
           padding: 0 !important;
-          padding-top: 20px !important;
           box-sizing: border-box !important;
         `;
+        parent = parent.parentElement;
+        depth++;
       }
       
-      // === 1. DESCRIPTION NATIVE (IDENTIQUE) ===
+      // === 1. DESCRIPTION NATIVE ===
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
                                 form.querySelector('[id*="description"]')?.closest('.form-group');
-      if (nativeDescription) {
-        nativeDescription.style.display = 'none';
-      }
+      if (nativeDescription) nativeDescription.style.display = 'none';
       
-      // === 2. CONTAINER FIX 4PX (CHANGÉ) ===
+      // === 2. CONTAINER SIMPLE 100% (PAS DE FULL-BLEED) ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
-        gap: 0 !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
-        padding: 24px 0 !important;
+        padding: 24px 8px !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
-        position: relative !important;
-        left: 50% !important;
-        margin-left: -50vw !important;
       `;
       
-      // === 3. FORM 50%-4PX (CHANGÉ) ===
+      // === 3. FORM GAUCHE 50% PUR ===
       form.style.cssText = `
-        flex: 0 0 calc(50% - 4px) !important;
+        flex: 1 !important;
         max-width: calc(50% - 4px) !important;
         width: calc(50% - 4px) !important;
         min-width: 0 !important;
@@ -71,7 +63,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL 50%-4PX (CHANGÉ) + TOUT LE RESTE IDENTIQUE ===
+      // === 4. PANEL DROIT 50% PUR ===
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
@@ -80,7 +72,7 @@
       }
       
       rightPanel.style.cssText = `
-        flex: 0 0 calc(50% - 4px) !important;
+        flex: 1 !important;
         max-width: calc(50% - 4px) !important;
         width: calc(50% - 4px) !important;
         min-width: 0 !important;
@@ -96,356 +88,334 @@
         max-height: 100vh !important;
         box-sizing: border-box !important;
       `;
-
-rightPanel.innerHTML = `
-<!-- Header Badge -->
-<div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 18px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-<div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 200px;">
-<div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-<span style="font-size: 20px;">🌟</span>
-</div>
-<div style="flex: 1; min-width: 0;">
-<div style="font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 4px;">MTP Service Color Categorization System</div>
-<div style="display: flex; gap: 8px; font-size: 11px; flex-wrap: wrap;">
-<span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
-<span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
-<span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
-</div>
-</div>
-</div>
-<button style="padding: 8px 16px; background: #00A67E; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex-shrink: 0;">See details</button>
-</div>
-
-<!-- Tabs Navigation -->
-<div style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
-<button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
-<span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-Service Info
-</span>
-</button>
-<button class="info-tab" data-tab="read-before" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
-<span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-Read Before Order
-</span>
-</button>
-<button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
-<span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
-<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-Service Updates
-</span>
-</button>
-</div>
-
-<!-- Tab Content -->
-<div id="tab-content" style="padding: 24px; overflow-y: auto; flex: 1;">
-
-<!-- SERVICE INFO TAB -->
-<div class="tab-panel active" data-panel="service-info">
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
-<div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,166,126,0.1)); border-radius: 10px; border: 1px solid rgba(0,166,126,0.2);">
-<div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-</div>
-<div style="font-size: 11px; color: #00A67E; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Guarantee</div>
-<div id="guarantee-value" style="font-size: 16px; font-weight: 700; color: #1f2937;">-</div>
-</div>
-<div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,102,255,0.1)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.2);">
-<div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
-<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-</div>
-<div style="font-size: 11px; color: #0066FF; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Speed</div>
-<div id="speed-value" style="font-size: 16px; font-weight: 700; color: #1f2937;">Loading...</div>
-</div>
-</div>
-
-<div id="dynamic-description" style="background: #f9fafb; padding: 20px; border-radius: 10px; border: 1px solid #e5e7eb;">
-<h4 style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-<span style="font-size: 18px;">📄</span> Description
-</h4>
-<div id="description-content" style="font-size: 13px; color: #6b7280; line-height: 1.7;">
-<p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>
-</div>
-</div>
-</div>
-
-<!-- READ BEFORE ORDER TAB -->
-<div class="tab-panel" data-panel="read-before" style="display: none;">
-<h3 style="font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-<span style="font-size: 24px;">📚</span> How Things Work Here
-</h3>
-
-<div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
-<p style="font-size: 13px; color: #6b7280; line-height: 1.7; margin-bottom: 14px;">When you place an order, the first thing you'll see is the <strong>status</strong>:</p>
-<ul style="list-style: none; padding: 0; margin: 0;">
-<li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
-<span style="width: 5px; height: 5px; background: #FFC107; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-<span><strong>Pending / Processing:</strong> Your order is received and will start within the promised start time (written on the service description).</span>
-</li>
-<li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
-<span style="width: 5px; height: 5px; background: #0066FF; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-<span><strong>In Progress:</strong> Delivery has started and followers, likes, views, or plays are being sent.</span>
-</li>
-<li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
-<span style="width: 5px; height: 5px; background: #00A67E; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-<span><strong>Completed:</strong> Your order is fully delivered.</span>
-</li>
-<li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
-<span style="width: 5px; height: 5px; background: #FF6B6B; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-<span><strong>Partial:</strong> Only part of your order was delivered. The missing part is automatically refunded to your balance.</span>
-</li>
-<li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
-<span style="width: 5px; height: 5px; background: #9ca3af; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-<span><strong>Canceled:</strong> The order could not run and was fully refunded to your balance.</span>
-</li>
-</ul>
-</div>
-
-<h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-<span style="font-size: 20px;">🎨</span> Service Colors
-</h4>
-<div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
-<div style="margin-bottom: 12px; padding: 14px; background: linear-gradient(135deg, rgba(255,193,7,0.08), rgba(255,193,7,0.04)); border-left: 3px solid #FFC107; border-radius: 6px;">
-<div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🟡 Basic</div>
-<div style="font-size: 12px; color: #6b7280;">Cheapest, but drops are more likely.</div>
-</div>
-<div style="margin-bottom: 12px; padding: 14px; background: linear-gradient(135deg, rgba(0,166,126,0.08), rgba(0,166,126,0.04)); border-left: 3px solid #00A67E; border-radius: 6px;">
-<div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🟢 Medium</div>
-<div style="font-size: 12px; color: #6b7280;">Balanced option with better stability.</div>
-</div>
-<div style="padding: 14px; background: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,102,255,0.04)); border-left: 3px solid #0066FF; border-radius: 6px;">
-<div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🔵 Elite</div>
-<div style="font-size: 12px; color: #6b7280;">Highest quality, best for long-term results.</div>
-</div>
-</div>
-
-<h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-<span style="font-size: 20px;">💰</span> Refund Policy
-</h4>
-<div style="background: #f9fafb; padding: 18px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
-<p style="font-size: 13px; color: #6b7280; line-height: 1.7;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
-</div>
-
-<h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
-<span style="font-size: 20px;">✅</span> How to Order Correctly
-</h4>
-<div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 18px; border-radius: 10px; border: 1px solid #0066FF;">
-<p style="font-size: 13px; color: #0047AB; line-height: 1.7;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. Small → Scale.</p>
-</div>
-</div>
-
-<!-- SERVICE UPDATES TAB -->
-<div class="tab-panel" data-panel="service-updates" style="display: none;">
-<div style="text-align: center; padding: 50px 20px;">
-<svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" stroke-width="1.5" style="margin-bottom: 16px;">
-<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-</svg>
-<h3 style="font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 10px;">No Updates Yet</h3>
-<p style="font-size: 13px; color: #6b7280;">Service updates will appear here when available.</p>
-</div>
-</div>
-</div>
-`;
-
-container.appendChild(rightPanel);
-
-// === 5. OBSERVER POUR CAPTURER LA DESCRIPTION NATIVE ===
-function updateServiceDescription() {
-const descriptionField = document.querySelector('#service_description, [name*="description"]');
-const descriptionContent = document.getElementById('description-content');
-const speedValue = document.getElementById('speed-value');
-const guaranteeValue = document.getElementById('guarantee-value');
-
-if (descriptionField && descriptionContent) {
-const descText = descriptionField.value || descriptionField.textContent;
-
-if (descText && descText.trim() && descText.trim() !== '') {
-const formattedDesc = descText
-.split('\n')
-.map(line => {
-line = line.trim();
-if (!line) return '';
-
-if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
-return `<p style="margin-bottom: 8px;">${line}</p>`;
-} else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
-return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
-} else {
-return `<p style="margin-bottom: 10px;">${line}</p>`;
-}
-})
-.filter(Boolean)
-.join('');
-
-descriptionContent.innerHTML = formattedDesc || descText;
-
-const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
-if (speedMatch && speedValue) {
-speedValue.textContent = speedMatch[1].trim();
-}
-
-const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
-if (refillMatch && guaranteeValue) {
-guaranteeValue.textContent = refillMatch[1].trim();
-}
-
-} else {
-descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>';
-if (speedValue) speedValue.textContent = 'N/A';
-if (guaranteeValue) guaranteeValue.textContent = '-';
-}
-}
-}
-
-const serviceSelect = form.querySelector('select[name*="service"], #service');
-if (serviceSelect) {
-serviceSelect.addEventListener('change', () => {
-setTimeout(updateServiceDescription, 300);
-});
-}
-
-const descField = document.querySelector('#service_description, [name*="description"]');
-if (descField) {
-const observer = new MutationObserver(updateServiceDescription);
-observer.observe(descField, {
-childList: true,
-characterData: true,
-subtree: true,
-attributes: true,
-attributeFilter: ['value']
-});
-
-descField.addEventListener('input', updateServiceDescription);
-descField.addEventListener('change', updateServiceDescription);
-}
-
-setTimeout(updateServiceDescription, 500);
-
-// === 6. OPTIMISATION INPUTS FORMULAIRE ===
-const inputs = form.querySelectorAll('input, select, textarea');
-inputs.forEach(input => {
-input.style.cssText = `
-width: 100% !important;
-padding: 10px 12px !important;
-border: 1px solid #e5e7eb !important;
-border-radius: 6px !important;
-font-size: 13px !important;
-background: white !important;
-transition: all 0.2s !important;
-margin-bottom: 12px !important;
-box-sizing: border-box !important;
-`;
-
-input.addEventListener('focus', function() {
-this.style.borderColor = '#0066FF';
-this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
-});
-
-input.addEventListener('blur', function() {
-this.style.borderColor = '#e5e7eb';
-this.style.boxShadow = 'none';
-});
-});
-
-// === 7. LABELS FORMULAIRE ===
-const labels = form.querySelectorAll('label');
-labels.forEach(label => {
-label.style.cssText = `
-font-size: 12px !important;
-font-weight: 600 !important;
-color: #1f2937 !important;
-margin-bottom: 6px !important;
-display: block !important;
-`;
-});
-
-// === 8. BOUTON SUBMIT ===
-const submitBtn = form.querySelector('button[type="submit"]');
-if (submitBtn) {
-submitBtn.style.cssText = `
-width: 100% !important;
-padding: 12px !important;
-background: linear-gradient(135deg, #00A67E, #00D97E) !important;
-color: white !important;
-border: none !important;
-border-radius: 8px !important;
-font-size: 14px !important;
-font-weight: 700 !important;
-cursor: pointer !important;
-transition: all 0.2s !important;
-text-transform: uppercase !important;
-letter-spacing: 0.5px !important;
-box-shadow: 0 2px 8px rgba(0,166,126,0.25) !important;
-margin-top: 16px !important;
-`;
-
-submitBtn.addEventListener('mouseenter', function() {
-this.style.transform = 'translateY(-1px)';
-this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.35)';
-});
-
-submitBtn.addEventListener('mouseleave', function() {
-this.style.transform = 'translateY(0)';
-this.style.boxShadow = '0 2px 8px rgba(0,166,126,0.25)';
-});
-}
-
-// === 9. SYSTÈME D'ONGLETS ===
-setTimeout(() => {
-const tabs = document.querySelectorAll('.info-tab');
-const panels = document.querySelectorAll('.tab-panel');
-
-tabs.forEach(tab => {
-tab.addEventListener('click', function() {
-const targetPanel = this.dataset.tab;
-
-tabs.forEach(t => {
-t.style.color = '#6b7280';
-t.style.background = 'none';
-t.style.borderBottom = 'none';
-});
-
-this.style.color = '#00A67E';
-this.style.background = 'white';
-this.style.borderBottom = '2px solid #00A67E';
-
-panels.forEach(p => p.style.display = 'none');
-const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
-if (targetPanelEl) targetPanelEl.style.display = 'block';
-});
-});
-
-if (tabs[0]) {
-tabs[0].style.color = '#00A67E';
-tabs[0].style.background = 'white';
-tabs[0].style.borderBottom = '2px solid #00A67E';
-}
-}, 100);
-
-// === 10. RESPONSIVE ===
-const mediaQuery = window.matchMedia('(max-width: 1100px)');
-
-function handleResponsive(e) {
-if (e.matches) {
-container.style.flexDirection = 'column';
-container.style.padding = '12px';
-form.style.width = '100%';
-rightPanel.style.width = '100%';
-} else {
-container.style.flexDirection = 'row';
-container.style.padding = '16px';
-form.style.width = 'auto';
-rightPanel.style.width = 'auto';
-}
-}
-
-handleResponsive(mediaQuery);
-mediaQuery.addEventListener('change', handleResponsive);
-
-console.log('✅ [NEW ORDER] Layout 50/50 activé');
-}
-}, 300);
+      
+      rightPanel.innerHTML = `
+        <!-- Header Badge -->
+        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 18px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 200px;">
+            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <span style="font-size: 20px;">🌟</span>
+            </div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 4px;">MTP Service Color Categorization System</div>
+              <div style="display: flex; gap: 8px; font-size: 11px; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
+                <span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
+                <span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
+              </div>
+            </div>
+          </div>
+          <button style="padding: 8px 16px; background: #00A67E; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex-shrink: 0;">See details</button>
+        </div>
+        
+        <!-- Tabs Navigation -->
+        <div style="display: flex; border-bottom: 1px solid #e5e7eb; background: #f9fafb;">
+          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Service Info
+            </span>
+          </button>
+          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Read Before Order
+            </span>
+          </button>
+          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 12px 16px; background: none; border: none; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; position: relative; transition: all 0.2s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Service Updates
+            </span>
+          </button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="tab-content" style="padding: 24px; overflow-y: auto; flex: 1;">
+          
+          <!-- SERVICE INFO TAB -->
+          <div class="tab-panel active" data-panel="service-info">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,166,126,0.1)); border-radius: 10px; border: 1px solid rgba(0,166,126,0.2);">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div style="font-size: 11px; color: #00A67E; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Guarantee</div>
+                <div id="guarantee-value" style="font-size: 16px; font-weight: 700; color: #1f2937;">-</div>
+              </div>
+              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,102,255,0.1)); border-radius: 10px; border: 1px solid rgba(0,102,255,0.2);">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div style="font-size: 11px; color: #0066FF; font-weight: 600; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Speed</div>
+                <div id="speed-value" style="font-size: 16px; font-weight: 700; color: #1f2937;">Loading...</div>
+              </div>
+            </div>
+            
+            <div id="dynamic-description" style="background: #f9fafb; padding: 20px; border-radius: 10px; border: 1px solid #e5e7eb;">
+              <h4 style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 18px;">📄</span> Description
+              </h4>
+              <div id="description-content" style="font-size: 13px; color: #6b7280; line-height: 1.7;">
+                <p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- READ BEFORE ORDER TAB -->
+          <div class="tab-panel" data-panel="read-before" style="display: none;">
+            <h3 style="font-size: 20px; font-weight: 700; color: #1f2937; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 24px;">📚</span> How Things Work Here
+            </h3>
+            
+            <div style="background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
+              <p style="font-size: 13px; color: #6b7280; line-height: 1.7; margin-bottom: 14px;">When you place an order, the first thing you'll see is the <strong>status</strong>:</p>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="width: 5px; height: 5px; background: #FFC107; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <span><strong>Pending / Processing:</strong> Your order is received and will start within the promised start time (written on the service description).</span>
+                </li>
+                <li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="width: 5px; height: 5px; background: #0066FF; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <span><strong>In Progress:</strong> Delivery has started and followers, likes, views, or plays are being sent.</span>
+                </li>
+                <li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="width: 5px; height: 5px; background: #00A67E; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <span><strong>Completed:</strong> Your order is fully delivered.</span>
+                </li>
+                <li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="width: 5px; height: 5px; background: #FF6B6B; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <span><strong>Partial:</strong> Only part of your order was delivered. The missing part is automatically refunded to your balance.</span>
+                </li>
+                <li style="padding: 6px 0; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px;">
+                  <span style="width: 5px; height: 5px; background: #9ca3af; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <span><strong>Canceled:</strong> The order could not run and was fully refunded to your balance.</span>
+                </li>
+              </ul>
+            </div>
+            
+            <h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px;">🎨</span> Service Colors
+            </h4>
+            <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
+              <div style="margin-bottom: 12px; padding: 14px; background: linear-gradient(135deg, rgba(255,193,7,0.08), rgba(255,193,7,0.04)); border-left: 3px solid #FFC107; border-radius: 6px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🟡 Basic</div>
+                <div style="font-size: 12px; color: #6b7280;">Cheapest, but drops are more likely.</div>
+              </div>
+              <div style="margin-bottom: 12px; padding: 14px; background: linear-gradient(135deg, rgba(0,166,126,0.08), rgba(0,166,126,0.04)); border-left: 3px solid #00A67E; border-radius: 6px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🟢 Medium</div>
+                <div style="font-size: 12px; color: #6b7280;">Balanced option with better stability.</div>
+              </div>
+              <div style="padding: 14px; background: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,102,255,0.04)); border-left: 3px solid #0066FF; border-radius: 6px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px;">🔵 Elite</div>
+                <div style="font-size: 12px; color: #6b7280;">Highest quality, best for long-term results.</div>
+              </div>
+            </div>
+            
+            <h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px;">💰</span> Refund Policy
+            </h4>
+            <div style="background: #f9fafb; padding: 18px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
+              <p style="font-size: 13px; color: #6b7280; line-height: 1.7;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
+            </div>
+            
+            <h4 style="font-size: 17px; font-weight: 700; color: #1f2937; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px;">✅</span> How to Order Correctly
+            </h4>
+            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 18px; border-radius: 10px; border: 1px solid #0066FF;">
+              <p style="font-size: 13px; color: #0047AB; line-height: 1.7;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. Small → Scale.</p>
+            </div>
+          </div>
+          
+          <!-- SERVICE UPDATES TAB -->
+          <div class="tab-panel" data-panel="service-updates" style="display: none;">
+            <div style="text-align: center; padding: 50px 20px;">
+              <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#e5e7eb" stroke-width="1.5" style="margin-bottom: 16px;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <h3 style="font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 10px;">No Updates Yet</h3>
+              <p style="font-size: 13px; color: #6b7280;">Service updates will appear here when available.</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // === 5. OBSERVER DESCRIPTIONS ===
+      function updateServiceDescription() {
+        const descriptionField = document.querySelector('#service_description, [name*="description"]');
+        const descriptionContent = document.getElementById('description-content');
+        const speedValue = document.getElementById('speed-value');
+        const guaranteeValue = document.getElementById('guarantee-value');
+        
+        if (descriptionField && descriptionContent) {
+          const descText = descriptionField.value || descriptionField.textContent;
+          
+          if (descText && descText.trim() && descText.trim() !== '') {
+            const formattedDesc = descText
+              .split('\n')
+              .map(line => {
+                line = line.trim();
+                if (!line) return '';
+                
+                if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
+                  return `<p style="margin-bottom: 8px;">${line}</p>`;
+                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
+                  return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
+                } else {
+                  return `<p style="margin-bottom: 10px;">${line}</p>`;
+                }
+              })
+              .filter(Boolean)
+              .join('');
+            
+            descriptionContent.innerHTML = formattedDesc || descText;
+            
+            const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
+            if (speedMatch && speedValue) {
+              speedValue.textContent = speedMatch[1].trim();
+            }
+            
+            const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
+            if (refillMatch && guaranteeValue) {
+              guaranteeValue.textContent = refillMatch[1].trim();
+            }
+            
+          } else {
+            descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>';
+            if (speedValue) speedValue.textContent = 'N/A';
+            if (guaranteeValue) guaranteeValue.textContent = '-';
+          }
+        }
+      }
+      
+      const serviceSelect = form.querySelector('select[name*="service"], #service');
+      if (serviceSelect) {
+        serviceSelect.addEventListener('change', () => {
+          setTimeout(updateServiceDescription, 300);
+        });
+      }
+      
+      const descField = document.querySelector('#service_description, [name*="description"]');
+      if (descField) {
+        const observer = new MutationObserver(updateServiceDescription);
+        observer.observe(descField, { 
+          childList: true, 
+          characterData: true, 
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['value']
+        });
+        
+        descField.addEventListener('input', updateServiceDescription);
+        descField.addEventListener('change', updateServiceDescription);
+      }
+      
+      setTimeout(updateServiceDescription, 500);
+      
+      // === 6. INPUTS STYLE ===
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.style.cssText = `
+          width: 100% !important;
+          padding: 10px 12px !important;
+          border: 1px solid #e5e7eb !important;
+          border-radius: 6px !important;
+          font-size: 13px !important;
+          background: white !important;
+          transition: all 0.2s !important;
+          margin-bottom: 12px !important;
+          box-sizing: border-box !important;
+        `;
+        
+        input.addEventListener('focus', function() {
+          this.style.borderColor = '#0066FF';
+          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.style.borderColor = '#e5e7eb';
+          this.style.boxShadow = 'none';
+        });
+      });
+      
+      // === 7. LABELS ===
+      const labels = form.querySelectorAll('label');
+      labels.forEach(label => {
+        label.style.cssText = `
+          font-size: 12px !important;
+          font-weight: 600 !important;
+          color: #1f2937 !important;
+          margin-bottom: 6px !important;
+          display: block !important;
+        `;
+      });
+      
+      // === 8. SUBMIT BUTTON ===
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.style.cssText = `
+          width: 100% !important;
+          padding: 12px !important;
+          background: linear-gradient(135deg, #00A67E, #00D97E) !important;
+          color: white !important;
+          border: none !important;
+          border-radius: 8px !important;
+          font-size: 14px !important;
+          font-weight: 700 !important;
+          cursor: pointer !important;
+          transition: all 0.2s !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.5px !important;
+          box-shadow: 0 2px 8px rgba(0,166,126,0.25) !important;
+          margin-top: 16px !important;
+        `;
+        
+        submitBtn.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-1px)';
+          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.35)';
+        });
+        
+        submitBtn.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.boxShadow = '0 2px 8px rgba(0,166,126,0.25)';
+        });
+      }
+      
+      // === 9. TABS SYSTEM ===
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.info-tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        
+        tabs.forEach(tab => {
+          tab.addEventListener('click', function() {
+            const targetPanel = this.dataset.tab;
+            
+            tabs.forEach(t => {
+              t.style.color = '#6b7280';
+              t.style.background = 'none';
+              t.style.borderBottom = 'none';
+            });
+            
+            this.style.color = '#00A67E';
+            this.style.background = 'white';
+            this.style.borderBottom = '2px solid #00A67E';
+            
+            panels.forEach(p => p.style.display = 'none');
+            const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
+            if (targetPanelEl) targetPanelEl.style.display = 'block';
+          });
+        });
+        
+        if (tabs[0]) {
+          tabs[0].style.color = '#00A67E';
+          tabs[0].style.background = 'white';
+          tabs[0].style.borderBottom = '2px solid #00A67E';
+        }
+      }, 100);
+      
+      console.log('✅ BRAIN MODE - PARFAIT 50/50');
+    }
+  }, 300);
 })();
 
 
