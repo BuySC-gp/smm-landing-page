@@ -1,453 +1,415 @@
 // =============================================================================
-// NEW ORDER PAGE - VERSION CORRIGÉE (À UTILISER SÉPARÉMENT)
+// NEW ORDER PAGE - VERSION NETTOYÉE (BASÉE SUR ANCIEN CODE FONCTIONNEL)
 // =============================================================================
 (function() {
-  'use strict';
-  
-  // Attendre que le DOM soit complètement chargé
-  function initNewOrderFix() {
-    console.log('🔍 [NEW ORDER] Recherche de la page New Order...');
+  setTimeout(() => {
+    const searchInput = document.querySelector('input[placeholder*="Search"]');
+    const form = searchInput?.closest('form');
     
-    // Vérifier qu'on est bien sur la page New Order
-    const isNewOrderPage = window.location.pathname.includes('neworder') || 
-                          document.querySelector('input[placeholder*="Search"]');
-    
-    if (!isNewOrderPage) {
-      console.log('❌ [NEW ORDER] Pas sur la page New Order - script ignoré');
-      return;
-    }
-    
-    console.log('✅ [NEW ORDER] Page New Order détectée');
-    
-    // Trouver le formulaire
-    const searchInput = document.querySelector('input[placeholder*="Search"], input[name*="search"]');
-    const form = searchInput?.closest('form') || document.querySelector('form');
-    
-    if (!form) {
-      console.error('❌ [NEW ORDER] Formulaire non trouvé');
-      return;
-    }
-    
-    if (form.dataset.fixed) {
-      console.log('⚠️ [NEW ORDER] Déjà appliqué');
-      return;
-    }
-    
-    form.dataset.fixed = 'true';
-    console.log('🎯 [NEW ORDER] Application des modifications...');
-    
-    // === 1. CACHER LA DESCRIPTION NATIVE ===
-    const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
-                              form.querySelector('#service_description')?.closest('.form-group') ||
-                              form.querySelector('[id*="description"]')?.parentElement;
-    
-    if (nativeDescription) {
-      nativeDescription.style.cssText = 'display: none !important; visibility: hidden !important;';
-      console.log('✓ Description native cachée');
-    }
-    
-    // === 2. FIX SEARCH BAR ===
-    if (searchInput) {
-      searchInput.style.cssText = `
-        width: 100% !important;
-        padding: 14px 16px 14px 45px !important;
-        border: 1.5px solid rgba(0,102,255,0.15) !important;
-        border-radius: 10px !important;
-        font-size: 14px !important;
-        background: #FAFBFC !important;
-        transition: all 0.3s !important;
-        color: #1a1a1a !important;
-        font-weight: 500 !important;
-      `;
+    if (form && !form.dataset.fixed) {
+      form.dataset.fixed = 'true';
+      console.log('🎯 [NEW ORDER] Layout optimisé activé');
       
-      const searchContainer = searchInput.closest('.form-group') || searchInput.parentElement;
-      if (searchContainer && !searchContainer.querySelector('.search-icon-wrapper')) {
-        searchContainer.style.position = 'relative';
-        
-        const iconWrapper = document.createElement('span');
-        iconWrapper.className = 'search-icon-wrapper';
-        iconWrapper.innerHTML = '🔍';
-        iconWrapper.style.cssText = `
-          position: absolute !important;
-          left: 16px !important;
-          top: 50% !important;
-          transform: translateY(-50%) !important;
-          font-size: 16px !important;
-          pointer-events: none !important;
-          z-index: 10 !important;
+      // === 1. CACHER LA DESCRIPTION NATIVE ===
+      const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
+                                form.querySelector('[id*="description"]')?.closest('.form-group');
+      if (nativeDescription) {
+        nativeDescription.style.display = 'none';
+      }
+      
+      // === 2. FIX SEARCH BAR - ICÔNE BIEN POSITIONNÉE ===
+      if (searchInput) {
+        searchInput.style.cssText = `
+          width: 100% !important;
+          padding: 12px 14px 12px 42px !important;
+          border: 1.5px solid #e5e5e5 !important;
+          border-radius: 8px !important;
+          font-size: 14px !important;
+          background: white !important;
+          transition: all 0.3s !important;
         `;
         
-        searchContainer.insertBefore(iconWrapper, searchInput);
-        console.log('✓ Icône de recherche positionnée');
-      }
-    }
-    
-    // === 3. CONTAINER PRINCIPAL ===
-    const container = form.parentElement;
-    container.style.cssText = `
-      display: flex !important;
-      gap: 24px !important;
-      padding: 32px 20px !important;
-      max-width: 1800px !important;
-      margin: 0 auto !important;
-      align-items: flex-start !important;
-      min-height: 100vh !important;
-      height: auto !important;
-    `;
-    console.log('✓ Container configuré');
-    
-    // === 4. FORMULAIRE GAUCHE ===
-    form.style.cssText = `
-      flex: 0 0 420px !important;
-      background: white !important;
-      border-radius: 16px !important;
-      padding: 32px !important;
-      box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
-      border: 1px solid rgba(0,102,255,0.1) !important;
-      position: sticky !important;
-      top: 90px !important;
-      height: fit-content !important;
-      max-height: calc(100vh - 110px) !important;
-      overflow-y: auto !important;
-    `;
-    console.log('✓ Formulaire stylé');
-    
-    // === 5. PANEL DROIT (SANS GUARANTEE/SPEED) ===
-    const existingPanel = document.getElementById('order-info-panel');
-    if (existingPanel) {
-      existingPanel.remove();
-    }
-    
-    const rightPanel = document.createElement('div');
-    rightPanel.id = 'order-info-panel';
-    rightPanel.style.cssText = `
-      flex: 1 !important;
-      background: white !important;
-      border-radius: 16px !important;
-      padding: 0 !important;
-      box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
-      border: 1px solid rgba(0,102,255,0.1) !important;
-      overflow: hidden !important;
-      min-height: 600px !important;
-      height: auto !important;
-    `;
-    
-    rightPanel.innerHTML = `
-      <div style="display: flex; border-bottom: 2px solid #F0F4FF; background: #FAFBFC;">
-        <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 18px 24px; background: none; border: none; font-size: 14px; font-weight: 700; color: #0066FF; cursor: pointer; position: relative; transition: all 0.3s; border-bottom: 3px solid #0066FF;">
-          <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            Service Info
-          </span>
-        </button>
-        <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 18px 24px; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-          <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            Read Before Order
-          </span>
-        </button>
-      </div>
-      
-      <div id="tab-content" style="padding: 32px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px); height: auto;">
-        
-        <div class="tab-panel active" data-panel="service-info">
-          <div id="dynamic-description" style="background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 100%); padding: 28px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.12); margin-bottom: 24px;">
-            <h4 style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 22px;">📋</span> Service Description
-            </h4>
-            <div id="description-content" style="font-size: 14px; color: #666; line-height: 1.8;">
-              <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
-            </div>
-          </div>
+        const searchContainer = searchInput.closest('.form-group') || searchInput.parentElement;
+        if (searchContainer && !searchContainer.querySelector('.search-icon-wrapper')) {
+          searchContainer.style.position = 'relative';
           
-          <div style="background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,166,126,0.04)); padding: 24px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.1);">
-            <div style="display: flex; align-items: flex-start; gap: 14px;">
-              <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                <span style="font-size: 20px;">💡</span>
-              </div>
-              <div>
-                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px;">Pro Tip</div>
-                <div style="font-size: 13px; color: #666; line-height: 1.6;">Always check the service description for specific requirements and delivery time before placing your order.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="tab-panel" data-panel="read-before" style="display: none;">
-          <h3 style="font-size: 26px; font-weight: 800; color: #1a1a1a; margin-bottom: 28px; display: flex; align-items: center; gap: 14px;">
-            <span style="font-size: 32px;">📚</span> How Things Work Here
-          </h3>
+          const iconWrapper = document.createElement('span');
+          iconWrapper.className = 'search-icon-wrapper';
+          iconWrapper.innerHTML = '🔍';
+          iconWrapper.style.cssText = `
+            position: absolute !important;
+            left: 14px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            font-size: 16px !important;
+            pointer-events: none !important;
+            z-index: 10 !important;
+          `;
           
-          <div style="background: linear-gradient(135deg, #F8F9FF, #FFFFFF); padding: 28px; border-radius: 16px; margin-bottom: 28px; border: 1.5px solid rgba(0,102,255,0.12);">
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 24px;">📊</span> Order Status Guide
-            </h4>
-            <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 20px;">When you place an order, you'll see one of these statuses:</p>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-              <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #FFC107; display: flex; align-items: flex-start; gap: 12px;">
-                <span style="width: 8px; height: 8px; background: #FFC107; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-                <div>
-                  <strong style="color: #1a1a1a; font-size: 14px;">Pending / Processing:</strong>
-                  <span style="color: #666; font-size: 14px;"> Your order is received and will start within the promised start time.</span>
-                </div>
-              </li>
-              <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #0066FF; display: flex; align-items: flex-start; gap: 12px;">
-                <span style="width: 8px; height: 8px; background: #0066FF; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-                <div>
-                  <strong style="color: #1a1a1a; font-size: 14px;">In Progress:</strong>
-                  <span style="color: #666; font-size: 14px;"> Delivery has started and engagement is being sent to your account.</span>
-                </div>
-              </li>
-              <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #00A67E; display: flex; align-items: flex-start; gap: 12px;">
-                <span style="width: 8px; height: 8px; background: #00A67E; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-                <div>
-                  <strong style="color: #1a1a1a; font-size: 14px;">Completed:</strong>
-                  <span style="color: #666; font-size: 14px;"> Your order is fully delivered successfully.</span>
-                </div>
-              </li>
-              <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #FF6B6B; display: flex; align-items: flex-start; gap: 12px;">
-                <span style="width: 8px; height: 8px; background: #FF6B6B; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-                <div>
-                  <strong style="color: #1a1a1a; font-size: 14px;">Partial:</strong>
-                  <span style="color: #666; font-size: 14px;"> Only part delivered. Missing part is automatically refunded to your balance.</span>
-                </div>
-              </li>
-              <li style="padding: 14px 18px; background: white; border-radius: 12px; border-left: 4px solid #999; display: flex; align-items: flex-start; gap: 12px;">
-                <span style="width: 8px; height: 8px; background: #999; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
-                <div>
-                  <strong style="color: #1a1a1a; font-size: 14px;">Canceled:</strong>
-                  <span style="color: #666; font-size: 14px;"> Order could not run and was fully refunded to your balance.</span>
-                </div>
-              </li>
-            </ul>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, #F8F9FF, #FFFFFF); padding: 28px; border-radius: 16px; margin-bottom: 28px; border: 1.5px solid rgba(0,102,255,0.12);">
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 24px;">💰</span> Refund Policy
-            </h4>
-            <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong style="color: #0066FF;">panel balance</strong>.</p>
-          </div>
-          
-          <div style="background: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,166,126,0.08)); padding: 28px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.2);">
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 24px;">✅</span> How to Order Correctly
-            </h4>
-            <p style="font-size: 15px; color: #0066FF; font-weight: 600; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. <strong>Start small → Scale gradually.</strong></p>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    container.appendChild(rightPanel);
-    console.log('✓ Panel droit créé');
-    
-    // === 6. MISE À JOUR DYNAMIQUE DE LA DESCRIPTION ===
-    function updateServiceDescription() {
-      const descriptionField = document.querySelector('#service_description, [name*="description"], textarea[id*="description"]');
-      const descriptionContent = document.getElementById('description-content');
-      
-      if (descriptionField && descriptionContent) {
-        const descText = descriptionField.value || descriptionField.textContent || descriptionField.innerText;
-        
-        if (descText && descText.trim()) {
-          const formattedDesc = descText
-            .split('\n')
-            .map(line => {
-              line = line.trim();
-              if (!line) return '';
-              
-              if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️|💰|⚡|🎯|📈)/)) {
-                return `<p style="margin-bottom: 10px; color: #1a1a1a;">${line}</p>`;
-              } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill|Guarantee|Quality|Start Time)/i)) {
-                return `<p style="margin-bottom: 14px;"><strong style="color: #0066FF;">${line}</strong></p>`;
-              } else {
-                return `<p style="margin-bottom: 12px; color: #666;">${line}</p>`;
-              }
-            })
-            .filter(Boolean)
-            .join('');
-          
-          descriptionContent.innerHTML = formattedDesc || `<p style="color: #666;">${descText}</p>`;
-          console.log('✓ Description mise à jour');
-        } else {
-          descriptionContent.innerHTML = '<p style="color: #999; font-style: italic;">Select a service to view its description...</p>';
+          searchContainer.insertBefore(iconWrapper, searchInput);
         }
       }
-    }
-    
-    const serviceSelect = form.querySelector('select[name*="service"], #service, select[id*="service"]');
-    if (serviceSelect) {
-      serviceSelect.addEventListener('change', () => {
-        setTimeout(updateServiceDescription, 300);
-      });
-    }
-    
-    const descField = document.querySelector('#service_description, [name*="description"], textarea[id*="description"]');
-    if (descField) {
-      const observer = new MutationObserver(updateServiceDescription);
-      observer.observe(descField, { 
-        childList: true, 
-        characterData: true, 
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['value']
-      });
       
-      descField.addEventListener('input', updateServiceDescription);
-      descField.addEventListener('change', updateServiceDescription);
-    }
-    
-    setTimeout(updateServiceDescription, 500);
-    
-    // === 7. STYLE DES INPUTS ===
-    const inputs = form.querySelectorAll('input:not([type="submit"]), select, textarea');
-    inputs.forEach(input => {
-      if (input === searchInput) return;
-      
-      input.style.cssText = `
-        width: 100% !important;
-        padding: 14px 16px !important;
-        border: 1.5px solid rgba(0,102,255,0.15) !important;
-        border-radius: 10px !important;
-        font-size: 14px !important;
-        background: #FAFBFC !important;
-        transition: all 0.3s !important;
-        color: #1a1a1a !important;
-        font-weight: 500 !important;
+      // === 3. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
+      const container = form.parentElement;
+      container.style.cssText = `
+        display: flex !important;
+        gap: 24px !important;
+        padding: 32px 20px !important;
+        max-width: 1800px !important;
+        margin: 0 auto !important;
+        align-items: flex-start !important;
+        min-height: 100vh !important;
+        height: auto !important;
       `;
       
-      input.addEventListener('focus', function() {
-        this.style.borderColor = '#0066FF';
-        this.style.background = 'white';
-        this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
-      });
-      
-      input.addEventListener('blur', function() {
-        this.style.borderColor = 'rgba(0,102,255,0.15)';
-        this.style.background = '#FAFBFC';
-        this.style.boxShadow = 'none';
-      });
-    });
-    
-    const labels = form.querySelectorAll('label');
-    labels.forEach(label => {
-      label.style.cssText = `
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        color: #1a1a1a !important;
-        margin-bottom: 8px !important;
-        display: block !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.03em !important;
-      `;
-    });
-    
-    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-    if (submitBtn) {
-      submitBtn.style.cssText = `
-        width: 100% !important;
-        padding: 16px !important;
-        background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 12px !important;
-        font-size: 16px !important;
-        font-weight: 800 !important;
-        cursor: pointer !important;
-        transition: all 0.3s !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
-        box-shadow: 0 6px 20px rgba(0,102,255,0.3) !important;
-        margin-top: 24px !important;
+      // === 4. FORMULAIRE GAUCHE (COMPACT ~32%) ===
+      form.style.cssText = `
+        flex: 0 0 380px !important;
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 28px !important;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e5e5e5 !important;
+        position: sticky !important;
+        top: 90px !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 110px) !important;
+        overflow-y: auto !important;
       `;
       
-      submitBtn.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-2px)';
-        this.style.boxShadow = '0 8px 28px rgba(0,102,255,0.4)';
-      });
+      // === 5. PANEL DROIT (NETTOYÉ - 2 TABS SEULEMENT) ===
+      const rightPanel = document.createElement('div');
+      rightPanel.id = 'order-info-panel';
+      rightPanel.style.cssText = `
+        flex: 1 !important;
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 0 !important;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e5e5e5 !important;
+        overflow: hidden !important;
+        min-height: 600px !important;
+        height: auto !important;
+      `;
       
-      submitBtn.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
-        this.style.boxShadow = '0 6px 20px rgba(0,102,255,0.3)';
-      });
-    }
-    
-    // === 8. SYSTÈME D'ONGLETS ===
-    setTimeout(() => {
-      const tabs = document.querySelectorAll('.info-tab');
-      const panels = document.querySelectorAll('.tab-panel');
+      rightPanel.innerHTML = `
+        <!-- Tabs Navigation (2 TABS SEULEMENT) -->
+        <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #FAFBFC;">
+          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Service Info
+            </span>
+          </button>
+          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Read Before Order
+            </span>
+          </button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="tab-content" style="padding: 28px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px); height: auto;">
+          
+          <!-- SERVICE INFO TAB (SANS GUARANTEE/SPEED CARDS) -->
+          <div class="tab-panel active" data-panel="service-info">
+            
+            <!-- Description Card -->
+            <div id="dynamic-description" style="background: #F8F9FF; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 20px;">
+              <h4 style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 19px;">📄</span> Service Description
+              </h4>
+              <div id="description-content" style="font-size: 13px; color: #666; line-height: 1.8;">
+                <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
+              </div>
+            </div>
+            
+            <!-- Pro Tip Card -->
+            <div style="background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,166,126,0.04)); padding: 20px; border-radius: 12px; border: 1px solid rgba(0,102,255,0.1);">
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <span style="font-size: 18px;">💡</span>
+                </div>
+                <div>
+                  <div style="font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">Pro Tip</div>
+                  <div style="font-size: 13px; color: #666; line-height: 1.6;">Always check the service description for specific requirements and delivery time before placing your order.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- READ BEFORE ORDER TAB -->
+          <div class="tab-panel" data-panel="read-before" style="display: none;">
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 28px;">📚</span> How Things Work Here
+            </h3>
+            
+            <!-- Order Status Section -->
+            <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 20px;">📊</span> Order Status Guide
+              </h4>
+              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 16px;">When you place an order, you'll see one of these statuses:</p>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span>
+                  <div><strong>Pending / Processing:</strong> Your order is received and will start within the promised start time.</div>
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span>
+                  <div><strong>In Progress:</strong> Delivery has started and engagement is being sent to your account.</div>
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span>
+                  <div><strong>Completed:</strong> Your order is fully delivered successfully.</div>
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #FF6B6B; border-radius: 50%;"></span>
+                  <div><strong>Partial:</strong> Only part delivered. Missing part is automatically refunded to your balance.</div>
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #999; border-radius: 50%;"></span>
+                  <div><strong>Canceled:</strong> Order could not run and was fully refunded to your balance.</div>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- Service Colors -->
+            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 20px;">🎨</span> Service Colors
+            </h4>
+            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <div style="margin-bottom: 14px; padding: 14px; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05)); border-left: 4px solid #FFC107; border-radius: 8px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🟡 Basic</div>
+                <div style="font-size: 13px; color: #666;">Cheapest, but drops are more likely.</div>
+              </div>
+              <div style="margin-bottom: 14px; padding: 14px; background: linear-gradient(135deg, rgba(0,166,126,0.1), rgba(0,166,126,0.05)); border-left: 4px solid #00A67E; border-radius: 8px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🟢 Medium</div>
+                <div style="font-size: 13px; color: #666;">Balanced option with better stability.</div>
+              </div>
+              <div style="padding: 14px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,102,255,0.05)); border-left: 4px solid #0066FF; border-radius: 8px;">
+                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🔵 Elite</div>
+                <div style="font-size: 13px; color: #666;">Highest quality, best for long-term results.</div>
+              </div>
+            </div>
+            
+            <!-- Refund Policy -->
+            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 20px;">💰</span> Refund Policy
+            </h4>
+            <div style="background: #F8F9FF; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
+            </div>
+            
+            <!-- Best Practices -->
+            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
+              <span style="font-size: 20px;">✅</span> How to Order Correctly
+            </h4>
+            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 18px; border-radius: 12px; border: 1px solid #0066FF;">
+              <p style="font-size: 14px; color: #0047AB; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. <strong>Start small → Scale gradually.</strong></p>
+            </div>
+          </div>
+        </div>
+      `;
       
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          const targetPanel = this.dataset.tab;
+      container.appendChild(rightPanel);
+      
+      // === 6. MISE À JOUR DYNAMIQUE DE LA DESCRIPTION ===
+      function updateServiceDescription() {
+        const descriptionField = document.querySelector('#service_description, [name*="description"]');
+        const descriptionContent = document.getElementById('description-content');
+        
+        if (descriptionField && descriptionContent) {
+          const descText = descriptionField.value || descriptionField.textContent;
           
-          tabs.forEach(t => {
-            t.style.color = '#666';
-            t.style.background = 'transparent';
-            t.style.borderBottom = 'none';
-          });
-          
-          this.style.color = '#0066FF';
-          this.style.background = 'white';
-          this.style.borderBottom = '3px solid #0066FF';
-          
-          panels.forEach(p => p.style.display = 'none');
-          const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
-          if (targetPanelEl) {
-            targetPanelEl.style.display = 'block';
+          if (descText && descText.trim() && descText.trim() !== '') {
+            // Convertir texte brut en HTML avec formatage
+            const formattedDesc = descText
+              .split('\n')
+              .map(line => {
+                line = line.trim();
+                if (!line) return '';
+                
+                // Détection de patterns
+                if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
+                  return `<p style="margin-bottom: 8px;">${line}</p>`;
+                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
+                  return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
+                } else {
+                  return `<p style="margin-bottom: 10px;">${line}</p>`;
+                }
+              })
+              .filter(Boolean)
+              .join('');
+            
+            descriptionContent.innerHTML = formattedDesc || descText;
+          } else {
+            descriptionContent.innerHTML = '<p style="color: #999; font-style: italic;">Select a service to view its description...</p>';
           }
+        }
+      }
+      
+      // Observer sur le select de service
+      const serviceSelect = form.querySelector('select[name*="service"], #service');
+      if (serviceSelect) {
+        serviceSelect.addEventListener('change', () => {
+          setTimeout(updateServiceDescription, 300);
+        });
+      }
+      
+      // Observer sur le champ description (mutation)
+      const descField = document.querySelector('#service_description, [name*="description"]');
+      if (descField) {
+        const observer = new MutationObserver(updateServiceDescription);
+        observer.observe(descField, { 
+          childList: true, 
+          characterData: true, 
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['value']
+        });
+        
+        // Event listeners classiques
+        descField.addEventListener('input', updateServiceDescription);
+        descField.addEventListener('change', updateServiceDescription);
+      }
+      
+      // Update initial
+      setTimeout(updateServiceDescription, 500);
+      
+      // === 7. OPTIMISATION INPUTS FORMULAIRE ===
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.style.cssText = `
+          width: 100% !important;
+          padding: 12px 14px !important;
+          border: 1.5px solid #e5e5e5 !important;
+          border-radius: 8px !important;
+          font-size: 14px !important;
+          background: white !important;
+          transition: all 0.3s !important;
+          margin-bottom: 14px !important;
+        `;
+        
+        input.addEventListener('focus', function() {
+          this.style.borderColor = '#0066FF';
+          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.08)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.style.borderColor = '#e5e5e5';
+          this.style.boxShadow = 'none';
         });
       });
-    }, 100);
-    
-    // === 9. ANIMATIONS ===
-    const animStyle = document.createElement('style');
-    animStyle.textContent = `
-      .info-tab:hover {
-        background: rgba(0, 102, 255, 0.05) !important;
+      
+      // === 8. LABELS FORMULAIRE ===
+      const labels = form.querySelectorAll('label');
+      labels.forEach(label => {
+        label.style.cssText = `
+          font-size: 13px !important;
+          font-weight: 600 !important;
+          color: #1a1a1a !important;
+          margin-bottom: 7px !important;
+          display: block !important;
+        `;
+      });
+      
+      // === 9. BOUTON SUBMIT ===
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.style.cssText = `
+          width: 100% !important;
+          padding: 14px !important;
+          background: linear-gradient(135deg, #00A67E, #00D97E) !important;
+          color: white !important;
+          border: none !important;
+          border-radius: 8px !important;
+          font-size: 15px !important;
+          font-weight: 700 !important;
+          cursor: pointer !important;
+          transition: all 0.3s !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.04em !important;
+          box-shadow: 0 4px 12px rgba(0,166,126,0.25) !important;
+          margin-top: 20px !important;
+        `;
+        
+        submitBtn.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+          this.style.boxShadow = '0 6px 18px rgba(0,166,126,0.35)';
+        });
+        
+        submitBtn.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.25)';
+        });
       }
       
-      #tab-content::-webkit-scrollbar,
-      form::-webkit-scrollbar {
-        width: 8px;
-      }
+      // === 10. SYSTÈME D'ONGLETS ===
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.info-tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        
+        tabs.forEach(tab => {
+          tab.addEventListener('click', function() {
+            const targetPanel = this.dataset.tab;
+            
+            // Reset tabs
+            tabs.forEach(t => {
+              t.style.color = '#666';
+              t.style.background = 'none';
+              t.style.borderBottom = 'none';
+            });
+            
+            // Active tab
+            this.style.color = '#00A67E';
+            this.style.background = 'white';
+            this.style.borderBottom = '2px solid #00A67E';
+            
+            // Show panel
+            panels.forEach(p => p.style.display = 'none');
+            const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
+            if (targetPanelEl) targetPanelEl.style.display = 'block';
+          });
+        });
+        
+        // Active premier tab par défaut
+        if (tabs[0]) {
+          tabs[0].style.color = '#00A67E';
+          tabs[0].style.background = 'white';
+          tabs[0].style.borderBottom = '2px solid #00A67E';
+        }
+      }, 100);
       
-      #tab-content::-webkit-scrollbar-track,
-      form::-webkit-scrollbar-track {
-        background: #F0F4FF;
-        border-radius: 10px;
-      }
+      // === 11. RESPONSIVE ===
+      const mediaQuery = window.matchMedia('(max-width: 1100px)');
       
-      #tab-content::-webkit-scrollbar-thumb,
-      form::-webkit-scrollbar-thumb {
-        background: #0066FF;
-        border-radius: 10px;
-      }
-      
-      @media (max-width: 1100px) {
-        div[style*="flex: 0 0 420px"] {
-          flex: 1 1 auto !important;
-          position: static !important;
-          max-height: none !important;
+      function handleResponsive(e) {
+        if (e.matches) {
+          container.style.flexDirection = 'column';
+          form.style.flex = '1 1 auto';
+          form.style.position = 'static';
+          form.style.maxHeight = 'none';
+          rightPanel.style.flex = '1 1 auto';
+        } else {
+          container.style.flexDirection = 'row';
+          form.style.flex = '0 0 380px';
+          form.style.position = 'sticky';
+          form.style.maxHeight = 'calc(100vh - 110px)';
+          rightPanel.style.flex = '1';
         }
       }
-    `;
-    document.head.appendChild(animStyle);
-    
-    console.log('✅ [NEW ORDER] Layout appliqué avec succès !');
-  }
-  
-  // Exécuter après le chargement du DOM
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(initNewOrderFix, 500);
-    });
-  } else {
-    setTimeout(initNewOrderFix, 500);
-  }
-  
+      
+      handleResponsive(mediaQuery);
+      mediaQuery.addEventListener('change', handleResponsive);
+      
+      console.log('✅ [NEW ORDER] Layout nettoyé appliqué avec succès');
+    }
+  }, 300);
 })();
+
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
