@@ -1,29 +1,29 @@
 // =============================================================================
-// 1. NEW ORDER PREMIUM - DÉTECTION NATIF (EN HAUT - PRIORITÉ MAX)
+// NEW ORDER PREMIUM - INDÉPENDANT (1er - TOUJOURS ACTIF)
 // =============================================================================
 (function() {
-  const observer = new MutationObserver((mutations, obs) => {
-    const newOrderBlock = document.querySelector('.neworder-container, #neworder-form, [id*="neworder"], .new-order-form, form[action*="neworder"], .order-form');
-    
-    if (newOrderBlock) {
-      console.log('🚀 [GENUINE] NEW ORDER NATIF DÉTECTÉ');
+  setTimeout(() => {
+    const searchInput = document.querySelector('input[placeholder*="Search"]');
+    if (searchInput) {
+      console.log('🚀 [GENUINE] NEW ORDER FORM DÉTECTÉ');
       
-      const searchInput = newOrderBlock.querySelector('input[placeholder*="Search"], input[placeholder*="search"], input[name*="search"], input[name="q"]');
-      if (searchInput) {
-        searchInput.style.cssText = `
-          background: rgba(255,255,255,0.95) !important;
-          backdrop-filter: blur(20px) !important;
-          border: 2px solid rgba(0,102,255,0.2) !important;
-          border-radius: 24px !important;
-          padding: 24px 32px 24px 72px !important;
-          font-size: 16px !important;
-          box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
-          position: relative !important;
-        `;
-        searchInput.insertAdjacentHTML('beforeend', '<span style="position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:20px;color:#0066FF;z-index:10;pointer-events:none">🔍</span>');
-      }
+      // GLASS INPUT
+      searchInput.style.cssText = `
+        background: rgba(255,255,255,0.95) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 2px solid rgba(0,102,255,0.2) !important;
+        border-radius: 24px !important;
+        padding: 24px 32px 24px 72px !important;
+        font-size: 16px !important;
+        box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
+        position: relative !important;
+      `;
       
-      const submitBtn = newOrderBlock.querySelector('button[type="submit"], input[type="submit"]');
+      // 🔍 ICON
+      searchInput.insertAdjacentHTML('beforeend', '<span style="position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:20px;color:#0066FF;z-index:10;pointer-events:none">🔍</span>');
+      
+      // GRADIENT BUTTON
+      const submitBtn = document.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           background: linear-gradient(135deg, #0066FF, #0052CC) !important;
@@ -31,23 +31,21 @@
           padding: 20px 40px !important;
           font-weight: 700 !important;
           box-shadow: 0 8px 24px rgba(0,102,255,0.3) !important;
+          color: white !important;
         `;
       }
       
-      obs.disconnect();
-      console.log('✅ [GENUINE] NEW ORDER PREMIUM ACTIVÉ');
+      console.log('✅ [GENUINE] GLASS + 🔍 + BUTTON OK');
     }
-  });
-  
-  observer.observe(document.body, { childList: true, subtree: true });
-  setTimeout(() => observer.disconnect(), 5000); // Sécurité
+  }, 1000); // 1s après chargement
 })();
 
 
 // =============================================================================
-// 2. DÉTECTION CONDITIONNELLE LANDING PAGE (TON CODE ORIGINAL)
+// LANDING PAGE (APRES - SÉPARE)
 // =============================================================================
 (function() {
+  // TON CODE LANDING ORIGINAL COMPLET (avec syntaxe corrigée)
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
@@ -58,7 +56,7 @@
   }
 
   console.log('[GENUINE] Landing page detected - loading');
-
+  
   // =============================================================================
   // 3. TON CODE V1 ORIGINAL (COLLÉ ICI EXACTEMENT)
   // =============================================================================
