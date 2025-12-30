@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT 50/50 FULL WIDTH
+// NEW ORDER PAGE - LAYOUT 50/50 FULL WIDTH (COMPLÈT & CORRIGÉ)
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,7 +8,27 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] Layout 50/50 activé');
+      console.log('🎯 [NEW ORDER] Layout 50/50 FULL WIDTH activé');
+      
+      // === 0. FORCER BODY + MAIN À 100% WIDTH ===
+      document.body.style.cssText = `
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100vw !important;
+        overflow-x: hidden !important;
+      `;
+      
+      const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
+      if (mainContainer) {
+        mainContainer.style.cssText = `
+          width: 100vw !important;
+          max-width: 100vw !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          padding-top: 20px !important;
+          box-sizing: border-box !important;
+        `;
+      }
       
       // === 1. CACHER LA DESCRIPTION NATIVE ===
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
@@ -17,46 +37,65 @@
         nativeDescription.style.display = 'none';
       }
       
-      // === 2. CONTAINER PRINCIPAL (FLEX 50/50) ===
+      // === 2. CONTAINER PRINCIPAL FULL WIDTH ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
-        gap: 16px !important;
-        padding: 16px !important;
-        max-width: 100% !important;
-        width: 100% !important;
+        gap: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
         margin: 0 !important;
+        padding: 24px 0 !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
+        position: relative !important;
+        left: 50% !important;
+        right: 50% !important;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
       `;
       
-      // === 3. FORMULAIRE GAUCHE (50%) ===
+      // === 3. FORMULAIRE GAUCHE EXACT 50% ===
       form.style.cssText = `
-        flex: 1 !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
         min-width: 0 !important;
         background: white !important;
-        border-radius: 12px !important;
-        padding: 24px !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+        border-radius: 0 12px 12px 0 !important;
+        padding: 32px !important;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.06) !important;
         border: 1px solid #e5e7eb !important;
+        border-left: none !important;
         box-sizing: border-box !important;
         height: fit-content !important;
+        max-height: 100vh !important;
+        overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT (50%) ===
-      const rightPanel = document.createElement('div');
-      rightPanel.id = 'order-info-panel';
+      // === 4. PANEL DROIT EXACT 50% ===
+      let rightPanel = document.getElementById('order-info-panel');
+      if (!rightPanel) {
+        rightPanel = document.createElement('div');
+        rightPanel.id = 'order-info-panel';
+        container.appendChild(rightPanel);
+      }
+      
       rightPanel.style.cssText = `
-        flex: 1 !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
         min-width: 0 !important;
         background: white !important;
-        border-radius: 12px !important;
-        padding: 0 !important;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+        border-radius: 12px 0 0 12px !important;
+        box-shadow: -4px 0 20px rgba(0,0,0,0.06) !important;
         border: 1px solid #e5e7eb !important;
+        border-right: none !important;
         overflow: hidden !important;
         display: flex !important;
         flex-direction: column !important;
+        height: fit-content !important;
+        max-height: 100vh !important;
         box-sizing: border-box !important;
       `;
       
