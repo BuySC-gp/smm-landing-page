@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER - 50/50 SANS FULL-BLEED (FIX FINAL)
+// NEW ORDER - 558PX MATHÉMATIQUE PARFAIT (1117px ÉCRAN)
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,7 +8,7 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] 50/50 SANS BLEED');
+      console.log('🎯 [NEW ORDER] 558PX PARFAIT');
       
       // === 0. BODY + MAIN ===
       document.body.style.cssText = `
@@ -36,24 +36,29 @@
         nativeDescription.style.display = 'none';
       }
       
-      // === 2. CONTAINER 100% SIMPLE ===
+      // === 2. CONTAINER FULL-BLEED ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
         gap: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        width: 100vw !important;
+        max-width: none !important;
         margin: 0 !important;
         padding: 24px 0 !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
+        position: relative !important;
+        left: 50% !important;
+        right: 50% !important;
+        margin-left: -50vw !important;
+        margin-right: -50vw !important;
       `;
       
-      // === 3. FORM GAUCHE 50% ===
+      // === 3. FORM GAUCHE 558PX ===
       form.style.cssText = `
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-        width: 50% !important;
+        flex: 0 0 558px !important;
+        max-width: 558px !important;
+        width: 558px !important;
         min-width: 0 !important;
         background: white !important;
         border-radius: 0 12px 12px 0 !important;
@@ -67,7 +72,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT 50% ===
+      // === 4. PANEL DROIT 558PX (CORRIGÉ) ===
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
@@ -76,9 +81,9 @@
       }
       
       rightPanel.style.cssText = `
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-        width: 50% !important;
+        flex: 0 0 558px !important;  /* ← 558PX COMME FORM */
+        max-width: 558px !important;  /* ← 558PX COMME FORM */
+        width: 558px !important;  /* ← 558PX COMME FORM */
         min-width: 0 !important;
         background: white !important;
         border-radius: 12px 0 0 12px !important;
