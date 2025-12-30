@@ -2296,100 +2296,93 @@ setTimeout(() => {
 
 })(); // End IIFE wrapper
 <script>
-// V5 - Z-INDEX MAX + DEBUG FORCE
-console.log('🔥 GENUINE V5 START - Z-INDEX 999999');
+// V6 - SYNTAXE PARFAITE + Z-INDEX MAX
+console.log('⚡ GENUINE V6 - SYNTAXE FIXÉE');
 
 setTimeout(() => {
-  console.log('📱 URL:', window.location.href);
-  console.log('📊 Inputs trouvés:', document.querySelectorAll('input').length);
-  
-  // FORCE SUR TOUS PANELS + Z-INDEX MAX
-  const dashboard = document.createElement('div');
-  dashboard.id = 'ultimate-dashboard';
-  dashboard.style.cssText = `
-    position:fixed !important; top:0 !important; left:0 !important; width:100% !important; height:100vh !important;
-    background:linear-gradient(135deg, rgba(248,249,255,0.98), rgba(232,240,255,0.95)) !important;
-    z-index:999999 !important; padding:40px !important; display:flex !important; flex-direction:column !important;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif !important; justify-content:center !important;
-    align-items:center !important; text-align:center !important; color:#1a1a1a !important;
-  `;
-  
-  dashboard.innerHTML = `
-    <div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;letter-spacing:-0.02em;">Genuine Promotion</div>
+  if (window.location.href.includes('genuinepromotion.com')) {
+    console.log('🎯 PANEL DÉTECTÉ - DASHBOARD INJECTION');
     
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;max-width:1200px;width:100%;margin:40px 0;">
-      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
-        <div style="font-size:56px;margin-bottom:20px;">📦</div>
-        <div style="font-size:44px;font-weight:900;color:#0066FF;margin-bottom:12px;">500K+</div>
-        <div style="color:#666;font-size:16px;font-weight:600;">Total Orders</div>
+    // DASHBOARD INLINE HTML + CSS (SYNTAXE BULLEPROOF)
+    const dashboardHTML = `
+      <div id="genuine-dashboard-v6" style="
+        position:fixed;top:0;left:0;width:100vw;height:100vh;
+        background:linear-gradient(135deg,rgba(248,249,255,0.98),rgba(232,240,255,0.95));
+        z-index:2147483647;padding:40px;display:flex;flex-direction:column;
+        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+        justify-content:center;align-items:center;text-align:center;color:#1a1a1a;
+      ">
+        <div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:24px;letter-spacing:-0.02em;">Genuine Promotion</div>
+        
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;max-width:1200px;width:100%;margin:40px 0;">
+          <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:36px 32px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);">
+            <div style="font-size:52px;margin-bottom:16px;">📦</div>
+            <div style="font-size:42px;font-weight:900;color:#0066FF;margin-bottom:8px;">500K+</div>
+            <div style="color:#666;font-size:16px;font-weight:600;">Total Orders</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:36px 32px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);">
+            <div style="font-size:52px;margin-bottom:16px;">👥</div>
+            <div style="font-size:42px;font-weight:900;color:#10B981;margin-bottom:8px;">2,500+</div>
+            <div style="color:#666;font-size:16px;font-weight:600;">Active Users</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:36px 32px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);">
+            <div style="font-size:52px;margin-bottom:16px;">⚡</div>
+            <div style="font-size:42px;font-weight:900;color:#F59E0B;margin-bottom:8px;">99.8%</div>
+            <div style="color:#666;font-size:16px;font-weight:600;">Uptime</div>
+          </div>
+        </div>
+        
+        <div style="font-size:34px;font-weight:800;color:#1a1a1a;margin:32px 0 40px;letter-spacing:-0.01em;">🚀 Quick Actions</div>
+        
+        <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
+          <button onclick="genuineScroll()" style="
+            padding:22px 44px;background:linear-gradient(135deg,#0066FF 0%,#0047AB 100%);
+            color:white;border:none;border-radius:20px;font-size:18px;font-weight:800;
+            cursor:pointer;box-shadow:0 16px 40px rgba(0,102,255,0.4);
+            transition:all 0.3s ease;min-width:180px;
+          ">➤ New Order</button>
+          <a href="/addfunds" style="
+            padding:22px 44px;background:white;color:#0066FF;text-decoration:none;
+            border-radius:20px;font-size:18px;font-weight:800;box-shadow:0 12px 32px rgba(0,0,0,0.15);
+            transition:all 0.3s ease;border:2px solid #E5E7EB;min-width:180px;
+          ">💰 Add Funds</a>
+          <a href="/api" style="
+            padding:20px 36px;background:#F8FAFC;color:#0066FF;text-decoration:none;
+            border-radius:20px;font-size:16px;font-weight:700;box-shadow:0 8px 24px rgba(0,102,255,0.15);
+            transition:all 0.3s ease;border:2px solid #E5E7EB;
+          ">🔌 API Docs</a>
+        </div>
+        
+        <div style="
+          margin-top:60px;padding:24px 32px;background:rgba(255,255,255,0.9);
+          backdrop-filter:blur(20px);border-radius:20px;border:2px dashed rgba(0,102,255,0.4);
+          color:#666;font-size:16px;font-weight:600;max-width:480px;
+        ">👇 Click "New Order" to continue your order</div>
       </div>
-      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
-        <div style="font-size:56px;margin-bottom:20px;">👥</div>
-        <div style="font-size:44px;font-weight:900;color:#10B981;margin-bottom:12px;">2,500+</div>
-        <div style="color:#666;font-size:16px;font-weight:600;">Active Users</div>
-      </div>
-      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
-        <div style="font-size:56px;margin-bottom:20px;">⚡</div>
-        <div style="font-size:44px;font-weight:900;color:#F59E0B;margin-bottom:12px;">99.8%</div>
-        <div style="color:#666;font-size:16px;font-weight:600;">Uptime</div>
-      </div>
-    </div>
+    `;
     
-    <div style="font-size:36px;font-weight:800;color:#1a1a1a;margin-bottom:40px;letter-spacing:-0.01em;">🚀 Quick Actions</div>
+    document.body.insertAdjacentHTML('afterbegin', dashboardHTML);
     
-    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;max-width:800px;">
-      <button onclick="scrollToOrder()" style="
-        padding:24px 48px !important;background:linear-gradient(135deg,#0066FF,#0047AB) !important;
-        color:white !important;border:none !important;border-radius:20px !important;font-size:20px !important;
-        font-weight:800 !important;cursor:pointer !important;box-shadow:0 16px 40px rgba(0,102,255,0.4) !important;
-        transition:all 0.3s ease !important;min-width:200px;
-      " onmouseover="this.style.transform='translateY(-4px) scale(1.02)'" onmouseout="this.style.transform=''">
-        ➤ New Order
-      </button>
-      <a href="/addfunds" style="
-        padding:24px 48px !important;background:white !important;color:#0066FF !important;
-        text-decoration:none !important;border-radius:20px !important;font-size:20px !important;
-        font-weight:800 !important;box-shadow:0 12px 32px rgba(0,0,0,0.15) !important;
-        transition:all 0.3s ease !important;min-width:200px;border:2px solid #E5E7EB !important;
-      " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
-        💰 Add Funds
-      </a>
-      <a href="/api" style="
-        padding:24px 32px !important;background:#F8FAFC !important;color:#0066FF !important;
-        text-decoration:none !important;border-radius:20px !important;font-size:18px !important;
-        font-weight:700 !important;box-shadow:0 8px 24px rgba(0,102,255,0.15) !important;
-        transition:all 0.3s ease !important;border:2px solid #E5E7EB !important;
-      " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
-        🔌 API Docs
-      </a>
-    </div>
+    window.genuineScroll = function() {
+      console.log('🎯 SCROLL ACTIVÉ');
+      const form = document.querySelector('input, select');
+      if (form) {
+        form.scrollIntoView({behavior:'smooth', block:'center'});
+        setTimeout(() => {
+          const dash = document.getElementById('genuine-dashboard-v6');
+          if (dash) {
+            dash.style.transition = 'all 0.5s ease';
+            dash.style.opacity = '0';
+            dash.style.transform = 'scale(0.95)';
+            setTimeout(() => dash.remove(), 500);
+          }
+        }, 600);
+      }
+    };
     
-    <div style="
-      margin-top:60px;padding:28px;background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);
-      border-radius:24px;border:3px dashed rgba(0,102,255,0.3);color:#666;font-size:18px;
-      font-weight:600;max-width:500px;
-    ">👇 Click "New Order" to continue or scroll down</div>
-  `;
-  
-  document.body.prepend(dashboard); // PREPEND = Z-INDEX MAX
-  
-  window.scrollToOrder = () => {
-    console.log('🎯 SCROLL TO FORM');
-    const formElements = document.querySelectorAll('input, select, textarea');
-    if (formElements.length > 0) {
-      formElements[0].scrollIntoView({behavior:'smooth', block:'center'});
-      setTimeout(() => {
-        dashboard.style.transition = 'all 0.5s ease';
-        dashboard.style.opacity = '0';
-        dashboard.style.transform = 'scale(0.95) translateY(-20px)';
-        setTimeout(() => dashboard.remove(), 600);
-      }, 800);
-    }
-  };
-  
-  console.log('✅ ULTIMATE DASHBOARD INJECTÉ - Z-INDEX 999999');
-}, 500); // 0.5s au lieu de 3s
+    console.log('✅ V6 SYNTAXE PARFAITE - DASHBOARD ACTIF');
+  }
+}, 800);
 
-console.log('🔥 GENUINE V5 END');
+console.log('⚡ GENUINE V6 CHARGÉ');
 </script>
-
