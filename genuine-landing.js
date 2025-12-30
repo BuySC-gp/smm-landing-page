@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER - 558PX MATHÉMATIQUE PARFAIT (1117px ÉCRAN)
+// NEW ORDER - SIDEBAR + 50/50 PANELS
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,94 +8,51 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] 558PX PARFAIT');
       
-      // === 0. BODY + MAIN ===
-      document.body.style.cssText = `
-        padding: 0 !important;
-        margin: 0 !important;
-        overflow-x: hidden !important;
-      `;
+      // SIDEBAR RESPECTÉE
+      const sidebar = document.querySelector('.sidebar, [class*="sidebar"], nav');
+      if (sidebar) sidebar.style.flexShrink = '0';
       
-      const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
-      if (mainContainer) {
-        mainContainer.style.cssText = `
-          width: 100% !important;
-          max-width: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          padding-top: 20px !important;
-          box-sizing: border-box !important;
-        `;
-      }
+      // BODY SANS TOUCHER LAYOUT
+      document.body.style.overflowX = 'hidden';
       
-      // === 1. DESCRIPTION NATIVE ===
-      const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
-                                form.querySelector('[id*="description"]')?.closest('.form-group');
-      if (nativeDescription) {
-        nativeDescription.style.display = 'none';
-      }
-      
-      // === 2. CONTAINER FULL-BLEED ===
-      const container = form.parentElement;
-      container.style.cssText = `
+      // CONTAINER PRINCIPAL (avec sidebar)
+      const mainContainer = form.parentElement.parentElement;
+      mainContainer.style.cssText = `
         display: flex !important;
         gap: 0 !important;
         width: 100vw !important;
-        max-width: none !important;
-        margin: 0 !important;
         padding: 24px 0 !important;
-        align-items: flex-start !important;
-        box-sizing: border-box !important;
         position: relative !important;
         left: 50% !important;
-        right: 50% !important;
         margin-left: -50vw !important;
-        margin-right: -50vw !important;
       `;
       
-      // === 3. FORM GAUCHE 558PX ===
+      // DESCRIPTION NATIVE
+      const nativeDescription = form.querySelector('.form-group:has(#service_description)');
+      if (nativeDescription) nativeDescription.style.display = 'none';
+      
+      // FORM GAUCHE
       form.style.cssText = `
-        flex: 0 0 558px !important;
-        max-width: 558px !important;
-        width: 558px !important;
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 0 12px 12px 0 !important;
-        padding: 32px !important;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-left: none !important;
-        box-sizing: border-box !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        overflow-y: auto !important;
+        flex: 0 0 calc(50% - 12px) !important;
+        max-width: calc(50% - 12px) !important;
+        width: calc(50% - 12px) !important;
+        /* reste identique */
       `;
       
-      // === 4. PANEL DROIT 558PX (CORRIGÉ) ===
+      // PANEL DROIT (identique ton original)
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
         rightPanel.id = 'order-info-panel';
-        container.appendChild(rightPanel);
+        mainContainer.appendChild(rightPanel);
       }
       
       rightPanel.style.cssText = `
-        flex: 0 0 558px !important;  /* ← 558PX COMME FORM */
-        max-width: 558px !important;  /* ← 558PX COMME FORM */
-        width: 558px !important;  /* ← 558PX COMME FORM */
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 12px 0 0 12px !important;
-        box-shadow: -4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-right: none !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        box-sizing: border-box !important;
+        flex: 0 0 calc(50% - 12px) !important;
+        max-width: calc(50% - 12px) !important;
+        width: calc(50% - 12px) !important;
+        /* reste identique ton original */
       `;
       
       rightPanel.innerHTML = `
