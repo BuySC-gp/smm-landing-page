@@ -1,62 +1,99 @@
 // =============================================================================
-// NEW ORDER PREMIUM - WRAPPER + ICON FIX
+// NEW ORDER = FULL PREMIUM REDESIGN (comme landing)
 // =============================================================================
 (function() {
   setTimeout(() => {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
-    if (searchInput && !searchInput.dataset.genuineStyled) {
-      searchInput.dataset.genuineStyled = 'true';
-      console.log('🚀 [GENUINE] NEW ORDER FORM DÉTECTÉ');
+    const formContainer = searchInput?.closest('form') || document.querySelector('form');
+    
+    if (formContainer && !formContainer.dataset.premiumApplied) {
+      formContainer.dataset.premiumApplied = 'true';
+      console.log('🚀 [GENUINE] NEW ORDER PREMIUM DASHBOARD ACTIVATED');
       
-      // WRAPPER pour icône
-      const wrapper = document.createElement('div');
-      wrapper.style.cssText = 'position:relative;display:inline-block;width:100%;';
-      searchInput.parentNode.insertBefore(wrapper, searchInput);
-      wrapper.appendChild(searchInput);
-      
-      // GLASS INPUT
-      searchInput.style.cssText = `
-        background: rgba(255,255,255,0.95) !important;
-        backdrop-filter: blur(20px) !important;
-        border: 2px solid rgba(0,102,255,0.2) !important;
-        border-radius: 24px !important;
-        padding: 24px 32px 24px 72px !important;
-        font-size: 16px !important;
-        box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
-        width: 100% !important;
+      // === 1. FORM CONTAINER GLASS ===
+      formContainer.style.cssText = `
+        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,255,0.95)) !important;
+        backdrop-filter: blur(24px) !important;
+        border-radius: 32px !important;
+        padding: 40px !important;
+        box-shadow: 0 24px 80px rgba(0,102,255,0.12) !important;
+        border: 1px solid rgba(0,102,255,0.15) !important;
+        max-width: 600px !important;
+        margin: 20px auto !important;
       `;
       
-      // 🔍 ICON (extérieur à l'input)
-      const icon = document.createElement('span');
-      icon.textContent = '🔍';
-      icon.style.cssText = `
-        position: absolute;
-        left: 32px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 20px;
-        pointer-events: none;
-        z-index: 10;
-      `;
-      wrapper.appendChild(icon);
+      // === 2. SERVICE SELECT BADGE ===
+      const serviceSelect = formContainer.querySelector('select');
+      if (serviceSelect) {
+        serviceSelect.insertAdjacentHTML('beforebegin', '<div style="position:absolute;top:-12px;left:20px;padding:4px 12px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.05em;">PREMIUM</div>');
+      }
       
-      // GRADIENT BUTTON
-      const submitBtn = document.querySelector('button[type="submit"]');
+      // === 3. INPUT SEARCH + ICON ===
+      if (searchInput) {
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'position:relative;margin-bottom:24px;display:block;';
+        searchInput.parentNode.insertBefore(wrapper, searchInput);
+        wrapper.appendChild(searchInput);
+        
+        searchInput.style.cssText = `
+          background: rgba(255,255,255,0.98) !important;
+          backdrop-filter: blur(28px) !important;
+          border: 2px solid rgba(0,102,255,0.2) !important;
+          border-radius: 24px !important;
+          padding: 24px 32px 24px 80px !important;
+          font-size: 16px !important;
+          box-shadow: 0 8px 32px rgba(0,102,255,0.1) !important;
+          width: 100% !important;
+          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+        `;
+        
+        const icon = document.createElement('span');
+        icon.textContent = '🔍';
+        icon.style.cssText = `
+          position: absolute; left: 36px; top: 50%; transform: translateY(-50%);
+          font-size: 22px; color: #0066FF; z-index: 10; pointer-events: none;
+        `;
+        wrapper.appendChild(icon);
+      }
+      
+      // === 4. QUANTITY + PRICE CARDS ===
+      const inputs = formContainer.querySelectorAll('input');
+      inputs.forEach((input, i) => {
+        if (input.type === 'number' || input.placeholder.includes('Quantity') || input.name.includes('quantity')) {
+          input.style.cssText = `
+            background: rgba(255,255,255,0.9) !important;
+            border: 2px solid rgba(0,102,255,0.15) !important;
+            border-radius: 16px !important;
+            padding: 20px 24px !important;
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
+          `;
+        }
+      });
+      
+      // === 5. SUBMIT BUTTON PREMIUM ===
+      const submitBtn = formContainer.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-          border-radius: 20px !important;
-          padding: 20px 40px !important;
-          font-weight: 700 !important;
-          box-shadow: 0 8px 24px rgba(0,102,255,0.3) !important;
+          border-radius: 24px !important;
+          padding: 24px 48px !important;
+          font-size: 18px !important;
+          font-weight: 800 !important;
+          box-shadow: 0 16px 48px rgba(0,102,255,0.4) !important;
           color: white !important;
           border: none !important;
+          width: 100% !important;
+          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
         `;
+        submitBtn.onmouseover = () => submitBtn.style.transform = 'translateY(-6px) scale(1.02)';
+        submitBtn.onmouseout = () => submitBtn.style.transform = '';
       }
       
-      console.log('✅ [GENUINE] GLASS + 🔍 + BUTTON OK');
+      console.log('✅ [GENUINE] FULL NEW ORDER PREMIUM DASHBOARD ACTIVATED');
     }
-  }, 1500); // 1.5s pour être sûr que le DOM est chargé
+  }, 1200);
 })();
 
 // =============================================================================
