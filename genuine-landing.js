@@ -46,8 +46,7 @@
         rightPanel.id = 'order-info-panel';
         rightPanel.style.cssText = `flex:0 0 ${panelWidth} !important;max-width:${panelWidth} !important;width:${panelWidth} !important;min-width:0 !important;background:white !important;border-radius:12px 0 0 12px !important;box-shadow:-4px 0 20px rgba(0,0,0,0.06) !important;border:1px solid #e5e7eb !important;border-right:none !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;height:fit-content !important;max-height:100vh !important;box-sizing:border-box !important;`;
         container.appendChild(rightPanel);
-      
-      rightPanel.innerHTML = `
+        rightPanel.innerHTML = `
         <!-- Header Badge -->
         <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 18px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
           <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 200px;">
