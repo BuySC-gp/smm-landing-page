@@ -1,9 +1,45 @@
-// === NEW ORDER STYLING (GLOBAL - AVANT TOUT) ===
-setTimeout(function(){
-  if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
-    console.log('[GENUINE] New Order detected - styling');
-  }
-}, 800);
+// === NEW ORDER PREMIUM - GLOBAL (HORS LANDING) ===
+(function(){
+  setTimeout(function(){
+    const searchInput = document.querySelector('input[placeholder*="Search"], input[placeholder*="search"], input[placeholder*="Q"]');
+    const sidebar = document.querySelector('.sidebar');
+    if(searchInput && sidebar){
+      console.log('✅ [GENUINE] NEW ORDER DETECTED - PREMIUM STYLING');
+      
+      // Inject glass input + gradient button
+      searchInput.style.cssText = `
+        background: rgba(255,255,255,0.9) !important;
+        backdrop-filter: blur(16px) !important;
+        border: 2px solid rgba(0,102,255,0.2) !important;
+        border-radius: 20px !important;
+        padding: 24px 28px 24px 68px !important;
+        font-size: 16px !important;
+        box-shadow: 0 2px 8px rgba(0,102,255,0.06) !important;
+        transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+        position: relative !important;
+      `;
+      
+      // Search icon
+      searchInput.insertAdjacentHTML('beforeend', '<span style="position:absolute;left:28px;top:50%;transform:translateY(-50%);font-size:20px;color:#0066FF;z-index:1;pointer-events:none">🔍</span>');
+      
+      // Gradient submit
+      const submitBtn = document.querySelector('button[type="submit"], input[type="submit"]');
+      if(submitBtn){
+        submitBtn.style.cssText = `
+          background: linear-gradient(135deg, #0066FF, #0052CC) !important;
+          border-radius: 20px !important;
+          padding: 20px 40px !important;
+          font-weight: 700 !important;
+          box-shadow: 0 8px 24px rgba(0,102,255,0.3) !important;
+          transition: all 0.4s !important;
+        `;
+        submitBtn.addEventListener('mouseenter', function(){this.style.transform='translateY(-4px)';});
+        submitBtn.addEventListener('mouseleave', function(){this.style.transform='';});
+      }
+    }
+  }, 1200); // Attendre sidebar + form
+})();
+
 
 // GENUINE PANEL - Landing Page Customization + Mobile Fix
 // Detection + V1 code + Responsive Mobile
