@@ -1,7 +1,13 @@
-// GENUINE PANEL - Landing Page Customization COMPLETE
-// Detection + V1 + Mobile Responsive + Fix espace blanc + Fix double mockup
+// GENUINE PANEL - Landing Page V2 COMPLETE
+// Zero setTimeout - Code complet avec toutes les sections
 
 (function() {
+  'use strict';
+
+  // ==========================================================================
+  // DETECTION CONDITIONNELLE
+  // ==========================================================================
+
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
@@ -11,11 +17,307 @@
     return;
   }
 
-  console.log('[GENUINE] Landing page detected - loading');
+  console.log('[GENUINE] Landing page detected - loading V2 COMPLETE');
 
-// =============================================================================
-// CODE V1 ORIGINAL
-// =============================================================================
+  // ==========================================================================
+  // FONCTION PRINCIPALE
+  // ==========================================================================
+
+  function initCustomLanding() {
+
+    const signupBlock = document.querySelector('.block-signin-text');
+    if (!signupBlock) {
+      console.error('[GENUINE] .block-signin-text not found');
+      return;
+    }
+
+    // ------------------------------------------------------------------------
+    // STEP 1: CACHER LES ÉLÉMENTS NATIFS IMMÉDIATEMENT
+    // ------------------------------------------------------------------------
+
+    const nativeElements = signupBlock.querySelectorAll('h1, h2, p, .block-signin__image, img, .component_card');
+    nativeElements.forEach(el => {
+      el.style.display = 'none';
+      el.style.opacity = '0';
+      el.style.visibility = 'hidden';
+      el.style.height = '0';
+    });
+
+    console.log('[GENUINE] ✅ Native elements hidden');
+
+    // ------------------------------------------------------------------------
+    // STEP 2: INJECTER TOUS LES STYLES CRITIQUES
+    // ------------------------------------------------------------------------
+
+    const allStyles = document.createElement('style');
+    allStyles.id = 'genuine-all-styles';
+    allStyles.textContent = `
+      /* ============================================================ */
+      /* HERO SECTION STYLES */
+      /* ============================================================ */
+
+      .block-signin-text {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .hero-premium {
+        background: linear-gradient(135deg, #F0F4FF 0%, #E8F0FF 50%, #F8F9FF 100%);
+        padding: 120px 40px;
+        position: relative;
+        overflow: visible;
+      }
+
+      .hero-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+      }
+
+      .hero-left { z-index: 2; }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.9);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #0047AB;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 12px rgba(0,71,171,0.1);
+      }
+
+      .hero-title {
+        font-size: 56px;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+      }
+
+      .hero-title-gradient {
+        background: linear-gradient(135deg, #0066FF 0%, #00A8E8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .hero-subtitle {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #666666;
+        margin-bottom: 32px;
+        max-width: 580px;
+      }
+
+      .hero-cta-group {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+      }
+
+      .hero-cta-primary, .hero-cta-secondary {
+        padding: 18px 36px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 17px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .hero-cta-primary {
+        background: linear-gradient(135deg, #0066FF 0%, #0047AB 100%);
+        color: white;
+        box-shadow: 0 8px 24px rgba(0,102,255,0.25);
+      }
+
+      .hero-cta-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(0,102,255,0.35);
+      }
+
+      .hero-cta-secondary {
+        background: white;
+        color: #0047AB;
+        border: 2px solid #E5E5E5;
+      }
+
+      .hero-cta-secondary:hover {
+        border-color: #0066FF;
+        transform: translateY(-2px);
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 32px;
+        background: white;
+        padding: 32px 40px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      }
+
+      .hero-stat { text-align: center; }
+
+      .hero-stat-value {
+        font-size: 36px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #0066FF 0%, #00A8E8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .hero-stat-label {
+        font-size: 14px;
+        color: #999999;
+        font-weight: 500;
+      }
+
+      .hero-right { position: relative; }
+
+      .hero-dashboard-preview {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 20px 60px rgba(0,71,171,0.15);
+        border: 1px solid rgba(0,102,255,0.1);
+        max-width: 700px !important;
+        width: 100% !important;
+        margin: 0 auto;
+      }
+
+      .hero-dashboard-preview img {
+        width: 100%;
+        height: auto;
+        border-radius: 12px;
+        display: block;
+      }
+
+      .hero-floating-badge {
+        position: absolute;
+        background: white;
+        padding: 16px 24px;
+        border-radius: 16px;
+        box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: float-badge 3s ease-in-out infinite;
+        z-index: 10;
+      }
+
+      .hero-floating-badge-1 { top: 40px; right: -40px; }
+      .hero-floating-badge-2 { bottom: 60px; left: -60px; }
+
+      .hero-floating-badge-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+
+      .hero-floating-badge-1 .hero-floating-badge-icon {
+        background: linear-gradient(135deg, #00D97E 0%, #00A67E 100%);
+      }
+
+      .hero-floating-badge-2 .hero-floating-badge-icon {
+        background: linear-gradient(135deg, #0066FF 0%, #0047AB 100%);
+      }
+
+      .hero-floating-badge-value {
+        font-size: 20px;
+        font-weight: 800;
+        color: #1a1a1a;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+
+      .hero-floating-badge-label {
+        font-size: 12px;
+        color: #999999;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      @keyframes float-badge {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+
+      /* ============================================================ */
+      /* RESPONSIVE MOBILE */
+      /* ============================================================ */
+
+      @media (max-width: 1200px) {
+        .hero-content {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .hero-dashboard-preview { max-width: 600px !important; }
+        .hero-floating-badge-1 { right: 10px; top: 20px; }
+        .hero-floating-badge-2 { left: 10px; bottom: 40px; }
+      }
+
+      @media (max-width: 768px) {
+        .hero-premium { padding: 60px 16px 50px; }
+        .hero-badge { font-size: 11px; padding: 6px 16px; }
+        .hero-title { font-size: 32px; line-height: 1.15; }
+        .hero-subtitle { font-size: 16px; margin-bottom: 28px; }
+        .hero-cta-group { flex-direction: column; gap: 12px; }
+        .hero-cta-primary, .hero-cta-secondary {
+          width: 100%;
+          justify-content: center;
+          padding: 16px 28px;
+          font-size: 16px;
+        }
+        .hero-stats {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          padding: 24px 20px;
+        }
+        .hero-stat-value { font-size: 32px; }
+        .hero-dashboard-preview {
+          max-width: 100% !important;
+          padding: 16px;
+        }
+        .hero-floating-badge { display: none !important; }
+      }
+
+      @media (max-width: 480px) {
+        .hero-title { font-size: 28px; }
+        .hero-subtitle { font-size: 15px; }
+        .hero-cta-primary, .hero-cta-secondary {
+          font-size: 15px;
+          padding: 14px 24px;
+        }
+      }
+    `;
+
+    document.head.appendChild(allStyles);
+    console.log('[GENUINE] ✅ All styles injected');
+
+    // ------------------------------------------------------------------------
+    // STEP 3: CRÉER LE HERO SECTION
+    // ------------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', function() {
   
@@ -919,7 +1221,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
-setTimeout(() => {
+// setTimeout removed - executing immediately
+{
   const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
@@ -944,7 +1247,7 @@ setTimeout(() => {
       label.textContent = 'Stay signed in';
     }
   });
-}, 800);
+} // end immediate execution
   }
 }); 
 
@@ -1105,7 +1408,8 @@ window.addEventListener('load', function() {
 
   });
    // === STATS MARQUEE DIAGONAL ===
-  setTimeout(() => {
+  // setTimeout removed - executing immediately
+{
     const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
       div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
     );
@@ -1157,10 +1461,11 @@ window.addEventListener('load', function() {
         </div>
       `);
     }
-  }, 500);
+  } // end immediate execution
 
   // === HOW IT WORKS TIMELINE ===
-setTimeout(() => {
+// setTimeout removed - executing immediately
+{
   const statsMarquee = document.querySelector('.stats-marquee-wrapper');
   
   if (statsMarquee) {
@@ -1401,7 +1706,7 @@ setTimeout(() => {
       });
     });
   }
-}, 600);
+} // end immediate execution
 });
 
 window.addEventListener('load', function() {
@@ -2138,266 +2443,16 @@ window.addEventListener('load', function() {
   
   console.log('✅ ALL sections loaded');
 });
-
-// =============================================================================
-// MOBILE RESPONSIVE FIX
-// =============================================================================
-
-setTimeout(() => {
-  const mobileFix = document.createElement('style');
-  mobileFix.textContent = `
-    /* Responsive mobile */
-    @media (max-width: 1200px) {
-      .hero-content {
-        grid-template-columns: 1fr !important;
-        gap: 40px !important;
-      }
-
-      .hero-title {
-        font-size: 42px !important;
-      }
-
-      .hero-dashboard-preview {
-        max-width: 600px !important;
-        margin: 0 auto !important;
-      }
-
-      .hero-floating-badge-1 {
-        right: 10px !important;
-        top: 20px !important;
-      }
-
-      .hero-floating-badge-2 {
-        left: 10px !important;
-        bottom: 40px !important;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero-premium {
-        padding: 60px 16px 50px !important;
-      }
-
-      .hero-badge {
-        font-size: 11px !important;
-        padding: 6px 16px !important;
-      }
-
-      .hero-title {
-        font-size: 32px !important;
-        line-height: 1.15 !important;
-        margin-bottom: 20px !important;
-      }
-
-      .hero-subtitle {
-        font-size: 16px !important;
-        margin-bottom: 28px !important;
-      }
-
-      .hero-cta-group {
-        flex-direction: column !important;
-        gap: 12px !important;
-      }
-
-      .hero-cta-primary,
-      .hero-cta-secondary {
-        width: 100% !important;
-        justify-content: center !important;
-        padding: 16px 28px !important;
-      }
-
-      .hero-stats {
-        grid-template-columns: 1fr !important;
-        gap: 20px !important;
-        padding: 24px 20px !important;
-      }
-
-      .hero-dashboard-preview {
-        border-radius: 12px !important;
-        max-width: 100% !important;
-      }
-
-      .hero-floating-badge {
-        display: none !important;
-      }
-
-      .stats-marquee-wrapper {
-        margin: 40px 0 !important;
-      }
-
-      .stats-marquee-item {
-        font-size: 13px !important;
-        padding: 0 20px !important;
-      }
-
-      .how-it-works-section {
-        padding: 50px 16px !important;
-      }
-
-      .how-it-works-title {
-        font-size: 28px !important;
-      }
-
-      .how-timeline {
-        padding-left: 50px !important;
-      }
-
-      .how-step-number {
-        left: -50px !important;
-        width: 36px !important;
-        height: 36px !important;
-        font-size: 16px !important;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-title {
-        font-size: 28px !important;
-      }
-
-      .hero-subtitle {
-        font-size: 15px !important;
-      }
-    }
-  `;
-
-  document.head.appendChild(mobileFix);
-  console.log('[GENUINE] ✅ Mobile responsive fix applied');
-}, 600);
-
-// =============================================================================
-// FIX ESPACE BLANC + DOUBLE MOCKUP
-// =============================================================================
-
-setTimeout(() => {
-  // -------------------------------------------------------------------------
-  // FIX 1: CACHER L'ESPACE BLANC (div.row natif)
-  // -------------------------------------------------------------------------
-
-  const signupBlock = document.querySelector('.block-signin-text');
-  if (signupBlock) {
-    // Remonter jusqu'au parent div.row
-    let parentRow = signupBlock.closest('.row');
-    if (parentRow) {
-      parentRow.style.display = 'none';
-      console.log('[GENUINE] ✅ Espace blanc (div.row) caché');
-    }
-
-    // Cacher tous les div.row qui contiennent block-signin-text
-    const allRows = document.querySelectorAll('.row');
-    allRows.forEach(row => {
-      if (row.querySelector('.block-signin-text')) {
-        row.style.display = 'none';
-      }
-    });
   }
 
-  // -------------------------------------------------------------------------
-  // FIX 2: CACHER L'IMAGE MOCKUP NATIVE
-  // -------------------------------------------------------------------------
+  // ==========================================================================
+  // INIT ON DOM READY
+  // ==========================================================================
 
-  const nativeImage = document.querySelector('.block-signin-text img');
-  if (nativeImage) {
-    nativeImage.style.display = 'none';
-    console.log('[GENUINE] ✅ Image mockup native cachée');
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCustomLanding);
+  } else {
+    initCustomLanding();
   }
 
-  // Cacher le container de l'image
-  const imageContainer = document.querySelector('.block-signin-text .col-lg-12');
-  if (imageContainer && imageContainer.querySelector('img')) {
-    imageContainer.style.display = 'none';
-  }
-
-  // -------------------------------------------------------------------------
-  // FIX 3: AGRANDIR LE MOCKUP CUSTOM
-  // -------------------------------------------------------------------------
-
-  const customMockup = document.querySelector('.hero-dashboard-preview');
-  if (customMockup) {
-    customMockup.style.display = 'block';
-    customMockup.style.width = '100%';
-    customMockup.style.maxWidth = '700px';
-    customMockup.style.margin = '0 auto';
-    console.log('[GENUINE] ✅ Mockup custom agrandi');
-  }
-
-  const heroRight = document.querySelector('.hero-right');
-  if (heroRight) {
-    heroRight.style.display = 'block';
-    heroRight.style.opacity = '1';
-  }
-
-  // -------------------------------------------------------------------------
-  // FIX 4: CSS FORCÉ POUR OVERRIDE TOUT
-  // -------------------------------------------------------------------------
-
-  const fixStyles = document.createElement('style');
-  fixStyles.textContent = `
-    /* CACHER complètement le bloc natif et l'espace blanc */
-    .block-signin-text,
-    .block-signin-text .row,
-    .block-signin-text img,
-    div.row:has(.block-signin-text) {
-      display: none !important;
-      height: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      overflow: hidden !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-    }
-
-    /* S'assurer que le hero custom est visible */
-    .hero-premium {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-
-    .hero-right {
-      display: block !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    .hero-dashboard-preview {
-      display: block !important;
-      width: 100% !important;
-      max-width: 700px !important;
-      margin: 0 auto !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    .hero-dashboard-preview img {
-      display: block !important;
-      width: 100% !important;
-      height: auto !important;
-    }
-
-    /* Floating badges bien visibles sur PC */
-    .hero-floating-badge {
-      display: block !important;
-      position: absolute !important;
-      z-index: 10 !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-
-    @media (max-width: 768px) {
-      .hero-dashboard-preview {
-        max-width: 100% !important;
-      }
-
-      .hero-floating-badge {
-        display: none !important;
-      }
-    }
-  `;
-
-  document.head.appendChild(fixStyles);
-  console.log('[GENUINE] ✅ Fix espace blanc + double mockup appliqué');
-
-}, 800);
-
-})(); // End IIFE
+})();
