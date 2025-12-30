@@ -42,7 +42,7 @@
         min-width: 280px !important;
         margin-left: 0 !important;
         position: relative !important;
-        z-index: 10 !important;  // ← SUR SIDEBAR
+        z-index: 999 !important;  // ← SUR SIDEBAR
         background: white !important;
         border-radius: 0 12px 12px 0 !important;
         padding: 32px !important;
@@ -69,7 +69,7 @@
         width: calc(50% - 12px) !important;
         min-width: 280px !important;
         position: relative !important;
-        z-index: 10 !important;  // ← SUR TOUT
+        z-index: 999 !important;  // ← SUR TOUT
         background: white !important;
         border-radius: 12px 0 0 12px !important;
         box-shadow: -4px 0 20px rgba(0,0,0,0.06) !important;
