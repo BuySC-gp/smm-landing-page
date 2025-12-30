@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER - FULL WIDTH SANS DÉBORDEMENT (FINAL)
+// NEW ORDER - 50/50 DYNAMIQUE PARFAIT (ANTI-SCROLLBAR)
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -9,7 +9,21 @@
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
       
-      // BODY + MAIN FULL
+      // CALCUL DYNAMIQUE largeur réelle
+      function getPanelWidth() {
+        return (window.innerWidth - (document.body.offsetWidth < window.innerWidth ? 0 : 17)) / 2 + 'px';
+      }
+      let panelWidth = getPanelWidth();
+      
+      // RESIZE LISTENER
+      window.addEventListener('resize', () => {
+        panelWidth = getPanelWidth();
+        if (form) form.style.width = form.style.maxWidth = form.style.flex = `0 0 ${panelWidth}`;
+        const rightPanel = document.getElementById('order-info-panel');
+        if (rightPanel) rightPanel.style.width = rightPanel.style.maxWidth = rightPanel.style.flex = `0 0 ${panelWidth}`;
+      });
+      
+      // BODY + MAIN
       document.body.style.cssText = `padding:0 !important;margin:0 !important;width:100vw !important;overflow-x:hidden !important;`;
       const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
       if (mainContainer) mainContainer.style.cssText = `width:100vw !important;max-width:100vw !important;margin:0 !important;padding:0 !important;padding-top:20px !important;box-sizing:border-box !important;`;
@@ -18,65 +32,20 @@
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || form.querySelector('[id*="description"]')?.closest('.form-group');
       if (nativeDescription) nativeDescription.style.display = 'none';
       
-      // CONTAINER FULL-BLEED
+      // CONTAINER
       const container = form.parentElement;
-      container.style.cssText = `
-        display: flex !important;
-        gap: 0 !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
-        margin: 0 !important;
-        padding: 24px 0 !important;
-        position: relative !important;
-        left: 50% !important;
-        margin-left: -50vw !important;
-        align-items: flex-start !important;
-        box-sizing: border-box !important;
-      `;
+      container.style.cssText = `display:flex !important;gap:0 !important;width:100vw !important;max-width:100vw !important;margin:0 !important;padding:24px 0 !important;position:relative !important;left:50% !important;margin-left:-50vw !important;align-items:flex-start !important;box-sizing:border-box !important;`;
       
-      // FORM 50% - SCROLLBAR FIX
-      form.style.cssText = `
-        flex: 0 0 calc(50% - 8px) !important;
-        max-width: calc(50% - 8px) !important;
-        width: calc(50% - 8px) !important;
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 0 12px 12px 0 !important;
-        padding: 32px !important;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-left: none !important;
-        box-sizing: border-box !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        overflow-y: auto !important;
-      `;
+      // FORM GAUCHE
+      form.style.cssText = `flex:0 0 ${panelWidth} !important;max-width:${panelWidth} !important;width:${panelWidth} !important;min-width:0 !important;background:white !important;border-radius:0 12px 12px 0 !important;padding:32px !important;box-shadow:4px 0 20px rgba(0,0,0,0.06) !important;border:1px solid #e5e7eb !important;border-left:none !important;box-sizing:border-box !important;height:fit-content !important;max-height:100vh !important;overflow-y:auto !important;`;
       
-      // PANEL DROIT 50% - SCROLLBAR FIX (+ innerHTML complet du 1er code)
+      // PANEL DROIT + INNERHTML (copie du 1er code)
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
         rightPanel.id = 'order-info-panel';
+        rightPanel.style.cssText = `flex:0 0 ${panelWidth} !important;max-width:${panelWidth} !important;width:${panelWidth} !important;min-width:0 !important;background:white !important;border-radius:12px 0 0 12px !important;box-shadow:-4px 0 20px rgba(0,0,0,0.06) !important;border:1px solid #e5e7eb !important;border-right:none !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;height:fit-content !important;max-height:100vh !important;box-sizing:border-box !important;`;
         container.appendChild(rightPanel);
-      }
-      
-      rightPanel.style.cssText = `
-        flex: 0 0 calc(50% - 8px) !important;
-        max-width: calc(50% - 8px) !important;
-        width: calc(50% - 8px) !important;
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 12px 0 0 12px !important;
-        box-shadow: -4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-right: none !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        box-sizing: border-box !important;
-      `;
       
       rightPanel.innerHTML = `
         <!-- Header Badge -->
