@@ -18,62 +18,53 @@
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || form.querySelector('[id*="description"]')?.closest('.form-group');
       if (nativeDescription) nativeDescription.style.display = 'none';
       
-      // CONTAINER FIXÉ
-      const container = form.parentElement;
-      container.style.cssText = `
-        display: flex !important;
-        gap: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 24px 12px !important;
-        align-items: flex-start !important;
-        box-sizing: border-box !important;
-      `;
-      
-      // FORM GAUCHE FIXÉ
-      form.style.cssText = `
-        flex: 0 0 calc(50% - 12px) !important;
-        max-width: calc(50% - 12px) !important;
-        width: calc(50% - 12px) !important;
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 0 12px 12px 0 !important;
-        padding: 32px !important;
-        box-shadow: 4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-left: none !important;
-        box-sizing: border-box !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        overflow-y: auto !important;
-      `;
-      
-      // PANEL DROIT FIXÉ (+ reste du code IDENTIQUE)
-      let rightPanel = document.getElementById('order-info-panel');
-      if (!rightPanel) {
-        rightPanel = document.createElement('div');
-        rightPanel.id = 'order-info-panel';
-        container.appendChild(rightPanel);
-      }
-      
-      rightPanel.style.cssText = `
-        flex: 0 0 calc(50% - 12px) !important;
-        max-width: calc(50% - 12px) !important;
-        width: calc(50% - 12px) !important;
-        min-width: 0 !important;
-        background: white !important;
-        border-radius: 12px 0 0 12px !important;
-        box-shadow: -4px 0 20px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e7eb !important;
-        border-right: none !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        height: fit-content !important;
-        max-height: 100vh !important;
-        box-sizing: border-box !important;
-      `;
+     // === CONTAINER SANS GAP/PADDING HORIZONTAUX ===
+const container = form.parentElement;
+container.style.cssText = `
+  display: flex !important;
+  gap: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 24px 0 !important;  /* ← UNIQUEMENT VERTICAL */
+  align-items: flex-start !important;
+  box-sizing: border-box !important;
+`;
+
+// === FORMULAIRE GAUCHE 50% EXACT ===
+form.style.cssText = `
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+  width: 50% !important;
+  min-width: 0 !important;
+  background: white !important;
+  border-radius: 0 16px 16px 0 !important;
+  padding: 32px !important;
+  box-shadow: 8px 0 24px -4px rgba(0,0,0,0.08) !important;  /* ← SHADOW COMPENSÉ */
+  border-right: 1px solid #e5e7eb !important;
+  box-sizing: border-box !important;
+  height: fit-content !important;
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+`;
+
+// === PANEL DROIT 50% EXACT ===
+rightPanel.style.cssText = `
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+  width: 50% !important;
+  min-width: 0 !important;
+  background: white !important;
+  border-radius: 16px 0 0 16px !important;
+  box-shadow: -8px 0 24px -4px rgba(0,0,0,0.08) !important;  /* ← SHADOW COMPENSÉ */
+  border-left: 1px solid #e5e7eb !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: fit-content !important;
+  max-height: 100vh !important;
+  box-sizing: border-box !important;
+`;
       
       rightPanel.innerHTML = `
         <!-- Header Badge -->
