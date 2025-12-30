@@ -18,6 +18,13 @@
 
   console.log('[GENUINE] Landing page detected - loading');
 
+  // === NEW ORDER STYLING (PANEL SAFE) ===
+setTimeout(function(){
+  if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
+    console.log('[GENUINE] New Order detected - styling');
+  }
+}, 500);
+
 // =============================================================================
 // 2. CODE V1 ORIGINAL
 // =============================================================================
