@@ -1,14 +1,18 @@
-// GENUINE PANEL - Landing + New Order
-(function() {
-  // === NEW ORDER STYLING (AVANT détection landing) ===
-  setTimeout(function(){
-    if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
-      console.log('[GENUINE] New Order detected - styling');
-      // Inject CSS classes + stats hero
-    }
-  }, 500);
+// === NEW ORDER STYLING (GLOBAL - AVANT TOUT) ===
+setTimeout(function(){
+  if(document.querySelector('input[placeholder*="Search"]') && document.querySelector('.sidebar')){
+    console.log('[GENUINE] New Order detected - styling');
+  }
+}, 800);
 
-  // === DÉTECTION LANDING (APRÈS) ===
+// GENUINE PANEL - Landing Page Customization + Mobile Fix
+// Detection + V1 code + Responsive Mobile
+
+// =============================================================================
+// 1. DÉTECTION CONDITIONNELLE (landing page only)
+// =============================================================================
+
+(function() {
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
@@ -19,7 +23,6 @@
   }
 
   console.log('[GENUINE] Landing page detected - loading');
-
 // =============================================================================
 // 2. CODE V1 ORIGINAL
 // =============================================================================
