@@ -1,16 +1,11 @@
-// GENUINE PANEL - Landing Page Customization + Mobile Fix
-// Detection + V1 code + Responsive Mobile
-
-// =============================================================================
-// 1. DÉTECTION CONDITIONNELLE (landing page only)
-// =============================================================================
+// GENUINE PANEL - Landing Page Customization COMPLETE
+// Detection + V1 + Mobile Responsive + Fix espace blanc + Fix double mockup
 
 (function() {
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
 
-  // Si pas landing page, skip tout
   if (!hasSignup || hasSidebar || hasLogout) {
     console.log('[GENUINE] Panel detected - skipping');
     return;
@@ -19,7 +14,7 @@
   console.log('[GENUINE] Landing page detected - loading');
 
 // =============================================================================
-// 2. CODE V1 ORIGINAL
+// CODE V1 ORIGINAL
 // =============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -2145,16 +2140,13 @@ window.addEventListener('load', function() {
 });
 
 // =============================================================================
-// 3. MOBILE RESPONSIVE FIX
+// MOBILE RESPONSIVE FIX
 // =============================================================================
 
 setTimeout(() => {
   const mobileFix = document.createElement('style');
   mobileFix.textContent = `
-    /* ================================================================== */
-    /* MOBILE RESPONSIVE FIX - Hero Section */
-    /* ================================================================== */
-
+    /* Responsive mobile */
     @media (max-width: 1200px) {
       .hero-content {
         grid-template-columns: 1fr !important;
@@ -2182,7 +2174,6 @@ setTimeout(() => {
     }
 
     @media (max-width: 768px) {
-      /* Hero Section */
       .hero-premium {
         padding: 60px 16px 50px !important;
       }
@@ -2190,7 +2181,6 @@ setTimeout(() => {
       .hero-badge {
         font-size: 11px !important;
         padding: 6px 16px !important;
-        margin-bottom: 20px !important;
       }
 
       .hero-title {
@@ -2201,14 +2191,12 @@ setTimeout(() => {
 
       .hero-subtitle {
         font-size: 16px !important;
-        line-height: 1.5 !important;
         margin-bottom: 28px !important;
       }
 
       .hero-cta-group {
         flex-direction: column !important;
         gap: 12px !important;
-        margin-bottom: 32px !important;
       }
 
       .hero-cta-primary,
@@ -2216,7 +2204,6 @@ setTimeout(() => {
         width: 100% !important;
         justify-content: center !important;
         padding: 16px 28px !important;
-        font-size: 16px !important;
       }
 
       .hero-stats {
@@ -2225,25 +2212,15 @@ setTimeout(() => {
         padding: 24px 20px !important;
       }
 
-      .hero-stat-value {
-        font-size: 32px !important;
-      }
-
-      .hero-stat-label {
-        font-size: 13px !important;
-      }
-
       .hero-dashboard-preview {
         border-radius: 12px !important;
         max-width: 100% !important;
       }
 
-      /* Cacher floating badges sur mobile */
       .hero-floating-badge {
         display: none !important;
       }
 
-      /* Trust Bar */
       .stats-marquee-wrapper {
         margin: 40px 0 !important;
       }
@@ -2253,7 +2230,6 @@ setTimeout(() => {
         padding: 0 20px !important;
       }
 
-      /* Timeline */
       .how-it-works-section {
         padding: 50px 16px !important;
       }
@@ -2262,26 +2238,8 @@ setTimeout(() => {
         font-size: 28px !important;
       }
 
-      .how-it-works-subtitle {
-        font-size: 15px !important;
-      }
-
-      .how-tabs {
-        gap: 8px !important;
-        margin-bottom: 32px !important;
-      }
-
-      .how-tab {
-        padding: 10px 20px !important;
-        font-size: 14px !important;
-      }
-
       .how-timeline {
         padding-left: 50px !important;
-      }
-
-      .how-timeline::before {
-        left: 14px !important;
       }
 
       .how-step-number {
@@ -2289,24 +2247,6 @@ setTimeout(() => {
         width: 36px !important;
         height: 36px !important;
         font-size: 16px !important;
-      }
-
-      .how-step-card {
-        padding: 16px 18px !important;
-      }
-
-      .how-step-title {
-        font-size: 16px !important;
-      }
-
-      .how-step-icon {
-        width: 36px !important;
-        height: 36px !important;
-      }
-
-      .how-step-description {
-        font-size: 14px !important;
-        line-height: 1.5 !important;
       }
     }
 
@@ -2318,37 +2258,146 @@ setTimeout(() => {
       .hero-subtitle {
         font-size: 15px !important;
       }
-
-      .hero-cta-primary,
-      .hero-cta-secondary {
-        font-size: 15px !important;
-        padding: 14px 24px !important;
-      }
-
-      .hero-stats {
-        padding: 20px 16px !important;
-      }
-
-      .stats-marquee-item {
-        font-size: 12px !important;
-        padding: 0 16px !important;
-      }
-
-      .how-timeline {
-        padding-left: 45px !important;
-      }
-
-      .how-step-number {
-        left: -45px !important;
-        width: 32px !important;
-        height: 32px !important;
-        font-size: 14px !important;
-      }
     }
   `;
 
   document.head.appendChild(mobileFix);
-  console.log('[GENUINE] ✅ Mobile fix applied');
+  console.log('[GENUINE] ✅ Mobile responsive fix applied');
 }, 600);
 
-})(); // End IIFE wrapper
+// =============================================================================
+// FIX ESPACE BLANC + DOUBLE MOCKUP
+// =============================================================================
+
+setTimeout(() => {
+  // -------------------------------------------------------------------------
+  // FIX 1: CACHER L'ESPACE BLANC (div.row natif)
+  // -------------------------------------------------------------------------
+
+  const signupBlock = document.querySelector('.block-signin-text');
+  if (signupBlock) {
+    // Remonter jusqu'au parent div.row
+    let parentRow = signupBlock.closest('.row');
+    if (parentRow) {
+      parentRow.style.display = 'none';
+      console.log('[GENUINE] ✅ Espace blanc (div.row) caché');
+    }
+
+    // Cacher tous les div.row qui contiennent block-signin-text
+    const allRows = document.querySelectorAll('.row');
+    allRows.forEach(row => {
+      if (row.querySelector('.block-signin-text')) {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // FIX 2: CACHER L'IMAGE MOCKUP NATIVE
+  // -------------------------------------------------------------------------
+
+  const nativeImage = document.querySelector('.block-signin-text img');
+  if (nativeImage) {
+    nativeImage.style.display = 'none';
+    console.log('[GENUINE] ✅ Image mockup native cachée');
+  }
+
+  // Cacher le container de l'image
+  const imageContainer = document.querySelector('.block-signin-text .col-lg-12');
+  if (imageContainer && imageContainer.querySelector('img')) {
+    imageContainer.style.display = 'none';
+  }
+
+  // -------------------------------------------------------------------------
+  // FIX 3: AGRANDIR LE MOCKUP CUSTOM
+  // -------------------------------------------------------------------------
+
+  const customMockup = document.querySelector('.hero-dashboard-preview');
+  if (customMockup) {
+    customMockup.style.display = 'block';
+    customMockup.style.width = '100%';
+    customMockup.style.maxWidth = '700px';
+    customMockup.style.margin = '0 auto';
+    console.log('[GENUINE] ✅ Mockup custom agrandi');
+  }
+
+  const heroRight = document.querySelector('.hero-right');
+  if (heroRight) {
+    heroRight.style.display = 'block';
+    heroRight.style.opacity = '1';
+  }
+
+  // -------------------------------------------------------------------------
+  // FIX 4: CSS FORCÉ POUR OVERRIDE TOUT
+  // -------------------------------------------------------------------------
+
+  const fixStyles = document.createElement('style');
+  fixStyles.textContent = `
+    /* CACHER complètement le bloc natif et l'espace blanc */
+    .block-signin-text,
+    .block-signin-text .row,
+    .block-signin-text img,
+    div.row:has(.block-signin-text) {
+      display: none !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    /* S'assurer que le hero custom est visible */
+    .hero-premium {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    .hero-right {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .hero-dashboard-preview {
+      display: block !important;
+      width: 100% !important;
+      max-width: 700px !important;
+      margin: 0 auto !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .hero-dashboard-preview img {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    /* Floating badges bien visibles sur PC */
+    .hero-floating-badge {
+      display: block !important;
+      position: absolute !important;
+      z-index: 10 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    @media (max-width: 768px) {
+      .hero-dashboard-preview {
+        max-width: 100% !important;
+      }
+
+      .hero-floating-badge {
+        display: none !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(fixStyles);
+  console.log('[GENUINE] ✅ Fix espace blanc + double mockup appliqué');
+
+}, 800);
+
+})(); // End IIFE
