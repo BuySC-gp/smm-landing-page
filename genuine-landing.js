@@ -1,323 +1,26 @@
-// GENUINE PANEL - Landing Page V2 COMPLETE
-// Zero setTimeout - Code complet avec toutes les sections
+// GENUINE PANEL - Landing Page Customization + Mobile Fix
+// Detection + V1 code + Responsive Mobile
+
+// =============================================================================
+// 1. DÉTECTION CONDITIONNELLE (landing page only)
+// =============================================================================
 
 (function() {
-  'use strict';
-
-  // ==========================================================================
-  // DETECTION CONDITIONNELLE
-  // ==========================================================================
-
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
   const hasLogout = document.querySelector('a[href*="logout"]');
 
+  // Si pas landing page, skip tout
   if (!hasSignup || hasSidebar || hasLogout) {
     console.log('[GENUINE] Panel detected - skipping');
     return;
   }
 
-  console.log('[GENUINE] Landing page detected - loading V2 COMPLETE');
+  console.log('[GENUINE] Landing page detected - loading');
 
-  // ==========================================================================
-  // FONCTION PRINCIPALE
-  // ==========================================================================
-
-  function initCustomLanding() {
-
-    const signupBlock = document.querySelector('.block-signin-text');
-    if (!signupBlock) {
-      console.error('[GENUINE] .block-signin-text not found');
-      return;
-    }
-
-    // ------------------------------------------------------------------------
-    // STEP 1: CACHER LES ÉLÉMENTS NATIFS IMMÉDIATEMENT
-    // ------------------------------------------------------------------------
-
-    const nativeElements = signupBlock.querySelectorAll('h1, h2, p, .block-signin__image, img, .component_card');
-    nativeElements.forEach(el => {
-      el.style.display = 'none';
-      el.style.opacity = '0';
-      el.style.visibility = 'hidden';
-      el.style.height = '0';
-    });
-
-    console.log('[GENUINE] ✅ Native elements hidden');
-
-    // ------------------------------------------------------------------------
-    // STEP 2: INJECTER TOUS LES STYLES CRITIQUES
-    // ------------------------------------------------------------------------
-
-    const allStyles = document.createElement('style');
-    allStyles.id = 'genuine-all-styles';
-    allStyles.textContent = `
-      /* ============================================================ */
-      /* HERO SECTION STYLES */
-      /* ============================================================ */
-
-      .block-signin-text {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-
-      .hero-premium {
-        background: linear-gradient(135deg, #F0F4FF 0%, #E8F0FF 50%, #F8F9FF 100%);
-        padding: 120px 40px;
-        position: relative;
-        overflow: visible;
-      }
-
-      .hero-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 80px;
-        align-items: center;
-      }
-
-      .hero-left { z-index: 2; }
-
-      .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(255,255,255,0.9);
-        padding: 8px 20px;
-        border-radius: 50px;
-        font-size: 13px;
-        font-weight: 600;
-        color: #0047AB;
-        margin-bottom: 24px;
-        box-shadow: 0 2px 12px rgba(0,71,171,0.1);
-      }
-
-      .hero-title {
-        font-size: 56px;
-        font-weight: 800;
-        line-height: 1.1;
-        color: #1a1a1a;
-        margin-bottom: 24px;
-      }
-
-      .hero-title-gradient {
-        background: linear-gradient(135deg, #0066FF 0%, #00A8E8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .hero-subtitle {
-        font-size: 18px;
-        line-height: 1.7;
-        color: #666666;
-        margin-bottom: 32px;
-        max-width: 580px;
-      }
-
-      .hero-cta-group {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 40px;
-        flex-wrap: wrap;
-      }
-
-      .hero-cta-primary, .hero-cta-secondary {
-        padding: 18px 36px;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 17px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .hero-cta-primary {
-        background: linear-gradient(135deg, #0066FF 0%, #0047AB 100%);
-        color: white;
-        box-shadow: 0 8px 24px rgba(0,102,255,0.25);
-      }
-
-      .hero-cta-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 32px rgba(0,102,255,0.35);
-      }
-
-      .hero-cta-secondary {
-        background: white;
-        color: #0047AB;
-        border: 2px solid #E5E5E5;
-      }
-
-      .hero-cta-secondary:hover {
-        border-color: #0066FF;
-        transform: translateY(-2px);
-      }
-
-      .hero-stats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 32px;
-        background: white;
-        padding: 32px 40px;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      }
-
-      .hero-stat { text-align: center; }
-
-      .hero-stat-value {
-        font-size: 36px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #0066FF 0%, #00A8E8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        display: block;
-        margin-bottom: 4px;
-      }
-
-      .hero-stat-label {
-        font-size: 14px;
-        color: #999999;
-        font-weight: 500;
-      }
-
-      .hero-right { position: relative; }
-
-      .hero-dashboard-preview {
-        position: relative;
-        background: white;
-        border-radius: 20px;
-        padding: 20px;
-        box-shadow: 0 20px 60px rgba(0,71,171,0.15);
-        border: 1px solid rgba(0,102,255,0.1);
-        max-width: 700px !important;
-        width: 100% !important;
-        margin: 0 auto;
-      }
-
-      .hero-dashboard-preview img {
-        width: 100%;
-        height: auto;
-        border-radius: 12px;
-        display: block;
-      }
-
-      .hero-floating-badge {
-        position: absolute;
-        background: white;
-        padding: 16px 24px;
-        border-radius: 16px;
-        box-shadow: 0 12px 32px rgba(0,0,0,0.15);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        animation: float-badge 3s ease-in-out infinite;
-        z-index: 10;
-      }
-
-      .hero-floating-badge-1 { top: 40px; right: -40px; }
-      .hero-floating-badge-2 { bottom: 60px; left: -60px; }
-
-      .hero-floating-badge-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
-      }
-
-      .hero-floating-badge-1 .hero-floating-badge-icon {
-        background: linear-gradient(135deg, #00D97E 0%, #00A67E 100%);
-      }
-
-      .hero-floating-badge-2 .hero-floating-badge-icon {
-        background: linear-gradient(135deg, #0066FF 0%, #0047AB 100%);
-      }
-
-      .hero-floating-badge-value {
-        font-size: 20px;
-        font-weight: 800;
-        color: #1a1a1a;
-        line-height: 1;
-        margin-bottom: 4px;
-      }
-
-      .hero-floating-badge-label {
-        font-size: 12px;
-        color: #999999;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      @keyframes float-badge {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-      }
-
-      /* ============================================================ */
-      /* RESPONSIVE MOBILE */
-      /* ============================================================ */
-
-      @media (max-width: 1200px) {
-        .hero-content {
-          grid-template-columns: 1fr;
-          gap: 40px;
-        }
-        .hero-dashboard-preview { max-width: 600px !important; }
-        .hero-floating-badge-1 { right: 10px; top: 20px; }
-        .hero-floating-badge-2 { left: 10px; bottom: 40px; }
-      }
-
-      @media (max-width: 768px) {
-        .hero-premium { padding: 60px 16px 50px; }
-        .hero-badge { font-size: 11px; padding: 6px 16px; }
-        .hero-title { font-size: 32px; line-height: 1.15; }
-        .hero-subtitle { font-size: 16px; margin-bottom: 28px; }
-        .hero-cta-group { flex-direction: column; gap: 12px; }
-        .hero-cta-primary, .hero-cta-secondary {
-          width: 100%;
-          justify-content: center;
-          padding: 16px 28px;
-          font-size: 16px;
-        }
-        .hero-stats {
-          grid-template-columns: 1fr;
-          gap: 20px;
-          padding: 24px 20px;
-        }
-        .hero-stat-value { font-size: 32px; }
-        .hero-dashboard-preview {
-          max-width: 100% !important;
-          padding: 16px;
-        }
-        .hero-floating-badge { display: none !important; }
-      }
-
-      @media (max-width: 480px) {
-        .hero-title { font-size: 28px; }
-        .hero-subtitle { font-size: 15px; }
-        .hero-cta-primary, .hero-cta-secondary {
-          font-size: 15px;
-          padding: 14px 24px;
-        }
-      }
-    `;
-
-    document.head.appendChild(allStyles);
-    console.log('[GENUINE] ✅ All styles injected');
-
-    // ------------------------------------------------------------------------
-    // STEP 3: CRÉER LE HERO SECTION
-    // ------------------------------------------------------------------------
+// =============================================================================
+// 2. CODE V1 ORIGINAL
+// =============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
   
@@ -756,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
       max-width: 1400px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 80px;
       align-items: center;
       position: relative;
@@ -943,10 +646,6 @@ document.addEventListener('DOMContentLoaded', function() {
       font-weight: 500;
     }
     
-    .hero-right {
-      animation: slideInRight 1s ease-out 0.2s backwards;
-      position: relative;
-    }
     
     @keyframes slideInRight {
       from { opacity: 0; transform: translateX(50px); }
@@ -973,32 +672,13 @@ document.addEventListener('DOMContentLoaded', function() {
       display: block;
     }
     
-    .hero-floating-badge {
-      position: absolute;
-      padding: 16px 24px;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-      animation: floatBadge 3s ease-in-out infinite;
-      text-align: center;
-    }
     
     @keyframes floatBadge {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
     
-    .hero-floating-badge-1 {
-      top: 40px;
-      right: -30px;
-    }
     
-    .hero-floating-badge-2 {
-      bottom: 60px;
-      left: -40px;
-      animation-delay: 1.5s;
-    }
     
     .hero-badge-icon {
       font-size: 28px;
@@ -1032,13 +712,7 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 48px;
       }
       
-      .hero-floating-badge-1 {
-        right: 20px;
-      }
       
-      .hero-floating-badge-2 {
-        left: 20px;
-      }
     }
     
     @media (max-width: 768px) {
@@ -1059,9 +733,6 @@ document.addEventListener('DOMContentLoaded', function() {
         gap: 24px;
       }
       
-      .hero-floating-badge {
-        display: none;
-      }
     }
     
     /* === AJOUT 1: STYLE FORMULAIRE LOGIN === */
@@ -1183,21 +854,7 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         </div>
       </div>
-      <div class="hero-right">
-        <div style="position: relative; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); border: 1px solid #e5e5e5; background: #fff; transform: perspective(1000px) rotateY(-5deg); transition: transform 0.5s;">
-          <img src="${imageUrl}" alt="Dashboard" style="width: 100%; height: auto; display: block;">
-          <div style="position: absolute; top: 30px; right: -25px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 102, 255, 0.1); text-align: center;">
-            <div style="font-size: 22px; margin-bottom: 4px;">⚡</div>
-            <div style="font-size: 18px; font-weight: 800; color: #0066FF; margin-bottom: 2px;">&lt;200ms</div>
-            <div style="font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">API Speed</div>
-          </div>
-          <div style="position: absolute; bottom: 40px; left: -30px; padding: 12px 20px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); border: 1px solid rgba(0, 166, 126, 0.1); text-align: center;">
-            <div style="font-size: 22px; margin-bottom: 4px;">🎯</div>
-            <div style="font-size: 18px; font-weight: 800; color: #00A67E; margin-bottom: 2px;">5,247</div>
-            <div style="font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Services</div>
-          </div>
-        </div>
-      </div>
+      
     </div>
   </section>
 `;
@@ -1221,8 +878,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
-// setTimeout removed - executing immediately
-{
+setTimeout(() => {
   const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
   const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
     label.textContent.trim().toLowerCase() === 'password'
@@ -1247,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
       label.textContent = 'Stay signed in';
     }
   });
-} // end immediate execution
+}, 800);
   }
 }); 
 
@@ -1408,8 +1064,7 @@ window.addEventListener('load', function() {
 
   });
    // === STATS MARQUEE DIAGONAL ===
-  // setTimeout removed - executing immediately
-{
+  setTimeout(() => {
     const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
       div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
     );
@@ -1461,11 +1116,10 @@ window.addEventListener('load', function() {
         </div>
       `);
     }
-  } // end immediate execution
+  }, 500);
 
   // === HOW IT WORKS TIMELINE ===
-// setTimeout removed - executing immediately
-{
+setTimeout(() => {
   const statsMarquee = document.querySelector('.stats-marquee-wrapper');
   
   if (statsMarquee) {
@@ -1706,7 +1360,7 @@ window.addEventListener('load', function() {
       });
     });
   }
-} // end immediate execution
+}, 600);
 });
 
 window.addEventListener('load', function() {
@@ -2443,16 +2097,201 @@ window.addEventListener('load', function() {
   
   console.log('✅ ALL sections loaded');
 });
-  }
 
-  // ==========================================================================
-  // INIT ON DOM READY
-  // ==========================================================================
+// =============================================================================
+// 3. MOBILE RESPONSIVE FIX
+// =============================================================================
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCustomLanding);
-  } else {
-    initCustomLanding();
-  }
+setTimeout(() => {
+  const mobileFix = document.createElement('style');
+  mobileFix.textContent = `
+    /* ================================================================== */
+    /* MOBILE RESPONSIVE FIX - Hero Section */
+    /* ================================================================== */
 
-})();
+    @media (max-width: 1200px) {
+      .hero-content {
+        grid-template-columns: 1fr !important;
+        gap: 40px !important;
+      }
+
+      .hero-title {
+        font-size: 42px !important;
+      }
+
+      .hero-dashboard-preview {
+        max-width: 600px !important;
+        margin: 0 auto !important;
+      }
+
+
+    }
+
+    @media (max-width: 768px) {
+      /* Hero Section */
+      .hero-premium {
+        padding: 60px 16px 50px !important;
+      }
+
+      .hero-badge {
+        font-size: 11px !important;
+        padding: 6px 16px !important;
+        margin-bottom: 20px !important;
+      }
+
+      .hero-title {
+        font-size: 32px !important;
+        line-height: 1.15 !important;
+        margin-bottom: 20px !important;
+      }
+
+      .hero-subtitle {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 28px !important;
+      }
+
+      .hero-cta-group {
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-bottom: 32px !important;
+      }
+
+      .hero-cta-primary,
+      .hero-cta-secondary {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 16px 28px !important;
+        font-size: 16px !important;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 24px 20px !important;
+      }
+
+      .hero-stat-value {
+        font-size: 32px !important;
+      }
+
+      .hero-stat-label {
+        font-size: 13px !important;
+      }
+
+      .hero-dashboard-preview {
+        border-radius: 12px !important;
+        max-width: 100% !important;
+      }
+
+      /* Cacher floating badges sur mobile */
+
+      /* Trust Bar */
+      .stats-marquee-wrapper {
+        margin: 40px 0 !important;
+      }
+
+      .stats-marquee-item {
+        font-size: 13px !important;
+        padding: 0 20px !important;
+      }
+
+      /* Timeline */
+      .how-it-works-section {
+        padding: 50px 16px !important;
+      }
+
+      .how-it-works-title {
+        font-size: 28px !important;
+      }
+
+      .how-it-works-subtitle {
+        font-size: 15px !important;
+      }
+
+      .how-tabs {
+        gap: 8px !important;
+        margin-bottom: 32px !important;
+      }
+
+      .how-tab {
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+      }
+
+      .how-timeline {
+        padding-left: 50px !important;
+      }
+
+      .how-timeline::before {
+        left: 14px !important;
+      }
+
+      .how-step-number {
+        left: -50px !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 16px !important;
+      }
+
+      .how-step-card {
+        padding: 16px 18px !important;
+      }
+
+      .how-step-title {
+        font-size: 16px !important;
+      }
+
+      .how-step-icon {
+        width: 36px !important;
+        height: 36px !important;
+      }
+
+      .how-step-description {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 28px !important;
+      }
+
+      .hero-subtitle {
+        font-size: 15px !important;
+      }
+
+      .hero-cta-primary,
+      .hero-cta-secondary {
+        font-size: 15px !important;
+        padding: 14px 24px !important;
+      }
+
+      .hero-stats {
+        padding: 20px 16px !important;
+      }
+
+      .stats-marquee-item {
+        font-size: 12px !important;
+        padding: 0 16px !important;
+      }
+
+      .how-timeline {
+        padding-left: 45px !important;
+      }
+
+      .how-step-number {
+        left: -45px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(mobileFix);
+  console.log('[GENUINE] ✅ Mobile fix applied');
+}, 600);
+
+})(); // End IIFE wrapper
