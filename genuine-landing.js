@@ -1,124 +1,177 @@
 // =============================================================================
-// NEW ORDER = SPLIT LAYOUT (LEFT + RIGHT PREMIUM PANEL)
+// GENUINE NEW ORDER = TOP TIER DASHBOARD (FINAL)
 // =============================================================================
 (function() {
   setTimeout(() => {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
     const form = searchInput?.closest('form');
     
-    if (form && !form.dataset.splitLayout) {
-      form.dataset.splitLayout = 'true';
-      console.log('🚀 [GENUINE] NEW ORDER SPLIT LAYOUT ACTIVATED');
+    if (form && !form.dataset.topTier) {
+      form.dataset.topTier = 'true';
+      console.log('🚀 [GENUINE] TOP TIER DASHBOARD ACTIVATED');
       
-      // === 1. FULL PAGE SPLIT CONTAINER ===
-      const pageContainer = form.parentElement;
-      pageContainer.style.cssText = `
-        display: flex !important;
-        gap: 40px !important;
-        padding: 40px !important;
-        max-width: 1600px !important;
+      // === 1. FULL SPLIT LAYOUT ===
+      const container = form.parentElement;
+      container.style.cssText = `
+        display: flex !important; gap: 48px !important; 
+        padding: 40px !important; max-width: 1800px !important; 
         margin: 0 auto !important;
       `;
       
-      // === 2. LEFT SIDEBAR (form actuel collé à gauche) ===
+      // === 2. LEFT ORDER FORM (collé sidebar) ===
       form.style.cssText = `
-        flex: 1 !important;
-        max-width: 480px !important;
-        background: rgba(255,255,255,0.92) !important;
-        backdrop-filter: blur(24px) !important;
-        border-radius: 24px !important;
-        padding: 40px !important;
-        box-shadow: 0 16px 64px rgba(0,102,255,0.12) !important;
-        border: 1px solid rgba(0,102,255,0.15) !important;
-        position: sticky !important;
-        top: 40px !important;
+        flex: 0 0 520px !important; background: rgba(255,255,255,0.95) !important;
+        backdrop-filter: blur(32px) !important; border-radius: 28px !important;
+        padding: 48px !important; box-shadow: 0 32px 120px rgba(0,102,255,0.15) !important;
+        border: 1px solid rgba(0,102,255,0.2) !important; position: sticky !important;
+        top: 32px !important; height: fit-content !important;
       `;
       
-      // === 3. RIGHT PREMIUM PANEL ===
-      const rightPanel = document.createElement('div');
-      rightPanel.style.cssText = `
-        flex: 1 !important;
-        background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,255,0.95)) !important;
-        backdrop-filter: blur(28px) !important;
-        border-radius: 28px !important;
-        padding: 48px !important;
-        box-shadow: 0 24px 80px rgba(0,102,255,0.15) !important;
-        border: 1px solid rgba(0,102,255,0.2) !important;
+      // === 3. RIGHT PREMIUM DASHBOARD ===
+      const dashboard = document.createElement('div');
+      dashboard.id = 'genuine-dashboard';
+      dashboard.style.cssText = `
+        flex: 1 !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,255,0.98)) !important;
+        backdrop-filter: blur(36px) !important; border-radius: 32px !important;
+        padding: 56px !important; box-shadow: 0 40px 160px rgba(0,102,255,0.18) !important;
+        border: 1px solid rgba(0,102,255,0.25) !important; position: relative !important;
+        overflow: hidden !important;
       `;
-      form.parentNode.insertBefore(rightPanel, form.nextSibling);
+      container.appendChild(dashboard);
       
-      // === 4. RIGHT PANEL CONTENT (comme concurrent) ===
-      rightPanel.innerHTML = `
-        <div style="position:absolute;top:-16px;left:32px;padding:8px 20px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:24px;font-size:13px;font-weight:800;letter-spacing:0.05em;box-shadow:0 8px 24px rgba(0,102,255,0.3);">PREMIUM ORDER DASHBOARD</div>
+      // === 4. DASHBOARD HEADER + BADGE ===
+      dashboard.innerHTML = `
+        <div style="position:absolute;top:-20px;left:40px;padding:12px 28px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:28px;font-size:14px;font-weight:800;letter-spacing:0.08em;box-shadow:0 12px 40px rgba(0,102,255,0.4);z-index:10;">✨ PREMIUM ORDER DASHBOARD</div>
         
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:32px;margin-bottom:32px;">
-          <div style="text-align:center;padding:24px;background:rgba(255,255,255,0.7);border-radius:20px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 8px 32px rgba(0,102,255,0.08);">
-            <div style="font-size:36px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">${Math.floor(Math.random()*5000)+1000}</div>
-            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Services</div>
+        <!-- USER WELCOME + BALANCE -->
+        <div style="display:grid;grid-template-columns:1fr auto;gap:32px;margin-bottom:48px;align-items:center;">
+          <div>
+            <h2 style="font-size:32px;font-weight:900;color:#1a1a1a;margin:0 0 8px 0;letter-spacing:-0.02em;">
+              Welcome back<span style="color:#0066FF;">, Pro</span> ✨
+            </h2>
+            <div style="font-size:15px;color:#666;font-weight:500;">Ready to scale? Your next order awaits 🚀</div>
           </div>
-          <div style="text-align:center;padding:24px;background:rgba(255,255,255,0.7);border-radius:20px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 8px 32px rgba(0,102,255,0.08);">
-            <div style="font-size:36px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">99.8%</div>
-            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Uptime</div>
+          <div style="text-align:right;">
+            <div style="font-size:28px;font-weight:800;color:#0066FF;margin-bottom:4px;">$247.83</div>
+            <div style="font-size:13px;color:#999;">Available Balance</div>
           </div>
         </div>
         
-        <div style="margin-bottom:24px;">
-          <h3 style="font-size:22px;font-weight:800;color:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-            <span style="width:44px;height:44px;background:linear-gradient(135deg,#0066FF,#00A67E);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 8px 24px rgba(0,102,255,0.3);">⚡</span>
-            Instant Delivery
+        <!-- STATS GRID -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;">
+          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);transition:all 0.3s;">
+            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">1,247</div>
+            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Total Orders</div>
+          </div>
+          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);">
+            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#00A67E,#00FF88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">99.9%</div>
+            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Success Rate</div>
+          </div>
+          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);">
+            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#FF6B6B,#FF8E8E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">$1,847</div>
+            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Total Spent</div>
+          </div>
+        </div>
+        
+        <!-- ACCOUNT STATUS -->
+        <div style="background:linear-gradient(135deg,rgba(0,102,255,0.04),rgba(0,166,126,0.04));border-radius:24px;padding:32px;margin-bottom:32px;border:1px solid rgba(0,102,255,0.15);">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+            <div style="width:60px;height:60px;background:linear-gradient(135deg,#0066FF,#00A67E);border-radius:16px;display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:24px;color:white;">⭐</span>
+            </div>
+            <div>
+              <div style="font-size:18px;font-weight:800;color:#1a1a1a;margin-bottom:4px;">VIP PRO Account</div>
+              <div style="font-size:13px;color:#666;">Unlimited API access • Priority support • 25% bulk discount</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- PRO TIPS -->
+        <div style="background:linear-gradient(135deg,#FFF3CD,#FFEAA7);border-radius:24px;padding:32px;margin-bottom:32px;border:1px solid rgba(255,193,7,0.3);">
+          <h3 style="font-size:22px;font-weight:800;color:#856404;margin:0 0 20px 0;display:flex;align-items:center;gap:12px;">
+            💡 Pro Tips
           </h3>
-          <p style="font-size:15px;color:#666;line-height:1.6;">Orders start within <strong style="color:#0066FF;">60 seconds</strong>. Real-time tracking with live updates.</p>
+          <div style="font-size:15px;color:#856404;line-height:1.6;">
+            👉 Match orders to account activity (100 followers → 50-200 max)<br>
+            👉 Drip-feed for natural growth (max 10%/day)<br>
+            👉 Test small → scale big (start 10% target)<br>
+            👉 Mix Basic/Medium for best ROI
+          </div>
         </div>
         
-        <div style="padding:24px;background:rgba(0,102,255,0.03);border-radius:20px;border:1px solid rgba(0,102,255,0.1);">
-          <h4 style="font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:12px;">💎 Premium Quality</h4>
-          <ul style="font-size:14px;color:#666;line-height:1.6;padding-left:20px;">
-            <li>✓ Real & active accounts</li>
-            <li>✓ Lifetime guarantee</li>
-            <li>✓ Drip-feed delivery</li>
-            <li>✓ 24/7 support</li>
-          </ul>
+        <!-- READ BEFORE ORDER -->
+        <div style="background:rgba(248,250,255,0.8);backdrop-filter:blur(20px);border-radius:24px;padding:32px;border:1px solid rgba(0,102,255,0.1);">
+          <h3 style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 24px 0;display:flex;align-items:center;gap:12px;">
+            <span style="width:48px;height:48px;background:linear-gradient(135deg,#0066FF,#FF6B6B);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 8px 24px rgba(0,102,255,0.3);">📌</span>
+            Read Before Order
+          </h3>
+          <div style="font-size:14px;color:#666;line-height:1.7;">
+            <strong>Order Status:</strong> Pending → In Progress → Completed | Partial/Canceled = auto-refund<br><br>
+            <strong>Service Colors:</strong><br>
+            🟡 <strong>Basic</strong> - Cheapest, higher drop risk<br>
+            🟢 <strong>Medium</strong> - Balanced quality/stability<br>
+            🔵 <strong>Elite</strong> - Best retention, long-term results<br><br>
+            <strong>Pro Tip:</strong> Match orders to real activity. 100 followers? Order 50-200 max. Small → Scale.
+          </div>
         </div>
       `;
       
-      // === 5. FORM ELEMENTS ENHANCED ===
+      // === 5. ENHANCE FORM ELEMENTS ===
       const inputs = form.querySelectorAll('input, select');
-      inputs.forEach(input => {
-        input.style.cssText += `
-          background: rgba(255,255,255,0.95) !important;
+      inputs.forEach((input, i) => {
+        input.style.cssText = `
+          background: rgba(255,255,255,0.98) !important;
           border: 2px solid rgba(0,102,255,0.15) !important;
-          border-radius: 16px !important;
-          padding: 20px 24px !important;
+          border-radius: 20px !important;
+          padding: 24px 28px !important;
           font-size: 16px !important;
-          box-shadow: 0 4px 20px rgba(0,102,255,0.06) !important;
-          transition: all 0.3s !important;
+          box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
+          margin-bottom: 24px !important;
+          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+          width: 100% !important;
         `;
-        input.onfocus = () => input.style.borderColor = '#0066FF';
+        input.onfocus = () => input.style.borderColor = '#0066FF', input.style.boxShadow = '0 0 0 4px rgba(0,102,255,0.15)';
         input.onblur = () => input.style.borderColor = 'rgba(0,102,255,0.15)';
       });
       
-      // === 6. SUBMIT BUTTON ===
+      // === 6. SERVICE DESCRIPTION (NOUVEAU PANEL) ===
+      const serviceDesc = document.createElement('div');
+      serviceDesc.style.cssText = `
+        background: rgba(255,255,255,0.92); backdrop-filter: blur(24px);
+        border-radius: 24px; padding: 32px; margin-top: 32px;
+        border: 1px solid rgba(0,102,255,0.15); box-shadow: 0 16px 64px rgba(0,102,255,0.1);
+      `;
+      serviceDesc.innerHTML = `
+        <h4 style="font-size:20px;font-weight:800;color:#1a1a1a;margin:0 0 20px 0;">📄 Service Details</h4>
+        <div style="font-size:14px;color:#666;line-height:1.6;">
+          <strong>Instagram Followers - Medium Tier</strong><br>
+          • Min: 20 | Max: 2000<br>
+          • Start: 6h | Refill: 30 days<br>
+          • Speed: 5-10 daily<br>
+          • Quality: Real accounts, drip-feed, natural growth
+        </div>
+      `;
+      form.appendChild(serviceDesc);
+      
+      // === 7. PREMIUM SUBMIT ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-          border-radius: 24px !important;
-          padding: 24px 48px !important;
-          font-size: 18px !important;
-          font-weight: 800 !important;
-          box-shadow: 0 16px 48px rgba(0,102,255,0.4) !important;
-          color: white !important;
-          border: none !important;
-          width: 100% !important;
-          margin-top: 32px !important;
+          border-radius: 28px !important; padding: 28px 56px !important;
+          font-size: 20px !important; font-weight: 900 !important;
+          box-shadow: 0 20px 64px rgba(0,102,255,0.4) !important;
+          color: white !important; border: none !important;
+          width: 100% !important; margin-top: 40px !important;
+          letter-spacing: 0.05em; text-transform: uppercase;
         `;
-        submitBtn.onmouseover = () => submitBtn.style.transform = 'translateY(-6px) scale(1.02)';
+        submitBtn.onmouseover = () => submitBtn.style.transform = 'translateY(-8px) scale(1.03)';
         submitBtn.onmouseout = () => submitBtn.style.transform = '';
       }
       
-      console.log('✅ [GENUINE] SPLIT LAYOUT + PREMIUM PANEL ACTIVATED');
+      console.log('✅ [GENUINE] TOP TIER DASHBOARD COMPLETE');
     }
-  }, 800);
+  }, 200);
 })();
 
 // =============================================================================
