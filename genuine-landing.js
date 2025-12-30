@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT OPTIMISÉ + DESCRIPTION DYNAMIQUE
+// NEW ORDER PAGE - VERSION AMÉLIORÉE GENUINE PROMOTION
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -30,12 +30,12 @@
       
       // === 3. FORMULAIRE GAUCHE (COMPACT ~32%) ===
       form.style.cssText = `
-        flex: 0 0 380px !important;
+        flex: 0 0 420px !important;
         background: white !important;
         border-radius: 16px !important;
-        padding: 28px !important;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e5e5 !important;
+        padding: 32px !important;
+        box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
+        border: 1px solid rgba(0,102,255,0.1) !important;
         position: sticky !important;
         top: 90px !important;
         height: fit-content !important;
@@ -43,7 +43,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT (INFO + TABS) ===
+      // === 4. PANEL DROIT (INFO + TABS) - SUPPRESSION MTP Badge & Service Updates ===
       const rightPanel = document.createElement('div');
       rightPanel.id = 'order-info-panel';
       rightPanel.style.cssText = `
@@ -51,158 +51,141 @@
         background: white !important;
         border-radius: 16px !important;
         padding: 0 !important;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
-        border: 1px solid #e5e5e5 !important;
+        box-shadow: 0 4px 20px rgba(0,102,255,0.08) !important;
+        border: 1px solid rgba(0,102,255,0.1) !important;
         overflow: hidden !important;
         min-height: 600px !important;
       `;
       
       rightPanel.innerHTML = `
-        <!-- Badge MTP Service Color -->
-        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.06), rgba(0,102,255,0.06)); padding: 20px 28px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
-            <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-              <span style="font-size: 22px;">🌟</span>
-            </div>
-            <div style="flex: 1;">
-              <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">MTP Service Color Categorization System</div>
-              <div style="display: flex; gap: 10px; font-size: 12px; flex-wrap: wrap;">
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
-                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
-              </div>
-            </div>
-          </div>
-          <button style="padding: 8px 18px; background: #00A67E; color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; flex-shrink: 0; white-space: nowrap;">See details</button>
-        </div>
-        
-        <!-- Tabs Navigation -->
-        <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #FAFBFC;">
-          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <!-- Tabs Navigation (2 tabs seulement) -->
+        <div style="display: flex; border-bottom: 2px solid #F0F4FF; background: #FAFBFC;">
+          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 18px 24px; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               Service Info
             </span>
           </button>
-          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 18px 24px; background: none; border: none; font-size: 14px; font-weight: 700; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
               Read Before Order
-            </span>
-          </button>
-          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Service Updates
             </span>
           </button>
         </div>
         
         <!-- Tab Content -->
-        <div id="tab-content" style="padding: 28px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 280px);">
+        <div id="tab-content" style="padding: 32px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px);">
           
           <!-- SERVICE INFO TAB -->
           <div class="tab-panel active" data-panel="service-info">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;">
-              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,166,126,0.04), rgba(0,166,126,0.08)); border-radius: 12px; border: 1px solid rgba(0,166,126,0.15);">
-                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <!-- Stats Cards -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px;">
+              <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(0, 102, 255, 0.06), rgba(0, 102, 255, 0.02)); border-radius: 16px; border: 1.5px solid rgba(0, 102, 255, 0.15); transition: all 0.3s;">
+                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,102,255,0.25);">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <div style="font-size: 12px; color: #00A67E; font-weight: 600; margin-bottom: 4px;">Guarantee</div>
-                <div id="guarantee-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">-</div>
+                <div style="font-size: 13px; color: #0066FF; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Guarantee</div>
+                <div id="guarantee-value" style="font-size: 20px; font-weight: 800; color: #1a1a1a;">-</div>
               </div>
-              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,102,255,0.08)); border-radius: 12px; border: 1px solid rgba(0,102,255,0.15);">
-                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div style="text-align: center; padding: 24px; background: linear-gradient(135deg, rgba(0, 166, 126, 0.06), rgba(0, 166, 126, 0.02)); border-radius: 16px; border: 1.5px solid rgba(0, 166, 126, 0.15); transition: all 0.3s;">
+                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; box-shadow: 0 4px 16px rgba(0,166,126,0.25);">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
-                <div style="font-size: 12px; color: #0066FF; font-weight: 600; margin-bottom: 4px;">Speed</div>
-                <div id="speed-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">Loading...</div>
+                <div style="font-size: 13px; color: #00A67E; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Speed</div>
+                <div id="speed-value" style="font-size: 20px; font-weight: 800; color: #1a1a1a;">Loading...</div>
               </div>
             </div>
             
-            <div id="dynamic-description" style="background: #F8F9FF; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 20px;">
-              <h4 style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 9px;">
-                <span style="font-size: 19px;">📄</span> Description
+            <!-- Description Card -->
+            <div id="dynamic-description" style="background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 100%); padding: 28px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.12); margin-bottom: 24px;">
+              <h4 style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 22px;">📋</span> Service Description
               </h4>
-              <div id="description-content" style="font-size: 13px; color: #666; line-height: 1.8;">
+              <div id="description-content" style="font-size: 14px; color: #666; line-height: 1.8;">
                 <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
+              </div>
+            </div>
+            
+            <!-- Tips Card -->
+            <div style="background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,166,126,0.04)); padding: 24px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.1);">
+              <div style="display: flex; align-items: flex-start; gap: 14px;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <span style="font-size: 20px;">💡</span>
+                </div>
+                <div>
+                  <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px;">Pro Tip</div>
+                  <div style="font-size: 13px; color: #666; line-height: 1.6;">Always check the service description for specific requirements and delivery time before placing your order.</div>
+                </div>
               </div>
             </div>
           </div>
           
           <!-- READ BEFORE ORDER TAB -->
           <div class="tab-panel" data-panel="read-before" style="display: none;">
-            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 28px;">📚</span> How Things Work Here
+            <h3 style="font-size: 26px; font-weight: 800; color: #1a1a1a; margin-bottom: 28px; display: flex; align-items: center; gap: 14px;">
+              <span style="font-size: 32px;">📚</span> How Things Work Here
             </h3>
             
-            <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
-              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 16px;">When you place an order, the first thing you'll see is the <strong>status</strong>:</p>
+            <!-- Order Status Section -->
+            <div style="background: linear-gradient(135deg, #F8F9FF, #FFFFFF); padding: 28px; border-radius: 16px; margin-bottom: 28px; border: 1.5px solid rgba(0,102,255,0.12);">
+              <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 18px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 24px;">📊</span> Order Status Guide
+              </h4>
+              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 20px;">When you place an order, you'll see one of these statuses:</p>
               <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span>
-                  <strong>Pending / Processing:</strong> Your order is received and will start within the promised start time (written on the service description).
+                <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #FFC107; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="width: 8px; height: 8px; background: #FFC107; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <div>
+                    <strong style="color: #1a1a1a; font-size: 14px;">Pending / Processing:</strong>
+                    <span style="color: #666; font-size: 14px;"> Your order is received and will start within the promised start time.</span>
+                  </div>
                 </li>
-                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span>
-                  <strong>In Progress:</strong> Delivery has started and followers, likes, views, or plays are being sent.
+                <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #0066FF; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="width: 8px; height: 8px; background: #0066FF; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <div>
+                    <strong style="color: #1a1a1a; font-size: 14px;">In Progress:</strong>
+                    <span style="color: #666; font-size: 14px;"> Delivery has started and engagement is being sent to your account.</span>
+                  </div>
                 </li>
-                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span>
-                  <strong>Completed:</strong> Your order is fully delivered.
+                <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #00A67E; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="width: 8px; height: 8px; background: #00A67E; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <div>
+                    <strong style="color: #1a1a1a; font-size: 14px;">Completed:</strong>
+                    <span style="color: #666; font-size: 14px;"> Your order is fully delivered successfully.</span>
+                  </div>
                 </li>
-                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 6px; height: 6px; background: #FF6B6B; border-radius: 50%;"></span>
-                  <strong>Partial:</strong> Only part of your order was delivered. The missing part is automatically refunded to your balance.
+                <li style="padding: 14px 18px; margin-bottom: 10px; background: white; border-radius: 12px; border-left: 4px solid #FF6B6B; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="width: 8px; height: 8px; background: #FF6B6B; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <div>
+                    <strong style="color: #1a1a1a; font-size: 14px;">Partial:</strong>
+                    <span style="color: #666; font-size: 14px;"> Only part delivered. Missing part is automatically refunded to your balance.</span>
+                  </div>
                 </li>
-                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 6px; height: 6px; background: #999; border-radius: 50%;"></span>
-                  <strong>Canceled:</strong> The order could not run and was fully refunded to your balance.
+                <li style="padding: 14px 18px; background: white; border-radius: 12px; border-left: 4px solid #999; display: flex; align-items: flex-start; gap: 12px;">
+                  <span style="width: 8px; height: 8px; background: #999; border-radius: 50%; margin-top: 6px; flex-shrink: 0;"></span>
+                  <div>
+                    <strong style="color: #1a1a1a; font-size: 14px;">Canceled:</strong>
+                    <span style="color: #666; font-size: 14px;"> Order could not run and was fully refunded to your balance.</span>
+                  </div>
                 </li>
               </ul>
             </div>
             
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 22px;">🎨</span> Service Colors
-            </h4>
-            <div style="background: white; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
-              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05)); border-left: 4px solid #FFC107; border-radius: 8px;">
-                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟡 Basic</div>
-                <div style="font-size: 13px; color: #666;">Cheapest, but drops are more likely.</div>
-              </div>
-              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(0,166,126,0.1), rgba(0,166,126,0.05)); border-left: 4px solid #00A67E; border-radius: 8px;">
-                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟢 Medium</div>
-                <div style="font-size: 13px; color: #666;">Balanced option with better stability.</div>
-              </div>
-              <div style="padding: 16px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,102,255,0.05)); border-left: 4px solid #0066FF; border-radius: 8px;">
-                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🔵 Elite</div>
-                <div style="font-size: 13px; color: #666;">Highest quality, best for long-term results.</div>
-              </div>
+            <!-- Refund Policy -->
+            <div style="background: linear-gradient(135deg, #F8F9FF, #FFFFFF); padding: 28px; border-radius: 16px; margin-bottom: 28px; border: 1.5px solid rgba(0,102,255,0.12);">
+              <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 24px;">💰</span> Refund Policy
+              </h4>
+              <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong style="color: #0066FF;">panel balance</strong>.</p>
             </div>
             
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 22px;">💰</span> Refund Policy
-            </h4>
-            <div style="background: #F8F9FF; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
-              <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
-            </div>
-            
-            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 22px;">✅</span> How to Order Correctly
-            </h4>
-            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 20px; border-radius: 12px; border: 1px solid #0066FF;">
-              <p style="font-size: 14px; color: #0047AB; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. Small → Scale.</p>
-            </div>
-          </div>
-          
-          <!-- SERVICE UPDATES TAB -->
-          <div class="tab-panel" data-panel="service-updates" style="display: none;">
-            <div style="text-align: center; padding: 60px 20px;">
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#e5e5e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px;">No Updates Yet</h3>
-              <p style="font-size: 14px; color: #666;">Service updates will appear here when available.</p>
+            <!-- Best Practices -->
+            <div style="background: linear-gradient(135deg, rgba(0,102,255,0.08), rgba(0,166,126,0.08)); padding: 28px; border-radius: 16px; border: 1.5px solid rgba(0,102,255,0.2);">
+              <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 24px;">✅</span> How to Order Correctly
+              </h4>
+              <p style="font-size: 15px; color: #0066FF; font-weight: 600; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. <strong>Start small → Scale gradually.</strong></p>
             </div>
           </div>
         </div>
@@ -230,11 +213,11 @@
                 
                 // Détection de patterns
                 if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
-                  return `<p style="margin-bottom: 8px;">${line}</p>`;
-                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
-                  return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
-                } else {
                   return `<p style="margin-bottom: 10px;">${line}</p>`;
+                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
+                  return `<p style="margin-bottom: 14px;"><strong style="color: #0066FF;">${line}</strong></p>`;
+                } else {
+                  return `<p style="margin-bottom: 12px;">${line}</p>`;
                 }
               })
               .filter(Boolean)
@@ -291,26 +274,36 @@
       setTimeout(updateServiceDescription, 500);
       
       // === 6. OPTIMISATION INPUTS FORMULAIRE ===
+      const formGroups = form.querySelectorAll('.form-group, div:has(> input), div:has(> select)');
+      formGroups.forEach(group => {
+        group.style.cssText = `
+          margin-bottom: 20px !important;
+        `;
+      });
+      
       const inputs = form.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.style.cssText = `
           width: 100% !important;
-          padding: 12px 14px !important;
-          border: 1.5px solid #e5e5e5 !important;
-          border-radius: 8px !important;
+          padding: 14px 16px !important;
+          border: 1.5px solid rgba(0,102,255,0.15) !important;
+          border-radius: 10px !important;
           font-size: 14px !important;
-          background: white !important;
+          background: #FAFBFC !important;
           transition: all 0.3s !important;
-          margin-bottom: 14px !important;
+          color: #1a1a1a !important;
+          font-weight: 500 !important;
         `;
         
         input.addEventListener('focus', function() {
           this.style.borderColor = '#0066FF';
-          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.08)';
+          this.style.background = 'white';
+          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
         });
         
         input.addEventListener('blur', function() {
-          this.style.borderColor = '#e5e5e5';
+          this.style.borderColor = 'rgba(0,102,255,0.15)';
+          this.style.background = '#FAFBFC';
           this.style.boxShadow = 'none';
         });
       });
@@ -320,45 +313,63 @@
       labels.forEach(label => {
         label.style.cssText = `
           font-size: 13px !important;
-          font-weight: 600 !important;
+          font-weight: 700 !important;
           color: #1a1a1a !important;
-          margin-bottom: 7px !important;
+          margin-bottom: 8px !important;
           display: block !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.03em !important;
         `;
       });
       
-      // === 8. BOUTON SUBMIT ===
+      // === 8. TITRE DU FORMULAIRE ===
+      const formTitle = form.querySelector('h1, h2, h3, .card-title');
+      if (formTitle) {
+        formTitle.style.cssText = `
+          font-size: 24px !important;
+          font-weight: 800 !important;
+          color: #1a1a1a !important;
+          margin-bottom: 24px !important;
+          padding-bottom: 16px !important;
+          border-bottom: 2px solid #F0F4FF !important;
+        `;
+        
+        // Ajouter un gradient au titre
+        formTitle.innerHTML = `<span style="background: linear-gradient(135deg, #0066FF, #00A67E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">New Order</span>`;
+      }
+      
+      // === 9. BOUTON SUBMIT ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           width: 100% !important;
-          padding: 14px !important;
-          background: linear-gradient(135deg, #00A67E, #00D97E) !important;
+          padding: 16px !important;
+          background: linear-gradient(135deg, #0066FF, #0052CC) !important;
           color: white !important;
           border: none !important;
-          border-radius: 8px !important;
-          font-size: 15px !important;
-          font-weight: 700 !important;
+          border-radius: 12px !important;
+          font-size: 16px !important;
+          font-weight: 800 !important;
           cursor: pointer !important;
           transition: all 0.3s !important;
           text-transform: uppercase !important;
-          letter-spacing: 0.04em !important;
-          box-shadow: 0 4px 12px rgba(0,166,126,0.25) !important;
-          margin-top: 20px !important;
+          letter-spacing: 0.05em !important;
+          box-shadow: 0 6px 20px rgba(0,102,255,0.3) !important;
+          margin-top: 24px !important;
         `;
         
         submitBtn.addEventListener('mouseenter', function() {
           this.style.transform = 'translateY(-2px)';
-          this.style.boxShadow = '0 6px 18px rgba(0,166,126,0.35)';
+          this.style.boxShadow = '0 8px 28px rgba(0,102,255,0.4)';
         });
         
         submitBtn.addEventListener('mouseleave', function() {
           this.style.transform = 'translateY(0)';
-          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.25)';
+          this.style.boxShadow = '0 6px 20px rgba(0,102,255,0.3)';
         });
       }
       
-      // === 9. SYSTÈME D'ONGLETS ===
+      // === 10. SYSTÈME D'ONGLETS ===
       setTimeout(() => {
         const tabs = document.querySelectorAll('.info-tab');
         const panels = document.querySelectorAll('.tab-panel');
@@ -370,31 +381,72 @@
             // Reset tabs
             tabs.forEach(t => {
               t.style.color = '#666';
-              t.style.background = 'none';
+              t.style.background = 'transparent';
               t.style.borderBottom = 'none';
             });
             
             // Active tab
-            this.style.color = '#00A67E';
+            this.style.color = '#0066FF';
             this.style.background = 'white';
-            this.style.borderBottom = '2px solid #00A67E';
+            this.style.borderBottom = '3px solid #0066FF';
             
             // Show panel
             panels.forEach(p => p.style.display = 'none');
             const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
-            if (targetPanelEl) targetPanelEl.style.display = 'block';
+            if (targetPanelEl) {
+              targetPanelEl.style.display = 'block';
+              targetPanelEl.style.animation = 'fadeIn 0.4s ease-out';
+            }
           });
         });
         
         // Active premier tab par défaut
         if (tabs[0]) {
-          tabs[0].style.color = '#00A67E';
+          tabs[0].style.color = '#0066FF';
           tabs[0].style.background = 'white';
-          tabs[0].style.borderBottom = '2px solid #00A67E';
+          tabs[0].style.borderBottom = '3px solid #0066FF';
         }
       }, 100);
       
-      // === 10. RESPONSIVE ===
+      // === 11. ANIMATIONS CSS ===
+      const animStyle = document.createElement('style');
+      animStyle.textContent = `
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .info-tab:hover {
+          background: rgba(0, 102, 255, 0.05) !important;
+        }
+        
+        #order-info-panel::-webkit-scrollbar {
+          width: 8px;
+        }
+        
+        #order-info-panel::-webkit-scrollbar-track {
+          background: #F0F4FF;
+          border-radius: 10px;
+        }
+        
+        #order-info-panel::-webkit-scrollbar-thumb {
+          background: #0066FF;
+          border-radius: 10px;
+        }
+        
+        #order-info-panel::-webkit-scrollbar-thumb:hover {
+          background: #0052CC;
+        }
+      `;
+      document.head.appendChild(animStyle);
+      
+      // === 12. RESPONSIVE ===
       const mediaQuery = window.matchMedia('(max-width: 1100px)');
       
       function handleResponsive(e) {
@@ -406,7 +458,7 @@
           rightPanel.style.flex = '1 1 auto';
         } else {
           container.style.flexDirection = 'row';
-          form.style.flex = '0 0 380px';
+          form.style.flex = '0 0 420px';
           form.style.position = 'sticky';
           form.style.maxHeight = 'calc(100vh - 110px)';
           rightPanel.style.flex = '1';
@@ -416,7 +468,7 @@
       handleResponsive(mediaQuery);
       mediaQuery.addEventListener('change', handleResponsive);
       
-      console.log('✅ [NEW ORDER] Layout optimisé + Description dynamique activés');
+      console.log('✅ [NEW ORDER] Layout optimisé + Style Genuine Promotion appliqué');
     }
   }, 300);
 })();
