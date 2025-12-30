@@ -1,5 +1,5 @@
-// GENUINE PANEL - Landing Page Customization
-// Detection + V1 code unchanged
+// GENUINE PANEL - Landing Page Customization + Mobile Fix
+// Detection + V1 code + Responsive Mobile
 
 // =============================================================================
 // 1. DÉTECTION CONDITIONNELLE (landing page only)
@@ -16,10 +16,10 @@
     return;
   }
 
-  console.log('[GENUINE] Landing page detected - loading V1 code');
+  console.log('[GENUINE] Landing page detected - loading');
 
 // =============================================================================
-// 2. CODE V1 ORIGINAL (100% INCHANGÉ)
+// 2. CODE V1 ORIGINAL
 // =============================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -2143,4 +2143,212 @@ window.addEventListener('load', function() {
   
   console.log('✅ ALL sections loaded');
 });
+
+// =============================================================================
+// 3. MOBILE RESPONSIVE FIX
+// =============================================================================
+
+setTimeout(() => {
+  const mobileFix = document.createElement('style');
+  mobileFix.textContent = `
+    /* ================================================================== */
+    /* MOBILE RESPONSIVE FIX - Hero Section */
+    /* ================================================================== */
+
+    @media (max-width: 1200px) {
+      .hero-content {
+        grid-template-columns: 1fr !important;
+        gap: 40px !important;
+      }
+
+      .hero-title {
+        font-size: 42px !important;
+      }
+
+      .hero-dashboard-preview {
+        max-width: 600px !important;
+        margin: 0 auto !important;
+      }
+
+      .hero-floating-badge-1 {
+        right: 10px !important;
+        top: 20px !important;
+      }
+
+      .hero-floating-badge-2 {
+        left: 10px !important;
+        bottom: 40px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Hero Section */
+      .hero-premium {
+        padding: 60px 16px 50px !important;
+      }
+
+      .hero-badge {
+        font-size: 11px !important;
+        padding: 6px 16px !important;
+        margin-bottom: 20px !important;
+      }
+
+      .hero-title {
+        font-size: 32px !important;
+        line-height: 1.15 !important;
+        margin-bottom: 20px !important;
+      }
+
+      .hero-subtitle {
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        margin-bottom: 28px !important;
+      }
+
+      .hero-cta-group {
+        flex-direction: column !important;
+        gap: 12px !important;
+        margin-bottom: 32px !important;
+      }
+
+      .hero-cta-primary,
+      .hero-cta-secondary {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 16px 28px !important;
+        font-size: 16px !important;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        padding: 24px 20px !important;
+      }
+
+      .hero-stat-value {
+        font-size: 32px !important;
+      }
+
+      .hero-stat-label {
+        font-size: 13px !important;
+      }
+
+      .hero-dashboard-preview {
+        border-radius: 12px !important;
+        max-width: 100% !important;
+      }
+
+      /* Cacher floating badges sur mobile */
+      .hero-floating-badge {
+        display: none !important;
+      }
+
+      /* Trust Bar */
+      .stats-marquee-wrapper {
+        margin: 40px 0 !important;
+      }
+
+      .stats-marquee-item {
+        font-size: 13px !important;
+        padding: 0 20px !important;
+      }
+
+      /* Timeline */
+      .how-it-works-section {
+        padding: 50px 16px !important;
+      }
+
+      .how-it-works-title {
+        font-size: 28px !important;
+      }
+
+      .how-it-works-subtitle {
+        font-size: 15px !important;
+      }
+
+      .how-tabs {
+        gap: 8px !important;
+        margin-bottom: 32px !important;
+      }
+
+      .how-tab {
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+      }
+
+      .how-timeline {
+        padding-left: 50px !important;
+      }
+
+      .how-timeline::before {
+        left: 14px !important;
+      }
+
+      .how-step-number {
+        left: -50px !important;
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 16px !important;
+      }
+
+      .how-step-card {
+        padding: 16px 18px !important;
+      }
+
+      .how-step-title {
+        font-size: 16px !important;
+      }
+
+      .how-step-icon {
+        width: 36px !important;
+        height: 36px !important;
+      }
+
+      .how-step-description {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 28px !important;
+      }
+
+      .hero-subtitle {
+        font-size: 15px !important;
+      }
+
+      .hero-cta-primary,
+      .hero-cta-secondary {
+        font-size: 15px !important;
+        padding: 14px 24px !important;
+      }
+
+      .hero-stats {
+        padding: 20px 16px !important;
+      }
+
+      .stats-marquee-item {
+        font-size: 12px !important;
+        padding: 0 16px !important;
+      }
+
+      .how-timeline {
+        padding-left: 45px !important;
+      }
+
+      .how-step-number {
+        left: -45px !important;
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 14px !important;
+      }
+    }
+  `;
+
+  document.head.appendChild(mobileFix);
+  console.log('[GENUINE] ✅ Mobile fix applied');
+}, 600);
+
 })(); // End IIFE wrapper
