@@ -1,5 +1,5 @@
 // =============================================================================
-// SOLUTION BULLETPROOF - FORCE PARENTS + 50/50 PUR
+// NEW ORDER - 50/50 SANS FULL-BLEED (FIX FINAL)
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,48 +8,52 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🧠 BRAIN MODE - FORCE PARENTS');
+      console.log('🎯 [NEW ORDER] 50/50 SANS BLEED');
       
-      // === 0. FORCER TOUS LES PARENTS À 100% (CLEF) ===
-      document.body.style.cssText = `margin:0 !important;padding:0 !important;width:100% !important;overflow-x:hidden !important;`;
+      // === 0. BODY + MAIN ===
+      document.body.style.cssText = `
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow-x: hidden !important;
+      `;
       
-      let parent = form.parentElement;
-      let depth = 0;
-      while (parent && depth < 10) {
-        parent.style.cssText = `
+      const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
+      if (mainContainer) {
+        mainContainer.style.cssText = `
           width: 100% !important;
           max-width: 100% !important;
           margin: 0 !important;
           padding: 0 !important;
+          padding-top: 20px !important;
           box-sizing: border-box !important;
         `;
-        parent = parent.parentElement;
-        depth++;
       }
       
       // === 1. DESCRIPTION NATIVE ===
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
                                 form.querySelector('[id*="description"]')?.closest('.form-group');
-      if (nativeDescription) nativeDescription.style.display = 'none';
+      if (nativeDescription) {
+        nativeDescription.style.display = 'none';
+      }
       
-      // === 2. CONTAINER SIMPLE 100% (PAS DE FULL-BLEED) ===
+      // === 2. CONTAINER 100% SIMPLE ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
-        gap: 8px !important;
+        gap: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
-        padding: 24px 8px !important;
+        padding: 24px 0 !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
       `;
       
-      // === 3. FORM GAUCHE 50% PUR ===
+      // === 3. FORM GAUCHE 50% ===
       form.style.cssText = `
-        flex: 1 !important;
-        max-width: calc(50% - 4px) !important;
-        width: calc(50% - 4px) !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
         min-width: 0 !important;
         background: white !important;
         border-radius: 0 12px 12px 0 !important;
@@ -63,7 +67,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT 50% PUR ===
+      // === 4. PANEL DROIT 50% ===
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
@@ -72,9 +76,9 @@
       }
       
       rightPanel.style.cssText = `
-        flex: 1 !important;
-        max-width: calc(50% - 4px) !important;
-        width: calc(50% - 4px) !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        width: 50% !important;
         min-width: 0 !important;
         background: white !important;
         border-radius: 12px 0 0 12px !important;
@@ -240,7 +244,7 @@
         </div>
       `;
       
-      // === 5. OBSERVER DESCRIPTIONS ===
+      // === 5. OBSERVER DESCRIPTIONS (IDENTIQUE TON CODE ORIGINAL) ===
       function updateServiceDescription() {
         const descriptionField = document.querySelector('#service_description, [name*="description"]');
         const descriptionContent = document.getElementById('description-content');
@@ -312,7 +316,7 @@
       
       setTimeout(updateServiceDescription, 500);
       
-      // === 6. INPUTS STYLE ===
+      // === 6. INPUTS (IDENTIQUE) ===
       const inputs = form.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.style.cssText = `
@@ -338,7 +342,7 @@
         });
       });
       
-      // === 7. LABELS ===
+      // === 7. LABELS (IDENTIQUE) ===
       const labels = form.querySelectorAll('label');
       labels.forEach(label => {
         label.style.cssText = `
@@ -350,7 +354,7 @@
         `;
       });
       
-      // === 8. SUBMIT BUTTON ===
+      // === 8. SUBMIT (IDENTIQUE) ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
@@ -381,7 +385,7 @@
         });
       }
       
-      // === 9. TABS SYSTEM ===
+      // === 9. TABS (IDENTIQUE) ===
       setTimeout(() => {
         const tabs = document.querySelectorAll('.info-tab');
         const panels = document.querySelectorAll('.tab-panel');
@@ -413,11 +417,34 @@
         }
       }, 100);
       
-      console.log('✅ BRAIN MODE - PARFAIT 50/50');
+      // === 10. RESPONSIVE (IDENTIQUE) ===
+      const mediaQuery = window.matchMedia('(max-width: 1100px)');
+      
+      function handleResponsive(e) {
+        if (e.matches) {
+          container.style.flexDirection = 'column';
+          container.style.padding = '12px';
+          form.style.width = '100%';
+          form.style.maxWidth = '100%';
+          rightPanel.style.width = '100%';
+          rightPanel.style.maxWidth = '100%';
+        } else {
+          container.style.flexDirection = 'row';
+          container.style.padding = '24px 0';
+          form.style.width = '50%';
+          form.style.maxWidth = '50%';
+          rightPanel.style.width = '50%';
+          rightPanel.style.maxWidth = '50%';
+        }
+      }
+      
+      handleResponsive(mediaQuery);
+      mediaQuery.addEventListener('change', handleResponsive);
+      
+      console.log('✅ [NEW ORDER] 50/50 - SANS OVERFLOW');
     }
   }, 300);
 })();
-
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
