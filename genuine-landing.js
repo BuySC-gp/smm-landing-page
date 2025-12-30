@@ -2296,218 +2296,52 @@ setTimeout(() => {
 
 })(); // End IIFE wrapper
 <script>
-// GENUINE NEW ORDER → PREMIUM DASHBOARD OVERLAY (BLANC)
-// Détection précise + cohérence landing page
-
+// DASHBOARD NEW ORDER (AJOUT UNIQUEMENT)
 (function() {
-  // Détecter page New Order du child panel
-  if (window.location.href.includes('genuinepromotion.com') && 
-      document.querySelector('input[placeholder*="Search"]') &&
-      !document.querySelector('.sidebar')) {
-
-    console.log('[GENUINE] New Order detected → Premium Dashboard');
-
-    // Créer overlay dashboard moderne
-    const overlay = document.createElement('div');
-    overlay.id = 'genuine-dashboard-overlay';
-    overlay.innerHTML = `
-      <div class="genuine-hero-dashboard">
-        <!-- Stats Header -->
-        <div class="db-stats">
-          <div class="stat-card">
-            <div class="stat-icon">📦</div>
-            <div class="stat-value">500K+</div>
-            <div class="stat-label">Total Orders</div>
+  setTimeout(() => {
+    const searchInput = document.querySelector('input[placeholder*="Search"], input[placeholder*="search"], input[placeholder*="Q"]');
+    if (window.location.href.includes('genuinepromotion.com') && searchInput && !document.querySelector('.block-signin-text')) {
+      
+      const dashboard = document.createElement('div');
+      dashboard.innerHTML = `
+        <style>
+          #dashboard-hero { position:fixed;top:0;left:0;width:100%;height:100vh;background:linear-gradient(135deg,#f8f9ff 0%,#e8f0ff 100%);z-index:9999;padding:40px;display:flex;flex-direction:column;font-family:-apple-system,sans-serif; }
+          .stats { display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin:50px 0; }
+          .stat { background:white;padding:40px 20px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,102,255,0.1); }
+          .icon { font-size:50px;margin-bottom:20px; }
+          .value { font-size:40px;font-weight:800;background:linear-gradient(135deg,#0066ff,#00a8e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+          .label { color:#666;font-weight:500; }
+          .actions { text-align:center;margin-top:50px; }
+          .actions h2 { font-size:36px;color:#1a1a1a;margin-bottom:30px; }
+          .btn { display:inline-block;padding:20px 40px;margin:10px;border-radius:15px;font-weight:700;font-size:18px;text-decoration:none; }
+          .btn-primary { background:linear-gradient(135deg,#0066ff,#0047ab);color:white;box-shadow:0 10px 30px rgba(0,102,255,0.4); }
+          .btn { background:white;color:#0066ff;box-shadow:0 5px 20px rgba(0,0,0,0.1); }
+          .btn:hover { transform:translateY(-5px); }
+          .hint { margin-top:auto;text-align:center;padding:20px;background:rgba(255,255,255,0.8);border-radius:15px;color:#666; }
+          @media (max-width:768px) { .stats { grid-template-columns:1fr; } }
+        </style>
+        <div id="dashboard-hero">
+          <div class="stats">
+            <div class="stat"><div class="icon">📦</div><div class="value">500K+</div><div class="label">Orders</div></div>
+            <div class="stat"><div class="icon">👥</div><div class="value">2.5K+</div><div class="label">Users</div></div>
+            <div class="stat"><div class="icon">⚡</div><div class="value">99.8%</div><div class="label">Uptime</div></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon">👥</div>
-            <div class="stat-value">2,500+</div>
-            <div class="stat-label">Active Users</div>
+          <div class="actions">
+            <h2>🚀 Quick Actions</h2>
+            <button class="btn btn-primary" onclick="scrollToForm()">New Order →</button>
+            <a href="/addfunds" class="btn">Add Funds</a>
           </div>
-          <div class="stat-card">
-            <div class="stat-icon">⚡</div>
-            <div class="stat-value">99.8%</div>
-            <div class="stat-label">Uptime</div>
-          </div>
+          <div class="hint">👇 Continue your order</div>
         </div>
-
-        <!-- Quick Actions -->
-        <div class="db-quick-actions">
-          <h3>🚀 Quick Actions</h3>
-          <div class="actions-grid">
-            <button class="action-btn primary" onclick="scrollToOrderForm()">
-              New Order <span>→</span>
-            </button>
-            <a href="/addfunds" class="action-btn secondary">Add Funds</a>
-            <a href="/api" class="action-btn secondary">API Docs</a>
-            <a href="#" class="action-btn secondary">Mass Orders</a>
-          </div>
-        </div>
-
-        <!-- Top Services Preview -->
-        <div class="db-services-preview">
-          <h4>⭐ Top Services Today</h4>
-          <div class="services-grid">
-            <span class="service-tag trending">Instagram Followers</span>
-            <span class="service-tag bestseller">YouTube Views</span>
-            <span class="service-tag popular">TikTok Likes</span>
-            <span class="service-tag">Spotify Monthly</span>
-            <span class="service-tag">Telegram Members</span>
-          </div>
-        </div>
-
-        <!-- Scroll to native form -->
-        <div class="scroll-hint">
-          <span>👇 Continue your order below</span>
-        </div>
-      </div>
-    `;
-
-    document.body.prepend(overlay);
-
-    // Injecter styles cohérents avec landing (BLANC)
-    const style = document.createElement('style');
-    style.id = 'genuine-dashboard-styles';
-    style.textContent = `
-      /* Overlay backdrop */
-      #genuine-dashboard-overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-        background: linear-gradient(135deg, rgba(248,249,255,0.98) 0%, rgba(232,240,255,0.95) 100%);
-        backdrop-filter: blur(20px); z-index: 9998;
-        padding: 40px 20px; overflow-y: auto;
-        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      }
-
-      .genuine-hero-dashboard {
-        max-width: 1400px; margin: 0 auto;
-        display: flex; flex-direction: column; gap: 48px;
-        animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      @keyframes slideIn {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      /* Stats Cards */
-      .db-stats {
-        display: grid; grid-template-columns: repeat(3, 1fr);
-        gap: 32px; margin-top: 20px;
-      }
-      .stat-card {
-        background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(12px);
-        padding: 40px 32px; border-radius: 24px;
-        text-align: center; box-shadow: 0 12px 40px rgba(0,71,171,0.12);
-        border: 1px solid rgba(255,255,255,0.8);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .stat-card:hover {
-        transform: translateY(-8px); box-shadow: 0 20px 60px rgba(0,71,171,0.2);
-      }
-      .stat-icon { font-size: 48px; margin-bottom: 16px; }
-      .stat-value {
-        font-size: 44px; font-weight: 800; color: #0066FF;
-        background: linear-gradient(135deg, #0066FF, #00A8E8);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        margin-bottom: 8px;
-      }
-      .stat-label {
-        color: #666666; font-size: 16px; font-weight: 500;
-      }
-
-      /* Quick Actions */
-      .db-quick-actions h3 {
-        font-size: 36px; font-weight: 800; color: #1a1a1a;
-        margin-bottom: 32px; letter-spacing: -0.02em;
-      }
-      .actions-grid {
-        display: grid; grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-      }
-      .action-btn {
-        padding: 24px 36px; border-radius: 20px;
-        font-weight: 700; font-size: 18px;
-        text-decoration: none; display: inline-flex;
-        align-items: center; justify-content: center; gap: 12px;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 2px solid transparent;
-      }
-      .action-btn.primary {
-        background: linear-gradient(135deg, #0066FF 0%, #0047AB 100%);
-        color: white; box-shadow: 0 12px 32px rgba(0,102,255,0.3);
-      }
-      .action-btn.secondary {
-        background: white; color: #0066FF;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-      }
-      .action-btn:hover {
-        transform: translateY(-6px) scale(1.02);
-        box-shadow: 0 20px 48px rgba(0,102,255,0.4);
-      }
-
-      /* Services Preview */
-      .db-services-preview h4 {
-        font-size: 24px; font-weight: 700; color: #1a1a1a;
-        margin-bottom: 28px;
-      }
-      .services-grid {
-        display: flex; gap: 16px; flex-wrap: wrap;
-      }
-      .service-tag {
-        padding: 14px 28px; border-radius: 50px;
-        font-size: 15px; font-weight: 600;
-        background: rgba(0,102,255,0.08);
-        color: #0066FF; border: 1px solid rgba(0,102,255,0.2);
-        transition: all 0.3s ease;
-      }
-      .service-tag.trending { background: rgba(255,193,7,0.15); color: #F59E0B; }
-      .service-tag.bestseller { background: rgba(34,197,94,0.15); color: #10B981; }
-      .service-tag.popular { background: rgba(139,92,246,0.15); color: #8B5CF6; }
-      .service-tag:hover { transform: translateY(-2px); scale: 1.05; }
-
-      /* Scroll hint */
-      .scroll-hint {
-        text-align: center; margin-top: 40px; padding: 20px;
-        background: rgba(255,255,255,0.7); border-radius: 16px;
-        border: 2px dashed rgba(0,102,255,0.3);
-      }
-      .scroll-hint span {
-        color: #666; font-size: 16px; font-weight: 500;
-      }
-
-      /* Responsive */
-      @media (max-width: 1024px) {
-        .db-stats { grid-template-columns: repeat(2, 1fr); }
-        .actions-grid { grid-template-columns: 1fr; }
-      }
-
-      @media (max-width: 768px) {
-        #genuine-dashboard-overlay { padding: 20px 16px; }
-        .genuine-hero-dashboard { gap: 32px; }
-        .db-stats { grid-template-columns: 1fr; }
-        .db-quick-actions h3 { font-size: 28px; }
-        .service-tag { font-size: 14px; padding: 12px 20px; }
-      }
-
-      @media (max-width: 480px) {
-        .db-quick-actions h3 { font-size: 24px; }
-        .stat-value { font-size: 36px; }
-      }
-    `;
-
-    document.head.appendChild(style);
-
-    // Fonction scroll vers formulaire natif
-    window.scrollToOrderForm = function() {
-      document.querySelector('input[placeholder*="Search"]').scrollIntoView({
-        behavior: 'smooth', block: 'center'
-      });
-      setTimeout(() => {
-        overlay.style.opacity = '0';
-        setTimeout(() => overlay.remove(), 400);
-      }, 800);
+      `;
+      document.body.appendChild(dashboard);
+      
+      window.scrollToForm = () => {
+        searchInput.scrollIntoView({behavior:'smooth'});
+        setTimeout(() => document.getElementById('dashboard-hero').remove(), 1000);
+      };
     }
-  }
+  }, 2000);
 })();
 </script>
+
