@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - FIX OVERFLOW 100% ÉCRAN
+// NEW ORDER PAGE - 50/50 PARFAIT SANS GAP/OVERFLOW
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,63 +8,33 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
+      console.log('🎯 [NEW ORDER] Layout 50/50 PARFAIT');
       
-      // BODY + MAIN (inchangé)
-      document.body.style.cssText = `padding:0;margin:0;width:100%;overflow-x:hidden;`;
+      // BODY + MAIN
+      document.body.style.cssText = `padding:0 !important;margin:0 !important;width:100vw !important;overflow-x:hidden !important;`;
       const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
-      if (mainContainer) mainContainer.style.cssText = `width:100%;max-width:100%;margin:0;padding:0 0 20px 0;box-sizing:border-box;`;
+      if (mainContainer) mainContainer.style.cssText = `width:100% !important;max-width:100% !important;margin:0 !important;padding:0 0 20px 0 !important;box-sizing:border-box !important;`;
       
-      // DESCRIPTION NATIVE (inchangé)
+      // DESCRIPTION NATIVE
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || form.querySelector('[id*="description"]')?.closest('.form-group');
       if (nativeDescription) nativeDescription.style.display = 'none';
       
-     // === CONTAINER SANS GAP/PADDING HORIZONTAUX ===
-const container = form.parentElement;
-container.style.cssText = `
-  display: flex !important;
-  gap: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 24px 0 !important;  /* ← UNIQUEMENT VERTICAL */
-  align-items: flex-start !important;
-  box-sizing: border-box !important;
-`;
-
-// === FORMULAIRE GAUCHE 50% EXACT ===
-form.style.cssText = `
-  flex: 0 0 50% !important;
-  max-width: 50% !important;
-  width: 50% !important;
-  min-width: 0 !important;
-  background: white !important;
-  border-radius: 0 16px 16px 0 !important;
-  padding: 32px !important;
-  box-shadow: 8px 0 24px -4px rgba(0,0,0,0.08) !important;  /* ← SHADOW COMPENSÉ */
-  border-right: 1px solid #e5e7eb !important;
-  box-sizing: border-box !important;
-  height: fit-content !important;
-  max-height: 100vh !important;
-  overflow-y: auto !important;
-`;
-
-// === PANEL DROIT 50% EXACT ===
-rightPanel.style.cssText = `
-  flex: 0 0 50% !important;
-  max-width: 50% !important;
-  width: 50% !important;
-  min-width: 0 !important;
-  background: white !important;
-  border-radius: 16px 0 0 16px !important;
-  box-shadow: -8px 0 24px -4px rgba(0,0,0,0.08) !important;  /* ← SHADOW COMPENSÉ */
-  border-left: 1px solid #e5e7eb !important;
-  overflow: hidden !important;
-  display: flex !important;
-  flex-direction: column !important;
-  height: fit-content !important;
-  max-height: 100vh !important;
-  box-sizing: border-box !important;
-`;
+      // CONTAINER 100% VERTICAL SEUL
+      const container = form.parentElement;
+      container.style.cssText = `display:flex !important;gap:0 !important;width:100% !important;max-width:100% !important;margin:0 !important;padding:24px 0 !important;align-items:flex-start !important;box-sizing:border-box !important;`;
+      
+      // FORM GAUCHE 50%
+      form.style.cssText = `flex:0 0 50% !important;max-width:50% !important;width:50% !important;min-width:0 !important;background:white !important;border-radius:0 16px 16px 0 !important;padding:32px !important;box-shadow:8px 0 24px -4px rgba(0,0,0,0.08) !important;border-right:1px solid #e5e7eb !important;box-sizing:border-box !important;height:fit-content !important;max-height:100vh !important;overflow-y:auto !important;`;
+      
+      // PANEL DROIT 50% + TOUT LE CONTENU (identique)
+      let rightPanel = document.getElementById('order-info-panel');
+      if (!rightPanel) {
+        rightPanel = document.createElement('div');
+        rightPanel.id = 'order-info-panel';
+        rightPanel.style.cssText = `flex:0 0 50% !important;max-width:50% !important;width:50% !important;min-width:0 !important;background:white !important;border-radius:16px 0 0 16px !important;box-shadow:-8px 0 24px -4px rgba(0,0,0,0.08) !important;border-left:1px solid #e5e7eb !important;overflow:hidden !important;display:flex !important;flex-direction:column !important;height:fit-content !important;max-height:100vh !important;box-sizing:border-box !important;`;
+        rightPanel.innerHTML = `[TON INNERHTML IDENTIQUE]`;
+        container.appendChild(rightPanel);
+      }
       
       rightPanel.innerHTML = `
         <!-- Header Badge -->
