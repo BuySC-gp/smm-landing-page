@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT CONCURRENT (CORRIGÉ)
+// NEW ORDER PAGE - LAYOUT OPTIMISÉ + DESCRIPTION DYNAMIQUE
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,131 +8,124 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] Layout concurrent activé');
+      console.log('🎯 [NEW ORDER] Layout optimisé activé');
       
-      // === 1. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
+      // === 1. CACHER LA DESCRIPTION NATIVE ===
+      const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
+                                form.querySelector('[id*="description"]')?.closest('.form-group');
+      if (nativeDescription) {
+        nativeDescription.style.display = 'none';
+      }
+      
+      // === 2. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
-        gap: 32px !important;
-        padding: 40px 20px !important;
-        max-width: 1600px !important;
+        gap: 24px !important;
+        padding: 32px 20px !important;
+        max-width: 1800px !important;
         margin: 0 auto !important;
         align-items: flex-start !important;
       `;
       
-      // === 2. FORMULAIRE GAUCHE (COMPACT ~35%) ===
+      // === 3. FORMULAIRE GAUCHE (COMPACT ~32%) ===
       form.style.cssText = `
-        flex: 0 0 420px !important;
+        flex: 0 0 380px !important;
         background: white !important;
-        border-radius: 20px !important;
-        padding: 32px !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        border-radius: 16px !important;
+        padding: 28px !important;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
         border: 1px solid #e5e5e5 !important;
         position: sticky !important;
-        top: 100px !important;
+        top: 90px !important;
         height: fit-content !important;
-        max-height: calc(100vh - 120px) !important;
+        max-height: calc(100vh - 110px) !important;
         overflow-y: auto !important;
       `;
       
-      // === 3. PANEL DROIT (INFO + TABS) ===
+      // === 4. PANEL DROIT (INFO + TABS) ===
       const rightPanel = document.createElement('div');
       rightPanel.id = 'order-info-panel';
       rightPanel.style.cssText = `
         flex: 1 !important;
         background: white !important;
-        border-radius: 20px !important;
+        border-radius: 16px !important;
         padding: 0 !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important;
         border: 1px solid #e5e5e5 !important;
         overflow: hidden !important;
+        min-height: 600px !important;
       `;
       
       rightPanel.innerHTML = `
         <!-- Badge MTP Service Color -->
-        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 24px 32px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between;">
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-              <span style="font-size: 24px;">🌟</span>
+        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.06), rgba(0,102,255,0.06)); padding: 20px 28px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
+            <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <span style="font-size: 22px;">🌟</span>
             </div>
-            <div>
-              <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">MTP Service Color Categorization System</div>
-              <div style="display: flex; gap: 12px; font-size: 13px;">
-                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
-                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
-                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">MTP Service Color Categorization System</div>
+              <div style="display: flex; gap: 10px; font-size: 12px; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
               </div>
             </div>
           </div>
-          <button style="padding: 10px 20px; background: #00A67E; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s;">See details</button>
+          <button style="padding: 8px 18px; background: #00A67E; color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; flex-shrink: 0; white-space: nowrap;">See details</button>
         </div>
         
         <!-- Tabs Navigation -->
-        <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #F8F9FF;">
-          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #FAFBFC;">
+          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
               Service Info
             </span>
           </button>
-          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
               Read Before Order
             </span>
           </button>
-          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
-            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
               Service Updates
             </span>
           </button>
         </div>
         
         <!-- Tab Content -->
-        <div id="tab-content" style="padding: 32px; min-height: 400px; overflow-y: auto; max-height: calc(100vh - 320px);">
+        <div id="tab-content" style="padding: 28px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 280px);">
           
           <!-- SERVICE INFO TAB -->
           <div class="tab-panel active" data-panel="service-info">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
-              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,166,126,0.1)); border-radius: 12px; border: 1px solid rgba(0,166,126,0.2);">
-                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;">
+              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,166,126,0.04), rgba(0,166,126,0.08)); border-radius: 12px; border: 1px solid rgba(0,166,126,0.15);">
+                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
-                <div style="font-size: 13px; color: #00A67E; font-weight: 600; margin-bottom: 4px;">Guarantee</div>
-                <div style="font-size: 18px; font-weight: 700; color: #1a1a1a;">-</div>
+                <div style="font-size: 12px; color: #00A67E; font-weight: 600; margin-bottom: 4px;">Guarantee</div>
+                <div id="guarantee-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">-</div>
               </div>
-              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,102,255,0.1)); border-radius: 12px; border: 1px solid rgba(0,102,255,0.2);">
-                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,102,255,0.08)); border-radius: 12px; border: 1px solid rgba(0,102,255,0.15);">
+                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
-                <div style="font-size: 13px; color: #0066FF; font-weight: 600; margin-bottom: 4px;">Speed</div>
-                <div style="font-size: 18px; font-weight: 700; color: #1a1a1a;">5-10K Daily</div>
+                <div style="font-size: 12px; color: #0066FF; font-weight: 600; margin-bottom: 4px;">Speed</div>
+                <div id="speed-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">Loading...</div>
               </div>
             </div>
             
-            <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 24px;">
-              <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 20px;">📄</span> Description
+            <div id="dynamic-description" style="background: #F8F9FF; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 20px;">
+              <h4 style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 19px;">📄</span> Description
               </h4>
-              <div style="font-size: 14px; color: #666; line-height: 1.8;">
-                <p style="margin-bottom: 12px;"><strong>🌴 X Follower Service (Provided By USI)</strong></p>
-                <p style="margin-bottom: 8px;">🌍 <strong>Geo:</strong> Global</p>
-                <p style="margin-bottom: 8px;">⏱️ <strong>Start Time:</strong> Instant</p>
-                <p style="margin-bottom: 8px;">📊 <strong>Min - Max:</strong> 100 - 30,000</p>
-              </div>
-            </div>
-            
-            <div style="background: linear-gradient(135deg, #FFF3CD, #FFEAA7); padding: 20px; border-radius: 12px; border: 1px solid #FFD700; margin-bottom: 24px;">
-              <div style="font-size: 14px; color: #856404; line-height: 1.8;">
-                <p style="margin-bottom: 8px;">⚠️ <strong>The profile must be set to "public" or the order will don't start.</strong> After the completion, you can close it again.</p>
-              </div>
-            </div>
-            
-            <div style="background: #E8F0FF; padding: 20px; border-radius: 12px; border: 1px solid #0066FF;">
-              <div style="font-size: 14px; color: #0047AB; line-height: 1.8;">
-                <p style="margin-bottom: 8px;">👉 <strong>Link Example:</strong> https://www.tiktok.com/@more_than_panel</p>
+              <div id="description-content" style="font-size: 13px; color: #666; line-height: 1.8;">
+                <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
               </div>
             </div>
           </div>
@@ -217,23 +210,103 @@
       
       container.appendChild(rightPanel);
       
-      // === 4. OPTIMISATION INPUTS FORMULAIRE ===
+      // === 5. OBSERVER POUR CAPTURER LA DESCRIPTION NATIVE ===
+      function updateServiceDescription() {
+        const descriptionField = document.querySelector('#service_description, [name*="description"]');
+        const descriptionContent = document.getElementById('description-content');
+        const speedValue = document.getElementById('speed-value');
+        const guaranteeValue = document.getElementById('guarantee-value');
+        
+        if (descriptionField && descriptionContent) {
+          const descText = descriptionField.value || descriptionField.textContent;
+          
+          if (descText && descText.trim() && descText.trim() !== '') {
+            // Convertir texte brut en HTML avec formatage
+            const formattedDesc = descText
+              .split('\n')
+              .map(line => {
+                line = line.trim();
+                if (!line) return '';
+                
+                // Détection de patterns
+                if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
+                  return `<p style="margin-bottom: 8px;">${line}</p>`;
+                } else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
+                  return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
+                } else {
+                  return `<p style="margin-bottom: 10px;">${line}</p>`;
+                }
+              })
+              .filter(Boolean)
+              .join('');
+            
+            descriptionContent.innerHTML = formattedDesc || descText;
+            
+            // Extraire Speed si présent
+            const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
+            if (speedMatch && speedValue) {
+              speedValue.textContent = speedMatch[1].trim();
+            }
+            
+            // Extraire Guarantee/Refill si présent
+            const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
+            if (refillMatch && guaranteeValue) {
+              guaranteeValue.textContent = refillMatch[1].trim();
+            }
+            
+          } else {
+            descriptionContent.innerHTML = '<p style="color: #999; font-style: italic;">Select a service to view its description...</p>';
+            if (speedValue) speedValue.textContent = 'N/A';
+            if (guaranteeValue) guaranteeValue.textContent = '-';
+          }
+        }
+      }
+      
+      // Observer sur le select de service
+      const serviceSelect = form.querySelector('select[name*="service"], #service');
+      if (serviceSelect) {
+        serviceSelect.addEventListener('change', () => {
+          setTimeout(updateServiceDescription, 300);
+        });
+      }
+      
+      // Observer sur le champ description (mutation)
+      const descField = document.querySelector('#service_description, [name*="description"]');
+      if (descField) {
+        const observer = new MutationObserver(updateServiceDescription);
+        observer.observe(descField, { 
+          childList: true, 
+          characterData: true, 
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['value']
+        });
+        
+        // Event listeners classiques
+        descField.addEventListener('input', updateServiceDescription);
+        descField.addEventListener('change', updateServiceDescription);
+      }
+      
+      // Update initial
+      setTimeout(updateServiceDescription, 500);
+      
+      // === 6. OPTIMISATION INPUTS FORMULAIRE ===
       const inputs = form.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.style.cssText = `
           width: 100% !important;
-          padding: 14px 16px !important;
+          padding: 12px 14px !important;
           border: 1.5px solid #e5e5e5 !important;
-          border-radius: 10px !important;
-          font-size: 15px !important;
+          border-radius: 8px !important;
+          font-size: 14px !important;
           background: white !important;
           transition: all 0.3s !important;
-          margin-bottom: 16px !important;
+          margin-bottom: 14px !important;
         `;
         
         input.addEventListener('focus', function() {
           this.style.borderColor = '#0066FF';
-          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
+          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.08)';
         });
         
         input.addEventListener('blur', function() {
@@ -242,50 +315,50 @@
         });
       });
       
-      // === 5. LABELS FORMULAIRE ===
+      // === 7. LABELS FORMULAIRE ===
       const labels = form.querySelectorAll('label');
       labels.forEach(label => {
         label.style.cssText = `
-          font-size: 14px !important;
+          font-size: 13px !important;
           font-weight: 600 !important;
           color: #1a1a1a !important;
-          margin-bottom: 8px !important;
+          margin-bottom: 7px !important;
           display: block !important;
         `;
       });
       
-      // === 6. BOUTON SUBMIT ===
+      // === 8. BOUTON SUBMIT ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
           width: 100% !important;
-          padding: 16px !important;
+          padding: 14px !important;
           background: linear-gradient(135deg, #00A67E, #00D97E) !important;
           color: white !important;
           border: none !important;
-          border-radius: 10px !important;
-          font-size: 16px !important;
+          border-radius: 8px !important;
+          font-size: 15px !important;
           font-weight: 700 !important;
           cursor: pointer !important;
           transition: all 0.3s !important;
           text-transform: uppercase !important;
-          letter-spacing: 0.05em !important;
-          box-shadow: 0 4px 12px rgba(0,166,126,0.3) !important;
-          margin-top: 24px !important;
+          letter-spacing: 0.04em !important;
+          box-shadow: 0 4px 12px rgba(0,166,126,0.25) !important;
+          margin-top: 20px !important;
         `;
         
         submitBtn.addEventListener('mouseenter', function() {
           this.style.transform = 'translateY(-2px)';
-          this.style.boxShadow = '0 6px 20px rgba(0,166,126,0.4)';
+          this.style.boxShadow = '0 6px 18px rgba(0,166,126,0.35)';
         });
         
         submitBtn.addEventListener('mouseleave', function() {
           this.style.transform = 'translateY(0)';
-          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.3)';
+          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.25)';
         });
       }
       
-      // === 7. SYSTÈME D'ONGLETS ===
+      // === 9. SYSTÈME D'ONGLETS ===
       setTimeout(() => {
         const tabs = document.querySelectorAll('.info-tab');
         const panels = document.querySelectorAll('.tab-panel');
@@ -304,22 +377,25 @@
             // Active tab
             this.style.color = '#00A67E';
             this.style.background = 'white';
-            this.style.borderBottom = '3px solid #00A67E';
+            this.style.borderBottom = '2px solid #00A67E';
             
             // Show panel
             panels.forEach(p => p.style.display = 'none');
-            document.querySelector(`[data-panel="${targetPanel}"]`).style.display = 'block';
+            const targetPanelEl = document.querySelector(`[data-panel="${targetPanel}"]`);
+            if (targetPanelEl) targetPanelEl.style.display = 'block';
           });
         });
         
         // Active premier tab par défaut
-        tabs[0].style.color = '#00A67E';
-        tabs[0].style.background = 'white';
-        tabs[0].style.borderBottom = '3px solid #00A67E';
+        if (tabs[0]) {
+          tabs[0].style.color = '#00A67E';
+          tabs[0].style.background = 'white';
+          tabs[0].style.borderBottom = '2px solid #00A67E';
+        }
       }, 100);
       
-      // === 8. RESPONSIVE ===
-      const mediaQuery = window.matchMedia('(max-width: 1024px)');
+      // === 10. RESPONSIVE ===
+      const mediaQuery = window.matchMedia('(max-width: 1100px)');
       
       function handleResponsive(e) {
         if (e.matches) {
@@ -330,9 +406,9 @@
           rightPanel.style.flex = '1 1 auto';
         } else {
           container.style.flexDirection = 'row';
-          form.style.flex = '0 0 420px';
+          form.style.flex = '0 0 380px';
           form.style.position = 'sticky';
-          form.style.maxHeight = 'calc(100vh - 120px)';
+          form.style.maxHeight = 'calc(100vh - 110px)';
           rightPanel.style.flex = '1';
         }
       }
@@ -340,10 +416,10 @@
       handleResponsive(mediaQuery);
       mediaQuery.addEventListener('change', handleResponsive);
       
-      console.log('✅ [NEW ORDER] Layout concurrent appliqué avec succès');
+      console.log('✅ [NEW ORDER] Layout optimisé + Description dynamique activés');
     }
   }, 300);
-})();;
+})();
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
