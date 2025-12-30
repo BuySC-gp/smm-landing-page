@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT OPTIMISÉ + DESCRIPTION DYNAMIQUE
+// NEW ORDER PAGE - LAYOUT 50/50 FULL WIDTH
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,7 +8,7 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] Layout optimisé activé');
+      console.log('🎯 [NEW ORDER] Layout 50/50 activé');
       
       // === 1. CACHER LA DESCRIPTION NATIVE ===
       const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
@@ -17,39 +17,38 @@
         nativeDescription.style.display = 'none';
       }
       
-      // === 2. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
+      // === 2. CONTAINER PRINCIPAL (FLEX 50/50) ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
-        gap: 20px !important;
-        padding: 20px !important;
+        gap: 16px !important;
+        padding: 16px !important;
         max-width: 100% !important;
-        margin: 0 auto !important;
+        width: 100% !important;
+        margin: 0 !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
       `;
       
-      // === 3. FORMULAIRE GAUCHE (~35%) ===
+      // === 3. FORMULAIRE GAUCHE (50%) ===
       form.style.cssText = `
-        flex: 0 0 420px !important;
+        flex: 1 !important;
+        min-width: 0 !important;
         background: white !important;
         border-radius: 12px !important;
         padding: 24px !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
         border: 1px solid #e5e7eb !important;
-        position: sticky !important;
-        top: 80px !important;
-        height: fit-content !important;
-        max-height: calc(100vh - 100px) !important;
-        overflow-y: auto !important;
         box-sizing: border-box !important;
+        height: fit-content !important;
       `;
       
-      // === 4. PANEL DROIT (~65%) ===
+      // === 4. PANEL DROIT (50%) ===
       const rightPanel = document.createElement('div');
       rightPanel.id = 'order-info-panel';
       rightPanel.style.cssText = `
         flex: 1 !important;
+        min-width: 0 !important;
         background: white !important;
         border-radius: 12px !important;
         padding: 0 !important;
@@ -63,12 +62,12 @@
       
       rightPanel.innerHTML = `
         <!-- Header Badge -->
-        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
-          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 240px;">
+        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 18px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 200px;">
             <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
               <span style="font-size: 20px;">🌟</span>
             </div>
-            <div style="flex: 1;">
+            <div style="flex: 1; min-width: 0;">
               <div style="font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 4px;">MTP Service Color Categorization System</div>
               <div style="display: flex; gap: 8px; font-size: 11px; flex-wrap: wrap;">
                 <span style="display: flex; align-items: center; gap: 4px; color: #6b7280;"><span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
@@ -393,19 +392,13 @@
       function handleResponsive(e) {
         if (e.matches) {
           container.style.flexDirection = 'column';
-          form.style.flex = '1 1 auto';
+          container.style.padding = '12px';
           form.style.width = '100%';
-          form.style.position = 'static';
-          form.style.maxHeight = 'none';
-          rightPanel.style.flex = '1 1 auto';
           rightPanel.style.width = '100%';
         } else {
           container.style.flexDirection = 'row';
-          form.style.flex = '0 0 420px';
+          container.style.padding = '16px';
           form.style.width = 'auto';
-          form.style.position = 'sticky';
-          form.style.maxHeight = 'calc(100vh - 100px)';
-          rightPanel.style.flex = '1';
           rightPanel.style.width = 'auto';
         }
       }
@@ -413,10 +406,11 @@
       handleResponsive(mediaQuery);
       mediaQuery.addEventListener('change', handleResponsive);
       
-      console.log('✅ [NEW ORDER] Layout optimisé + Description dynamique activés');
+      console.log('✅ [NEW ORDER] Layout 50/50 activé');
     }
   }, 300);
 })();
+
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
