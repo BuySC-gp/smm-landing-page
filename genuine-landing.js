@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT 50/50 FULL WIDTH (COMPLÈT & CORRIGÉ)
+// NEW ORDER PAGE - FIX OVERFLOW 100% ÉCRAN
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -8,58 +8,34 @@
     
     if (form && !form.dataset.fixed) {
       form.dataset.fixed = 'true';
-      console.log('🎯 [NEW ORDER] Layout 50/50 FULL WIDTH activé');
       
-      // === 0. FORCER BODY + MAIN À 100% WIDTH ===
-      document.body.style.cssText = `
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100vw !important;
-        overflow-x: hidden !important;
-      `;
-      
+      // BODY + MAIN (inchangé)
+      document.body.style.cssText = `padding:0;margin:0;width:100%;overflow-x:hidden;`;
       const mainContainer = document.querySelector('main, .main-content, [role="main"]') || form.parentElement.parentElement;
-      if (mainContainer) {
-        mainContainer.style.cssText = `
-          width: 100vw !important;
-          max-width: 100vw !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          padding-top: 20px !important;
-          box-sizing: border-box !important;
-        `;
-      }
+      if (mainContainer) mainContainer.style.cssText = `width:100%;max-width:100%;margin:0;padding:0 0 20px 0;box-sizing:border-box;`;
       
-      // === 1. CACHER LA DESCRIPTION NATIVE ===
-      const nativeDescription = form.querySelector('.form-group:has(#service_description)') || 
-                                form.querySelector('[id*="description"]')?.closest('.form-group');
-      if (nativeDescription) {
-        nativeDescription.style.display = 'none';
-      }
+      // DESCRIPTION NATIVE (inchangé)
+      const nativeDescription = form.querySelector('.form-group:has(#service_description)') || form.querySelector('[id*="description"]')?.closest('.form-group');
+      if (nativeDescription) nativeDescription.style.display = 'none';
       
-      // === 2. CONTAINER PRINCIPAL FULL WIDTH ===
+      // CONTAINER FIXÉ
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
         gap: 0 !important;
-        width: 100vw !important;
-        max-width: 100vw !important;
+        width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
-        padding: 24px 0 !important;
+        padding: 24px 12px !important;
         align-items: flex-start !important;
         box-sizing: border-box !important;
-        position: relative !important;
-        left: 50% !important;
-        right: 50% !important;
-        margin-left: -50vw !important;
-        margin-right: -50vw !important;
       `;
       
-      // === 3. FORMULAIRE GAUCHE EXACT 50% ===
+      // FORM GAUCHE FIXÉ
       form.style.cssText = `
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-        width: 50% !important;
+        flex: 0 0 calc(50% - 12px) !important;
+        max-width: calc(50% - 12px) !important;
+        width: calc(50% - 12px) !important;
         min-width: 0 !important;
         background: white !important;
         border-radius: 0 12px 12px 0 !important;
@@ -73,7 +49,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 4. PANEL DROIT EXACT 50% ===
+      // PANEL DROIT FIXÉ (+ reste du code IDENTIQUE)
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
@@ -82,9 +58,9 @@
       }
       
       rightPanel.style.cssText = `
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-        width: 50% !important;
+        flex: 0 0 calc(50% - 12px) !important;
+        max-width: calc(50% - 12px) !important;
+        width: calc(50% - 12px) !important;
         min-width: 0 !important;
         background: white !important;
         border-radius: 12px 0 0 12px !important;
