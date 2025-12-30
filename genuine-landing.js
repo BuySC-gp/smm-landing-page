@@ -2296,84 +2296,100 @@ setTimeout(() => {
 
 })(); // End IIFE wrapper
 <script>
-// DEBUG + DASHBOARD FORCE (V4 - FONCTIONNE À COUP SÛR)
-console.log('🔍 GENUINE DEBUG START');
-console.log('URL:', window.location.href);
-console.log('Search inputs:', document.querySelectorAll('input').length);
+// V5 - Z-INDEX MAX + DEBUG FORCE
+console.log('🔥 GENUINE V5 START - Z-INDEX 999999');
 
 setTimeout(() => {
-  // FORCE DASHBOARD SUR TOUTE PAGE PANEL
-  if (window.location.href.includes('genuinepromotion.com')) {
-    console.log('🚀 FORCE DASHBOARD ACTIVÉ');
+  console.log('📱 URL:', window.location.href);
+  console.log('📊 Inputs trouvés:', document.querySelectorAll('input').length);
+  
+  // FORCE SUR TOUS PANELS + Z-INDEX MAX
+  const dashboard = document.createElement('div');
+  dashboard.id = 'ultimate-dashboard';
+  dashboard.style.cssText = `
+    position:fixed !important; top:0 !important; left:0 !important; width:100% !important; height:100vh !important;
+    background:linear-gradient(135deg, rgba(248,249,255,0.98), rgba(232,240,255,0.95)) !important;
+    z-index:999999 !important; padding:40px !important; display:flex !important; flex-direction:column !important;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif !important; justify-content:center !important;
+    align-items:center !important; text-align:center !important; color:#1a1a1a !important;
+  `;
+  
+  dashboard.innerHTML = `
+    <div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#0066FF,#00A8E8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;letter-spacing:-0.02em;">Genuine Promotion</div>
     
-    const dashboard = document.createElement('div');
-    dashboard.id = 'force-dashboard';
-    dashboard.style.cssText = `
-      position:fixed;top:0;left:0;width:100%;height:100vh;
-      background:linear-gradient(135deg,#f8f9ff 0%,#e8f0ff 100%);
-      z-index:99999;padding:40px;display:flex;flex-direction:column;
-      font-family:-apple-system,sans-serif;justify-content:center;align-items:center;
-      text-align:center;color:#1a1a1a;
-    `;
-    dashboard.innerHTML = `
-      <div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#0066ff,#00a8e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;">Genuine Promotion</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:40px 0;">
-        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
-          <div style="font-size:60px;margin-bottom:20px;">📦</div>
-          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">500K+</div>
-          <div style="color:#666;font-weight:500;">Total Orders</div>
-        </div>
-        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
-          <div style="font-size:60px;margin-bottom:20px;">👥</div>
-          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">2,500+</div>
-          <div style="color:#666;font-weight:500;">Active Users</div>
-        </div>
-        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
-          <div style="font-size:60px;margin-bottom:20px;">⚡</div>
-          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">99.8%</div>
-          <div style="color:#666;font-weight:500;">Uptime</div>
-        </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:32px;max-width:1200px;width:100%;margin:40px 0;">
+      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
+        <div style="font-size:56px;margin-bottom:20px;">📦</div>
+        <div style="font-size:44px;font-weight:900;color:#0066FF;margin-bottom:12px;">500K+</div>
+        <div style="color:#666;font-size:16px;font-weight:600;">Total Orders</div>
       </div>
-      <div style="font-size:36px;font-weight:800;color:#1a1a1a;margin-bottom:40px;">🚀 Quick Actions</div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
-        <button onclick="scrollToOrder()" style="
-          padding:24px 48px;background:linear-gradient(135deg,#0066ff,#0047ab);
-          color:white;border:none;border-radius:20px;font-size:20px;font-weight:700;
-          cursor:pointer;box-shadow:0 12px 32px rgba(0,102,255,0.4);
-          transition:all 0.3s;
-        ">New Order →</button>
-        <a href="/addfunds" style="
-          padding:24px 48px;background:white;color:#0066ff;
-          text-decoration:none;border-radius:20px;font-size:20px;font-weight:700;
-          box-shadow:0 8px 24px rgba(0,0,0,0.15);transition:all 0.3s;
-        ">Add Funds</a>
+      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
+        <div style="font-size:56px;margin-bottom:20px;">👥</div>
+        <div style="font-size:44px;font-weight:900;color:#10B981;margin-bottom:12px;">2,500+</div>
+        <div style="color:#666;font-size:16px;font-weight:600;">Active Users</div>
       </div>
-      <div style="
-        margin-top:60px;padding:24px;background:rgba(255,255,255,0.8);
-        border-radius:20px;border:2px dashed #0066ff;color:#666;font-size:18px;
-      ">👇 Click "New Order" or scroll to continue</div>
-    `;
+      <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);padding:40px;border-radius:24px;box-shadow:0 20px 60px rgba(0,102,255,0.15);border:1px solid rgba(255,255,255,0.8);transition:all 0.3s;">
+        <div style="font-size:56px;margin-bottom:20px;">⚡</div>
+        <div style="font-size:44px;font-weight:900;color:#F59E0B;margin-bottom:12px;">99.8%</div>
+        <div style="color:#666;font-size:16px;font-weight:600;">Uptime</div>
+      </div>
+    </div>
     
-    document.body.appendChild(dashboard);
+    <div style="font-size:36px;font-weight:800;color:#1a1a1a;margin-bottom:40px;letter-spacing:-0.01em;">🚀 Quick Actions</div>
     
-    window.scrollToOrder = () => {
-      console.log('🎯 Scroll to order form');
-      const inputs = document.querySelectorAll('input, select');
-      if (inputs.length > 0) {
-        inputs[0].scrollIntoView({behavior:'smooth', block:'center'});
-        setTimeout(() => {
-          dashboard.style.opacity = '0';
-          dashboard.style.transform = 'scale(0.95)';
-          setTimeout(() => dashboard.remove(), 500);
-        }, 800);
-      } else {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      }
-    };
+    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;max-width:800px;">
+      <button onclick="scrollToOrder()" style="
+        padding:24px 48px !important;background:linear-gradient(135deg,#0066FF,#0047AB) !important;
+        color:white !important;border:none !important;border-radius:20px !important;font-size:20px !important;
+        font-weight:800 !important;cursor:pointer !important;box-shadow:0 16px 40px rgba(0,102,255,0.4) !important;
+        transition:all 0.3s ease !important;min-width:200px;
+      " onmouseover="this.style.transform='translateY(-4px) scale(1.02)'" onmouseout="this.style.transform=''">
+        ➤ New Order
+      </button>
+      <a href="/addfunds" style="
+        padding:24px 48px !important;background:white !important;color:#0066FF !important;
+        text-decoration:none !important;border-radius:20px !important;font-size:20px !important;
+        font-weight:800 !important;box-shadow:0 12px 32px rgba(0,0,0,0.15) !important;
+        transition:all 0.3s ease !important;min-width:200px;border:2px solid #E5E7EB !important;
+      " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        💰 Add Funds
+      </a>
+      <a href="/api" style="
+        padding:24px 32px !important;background:#F8FAFC !important;color:#0066FF !important;
+        text-decoration:none !important;border-radius:20px !important;font-size:18px !important;
+        font-weight:700 !important;box-shadow:0 8px 24px rgba(0,102,255,0.15) !important;
+        transition:all 0.3s ease !important;border:2px solid #E5E7EB !important;
+      " onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        🔌 API Docs
+      </a>
+    </div>
     
-    console.log('✅ DASHBOARD INJECTÉ');
-  }
-}, 3000);
+    <div style="
+      margin-top:60px;padding:28px;background:rgba(255,255,255,0.9);backdrop-filter:blur(20px);
+      border-radius:24px;border:3px dashed rgba(0,102,255,0.3);color:#666;font-size:18px;
+      font-weight:600;max-width:500px;
+    ">👇 Click "New Order" to continue or scroll down</div>
+  `;
+  
+  document.body.prepend(dashboard); // PREPEND = Z-INDEX MAX
+  
+  window.scrollToOrder = () => {
+    console.log('🎯 SCROLL TO FORM');
+    const formElements = document.querySelectorAll('input, select, textarea');
+    if (formElements.length > 0) {
+      formElements[0].scrollIntoView({behavior:'smooth', block:'center'});
+      setTimeout(() => {
+        dashboard.style.transition = 'all 0.5s ease';
+        dashboard.style.opacity = '0';
+        dashboard.style.transform = 'scale(0.95) translateY(-20px)';
+        setTimeout(() => dashboard.remove(), 600);
+      }, 800);
+    }
+  };
+  
+  console.log('✅ ULTIMATE DASHBOARD INJECTÉ - Z-INDEX 999999');
+}, 500); // 0.5s au lieu de 3s
 
-console.log('🔍 GENUINE DEBUG END');
+console.log('🔥 GENUINE V5 END');
 </script>
+
