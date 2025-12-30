@@ -1,178 +1,349 @@
 // =============================================================================
-// GENUINE NEW ORDER = TOP TIER DASHBOARD (FINAL)
+// NEW ORDER PAGE - LAYOUT CONCURRENT (CORRIGÉ)
 // =============================================================================
 (function() {
   setTimeout(() => {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
     const form = searchInput?.closest('form');
     
-    if (form && !form.dataset.topTier) {
-      form.dataset.topTier = 'true';
-      console.log('🚀 [GENUINE] TOP TIER DASHBOARD ACTIVATED');
+    if (form && !form.dataset.fixed) {
+      form.dataset.fixed = 'true';
+      console.log('🎯 [NEW ORDER] Layout concurrent activé');
       
-      // === 1. FULL SPLIT LAYOUT ===
+      // === 1. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
       const container = form.parentElement;
       container.style.cssText = `
-        display: flex !important; gap: 48px !important; 
-        padding: 40px !important; max-width: 1800px !important; 
+        display: flex !important;
+        gap: 32px !important;
+        padding: 40px 20px !important;
+        max-width: 1600px !important;
         margin: 0 auto !important;
+        align-items: flex-start !important;
       `;
       
-      // === 2. LEFT ORDER FORM (collé sidebar) ===
+      // === 2. FORMULAIRE GAUCHE (COMPACT ~35%) ===
       form.style.cssText = `
-        flex: 0 0 520px !important; background: rgba(255,255,255,0.95) !important;
-        backdrop-filter: blur(32px) !important; border-radius: 28px !important;
-        padding: 48px !important; box-shadow: 0 32px 120px rgba(0,102,255,0.15) !important;
-        border: 1px solid rgba(0,102,255,0.2) !important; position: sticky !important;
-        top: 32px !important; height: fit-content !important;
+        flex: 0 0 420px !important;
+        background: white !important;
+        border-radius: 20px !important;
+        padding: 32px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        border: 1px solid #e5e5e5 !important;
+        position: sticky !important;
+        top: 100px !important;
+        height: fit-content !important;
+        max-height: calc(100vh - 120px) !important;
+        overflow-y: auto !important;
       `;
       
-      // === 3. RIGHT PREMIUM DASHBOARD ===
-      const dashboard = document.createElement('div');
-      dashboard.id = 'genuine-dashboard';
-      dashboard.style.cssText = `
-        flex: 1 !important; background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,255,0.98)) !important;
-        backdrop-filter: blur(36px) !important; border-radius: 32px !important;
-        padding: 56px !important; box-shadow: 0 40px 160px rgba(0,102,255,0.18) !important;
-        border: 1px solid rgba(0,102,255,0.25) !important; position: relative !important;
+      // === 3. PANEL DROIT (INFO + TABS) ===
+      const rightPanel = document.createElement('div');
+      rightPanel.id = 'order-info-panel';
+      rightPanel.style.cssText = `
+        flex: 1 !important;
+        background: white !important;
+        border-radius: 20px !important;
+        padding: 0 !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08) !important;
+        border: 1px solid #e5e5e5 !important;
         overflow: hidden !important;
       `;
-      container.appendChild(dashboard);
       
-      // === 4. DASHBOARD HEADER + BADGE ===
-      dashboard.innerHTML = `
-        <div style="position:absolute;top:-20px;left:40px;padding:12px 28px;background:linear-gradient(135deg,#0066FF,#00A67E);color:white;border-radius:28px;font-size:14px;font-weight:800;letter-spacing:0.08em;box-shadow:0 12px 40px rgba(0,102,255,0.4);z-index:10;">✨ PREMIUM ORDER DASHBOARD</div>
-        
-        <!-- USER WELCOME + BALANCE -->
-        <div style="display:grid;grid-template-columns:1fr auto;gap:32px;margin-bottom:48px;align-items:center;">
-          <div>
-            <h2 style="font-size:32px;font-weight:900;color:#1a1a1a;margin:0 0 8px 0;letter-spacing:-0.02em;">
-              Welcome back<span style="color:#0066FF;">, Pro</span> ✨
-            </h2>
-            <div style="font-size:15px;color:#666;font-weight:500;">Ready to scale? Your next order awaits 🚀</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:28px;font-weight:800;color:#0066FF;margin-bottom:4px;">$247.83</div>
-            <div style="font-size:13px;color:#999;">Available Balance</div>
-          </div>
-        </div>
-        
-        <!-- STATS GRID -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px;">
-          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);transition:all 0.3s;">
-            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#0066FF,#00A67E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">1,247</div>
-            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Total Orders</div>
-          </div>
-          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);">
-            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#00A67E,#00FF88);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">99.9%</div>
-            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Success Rate</div>
-          </div>
-          <div style="text-align:center;padding:32px 24px;background:rgba(255,255,255,0.8);backdrop-filter:blur(20px);border-radius:24px;border:1px solid rgba(0,102,255,0.1);box-shadow:0 12px 48px rgba(0,102,255,0.08);">
-            <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#FF6B6B,#FF8E8E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;">$1,847</div>
-            <div style="font-size:14px;color:#666;font-weight:600;letter-spacing:0.05em;">Total Spent</div>
-          </div>
-        </div>
-        
-        <!-- ACCOUNT STATUS -->
-        <div style="background:linear-gradient(135deg,rgba(0,102,255,0.04),rgba(0,166,126,0.04));border-radius:24px;padding:32px;margin-bottom:32px;border:1px solid rgba(0,102,255,0.15);">
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-            <div style="width:60px;height:60px;background:linear-gradient(135deg,#0066FF,#00A67E);border-radius:16px;display:flex;align-items:center;justify-content:center;">
-              <span style="font-size:24px;color:white;">⭐</span>
+      rightPanel.innerHTML = `
+        <!-- Badge MTP Service Color -->
+        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,102,255,0.05)); padding: 24px 32px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 24px;">🌟</span>
             </div>
             <div>
-              <div style="font-size:18px;font-weight:800;color:#1a1a1a;margin-bottom:4px;">VIP PRO Account</div>
-              <div style="font-size:13px;color:#666;">Unlimited API access • Priority support • 25% bulk discount</div>
+              <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">MTP Service Color Categorization System</div>
+              <div style="display: flex; gap: 12px; font-size: 13px;">
+                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
+                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
+                <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 8px; height: 8px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
+              </div>
+            </div>
+          </div>
+          <button style="padding: 10px 20px; background: #00A67E; color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s;">See details</button>
+        </div>
+        
+        <!-- Tabs Navigation -->
+        <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #F8F9FF;">
+          <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Service Info
+            </span>
+          </button>
+          <button class="info-tab" data-tab="read-before" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Read Before Order
+            </span>
+          </button>
+          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 16px 24px; background: none; border: none; font-size: 14px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Service Updates
+            </span>
+          </button>
+        </div>
+        
+        <!-- Tab Content -->
+        <div id="tab-content" style="padding: 32px; min-height: 400px; overflow-y: auto; max-height: calc(100vh - 320px);">
+          
+          <!-- SERVICE INFO TAB -->
+          <div class="tab-panel active" data-panel="service-info">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,166,126,0.05), rgba(0,166,126,0.1)); border-radius: 12px; border: 1px solid rgba(0,166,126,0.2);">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div style="font-size: 13px; color: #00A67E; font-weight: 600; margin-bottom: 4px;">Guarantee</div>
+                <div style="font-size: 18px; font-weight: 700; color: #1a1a1a;">-</div>
+              </div>
+              <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(0,102,255,0.05), rgba(0,102,255,0.1)); border-radius: 12px; border: 1px solid rgba(0,102,255,0.2);">
+                <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div style="font-size: 13px; color: #0066FF; font-weight: 600; margin-bottom: 4px;">Speed</div>
+                <div style="font-size: 18px; font-weight: 700; color: #1a1a1a;">5-10K Daily</div>
+              </div>
+            </div>
+            
+            <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 24px;">
+              <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px;">📄</span> Description
+              </h4>
+              <div style="font-size: 14px; color: #666; line-height: 1.8;">
+                <p style="margin-bottom: 12px;"><strong>🌴 X Follower Service (Provided By USI)</strong></p>
+                <p style="margin-bottom: 8px;">🌍 <strong>Geo:</strong> Global</p>
+                <p style="margin-bottom: 8px;">⏱️ <strong>Start Time:</strong> Instant</p>
+                <p style="margin-bottom: 8px;">📊 <strong>Min - Max:</strong> 100 - 30,000</p>
+              </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #FFF3CD, #FFEAA7); padding: 20px; border-radius: 12px; border: 1px solid #FFD700; margin-bottom: 24px;">
+              <div style="font-size: 14px; color: #856404; line-height: 1.8;">
+                <p style="margin-bottom: 8px;">⚠️ <strong>The profile must be set to "public" or the order will don't start.</strong> After the completion, you can close it again.</p>
+              </div>
+            </div>
+            
+            <div style="background: #E8F0FF; padding: 20px; border-radius: 12px; border: 1px solid #0066FF;">
+              <div style="font-size: 14px; color: #0047AB; line-height: 1.8;">
+                <p style="margin-bottom: 8px;">👉 <strong>Link Example:</strong> https://www.tiktok.com/@more_than_panel</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- READ BEFORE ORDER TAB -->
+          <div class="tab-panel" data-panel="read-before" style="display: none;">
+            <h3 style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 28px;">📚</span> How Things Work Here
+            </h3>
+            
+            <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 16px;">When you place an order, the first thing you'll see is the <strong>status</strong>:</p>
+              <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span>
+                  <strong>Pending / Processing:</strong> Your order is received and will start within the promised start time (written on the service description).
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span>
+                  <strong>In Progress:</strong> Delivery has started and followers, likes, views, or plays are being sent.
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span>
+                  <strong>Completed:</strong> Your order is fully delivered.
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #FF6B6B; border-radius: 50%;"></span>
+                  <strong>Partial:</strong> Only part of your order was delivered. The missing part is automatically refunded to your balance.
+                </li>
+                <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 6px; height: 6px; background: #999; border-radius: 50%;"></span>
+                  <strong>Canceled:</strong> The order could not run and was fully refunded to your balance.
+                </li>
+              </ul>
+            </div>
+            
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">🎨</span> Service Colors
+            </h4>
+            <div style="background: white; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05)); border-left: 4px solid #FFC107; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟡 Basic</div>
+                <div style="font-size: 13px; color: #666;">Cheapest, but drops are more likely.</div>
+              </div>
+              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(0,166,126,0.1), rgba(0,166,126,0.05)); border-left: 4px solid #00A67E; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟢 Medium</div>
+                <div style="font-size: 13px; color: #666;">Balanced option with better stability.</div>
+              </div>
+              <div style="padding: 16px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,102,255,0.05)); border-left: 4px solid #0066FF; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🔵 Elite</div>
+                <div style="font-size: 13px; color: #666;">Highest quality, best for long-term results.</div>
+              </div>
+            </div>
+            
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">💰</span> Refund Policy
+            </h4>
+            <div style="background: #F8F9FF; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
+            </div>
+            
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">✅</span> How to Order Correctly
+            </h4>
+            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 20px; border-radius: 12px; border: 1px solid #0066FF;">
+              <p style="font-size: 14px; color: #0047AB; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. Small → Scale.</p>
+            </div>
+          </div>
+          
+          <!-- SERVICE UPDATES TAB -->
+          <div class="tab-panel" data-panel="service-updates" style="display: none;">
+            <div style="text-align: center; padding: 60px 20px;">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#e5e5e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px;">No Updates Yet</h3>
+              <p style="font-size: 14px; color: #666;">Service updates will appear here when available.</p>
             </div>
           </div>
         </div>
-        
-        <!-- PRO TIPS -->
-        <div style="background:linear-gradient(135deg,#FFF3CD,#FFEAA7);border-radius:24px;padding:32px;margin-bottom:32px;border:1px solid rgba(255,193,7,0.3);">
-          <h3 style="font-size:22px;font-weight:800;color:#856404;margin:0 0 20px 0;display:flex;align-items:center;gap:12px;">
-            💡 Pro Tips
-          </h3>
-          <div style="font-size:15px;color:#856404;line-height:1.6;">
-            👉 Match orders to account activity (100 followers → 50-200 max)<br>
-            👉 Drip-feed for natural growth (max 10%/day)<br>
-            👉 Test small → scale big (start 10% target)<br>
-            👉 Mix Basic/Medium for best ROI
-          </div>
-        </div>
-        
-        <!-- READ BEFORE ORDER -->
-        <div style="background:rgba(248,250,255,0.8);backdrop-filter:blur(20px);border-radius:24px;padding:32px;border:1px solid rgba(0,102,255,0.1);">
-          <h3 style="font-size:22px;font-weight:800;color:#1a1a1a;margin:0 0 24px 0;display:flex;align-items:center;gap:12px;">
-            <span style="width:48px;height:48px;background:linear-gradient(135deg,#0066FF,#FF6B6B);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:white;box-shadow:0 8px 24px rgba(0,102,255,0.3);">📌</span>
-            Read Before Order
-          </h3>
-          <div style="font-size:14px;color:#666;line-height:1.7;">
-            <strong>Order Status:</strong> Pending → In Progress → Completed | Partial/Canceled = auto-refund<br><br>
-            <strong>Service Colors:</strong><br>
-            🟡 <strong>Basic</strong> - Cheapest, higher drop risk<br>
-            🟢 <strong>Medium</strong> - Balanced quality/stability<br>
-            🔵 <strong>Elite</strong> - Best retention, long-term results<br><br>
-            <strong>Pro Tip:</strong> Match orders to real activity. 100 followers? Order 50-200 max. Small → Scale.
-          </div>
-        </div>
       `;
       
-      // === 5. ENHANCE FORM ELEMENTS ===
-      const inputs = form.querySelectorAll('input, select');
-      inputs.forEach((input, i) => {
+      container.appendChild(rightPanel);
+      
+      // === 4. OPTIMISATION INPUTS FORMULAIRE ===
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
         input.style.cssText = `
-          background: rgba(255,255,255,0.98) !important;
-          border: 2px solid rgba(0,102,255,0.15) !important;
-          border-radius: 20px !important;
-          padding: 24px 28px !important;
-          font-size: 16px !important;
-          box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
-          margin-bottom: 24px !important;
-          transition: all 0.4s cubic-bezier(0.4,0,0.2,1) !important;
           width: 100% !important;
+          padding: 14px 16px !important;
+          border: 1.5px solid #e5e5e5 !important;
+          border-radius: 10px !important;
+          font-size: 15px !important;
+          background: white !important;
+          transition: all 0.3s !important;
+          margin-bottom: 16px !important;
         `;
-        input.onfocus = () => input.style.borderColor = '#0066FF', input.style.boxShadow = '0 0 0 4px rgba(0,102,255,0.15)';
-        input.onblur = () => input.style.borderColor = 'rgba(0,102,255,0.15)';
+        
+        input.addEventListener('focus', function() {
+          this.style.borderColor = '#0066FF';
+          this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
+        });
+        
+        input.addEventListener('blur', function() {
+          this.style.borderColor = '#e5e5e5';
+          this.style.boxShadow = 'none';
+        });
       });
       
-      // === 6. SERVICE DESCRIPTION (NOUVEAU PANEL) ===
-      const serviceDesc = document.createElement('div');
-      serviceDesc.style.cssText = `
-        background: rgba(255,255,255,0.92); backdrop-filter: blur(24px);
-        border-radius: 24px; padding: 32px; margin-top: 32px;
-        border: 1px solid rgba(0,102,255,0.15); box-shadow: 0 16px 64px rgba(0,102,255,0.1);
-      `;
-      serviceDesc.innerHTML = `
-        <h4 style="font-size:20px;font-weight:800;color:#1a1a1a;margin:0 0 20px 0;">📄 Service Details</h4>
-        <div style="font-size:14px;color:#666;line-height:1.6;">
-          <strong>Instagram Followers - Medium Tier</strong><br>
-          • Min: 20 | Max: 2000<br>
-          • Start: 6h | Refill: 30 days<br>
-          • Speed: 5-10 daily<br>
-          • Quality: Real accounts, drip-feed, natural growth
-        </div>
-      `;
-      form.appendChild(serviceDesc);
+      // === 5. LABELS FORMULAIRE ===
+      const labels = form.querySelectorAll('label');
+      labels.forEach(label => {
+        label.style.cssText = `
+          font-size: 14px !important;
+          font-weight: 600 !important;
+          color: #1a1a1a !important;
+          margin-bottom: 8px !important;
+          display: block !important;
+        `;
+      });
       
-      // === 7. PREMIUM SUBMIT ===
+      // === 6. BOUTON SUBMIT ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
-          background: linear-gradient(135deg, #0066FF, #0052CC) !important;
-          border-radius: 28px !important; padding: 28px 56px !important;
-          font-size: 20px !important; font-weight: 900 !important;
-          box-shadow: 0 20px 64px rgba(0,102,255,0.4) !important;
-          color: white !important; border: none !important;
-          width: 100% !important; margin-top: 40px !important;
-          letter-spacing: 0.05em; text-transform: uppercase;
+          width: 100% !important;
+          padding: 16px !important;
+          background: linear-gradient(135deg, #00A67E, #00D97E) !important;
+          color: white !important;
+          border: none !important;
+          border-radius: 10px !important;
+          font-size: 16px !important;
+          font-weight: 700 !important;
+          cursor: pointer !important;
+          transition: all 0.3s !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.05em !important;
+          box-shadow: 0 4px 12px rgba(0,166,126,0.3) !important;
+          margin-top: 24px !important;
         `;
-        submitBtn.onmouseover = () => submitBtn.style.transform = 'translateY(-8px) scale(1.03)';
-        submitBtn.onmouseout = () => submitBtn.style.transform = '';
+        
+        submitBtn.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+          this.style.boxShadow = '0 6px 20px rgba(0,166,126,0.4)';
+        });
+        
+        submitBtn.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.boxShadow = '0 4px 12px rgba(0,166,126,0.3)';
+        });
       }
       
-      console.log('✅ [GENUINE] TOP TIER DASHBOARD COMPLETE');
+      // === 7. SYSTÈME D'ONGLETS ===
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.info-tab');
+        const panels = document.querySelectorAll('.tab-panel');
+        
+        tabs.forEach(tab => {
+          tab.addEventListener('click', function() {
+            const targetPanel = this.dataset.tab;
+            
+            // Reset tabs
+            tabs.forEach(t => {
+              t.style.color = '#666';
+              t.style.background = 'none';
+              t.style.borderBottom = 'none';
+            });
+            
+            // Active tab
+            this.style.color = '#00A67E';
+            this.style.background = 'white';
+            this.style.borderBottom = '3px solid #00A67E';
+            
+            // Show panel
+            panels.forEach(p => p.style.display = 'none');
+            document.querySelector(`[data-panel="${targetPanel}"]`).style.display = 'block';
+          });
+        });
+        
+        // Active premier tab par défaut
+        tabs[0].style.color = '#00A67E';
+        tabs[0].style.background = 'white';
+        tabs[0].style.borderBottom = '3px solid #00A67E';
+      }, 100);
+      
+      // === 8. RESPONSIVE ===
+      const mediaQuery = window.matchMedia('(max-width: 1024px)');
+      
+      function handleResponsive(e) {
+        if (e.matches) {
+          container.style.flexDirection = 'column';
+          form.style.flex = '1 1 auto';
+          form.style.position = 'static';
+          form.style.maxHeight = 'none';
+          rightPanel.style.flex = '1 1 auto';
+        } else {
+          container.style.flexDirection = 'row';
+          form.style.flex = '0 0 420px';
+          form.style.position = 'sticky';
+          form.style.maxHeight = 'calc(100vh - 120px)';
+          rightPanel.style.flex = '1';
+        }
+      }
+      
+      handleResponsive(mediaQuery);
+      mediaQuery.addEventListener('change', handleResponsive);
+      
+      console.log('✅ [NEW ORDER] Layout concurrent appliqué avec succès');
     }
-  }, 200);
-})();
+  }, 300);
+})();;
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
