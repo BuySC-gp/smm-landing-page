@@ -2296,52 +2296,84 @@ setTimeout(() => {
 
 })(); // End IIFE wrapper
 <script>
-// DASHBOARD NEW ORDER (AJOUT UNIQUEMENT)
-(function() {
-  setTimeout(() => {
-    const searchInput = document.querySelector('input[placeholder*="Search"], input[placeholder*="search"], input[placeholder*="Q"]');
-    if (window.location.href.includes('genuinepromotion.com') && searchInput && !document.querySelector('.block-signin-text')) {
-      
-      const dashboard = document.createElement('div');
-      dashboard.innerHTML = `
-        <style>
-          #dashboard-hero { position:fixed;top:0;left:0;width:100%;height:100vh;background:linear-gradient(135deg,#f8f9ff 0%,#e8f0ff 100%);z-index:9999;padding:40px;display:flex;flex-direction:column;font-family:-apple-system,sans-serif; }
-          .stats { display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin:50px 0; }
-          .stat { background:white;padding:40px 20px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(0,102,255,0.1); }
-          .icon { font-size:50px;margin-bottom:20px; }
-          .value { font-size:40px;font-weight:800;background:linear-gradient(135deg,#0066ff,#00a8e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
-          .label { color:#666;font-weight:500; }
-          .actions { text-align:center;margin-top:50px; }
-          .actions h2 { font-size:36px;color:#1a1a1a;margin-bottom:30px; }
-          .btn { display:inline-block;padding:20px 40px;margin:10px;border-radius:15px;font-weight:700;font-size:18px;text-decoration:none; }
-          .btn-primary { background:linear-gradient(135deg,#0066ff,#0047ab);color:white;box-shadow:0 10px 30px rgba(0,102,255,0.4); }
-          .btn { background:white;color:#0066ff;box-shadow:0 5px 20px rgba(0,0,0,0.1); }
-          .btn:hover { transform:translateY(-5px); }
-          .hint { margin-top:auto;text-align:center;padding:20px;background:rgba(255,255,255,0.8);border-radius:15px;color:#666; }
-          @media (max-width:768px) { .stats { grid-template-columns:1fr; } }
-        </style>
-        <div id="dashboard-hero">
-          <div class="stats">
-            <div class="stat"><div class="icon">📦</div><div class="value">500K+</div><div class="label">Orders</div></div>
-            <div class="stat"><div class="icon">👥</div><div class="value">2.5K+</div><div class="label">Users</div></div>
-            <div class="stat"><div class="icon">⚡</div><div class="value">99.8%</div><div class="label">Uptime</div></div>
-          </div>
-          <div class="actions">
-            <h2>🚀 Quick Actions</h2>
-            <button class="btn btn-primary" onclick="scrollToForm()">New Order →</button>
-            <a href="/addfunds" class="btn">Add Funds</a>
-          </div>
-          <div class="hint">👇 Continue your order</div>
-        </div>
-      `;
-      document.body.appendChild(dashboard);
-      
-      window.scrollToForm = () => {
-        searchInput.scrollIntoView({behavior:'smooth'});
-        setTimeout(() => document.getElementById('dashboard-hero').remove(), 1000);
-      };
-    }
-  }, 2000);
-})();
-</script>
+// DEBUG + DASHBOARD FORCE (V4 - FONCTIONNE À COUP SÛR)
+console.log('🔍 GENUINE DEBUG START');
+console.log('URL:', window.location.href);
+console.log('Search inputs:', document.querySelectorAll('input').length);
 
+setTimeout(() => {
+  // FORCE DASHBOARD SUR TOUTE PAGE PANEL
+  if (window.location.href.includes('genuinepromotion.com')) {
+    console.log('🚀 FORCE DASHBOARD ACTIVÉ');
+    
+    const dashboard = document.createElement('div');
+    dashboard.id = 'force-dashboard';
+    dashboard.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;height:100vh;
+      background:linear-gradient(135deg,#f8f9ff 0%,#e8f0ff 100%);
+      z-index:99999;padding:40px;display:flex;flex-direction:column;
+      font-family:-apple-system,sans-serif;justify-content:center;align-items:center;
+      text-align:center;color:#1a1a1a;
+    `;
+    dashboard.innerHTML = `
+      <div style="font-size:48px;font-weight:800;background:linear-gradient(135deg,#0066ff,#00a8e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;">Genuine Promotion</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:40px 0;">
+        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
+          <div style="font-size:60px;margin-bottom:20px;">📦</div>
+          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">500K+</div>
+          <div style="color:#666;font-weight:500;">Total Orders</div>
+        </div>
+        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
+          <div style="font-size:60px;margin-bottom:20px;">👥</div>
+          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">2,500+</div>
+          <div style="color:#666;font-weight:500;">Active Users</div>
+        </div>
+        <div style="background:white;padding:40px;border-radius:24px;box-shadow:0 20px 40px rgba(0,102,255,0.15);">
+          <div style="font-size:60px;margin-bottom:20px;">⚡</div>
+          <div style="font-size:44px;font-weight:800;color:#0066ff;margin-bottom:8px;">99.8%</div>
+          <div style="color:#666;font-weight:500;">Uptime</div>
+        </div>
+      </div>
+      <div style="font-size:36px;font-weight:800;color:#1a1a1a;margin-bottom:40px;">🚀 Quick Actions</div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;">
+        <button onclick="scrollToOrder()" style="
+          padding:24px 48px;background:linear-gradient(135deg,#0066ff,#0047ab);
+          color:white;border:none;border-radius:20px;font-size:20px;font-weight:700;
+          cursor:pointer;box-shadow:0 12px 32px rgba(0,102,255,0.4);
+          transition:all 0.3s;
+        ">New Order →</button>
+        <a href="/addfunds" style="
+          padding:24px 48px;background:white;color:#0066ff;
+          text-decoration:none;border-radius:20px;font-size:20px;font-weight:700;
+          box-shadow:0 8px 24px rgba(0,0,0,0.15);transition:all 0.3s;
+        ">Add Funds</a>
+      </div>
+      <div style="
+        margin-top:60px;padding:24px;background:rgba(255,255,255,0.8);
+        border-radius:20px;border:2px dashed #0066ff;color:#666;font-size:18px;
+      ">👇 Click "New Order" or scroll to continue</div>
+    `;
+    
+    document.body.appendChild(dashboard);
+    
+    window.scrollToOrder = () => {
+      console.log('🎯 Scroll to order form');
+      const inputs = document.querySelectorAll('input, select');
+      if (inputs.length > 0) {
+        inputs[0].scrollIntoView({behavior:'smooth', block:'center'});
+        setTimeout(() => {
+          dashboard.style.opacity = '0';
+          dashboard.style.transform = 'scale(0.95)';
+          setTimeout(() => dashboard.remove(), 500);
+        }, 800);
+      } else {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      }
+    };
+    
+    console.log('✅ DASHBOARD INJECTÉ');
+  }
+}, 3000);
+
+console.log('🔍 GENUINE DEBUG END');
+</script>
