@@ -1,11 +1,18 @@
 // =============================================================================
-// NEW ORDER PREMIUM - INDÉPENDANT (1er - TOUJOURS ACTIF)
+// NEW ORDER PREMIUM - WRAPPER + ICON FIX
 // =============================================================================
 (function() {
   setTimeout(() => {
     const searchInput = document.querySelector('input[placeholder*="Search"]');
-    if (searchInput) {
+    if (searchInput && !searchInput.dataset.genuineStyled) {
+      searchInput.dataset.genuineStyled = 'true';
       console.log('🚀 [GENUINE] NEW ORDER FORM DÉTECTÉ');
+      
+      // WRAPPER pour icône
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'position:relative;display:inline-block;width:100%;';
+      searchInput.parentNode.insertBefore(wrapper, searchInput);
+      wrapper.appendChild(searchInput);
       
       // GLASS INPUT
       searchInput.style.cssText = `
@@ -16,11 +23,22 @@
         padding: 24px 32px 24px 72px !important;
         font-size: 16px !important;
         box-shadow: 0 8px 32px rgba(0,102,255,0.08) !important;
-        position: relative !important;
+        width: 100% !important;
       `;
       
-      // 🔍 ICON
-      searchInput.insertAdjacentHTML('beforeend', '<span style="position:absolute;left:32px;top:50%;transform:translateY(-50%);font-size:20px;color:#0066FF;z-index:10;pointer-events:none">🔍</span>');
+      // 🔍 ICON (extérieur à l'input)
+      const icon = document.createElement('span');
+      icon.textContent = '🔍';
+      icon.style.cssText = `
+        position: absolute;
+        left: 32px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 20px;
+        pointer-events: none;
+        z-index: 10;
+      `;
+      wrapper.appendChild(icon);
       
       // GRADIENT BUTTON
       const submitBtn = document.querySelector('button[type="submit"]');
@@ -32,14 +50,14 @@
           font-weight: 700 !important;
           box-shadow: 0 8px 24px rgba(0,102,255,0.3) !important;
           color: white !important;
+          border: none !important;
         `;
       }
       
       console.log('✅ [GENUINE] GLASS + 🔍 + BUTTON OK');
     }
-  }, 1000); // 1s après chargement
+  }, 1500); // 1.5s pour être sûr que le DOM est chargé
 })();
-
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
