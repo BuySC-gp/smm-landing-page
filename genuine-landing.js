@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - VERSION NETTOYÉE (BASÉE SUR ANCIEN CODE FONCTIONNEL)
+// NEW ORDER PAGE - LAYOUT OPTIMISÉ + DESCRIPTION DYNAMIQUE
 // =============================================================================
 (function() {
   setTimeout(() => {
@@ -17,40 +17,7 @@
         nativeDescription.style.display = 'none';
       }
       
-      // === 2. FIX SEARCH BAR - ICÔNE BIEN POSITIONNÉE ===
-      if (searchInput) {
-        searchInput.style.cssText = `
-          width: 100% !important;
-          padding: 12px 14px 12px 42px !important;
-          border: 1.5px solid #e5e5e5 !important;
-          border-radius: 8px !important;
-          font-size: 14px !important;
-          background: white !important;
-          transition: all 0.3s !important;
-        `;
-        
-        const searchContainer = searchInput.closest('.form-group') || searchInput.parentElement;
-        if (searchContainer && !searchContainer.querySelector('.search-icon-wrapper')) {
-          searchContainer.style.position = 'relative';
-          
-          const iconWrapper = document.createElement('span');
-          iconWrapper.className = 'search-icon-wrapper';
-          iconWrapper.innerHTML = '🔍';
-          iconWrapper.style.cssText = `
-            position: absolute !important;
-            left: 14px !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            font-size: 16px !important;
-            pointer-events: none !important;
-            z-index: 10 !important;
-          `;
-          
-          searchContainer.insertBefore(iconWrapper, searchInput);
-        }
-      }
-      
-      // === 3. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
+      // === 2. CONTAINER PRINCIPAL (FLEX HORIZONTAL) ===
       const container = form.parentElement;
       container.style.cssText = `
         display: flex !important;
@@ -59,11 +26,9 @@
         max-width: 1800px !important;
         margin: 0 auto !important;
         align-items: flex-start !important;
-        min-height: 100vh !important;
-        height: auto !important;
       `;
       
-      // === 4. FORMULAIRE GAUCHE (COMPACT ~32%) ===
+      // === 3. FORMULAIRE GAUCHE (COMPACT ~32%) ===
       form.style.cssText = `
         flex: 0 0 380px !important;
         background: white !important;
@@ -78,7 +43,7 @@
         overflow-y: auto !important;
       `;
       
-      // === 5. PANEL DROIT (NETTOYÉ - 2 TABS SEULEMENT) ===
+      // === 4. PANEL DROIT (INFO + TABS) ===
       const rightPanel = document.createElement('div');
       rightPanel.id = 'order-info-panel';
       rightPanel.style.cssText = `
@@ -90,11 +55,28 @@
         border: 1px solid #e5e5e5 !important;
         overflow: hidden !important;
         min-height: 600px !important;
-        height: auto !important;
       `;
       
       rightPanel.innerHTML = `
-        <!-- Tabs Navigation (2 TABS SEULEMENT) -->
+        <!-- Badge MTP Service Color -->
+        <div style="background: linear-gradient(135deg, rgba(0,166,126,0.06), rgba(0,102,255,0.06)); padding: 20px 28px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
+            <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #0066FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <span style="font-size: 22px;">🌟</span>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">MTP Service Color Categorization System</div>
+              <div style="display: flex; gap: 10px; font-size: 12px; flex-wrap: wrap;">
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #FFC107; border-radius: 50%;"></span> Basic</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #00A67E; border-radius: 50%;"></span> Medium</span>
+                <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 7px; height: 7px; background: #0066FF; border-radius: 50%;"></span> Elite</span>
+              </div>
+            </div>
+          </div>
+          <button style="padding: 8px 18px; background: #00A67E; color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.3s; flex-shrink: 0; white-space: nowrap;">See details</button>
+        </div>
+        
+        <!-- Tabs Navigation -->
         <div style="display: flex; border-bottom: 1px solid #e5e5e5; background: #FAFBFC;">
           <button class="info-tab active" data-tab="service-info" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
             <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
@@ -108,34 +90,42 @@
               Read Before Order
             </span>
           </button>
+          <button class="info-tab" data-tab="service-updates" style="flex: 1; padding: 14px 20px; background: none; border: none; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; position: relative; transition: all 0.3s;">
+            <span style="display: flex; align-items: center; justify-content: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Service Updates
+            </span>
+          </button>
         </div>
         
         <!-- Tab Content -->
-        <div id="tab-content" style="padding: 28px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 200px); height: auto;">
+        <div id="tab-content" style="padding: 28px; min-height: 450px; overflow-y: auto; max-height: calc(100vh - 280px);">
           
-          <!-- SERVICE INFO TAB (SANS GUARANTEE/SPEED CARDS) -->
+          <!-- SERVICE INFO TAB -->
           <div class="tab-panel active" data-panel="service-info">
-            
-            <!-- Description Card -->
-            <div id="dynamic-description" style="background: #F8F9FF; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 20px;">
-              <h4 style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 9px;">
-                <span style="font-size: 19px;">📄</span> Service Description
-              </h4>
-              <div id="description-content" style="font-size: 13px; color: #666; line-height: 1.8;">
-                <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;">
+              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,166,126,0.04), rgba(0,166,126,0.08)); border-radius: 12px; border: 1px solid rgba(0,166,126,0.15);">
+                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00A67E, #00D97E); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <div style="font-size: 12px; color: #00A67E; font-weight: 600; margin-bottom: 4px;">Guarantee</div>
+                <div id="guarantee-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">-</div>
+              </div>
+              <div style="text-align: center; padding: 18px; background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,102,255,0.08)); border-radius: 12px; border: 1px solid rgba(0,102,255,0.15);">
+                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #0066FF, #0052CC); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div style="font-size: 12px; color: #0066FF; font-weight: 600; margin-bottom: 4px;">Speed</div>
+                <div id="speed-value" style="font-size: 17px; font-weight: 700; color: #1a1a1a;">Loading...</div>
               </div>
             </div>
             
-            <!-- Pro Tip Card -->
-            <div style="background: linear-gradient(135deg, rgba(0,102,255,0.04), rgba(0,166,126,0.04)); padding: 20px; border-radius: 12px; border: 1px solid rgba(0,102,255,0.1);">
-              <div style="display: flex; align-items: flex-start; gap: 12px;">
-                <div style="width: 38px; height: 38px; background: linear-gradient(135deg, #0066FF, #00A67E); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <span style="font-size: 18px;">💡</span>
-                </div>
-                <div>
-                  <div style="font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">Pro Tip</div>
-                  <div style="font-size: 13px; color: #666; line-height: 1.6;">Always check the service description for specific requirements and delivery time before placing your order.</div>
-                </div>
+            <div id="dynamic-description" style="background: #F8F9FF; padding: 20px; border-radius: 12px; border: 1px solid #e5e5e5; margin-bottom: 20px;">
+              <h4 style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 14px; display: flex; align-items: center; gap: 9px;">
+                <span style="font-size: 19px;">📄</span> Description
+              </h4>
+              <div id="description-content" style="font-size: 13px; color: #666; line-height: 1.8;">
+                <p style="color: #999; font-style: italic;">Select a service to view its description...</p>
               </div>
             </div>
           </div>
@@ -146,69 +136,73 @@
               <span style="font-size: 28px;">📚</span> How Things Work Here
             </h3>
             
-            <!-- Order Status Section -->
             <div style="background: #F8F9FF; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
-              <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
-                <span style="font-size: 20px;">📊</span> Order Status Guide
-              </h4>
-              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 16px;">When you place an order, you'll see one of these statuses:</p>
+              <p style="font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 16px;">When you place an order, the first thing you'll see is the <strong>status</strong>:</p>
               <ul style="list-style: none; padding: 0; margin: 0;">
                 <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
                   <span style="width: 6px; height: 6px; background: #FFC107; border-radius: 50%;"></span>
-                  <div><strong>Pending / Processing:</strong> Your order is received and will start within the promised start time.</div>
+                  <strong>Pending / Processing:</strong> Your order is received and will start within the promised start time (written on the service description).
                 </li>
                 <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
                   <span style="width: 6px; height: 6px; background: #0066FF; border-radius: 50%;"></span>
-                  <div><strong>In Progress:</strong> Delivery has started and engagement is being sent to your account.</div>
+                  <strong>In Progress:</strong> Delivery has started and followers, likes, views, or plays are being sent.
                 </li>
                 <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
                   <span style="width: 6px; height: 6px; background: #00A67E; border-radius: 50%;"></span>
-                  <div><strong>Completed:</strong> Your order is fully delivered successfully.</div>
+                  <strong>Completed:</strong> Your order is fully delivered.
                 </li>
                 <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
                   <span style="width: 6px; height: 6px; background: #FF6B6B; border-radius: 50%;"></span>
-                  <div><strong>Partial:</strong> Only part delivered. Missing part is automatically refunded to your balance.</div>
+                  <strong>Partial:</strong> Only part of your order was delivered. The missing part is automatically refunded to your balance.
                 </li>
                 <li style="padding: 8px 0; font-size: 14px; color: #666; display: flex; align-items: center; gap: 10px;">
                   <span style="width: 6px; height: 6px; background: #999; border-radius: 50%;"></span>
-                  <div><strong>Canceled:</strong> Order could not run and was fully refunded to your balance.</div>
+                  <strong>Canceled:</strong> The order could not run and was fully refunded to your balance.
                 </li>
               </ul>
             </div>
             
-            <!-- Service Colors -->
-            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
-              <span style="font-size: 20px;">🎨</span> Service Colors
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">🎨</span> Service Colors
             </h4>
-            <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
-              <div style="margin-bottom: 14px; padding: 14px; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05)); border-left: 4px solid #FFC107; border-radius: 8px;">
-                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🟡 Basic</div>
+            <div style="background: white; padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(255,193,7,0.1), rgba(255,193,7,0.05)); border-left: 4px solid #FFC107; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟡 Basic</div>
                 <div style="font-size: 13px; color: #666;">Cheapest, but drops are more likely.</div>
               </div>
-              <div style="margin-bottom: 14px; padding: 14px; background: linear-gradient(135deg, rgba(0,166,126,0.1), rgba(0,166,126,0.05)); border-left: 4px solid #00A67E; border-radius: 8px;">
-                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🟢 Medium</div>
+              <div style="margin-bottom: 16px; padding: 16px; background: linear-gradient(135deg, rgba(0,166,126,0.1), rgba(0,166,126,0.05)); border-left: 4px solid #00A67E; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🟢 Medium</div>
                 <div style="font-size: 13px; color: #666;">Balanced option with better stability.</div>
               </div>
-              <div style="padding: 14px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,102,255,0.05)); border-left: 4px solid #0066FF; border-radius: 8px;">
-                <div style="font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">🔵 Elite</div>
+              <div style="padding: 16px; background: linear-gradient(135deg, rgba(0,102,255,0.1), rgba(0,102,255,0.05)); border-left: 4px solid #0066FF; border-radius: 8px;">
+                <div style="font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px;">🔵 Elite</div>
                 <div style="font-size: 13px; color: #666;">Highest quality, best for long-term results.</div>
               </div>
             </div>
             
-            <!-- Refund Policy -->
-            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
-              <span style="font-size: 20px;">💰</span> Refund Policy
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">💰</span> Refund Policy
             </h4>
-            <div style="background: #F8F9FF; padding: 18px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
+            <div style="background: #F8F9FF; padding: 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #e5e5e5;">
               <p style="font-size: 14px; color: #666; line-height: 1.8;">If you request a refill or speed-up two times and the order still doesn't move, we will stop it and refund the missing part directly to your <strong>panel balance</strong>.</p>
             </div>
             
-            <!-- Best Practices -->
-            <h4 style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 9px;">
-              <span style="font-size: 20px;">✅</span> How to Order Correctly
+            <h4 style="font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 22px;">✅</span> How to Order Correctly
             </h4>
-            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 18px; border-radius: 12px; border: 1px solid #0066FF;">
-              <p style="font-size: 14px; color: #0047AB; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. <strong>Start small → Scale gradually.</strong></p>
+            <div style="background: linear-gradient(135deg, #E8F0FF, #F8F9FF); padding: 20px; border-radius: 12px; border: 1px solid #0066FF;">
+              <p style="font-size: 14px; color: #0047AB; line-height: 1.8;">👉 Try to match your orders with your account's real activity. If your account has 100 followers, don't suddenly buy 10,000. Small → Scale.</p>
+            </div>
+          </div>
+          
+          <!-- SERVICE UPDATES TAB -->
+          <div class="tab-panel" data-panel="service-updates" style="display: none;">
+            <div style="text-align: center; padding: 60px 20px;">
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#e5e5e5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px;">No Updates Yet</h3>
+              <p style="font-size: 14px; color: #666;">Service updates will appear here when available.</p>
             </div>
           </div>
         </div>
@@ -216,10 +210,12 @@
       
       container.appendChild(rightPanel);
       
-      // === 6. MISE À JOUR DYNAMIQUE DE LA DESCRIPTION ===
+      // === 5. OBSERVER POUR CAPTURER LA DESCRIPTION NATIVE ===
       function updateServiceDescription() {
         const descriptionField = document.querySelector('#service_description, [name*="description"]');
         const descriptionContent = document.getElementById('description-content');
+        const speedValue = document.getElementById('speed-value');
+        const guaranteeValue = document.getElementById('guarantee-value');
         
         if (descriptionField && descriptionContent) {
           const descText = descriptionField.value || descriptionField.textContent;
@@ -245,8 +241,23 @@
               .join('');
             
             descriptionContent.innerHTML = formattedDesc || descText;
+            
+            // Extraire Speed si présent
+            const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
+            if (speedMatch && speedValue) {
+              speedValue.textContent = speedMatch[1].trim();
+            }
+            
+            // Extraire Guarantee/Refill si présent
+            const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
+            if (refillMatch && guaranteeValue) {
+              guaranteeValue.textContent = refillMatch[1].trim();
+            }
+            
           } else {
             descriptionContent.innerHTML = '<p style="color: #999; font-style: italic;">Select a service to view its description...</p>';
+            if (speedValue) speedValue.textContent = 'N/A';
+            if (guaranteeValue) guaranteeValue.textContent = '-';
           }
         }
       }
@@ -279,7 +290,7 @@
       // Update initial
       setTimeout(updateServiceDescription, 500);
       
-      // === 7. OPTIMISATION INPUTS FORMULAIRE ===
+      // === 6. OPTIMISATION INPUTS FORMULAIRE ===
       const inputs = form.querySelectorAll('input, select, textarea');
       inputs.forEach(input => {
         input.style.cssText = `
@@ -304,7 +315,7 @@
         });
       });
       
-      // === 8. LABELS FORMULAIRE ===
+      // === 7. LABELS FORMULAIRE ===
       const labels = form.querySelectorAll('label');
       labels.forEach(label => {
         label.style.cssText = `
@@ -316,7 +327,7 @@
         `;
       });
       
-      // === 9. BOUTON SUBMIT ===
+      // === 8. BOUTON SUBMIT ===
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.style.cssText = `
@@ -347,7 +358,7 @@
         });
       }
       
-      // === 10. SYSTÈME D'ONGLETS ===
+      // === 9. SYSTÈME D'ONGLETS ===
       setTimeout(() => {
         const tabs = document.querySelectorAll('.info-tab');
         const panels = document.querySelectorAll('.tab-panel');
@@ -383,7 +394,7 @@
         }
       }, 100);
       
-      // === 11. RESPONSIVE ===
+      // === 10. RESPONSIVE ===
       const mediaQuery = window.matchMedia('(max-width: 1100px)');
       
       function handleResponsive(e) {
@@ -405,11 +416,10 @@
       handleResponsive(mediaQuery);
       mediaQuery.addEventListener('change', handleResponsive);
       
-      console.log('✅ [NEW ORDER] Layout nettoyé appliqué avec succès');
+      console.log('✅ [NEW ORDER] Layout optimisé + Description dynamique activés');
     }
   }, 300);
 })();
-
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
