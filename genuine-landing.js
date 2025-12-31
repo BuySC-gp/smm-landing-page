@@ -560,9 +560,21 @@ console.log('✅ [NEW ORDER] Setup complete');
   
   console.log('[GP] 🎯 Injection footer global...');
   
+  // Détecter si on est sur une page avec sidebar
+  const hasSidebar = document.querySelector('.sidebar, .component_private_sidebar, .component-sidebar-wrapper');
+  const hasSignup = document.querySelector('.block-signin-text .component_card');
+  
+  // Ajouter une classe sur le body pour identifier le contexte
+  if (hasSidebar) {
+    document.body.classList.add('gp-has-sidebar');
+  }
+  if (hasSignup && !hasSidebar) {
+    document.body.classList.add('gp-is-landing');
+  }
+  
   const footerHTML = `
-        <!-- FOOTER MEGA -->
-<div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
+    <!-- FOOTER MEGA -->
+<div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5; margin-top: 80px; clear: both;">
   <div style="max-width: 1400px; margin: 0 auto;">
     <!-- Top Section: Logo + Colonnes de liens -->
     <div style="display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 60px; margin-bottom: 60px;">
@@ -680,74 +692,64 @@ console.log('✅ [NEW ORDER] Setup complete');
   
   <style>
     /* Footer hover effects */
-    div[style*="background: #F8F9FF"] a:hover { color: #0066FF !important; transform: translateX(4px); }
-    div[style*="background: #F8F9FF"] a[style*="width: 40px"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,102,255,0.2); border-color: #0066FF; }
+    #gp-footer-global a:hover { 
+      color: #0066FF !important; 
+      transform: translateX(4px); 
+    }
+    #gp-footer-global a[style*="width: 40px"]:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 4px 12px rgba(0,102,255,0.2); 
+      border-color: #0066FF; 
+    }
+    
+    /* ADAPTATION SIDEBAR — CSS UNIQUEMENT */
+    body.gp-has-sidebar #gp-footer-global {
+      margin-left: 260px !important;
+      width: calc(100% - 260px) !important;
+      box-sizing: border-box !important;
+    }
+    
+    /* Landing page : pleine largeur */
+    body.gp-is-landing #gp-footer-global {
+      margin-left: 0 !important;
+      width: 100% !important;
+    }
     
     /* Responsive Footer */
     @media (max-width: 1200px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(3, 1fr) !important; }
+      #gp-footer-global > div > div:first-of-type { 
+        grid-template-columns: repeat(3, 1fr) !important; 
+      }
     }
+    
     @media (max-width: 768px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(2, 1fr) !important; gap: 40px !important; }
-      div[style*="padding: 80px 20px 40px"] { padding: 60px 20px 30px !important; }
+      /* Sur mobile, footer pleine largeur même avec sidebar */
+      body.gp-has-sidebar #gp-footer-global {
+        margin-left: 0 !important;
+        width: 100% !important;
+      }
+      
+      #gp-footer-global > div > div:first-of-type { 
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 40px !important; 
+      }
+      #gp-footer-global { 
+        padding: 60px 20px 30px !important; 
+      }
     }
+    
     @media (max-width: 480px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: 1fr !important; }
+      #gp-footer-global > div > div:first-of-type { 
+        grid-template-columns: 1fr !important; 
+      }
     }
   </style>
 </div>
 `;
   
-  // DÉTECTION INTELLIGENTE : Landing vs Panel
-  const hasSignup = document.querySelector('.block-signin-text .component_card');
-  const hasSidebar = document.querySelector('.sidebar, .component_private_sidebar');
-  
-  if (hasSignup && !hasSidebar) {
-    // === LANDING PAGE ===
-    // Injecter APRÈS tout le contenu landing (avec délai)
-    setTimeout(() => {
-      const landingContainer = document.querySelector('.block-signin-text') || document.body;
-      landingContainer.insertAdjacentHTML('afterend', footerHTML);
-      console.log('✅ [GP] Footer injecté en fin de landing');
-    }, 1000); // Délai pour laisser le contenu landing se charger
-    
-  } else if (hasSidebar) {
-    // === PANEL PAGES (avec sidebar) ===
-    // Injecter dans le wrapper principal du panel
-    const mainWrapper = document.querySelector('.wrapper_content, .main-content, [class*="wrapper"]') || document.body;
-    mainWrapper.insertAdjacentHTML('beforeend', footerHTML);
-    
-    // Ajuster le style pour respecter la sidebar
-    setTimeout(() => {
-      const footer = document.getElementById('gp-footer-global');
-      if (footer && hasSidebar) {
-        footer.style.marginLeft = '260px'; // Largeur de la sidebar
-        footer.style.width = 'calc(100% - 260px)';
-        footer.style.boxSizing = 'border-box';
-        
-        // Responsive : retirer le margin sur mobile
-        const mediaQuery = window.matchMedia('(max-width: 768px)');
-        function handleFooterResponsive(e) {
-          if (e.matches) {
-            footer.style.marginLeft = '0';
-            footer.style.width = '100%';
-          } else {
-            footer.style.marginLeft = '260px';
-            footer.style.width = 'calc(100% - 260px)';
-          }
-        }
-        handleFooterResponsive(mediaQuery);
-        mediaQuery.addEventListener('change', handleFooterResponsive);
-      }
-    }, 100);
-    
-    console.log('✅ [GP] Footer injecté dans le panel (avec adaptation sidebar)');
-    
-  } else {
-    // === FALLBACK (autres pages) ===
-    document.body.insertAdjacentHTML('beforeend', footerHTML);
-    console.log('✅ [GP] Footer injecté (fallback)');
-  }
+  // INJECTION UNIQUE : toujours en fin de body
+  document.body.insertAdjacentHTML('beforeend', footerHTML);
+  console.log('✅ [GP] Footer global injecté (contexte: ' + (hasSidebar ? 'PANEL avec sidebar' : 'LANDING') + ')');
   
 })();
 
