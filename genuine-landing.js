@@ -226,75 +226,120 @@ container.appendChild(rightPanel);
 
 // === 5. OBSERVER POUR CAPTURER LA DESCRIPTION NATIVE ===
 function updateServiceDescription() {
-const descriptionField = document.querySelector('#service_description, [name*="description"]');
-const descriptionContent = document.getElementById('description-content');
-const speedValue = document.getElementById('speed-value');
-const guaranteeValue = document.getElementById('guarantee-value');
+    console.log('🔍 [DEBUG] updateServiceDescription triggered');
+    
+    // ÉTAPE 1 : TROUVER LE VRAI CONTENU (dans le div caché .panel-description)
+    const descriptionPanel = 
+        document.querySelector('#service_description .panel-description') ||
+        document.querySelector('.panel-description') ||
+        document.querySelector('#service_description div[class*="description"]');
+    
+    const descriptionContent = document.getElementById('description-content');
+    const speedValue = document.getElementById('speed-value');
+    const guaranteeValue = document.getElementById('guarantee-value');
 
-if (descriptionField && descriptionContent) {
-const descText = descriptionField.value || descriptionField.textContent;
+    console.log('📋 Panel found:', descriptionPanel);
+    console.log('🎯 Target container:', descriptionContent);
 
-if (descText && descText.trim() && descText.trim() !== '') {
-const formattedDesc = descText
-.split('\n')
-.map(line => {
-line = line.trim();
-if (!line) return '';
+    if (!descriptionContent) {
+        console.error('❌ Target container #description-content NOT FOUND');
+        return;
+    }
 
-if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️)/)) {
-return `<p style="margin-bottom: 8px;">${line}</p>`;
-} else if (line.match(/^(MEDIUM|BASIC|ELITE|Speed|Refill)/i)) {
-return `<p style="margin-bottom: 12px;"><strong>${line}</strong></p>`;
-} else {
-return `<p style="margin-bottom: 10px;">${line}</p>`;
+    if (descriptionPanel) {
+        // ÉTAPE 2 : EXTRAIRE LE TEXTE du div (pas .value mais .textContent)
+        let descText = descriptionPanel.textContent || descriptionPanel.innerText || '';
+        descText = descText.trim();
+
+        console.log('📝 Description text:', descText.substring(0, 150));
+
+        if (descText && descText.length > 0) {
+            // ÉTAPE 3 : FORMATAGE
+            const formattedDesc = descText
+                .split('\n')
+                .map(line => {
+                    line = line.trim();
+                    if (!line) return '';
+
+                    if (line.match(/^(🌍|⏱️|📊|🔹|•|👉|⚠️|Speed|Refill|Guarantee)/i)) {
+                        return `<p style="margin-bottom: 10px; line-height: 1.6;"><strong>${line}</strong></p>`;
+                    } else {
+                        return `<p style="margin-bottom: 8px; line-height: 1.6;">${line}</p>`;
+                    }
+                })
+                .filter(Boolean)
+                .join('');
+
+            descriptionContent.innerHTML = formattedDesc || `<p style="margin-bottom: 10px; line-height: 1.6;">${descText.replace(/\n/g, '<br>')}</p>`;
+            console.log('✅ Description updated successfully');
+
+            // ÉTAPE 4 : EXTRAIRE SPEED
+            const speedMatch = descText.match(/Speed[:\s\-]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day|day)?)/i);
+            if (speedMatch && speedValue) {
+                speedValue.textContent = speedMatch[1].trim();
+                console.log('⚡ Speed detected:', speedMatch[1].trim());
+            } else if (speedValue) {
+                speedValue.textContent = 'N/A';
+            }
+
+            // ÉTAPE 5 : EXTRAIRE GUARANTEE (Refill)
+            const refillMatch = descText.match(/(?:Refill|Guarantee)[:\s\-]+([0-9]+\s*(?:Days?|day)?)/i);
+            if (refillMatch && guaranteeValue) {
+                guaranteeValue.textContent = refillMatch[1].trim();
+                console.log('🛡️ Guarantee detected:', refillMatch[1].trim());
+            } else if (guaranteeValue) {
+                const noRefillMatch = descText.match(/(?:Refill|Guarantee)[:\s\-]+(No|None|N\/A)/i);
+                guaranteeValue.textContent = noRefillMatch ? 'No guarantee' : '-';
+            }
+
+        } else {
+            console.warn('⚠️ Description panel is empty');
+            descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>';
+            if (speedValue) speedValue.textContent = 'Loading...';
+            if (guaranteeValue) guaranteeValue.textContent = '-';
+        }
+    } else {
+        console.error('❌ Description panel NOT FOUND in DOM');
+        descriptionContent.innerHTML = '<p style="color: #ff6b6b; font-style: italic;">⚠️ Description not available. Try selecting another service.</p>';
+    }
 }
-})
-.filter(Boolean)
-.join('');
 
-descriptionContent.innerHTML = formattedDesc || descText;
+// === DÉCLENCHEMENT AUTO DE LA DESCRIPTION ===
 
-const speedMatch = descText.match(/Speed[:\s]+([0-9KkMm\-\s\/]+(?:Daily|Per Day|\/day)?)/i);
-if (speedMatch && speedValue) {
-speedValue.textContent = speedMatch[1].trim();
-}
-
-const refillMatch = descText.match(/Refill[:\s]+([0-9]+\s*(?:Days?|day))/i);
-if (refillMatch && guaranteeValue) {
-guaranteeValue.textContent = refillMatch[1].trim();
-}
-
-} else {
-descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service to view its description...</p>';
-if (speedValue) speedValue.textContent = 'N/A';
-if (guaranteeValue) guaranteeValue.textContent = '-';
-}
-}
-}
-
-const serviceSelect = form.querySelector('select[name*="service"], #service');
+// 1. Sur changement de service
+const serviceSelect = form.querySelector('select[name*="service"], #service, select');
 if (serviceSelect) {
-serviceSelect.addEventListener('change', () => {
-setTimeout(updateServiceDescription, 300);
-});
+    console.log('✅ Service select found');
+    serviceSelect.addEventListener('change', () => {
+        console.log('🔄 Service changed, waiting 500ms...');
+        setTimeout(updateServiceDescription, 500);
+        setTimeout(updateServiceDescription, 1200); // Backup si MTP est lent
+    });
 }
 
-const descField = document.querySelector('#service_description, [name*="description"]');
-if (descField) {
-const observer = new MutationObserver(updateServiceDescription);
-observer.observe(descField, {
-childList: true,
-characterData: true,
-subtree: true,
-attributes: true,
-attributeFilter: ['value']
-});
-
-descField.addEventListener('input', updateServiceDescription);
-descField.addEventListener('change', updateServiceDescription);
+// 2. MutationObserver sur le div #service_description (MTP le modifie dynamiquement)
+const serviceDescDiv = document.getElementById('service_description');
+if (serviceDescDiv) {
+    const descObserver = new MutationObserver(() => {
+        const panel = serviceDescDiv.querySelector('.panel-description');
+        if (panel && panel.textContent.trim()) {
+            console.log('🔍 Description detected via MutationObserver');
+            updateServiceDescription();
+        }
+    });
+    
+    descObserver.observe(serviceDescDiv, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+    console.log('✅ MutationObserver installed on #service_description');
 }
 
-setTimeout(updateServiceDescription, 500);
+// 3. Tentatives initiales
+setTimeout(updateServiceDescription, 1000);
+setTimeout(updateServiceDescription, 2500);
+
 
 // === 6. OPTIMISATION INPUTS FORMULAIRE ===
 const inputs = form.querySelectorAll('input, select, textarea');
