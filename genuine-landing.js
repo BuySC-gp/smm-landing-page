@@ -352,17 +352,22 @@ tabs[0].style.borderBottom = '2px solid #00A67E';
 }
 }, 200);
 
-// === 10. FORM STYLING ===
+// === 10. FORM STYLING CORRIGÉ (FIX SEARCH PADDING) ===
 const inputs = form.querySelectorAll('input, select, textarea');
 inputs.forEach(input => {
-input.style.cssText = `
-width: 100% !important;
-padding: 10px 12px !important;
-border: 1px solid #e5e7eb !important;
-border-radius: 6px !important;
-font-size: 13px !important;
-transition: all 0.2s !important;
-`;
+    // On vérifie si c'est le champ recherche
+    const isSearch = input.getAttribute('placeholder')?.toLowerCase().includes('search') || 
+                     input.id?.includes('search') ||
+                     input.name?.includes('search');
+    input.style.cssText = `
+        width: 100% !important;
+        padding: 10px 12px !important;
+        ${isSearch ? 'padding-left: 40px !important;' : ''} /* <--- LE FIX EST ICI */
+        border: 1px solid #e5e7eb !important;
+        border-radius: 6px !important;
+        font-size: 13px !important;
+        transition: all 0.2s !important;
+    `;
 });
 
 const submitBtn = form.querySelector('button[type="submit"]');
