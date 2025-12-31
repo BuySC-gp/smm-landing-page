@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT 50/50 (CORRIGÉ POUR SIDEBAR)
+// NEW ORDER PAGE - LAYOUT 50/50 (FIX FULL WIDTH)
 // =============================================================================
 (function() {
 setTimeout(() => {
@@ -7,14 +7,28 @@ const searchInput = document.querySelector('input[placeholder*="Search"]');
 const form = searchInput?.closest('form');
 if (form && !form.dataset.fixed) {
 form.dataset.fixed = 'true';
-console.log('🎯 [NEW ORDER] Layout 50/50 activé');
+console.log('🎯 [NEW ORDER] Layout 50/50 FULL WIDTH activé');
 // === 1. CACHER LA DESCRIPTION NATIVE ===
 const nativeDescription = form.querySelector('.form-group:has(#service_description)') ||
 form.querySelector('[id*="description"]')?.closest('.form-group');
 if (nativeDescription) {
 nativeDescription.style.display = 'none';
 }
-// === 2. CONTAINER PRINCIPAL (sans forcer 100vw) ===
+// === 2. FORCER TOUS LES PARENTS À 100% WIDTH ===
+let parent = form.parentElement;
+while (parent && parent !== document.body) {
+// Ne pas toucher à la sidebar
+if (!parent.matches('aside, nav, [class*="sidebar"], [class*="side-bar"]')) {
+parent.style.maxWidth = '100%';
+parent.style.width = '100%';
+parent.style.paddingLeft = '0';
+parent.style.paddingRight = '0';
+parent.style.marginLeft = '0';
+parent.style.marginRight = '0';
+}
+parent = parent.parentElement;
+}
+// === 3. CONTAINER PRINCIPAL FLEX ===
 const container = form.parentElement;
 container.style.cssText = `
 display: flex !important;
@@ -25,10 +39,9 @@ padding: 24px !important;
 align-items: flex-start !important;
 box-sizing: border-box !important;
 `;
-// === 3. FORMULAIRE GAUCHE 50% ===
+// === 4. FORMULAIRE GAUCHE - FLEX GROW ===
 form.style.cssText = `
-flex: 1 1 50% !important;
-max-width: calc(50% - 12px) !important;
+flex: 1 1 0 !important;
 min-width: 0 !important;
 background: white !important;
 border-radius: 12px !important;
@@ -39,7 +52,7 @@ box-sizing: border-box !important;
 height: fit-content !important;
 overflow-y: auto !important;
 `;
-// === 4. PANEL DROIT 50% ===
+// === 5. PANEL DROIT - FLEX GROW ===
 let rightPanel = document.getElementById('order-info-panel');
 if (!rightPanel) {
 rightPanel = document.createElement('div');
@@ -47,8 +60,7 @@ rightPanel.id = 'order-info-panel';
 container.appendChild(rightPanel);
 }
 rightPanel.style.cssText = `
-flex: 1 1 50% !important;
-max-width: calc(50% - 12px) !important;
+flex: 1 1 0 !important;
 min-width: 0 !important;
 background: white !important;
 border-radius: 12px !important;
