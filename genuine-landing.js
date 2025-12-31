@@ -546,6 +546,164 @@ console.log('✅ [NEW ORDER] Setup complete');
 })();
 })();
 
+// ============================================================================
+// FOOTER GLOBAL — TOUTES LES PAGES (PANEL + LANDING)
+// ============================================================================
+(function() {
+    'use strict';
+    
+    // Éviter double injection
+    if (document.getElementById('gp-footer-global')) {
+        console.log('[GP] Footer déjà présent');
+        return;
+    }
+    
+    console.log('[GP] 🎯 Injection footer global...');
+    
+    const footerHTML = `
+    <!-- FOOTER MEGA -->
+<div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
+  <div style="max-width: 1400px; margin: 0 auto;">
+    <!-- Top Section: Logo + Colonnes de liens -->
+    <div style="display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 60px; margin-bottom: 60px;">
+      
+      <!-- Colonne 1: Branding -->
+      <div>
+        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #0047AB, #0066FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">GENUINE PROMOTION</div>
+        <p style="font-size: 14px; line-height: 1.7; color: #666; max-width: 320px; margin-bottom: 24px;">Your trusted partner for premium social media marketing services across all major platforms.</p>
+        
+        <div style="font-size: 14px; color: #666; margin-bottom: 20px;">
+          <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"/></svg>
+            <span>support@genuinepromotion.com</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/></svg>
+            <span>24/7 Live Chat Support</span>
+          </div>
+        </div>
+        
+        <!-- Social Icons -->
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
+            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
+          </a>
+          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
+            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.70,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z"/></svg>
+          </a>
+          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
+            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
+          </a>
+          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
+            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z"/></svg>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Colonne 2: Services -->
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Services</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">TikTok Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Instagram Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">YouTube Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Spotify Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Facebook Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Twitter Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Twitch Services</a>
+          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Discord Services</a>
+        </div>
+      </div>
+      
+      <!-- Colonne 3: Company -->
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Company</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <a href="/about" style="color: #666; text-decoration: none; transition: all 0.2s;">About Us</a>
+          <a href="/pricing" style="color: #666; text-decoration: none; transition: all 0.2s;">Pricing</a>
+          <a href="/our-story" style="color: #666; text-decoration: none; transition: all 0.2s;">Our Story</a>
+          <a href="/mission" style="color: #666; text-decoration: none; transition: all 0.2s;">Our Mission</a>
+          <a href="/how-it-works" style="color: #666; text-decoration: none; transition: all 0.2s;">How It Works</a>
+          <a href="/case-studies" style="color: #666; text-decoration: none; transition: all 0.2s;">Case Studies</a>
+          <a href="/blog" style="color: #666; text-decoration: none; transition: all 0.2s;">Blog</a>
+          <a href="/careers" style="color: #666; text-decoration: none; transition: all 0.2s;">Careers</a>
+        </div>
+      </div>
+      
+      <!-- Colonne 4: Support -->
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Support</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <a href="/faq" style="color: #666; text-decoration: none; transition: all 0.2s;">FAQ</a>
+          <a href="/help" style="color: #666; text-decoration: none; transition: all 0.2s;">Help Center</a>
+          <a href="/contact" style="color: #666; text-decoration: none; transition: all 0.2s;">Contact Us</a>
+          <a href="/api" style="color: #666; text-decoration: none; transition: all 0.2s;">API Documentation</a>
+          <a href="/status" style="color: #666; text-decoration: none; transition: all 0.2s;">System Status</a>
+          <a href="/guides" style="color: #666; text-decoration: none; transition: all 0.2s;">Guides & Tutorials</a>
+          <a href="/press" style="color: #666; text-decoration: none; transition: all 0.2s;">Press Kit</a>
+          <a href="/affiliates" style="color: #666; text-decoration: none; transition: all 0.2s;">Affiliate Program</a>
+        </div>
+      </div>
+      
+      <!-- Colonne 5: Legal -->
+      <div>
+        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Legal</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
+          <a href="/terms" style="color: #666; text-decoration: none; transition: all 0.2s;">Terms of Service</a>
+          <a href="/privacy" style="color: #666; text-decoration: none; transition: all 0.2s;">Privacy Policy</a>
+          <a href="/refund" style="color: #666; text-decoration: none; transition: all 0.2s;">Refund Policy</a>
+          <a href="/cookie" style="color: #666; text-decoration: none; transition: all 0.2s;">Cookie Policy</a>
+          <a href="/dmca" style="color: #666; text-decoration: none; transition: all 0.2s;">DMCA</a>
+          <a href="/aup" style="color: #666; text-decoration: none; transition: all 0.2s;">Acceptable Use Policy</a>
+          <a href="/disclaimer" style="color: #666; text-decoration: none; transition: all 0.2s;">Disclaimer</a>
+          <a href="/license" style="color: #666; text-decoration: none; transition: all 0.2s;">License</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Bottom Section: Copyright + Payment Methods -->
+    <div style="border-top: 1px solid #e5e5e5; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <div style="font-size: 14px; color: #666;">
+        © 2025 Genuine Promotion. All rights reserved.
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="font-size: 13px; color: #666;">We Accept:</span>
+        <div style="display: flex; gap: 8px;">
+          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">VISA</div>
+          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">MASTERCARD</div>
+          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">PAYPAL</div>
+          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">CRYPTO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    /* Footer hover effects */
+    div[style*="background: #F8F9FF"] a:hover { color: #0066FF !important; transform: translateX(4px); }
+    div[style*="background: #F8F9FF"] a[style*="width: 40px"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,102,255,0.2); border-color: #0066FF; }
+    
+    /* Responsive Footer */
+    @media (max-width: 1200px) {
+      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(3, 1fr) !important; }
+    }
+    @media (max-width: 768px) {
+      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(2, 1fr) !important; gap: 40px !important; }
+      div[style*="padding: 80px 20px 40px"] { padding: 60px 20px 30px !important; }
+    }
+    @media (max-width: 480px) {
+      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</div>
+    `;
+    
+    // Injection en fin de body
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
+    console.log('✅ [GP] Footer global injecté sur TOUTES les pages');
+    
+})();
+
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
 // =============================================================================
@@ -2494,142 +2652,6 @@ window.addEventListener('load', function() {
 </div>
       </div>
     </div>
-
-    <!-- FOOTER MEGA -->
-<div style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
-  <div style="max-width: 1400px; margin: 0 auto;">
-    <!-- Top Section: Logo + Colonnes de liens -->
-    <div style="display: grid; grid-template-columns: 1.5fr repeat(4, 1fr); gap: 60px; margin-bottom: 60px;">
-      
-      <!-- Colonne 1: Branding -->
-      <div>
-        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #0047AB, #0066FF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">GENUINE PROMOTION</div>
-        <p style="font-size: 14px; line-height: 1.7; color: #666; max-width: 320px; margin-bottom: 24px;">Your trusted partner for premium social media marketing services across all major platforms.</p>
-        
-        <div style="font-size: 14px; color: #666; margin-bottom: 20px;">
-          <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z"/></svg>
-            <span>support@genuinepromotion.com</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/></svg>
-            <span>24/7 Live Chat Support</span>
-          </div>
-        </div>
-        
-        <!-- Social Icons -->
-        <div style="display: flex; gap: 12px; margin-top: 24px;">
-          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
-            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z"/></svg>
-          </a>
-          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
-            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.70,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z"/></svg>
-          </a>
-          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
-            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>
-          </a>
-          <a href="#" style="width: 40px; height: 40px; background: #FFFFFF; border: 1px solid #e5e5e5; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s;">
-            <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="#0066FF"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z"/></svg>
-          </a>
-        </div>
-      </div>
-      
-      <!-- Colonne 2: Services -->
-      <div>
-        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Services</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">TikTok Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Instagram Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">YouTube Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Spotify Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Facebook Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Twitter Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Twitch Services</a>
-          <a href="/services" style="color: #666; text-decoration: none; transition: all 0.2s;">Discord Services</a>
-        </div>
-      </div>
-      
-      <!-- Colonne 3: Company -->
-      <div>
-        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Company</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-          <a href="/about" style="color: #666; text-decoration: none; transition: all 0.2s;">About Us</a>
-          <a href="/pricing" style="color: #666; text-decoration: none; transition: all 0.2s;">Pricing</a>
-          <a href="/our-story" style="color: #666; text-decoration: none; transition: all 0.2s;">Our Story</a>
-          <a href="/mission" style="color: #666; text-decoration: none; transition: all 0.2s;">Our Mission</a>
-          <a href="/how-it-works" style="color: #666; text-decoration: none; transition: all 0.2s;">How It Works</a>
-          <a href="/case-studies" style="color: #666; text-decoration: none; transition: all 0.2s;">Case Studies</a>
-          <a href="/blog" style="color: #666; text-decoration: none; transition: all 0.2s;">Blog</a>
-          <a href="/careers" style="color: #666; text-decoration: none; transition: all 0.2s;">Careers</a>
-        </div>
-      </div>
-      
-      <!-- Colonne 4: Support -->
-      <div>
-        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Support</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-          <a href="/faq" style="color: #666; text-decoration: none; transition: all 0.2s;">FAQ</a>
-          <a href="/help" style="color: #666; text-decoration: none; transition: all 0.2s;">Help Center</a>
-          <a href="/contact" style="color: #666; text-decoration: none; transition: all 0.2s;">Contact Us</a>
-          <a href="/api" style="color: #666; text-decoration: none; transition: all 0.2s;">API Documentation</a>
-          <a href="/status" style="color: #666; text-decoration: none; transition: all 0.2s;">System Status</a>
-          <a href="/guides" style="color: #666; text-decoration: none; transition: all 0.2s;">Guides & Tutorials</a>
-          <a href="/press" style="color: #666; text-decoration: none; transition: all 0.2s;">Press Kit</a>
-          <a href="/affiliates" style="color: #666; text-decoration: none; transition: all 0.2s;">Affiliate Program</a>
-        </div>
-      </div>
-      
-      <!-- Colonne 5: Legal -->
-      <div>
-        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; color: #1a1a1a; letter-spacing: 0.05em;">Legal</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 14px;">
-          <a href="/terms" style="color: #666; text-decoration: none; transition: all 0.2s;">Terms of Service</a>
-          <a href="/privacy" style="color: #666; text-decoration: none; transition: all 0.2s;">Privacy Policy</a>
-          <a href="/refund" style="color: #666; text-decoration: none; transition: all 0.2s;">Refund Policy</a>
-          <a href="/cookie" style="color: #666; text-decoration: none; transition: all 0.2s;">Cookie Policy</a>
-          <a href="/dmca" style="color: #666; text-decoration: none; transition: all 0.2s;">DMCA</a>
-          <a href="/aup" style="color: #666; text-decoration: none; transition: all 0.2s;">Acceptable Use Policy</a>
-          <a href="/disclaimer" style="color: #666; text-decoration: none; transition: all 0.2s;">Disclaimer</a>
-          <a href="/license" style="color: #666; text-decoration: none; transition: all 0.2s;">License</a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Bottom Section: Copyright + Payment Methods -->
-    <div style="border-top: 1px solid #e5e5e5; padding-top: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-      <div style="font-size: 14px; color: #666;">
-        © 2025 Genuine Promotion. All rights reserved.
-      </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="font-size: 13px; color: #666;">We Accept:</span>
-        <div style="display: flex; gap: 8px;">
-          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">VISA</div>
-          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">MASTERCARD</div>
-          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">PAYPAL</div>
-          <div style="padding: 6px 12px; background: white; border: 1px solid #e5e5e5; border-radius: 6px; font-size: 12px; font-weight: 600; color: #666;">CRYPTO</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <style>
-    /* Footer hover effects */
-    div[style*="background: #F8F9FF"] a:hover { color: #0066FF !important; transform: translateX(4px); }
-    div[style*="background: #F8F9FF"] a[style*="width: 40px"]:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,102,255,0.2); border-color: #0066FF; }
-    
-    /* Responsive Footer */
-    @media (max-width: 1200px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(3, 1fr) !important; }
-    }
-    @media (max-width: 768px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: repeat(2, 1fr) !important; gap: 40px !important; }
-      div[style*="padding: 80px 20px 40px"] { padding: 60px 20px 30px !important; }
-    }
-    @media (max-width: 480px) {
-      div[style*="grid-template-columns: 1.5fr"] { grid-template-columns: 1fr !important; }
-    }
-  </style>
-</div>
   `;
   
   if (footer) {
