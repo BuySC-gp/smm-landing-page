@@ -189,70 +189,100 @@ Updates
 
 // === 7. FONCTION UPDATE DESCRIPTION ===
 function updateServiceDescription() {
-console.log('🔍 [UPDATE] Description function called');
+    console.log('🔍 [UPDATE] Description function called');
 
-const descriptionPanel = 
-document.querySelector('#service_description .panel-description') ||
-document.querySelector('.panel-description') ||
-document.querySelector('#service_description');
+    const descriptionPanel = 
+        document.querySelector('#service_description .panel-description') ||
+        document.querySelector('.panel-description') ||
+        document.querySelector('#service_description');
 
-const descriptionContent = document.getElementById('description-content');
-const speedValue = document.getElementById('speed-value');
-const guaranteeValue = document.getElementById('guarantee-value');
+    const descriptionContent = document.getElementById('description-content');
+    const speedValue = document.getElementById('speed-value');
+    const guaranteeValue = document.getElementById('guarantee-value');
 
-console.log('📋 Description panel:', descriptionPanel);
-console.log('🎯 Target container:', descriptionContent);
+    console.log('📋 Description panel:', descriptionPanel);
+    console.log('🎯 Target container:', descriptionContent);
 
-if (!descriptionContent) {
-console.error('❌ #description-content NOT FOUND');
-return;
-}
+    if (!descriptionContent) {
+        console.error('❌ #description-content NOT FOUND');
+        return;
+    }
 
-if (descriptionPanel) {
-let descText = descriptionPanel.textContent || descriptionPanel.innerText || '';
-descText = descText.trim();
+    if (descriptionPanel) {
+        let descText = descriptionPanel.textContent || descriptionPanel.innerText || '';
+        descText = descText.trim();
 
-console.log('📝 Text length:', descText.length);
-console.log('📝 Text preview:', descText.substring(0, 200));
+        console.log('📝 Text length:', descText.length);
+        console.log('📝 Text preview:', descText.substring(0, 200));
 
-if (descText && descText.length > 5) {
-const formattedDesc = descText
-.split('\n')
-.map(line => {
-line = line.trim();
-if (!line) return '';
-if (line.match(/^(Speed|Refill|Guarantee|Start)/i)) {
-return `<p style="margin-bottom: 10px; line-height: 1.6;"><strong>${line}</strong></p>`;
-}
-return `<p style="margin-bottom: 8px; line-height: 1.6;">${line}</p>`;
-})
-.filter(Boolean)
-.join('');
+        if (descText && descText.length > 5) {
+            const formattedDesc = descText
+                .split('\n')
+                .map(line => {
+                    line = line.trim();
+                    if (!line) return '';
+                    if (line.match(/^(Speed|Refill|Guarantee|Start Time|🌴|🌎|⌚|🔼|🚑|⚠|🍺|🟢|🔴)/i)) {
+                        return `<p style="margin-bottom: 10px; line-height: 1.6;"><strong>${line}</strong></p>`;
+                    }
+                    return `<p style="margin-bottom: 8px; line-height: 1.6;">${line}</p>`;
+                })
+                .filter(Boolean)
+                .join('');
 
-descriptionContent.innerHTML = formattedDesc || descText.replace(/\n/g, '<br>');
-console.log('✅ Description updated!');
+            descriptionContent.innerHTML = formattedDesc || descText.replace(/\n/g, '<br>');
+            console.log('✅ Description updated!');
 
-// Extract Speed
-const speedMatch = descText.match(/Speed[:\s\-]+([^\n]+)/i);
-if (speedMatch && speedValue) {
-speedValue.textContent = speedMatch[1].trim();
-console.log('⚡ Speed:', speedMatch[1].trim());
-}
+            // === EXTRACTION SPEED (Start Time + Speed) ===
+            const startTimeMatch = descText.match(/Start Time[:\s\-]+([^\n]+)/i);
+            const speedMatch = descText.match(/Speed[:\s\-]+([^\n]+)/i);
 
-// Extract Guarantee
-const refillMatch = descText.match(/(?:Refill|Guarantee)[:\s\-]+([^\n]+)/i);
-if (refillMatch && guaranteeValue) {
-guaranteeValue.textContent = refillMatch[1].trim();
-console.log('🛡️ Guarantee:', refillMatch[1].trim());
-}
-} else {
-console.warn('⚠️ Description empty or too short');
-descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service...</p>';
-}
-} else {
-console.error('❌ Description panel NOT FOUND');
-descriptionContent.innerHTML = '<p style="color: #ff6b6b;">Description not available</p>';
-}
+            if (speedValue) {
+                let speedText = '';
+                
+                if (startTimeMatch && speedMatch) {
+                    // Les deux présents : "1-24h | 100K Daily"
+                    speedText = `${startTimeMatch[1].trim()} | ${speedMatch[1].trim()}`;
+                } else if (speedMatch) {
+                    // Seulement Speed
+                    speedText = speedMatch[1].trim();
+                } else if (startTimeMatch) {
+                    // Seulement Start Time
+                    speedText = `Start: ${startTimeMatch[1].trim()}`;
+                } else {
+                    speedText = 'N/A';
+                }
+                
+                speedValue.textContent = speedText;
+                console.log('⚡ Speed extracted:', speedText);
+            }
+
+            // === EXTRACTION GUARANTEE (Refill) ===
+            const refillMatch = descText.match(/Refill[:\s\-]+([^\n]+)/i);
+
+            if (guaranteeValue) {
+                if (refillMatch) {
+                    guaranteeValue.textContent = refillMatch[1].trim();
+                    console.log('🛡️ Guarantee extracted:', refillMatch[1].trim());
+                } else {
+                    // Chercher aussi "Guarantee:" au cas où
+                    const guaranteeMatch = descText.match(/Guarantee[:\s\-]+([^\n]+)/i);
+                    guaranteeValue.textContent = guaranteeMatch ? guaranteeMatch[1].trim() : 'No guarantee';
+                    console.log('🛡️ Guarantee fallback:', guaranteeValue.textContent);
+                }
+            }
+
+        } else {
+            console.warn('⚠️ Description empty or too short');
+            descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service...</p>';
+            if (speedValue) speedValue.textContent = 'N/A';
+            if (guaranteeValue) guaranteeValue.textContent = '-';
+        }
+    } else {
+        console.error('❌ Description panel NOT FOUND');
+        descriptionContent.innerHTML = '<p style="color: #ff6b6b;">Description not available</p>';
+        if (speedValue) speedValue.textContent = 'N/A';
+        if (guaranteeValue) guaranteeValue.textContent = '-';
+    }
 }
 
 // === 8. LISTENERS ===
