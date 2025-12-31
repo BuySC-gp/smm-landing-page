@@ -2689,14 +2689,17 @@ setTimeout(() => {
   console.log('[GENUINE] ✅ Mobile fix applied');
 }, 600);
 
- <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var balanceBtn = document.querySelector("#block_1 .component_private_navbar .component-navbar-balance-item__navbar-private");
-    if (balanceBtn) {
-        balanceBtn.addEventListener("click", function() {
-            window.location.href = "https://genuinepromotion.com/addfunds";
-        });
+<script>
+document.addEventListener('click', function(e) {
+    // On cherche si l'élément cliqué (ou l'un de ses parents) est le bouton balance
+    var target = e.target.closest('.component-navbar-balance-item__navbar-private');
+    
+    // Si on a trouvé le bouton, on redirige
+    if (target) {
+        e.preventDefault(); // Empêche le comportement par défaut au cas où
+        window.location.href = "https://genuinepromotion.com/addfunds";
     }
 });
 </script>
+
 })(); // End IIFE wrapper
