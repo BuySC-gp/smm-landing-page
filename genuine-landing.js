@@ -94,7 +94,14 @@ rightPanel.innerHTML = `
 <div style="font-size: 11px; color: #6b7280; line-height: 1.3;">Premium SMM Services • 24/7 Support</div>
 </div>
 </div>
-<button onclick="window.open('https://genuinepromotion.com', '_blank')" style="padding: 9px 16px; background: linear-gradient(135deg, #0047AB, #0066FF); color: white; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,71,171,0.2);">Learn More</button>
+<button onclick="window.open('https://genuinepromotion.com/faq', '_blank')" style="padding: 9px 14px; background: linear-gradient(135deg, #0047AB, #0066FF); color: white; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,71,171,0.2); display: flex; align-items: center; gap: 6px;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="10"/>
+<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+<line x1="12" y1="17" x2="12.01" y2="17"/>
+</svg>
+FAQ
+</button>
 </div>
 
 <!-- Tabs Navigation -->
