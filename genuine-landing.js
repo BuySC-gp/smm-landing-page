@@ -82,33 +82,19 @@ box-sizing: border-box !important;
 `;
 
 rightPanel.innerHTML = `
-<!-- Header Badge GP -->
-<div style="background: linear-gradient(135deg, rgba(0,71,171,0.05), rgba(0,166,126,0.05)); padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-<div style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 250px;">
-<!-- Logo GP Vectoriel -->
-<div style="width: 48px; height: 48px; background: linear-gradient(135deg, #0047AB, #00A67E); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; box-shadow: 0 4px 12px rgba(0,71,171,0.2);">
-<svg width="32" height="32" viewBox="0 0 100 100" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
-<!-- Lettre G -->
-<path d="M25 30 Q25 20 35 20 L55 20 Q65 20 65 30 L65 45 L55 45 L55 30 L35 30 L35 70 L55 70 L55 55 L45 55 L45 45 L75 45 L75 70 Q75 80 65 80 L35 80 Q25 80 25 70 Z" fill="white" stroke="white" stroke-width="2"/>
-<!-- Lettre P -->
-<path d="M80 20 L100 20 Q115 20 115 35 Q115 50 100 50 L90 50 L90 80 L80 80 Z M90 30 L90 40 L100 40 Q105 40 105 35 Q105 30 100 30 Z" fill="white" stroke="white" stroke-width="2" transform="translate(-35,0)"/>
-</svg>
+<!-- Header Badge GP CLEAN -->
+<div style="background: linear-gradient(135deg, #f8f9ff, #ffffff); padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+<div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 250px;">
+<!-- Logo GP Clean -->
+<div style="width: 44px; height: 44px; background: linear-gradient(135deg, #0047AB, #0066FF); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,71,171,0.2);">
+<span style="font-size: 18px; font-weight: 900; color: white; letter-spacing: -1px; font-family: system-ui, -apple-system, sans-serif;">GP</span>
 </div>
 <div style="flex: 1; min-width: 0;">
-<div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px; letter-spacing: 0.3px;">Genuine Promotion</div>
-<div style="font-size: 12px; color: #6b7280; line-height: 1.4;">Premium SMM Services • Instant Delivery • 24/7 Support</div>
+<div style="font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 3px;">Genuine Promotion</div>
+<div style="font-size: 11px; color: #6b7280; line-height: 1.3;">Premium SMM Services • 24/7 Support</div>
 </div>
 </div>
-<button onclick="window.open('https://genuinepromotion.com', '_blank')" style="padding: 10px 18px; background: linear-gradient(135deg, #0047AB, #0066FF); color: white; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.3s; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,71,171,0.25);">
-<span style="display: flex; align-items: center; gap: 6px;">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-<circle cx="12" cy="12" r="10"/>
-<line x1="12" y1="16" x2="12" y2="12"/>
-<line x1="12" y1="8" x2="12.01" y2="8"/>
-</svg>
-Learn More
-</span>
-</button>
+<button onclick="window.open('https://genuinepromotion.com', '_blank')" style="padding: 9px 16px; background: linear-gradient(135deg, #0047AB, #0066FF); color: white; border: none; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,71,171,0.2);">Learn More</button>
 </div>
 
 <!-- Tabs Navigation -->
