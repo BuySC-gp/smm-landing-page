@@ -399,6 +399,7 @@ console.log('✅ [NEW ORDER] Setup complete');
 
 /* =============================================================================
    MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques)
+   CORRECTED VERSION: FULL WIDTH PLACEMENT
    ============================================================================= */
 (function() {
     // 1. CONFIGURATION DES BOUTONS (ICONE + FILTRE)
@@ -413,19 +414,22 @@ console.log('✅ [NEW ORDER] Setup complete');
     // 2. INJECTION DU HTML (LE VISUEL)
     function injectQuickSelectors() {
         const form = document.querySelector('form');
-        const formGroup = form ? form.querySelector('.form-group') : null;
         
         // On évite les doublons
         if (document.getElementById('quick-selectors-bar')) return;
-        if (form && formGroup) {
+        
+        // On cherche le conteneur PRINCIPAL (la ligne qui contient colonne gauche + droite)
+        const rowDiv = document.querySelector('.row.new-order-form') || (form ? form.closest('.row') : null);
+        if (rowDiv) {
             const wrapper = document.createElement('div');
             wrapper.id = 'quick-selectors-bar';
             wrapper.style.cssText = `
                 display: flex;
                 gap: 10px;
                 overflow-x: auto;
-                padding-bottom: 12px;
+                padding: 4px 10px 16px 10px; /* Un peu de padding */
                 margin-bottom: 24px;
+                width: 100%;
                 scrollbar-width: none; /* Firefox */
                 -ms-overflow-style: none; /* IE */
             `;
@@ -434,6 +438,7 @@ console.log('✅ [NEW ORDER] Setup complete');
             const style = document.createElement('style');
             style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
             document.head.appendChild(style);
+            
             // Générer les boutons
             quickApps.forEach(app => {
                 const btn = document.createElement('button');
@@ -443,16 +448,17 @@ console.log('✅ [NEW ORDER] Setup complete');
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    padding: 8px 16px;
-                    background: #f3f4f6;
+                    padding: 10px 20px;
+                    background: white;
                     border: 1px solid #e5e7eb;
                     border-radius: 50px;
-                    font-size: 13px;
+                    font-size: 14px;
                     font-weight: 600;
                     color: #4b5563;
                     cursor: pointer;
                     white-space: nowrap;
                     transition: all 0.2s ease;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
                 `;
                 
                 // Icon styling
@@ -461,29 +467,28 @@ console.log('✅ [NEW ORDER] Setup complete');
                 iconSpan.style.cssText = `
                     display: flex;
                     align-items: center;
-                    width: 18px;
-                    height: 18px;
+                    width: 20px;
+                    height: 20px;
                     color: ${app.color};
                 `;
                 if(app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
                 btn.prepend(iconSpan);
                 btn.append(app.name);
+                
                 // Hover effects
                 btn.onmouseenter = () => {
-                    btn.style.background = 'white';
-                    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
                     btn.style.borderColor = app.color;
-                    btn.style.color = 'black'; // Text dark on hover
+                    btn.style.color = '#1f2937';
                     btn.style.transform = 'translateY(-2px)';
+                    btn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.08)';
                 };
                 btn.onmouseleave = () => {
-                    // Reset style only if not active (add active class logic later if needed)
-                    btn.style.background = '#f3f4f6';
-                    btn.style.boxShadow = 'none';
                     btn.style.borderColor = '#e5e7eb';
                     btn.style.color = '#4b5563';
                     btn.style.transform = 'translateY(0)';
+                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
                 };
+                
                 // 3. LOGIQUE DU CLIC (LE LIEN)
                 btn.addEventListener('click', function(e) {
                     e.preventDefault(); // Empêche le submit du formulaire
@@ -516,18 +521,21 @@ console.log('✅ [NEW ORDER] Setup complete');
                         console.log(`✅ Quick Selector: Switched to ${filter}`);
                     } else {
                         console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
-                        // Optionnel: Faire vibrer le bouton en rouge pour dire "Pas dispo"
                     }
                 });
                 wrapper.appendChild(btn);
             });
-            // Insérer la barre AVANT les champs du formulaire
-            form.insertBefore(wrapper, form.firstChild);
-            console.log('✅ Quick Selectors Bar injected');
+            
+            // === INSERTION CORRIGÉE (FULL WIDTH) ===
+            // On insère AVANT le conteneur flex "rowDiv" pour qu'il soit au-dessus de tout
+            if(rowDiv.parentNode) {
+                rowDiv.parentNode.insertBefore(wrapper, rowDiv);
+                console.log('✅ Quick Selectors Bar injected (Full Width Mode)');
+            }
         }
     }
-    // Lancer après un court délai pour être sûr que le formulaire est là
-    setTimeout(injectQuickSelectors, 500);
+    // Lancer après un court délai pour être sûr que le layout est prêt
+    setTimeout(injectQuickSelectors, 600);
     setTimeout(injectQuickSelectors, 1500); // 2ème passe de sécurité
 })();
 })();
