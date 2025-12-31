@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT 50/50 (FIX POUR WRAPPER)
+// NEW ORDER PAGE - LAYOUT 50/50 (FIX STRUCTURE BOOTSTRAP)
 // =============================================================================
 (function() {
 setTimeout(() => {
@@ -14,52 +14,35 @@ form.querySelector('[id*="description"]')?.closest('.form-group');
 if (nativeDescription) {
 nativeDescription.style.display = 'none';
 }
-// === 2. CIBLER LES WRAPPERS SPÉCIFIQUES DU PANEL ===
-const rowNewOrder = document.querySelector('.row.new-order-form, .new-order-form');
-if (rowNewOrder) {
-rowNewOrder.style.cssText = `
-max-width: 100% !important;
-width: 100% !important;
-padding: 0 24px !important;
-margin: 0 !important;
-box-sizing: border-box !important;
-`;
+// === 2. TROUVER LE VRAI ROW PARENT (pas col-lg-8) ===
+const colDiv = form.closest('.col-lg-8, [class*="col-"]');
+const rowDiv = document.querySelector('.row.new-order-form') || colDiv?.parentElement;
+if (!rowDiv) {
+console.error('Row not found');
+return;
 }
-const wrapperContent = document.querySelector('.wrapper_content__footer, [class*="wrapper_content"]');
-if (wrapperContent) {
-wrapperContent.style.cssText = `
-max-width: 100% !important;
-width: 100% !important;
-padding: 0 !important;
-margin: 0 !important;
-`;
-}
-// === 3. FORCER LE MAIN CONTENT AREA ===
-const mainContent = document.querySelector('.main-content, main, [class*="content-wrapper"], [class*="page-content"]');
-if (mainContent) {
-mainContent.style.cssText = `
-max-width: 100% !important;
-width: 100% !important;
-padding: 24px !important;
-margin: 0 !important;
-box-sizing: border-box !important;
-`;
-}
-// === 4. CONTAINER PRINCIPAL FLEX ===
-const container = form.parentElement;
-container.style.cssText = `
+// === 3. TRANSFORMER LE ROW EN FLEX 50/50 ===
+rowDiv.style.cssText = `
 display: flex !important;
+flex-wrap: nowrap !important;
 gap: 24px !important;
 width: 100% !important;
 max-width: 100% !important;
-padding: 0 !important;
-align-items: flex-start !important;
+padding: 24px !important;
 box-sizing: border-box !important;
 `;
-// === 5. FORMULAIRE GAUCHE ===
+// === 4. COLUMN GAUCHE = 50% ===
+if (colDiv) {
+colDiv.style.cssText = `
+flex: 0 0 50% !important;
+max-width: 50% !important;
+width: 50% !important;
+padding: 0 !important;
+`;
+}
+// === 5. STYLE DU FORM ===
 form.style.cssText = `
-flex: 1 1 0 !important;
-min-width: 0 !important;
+width: 100% !important;
 background: white !important;
 border-radius: 12px !important;
 padding: 32px !important;
@@ -67,16 +50,17 @@ box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
 border: 1px solid #e5e7eb !important;
 box-sizing: border-box !important;
 `;
-// === 6. PANEL DROIT ===
+// === 6. CRÉER PANEL DROIT DANS LE ROW (pas dans col-lg-8) ===
 let rightPanel = document.getElementById('order-info-panel');
 if (!rightPanel) {
 rightPanel = document.createElement('div');
 rightPanel.id = 'order-info-panel';
-container.appendChild(rightPanel);
+rowDiv.appendChild(rightPanel);  // <-- AJOUTÉ AU ROW, PAS AU COL
 }
 rightPanel.style.cssText = `
-flex: 1 1 0 !important;
-min-width: 0 !important;
+flex: 0 0 calc(50% - 24px) !important;
+max-width: calc(50% - 24px) !important;
+width: calc(50% - 24px) !important;
 background: white !important;
 border-radius: 12px !important;
 box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
