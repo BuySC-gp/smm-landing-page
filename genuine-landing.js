@@ -2688,5 +2688,15 @@ setTimeout(() => {
   document.head.appendChild(mobileFix);
   console.log('[GENUINE] ✅ Mobile fix applied');
 }, 600);
-    
+
+ <script>
+document.addEventListener("DOMContentLoaded", function() {
+    var balanceBtn = document.querySelector("#block_1 .component_private_navbar .component-navbar-balance-item__navbar-private");
+    if (balanceBtn) {
+        balanceBtn.addEventListener("click", function() {
+            window.location.href = "https://genuinepromotion.com/addfunds";
+        });
+    }
+});
+</script>
 })(); // End IIFE wrapper
