@@ -335,9 +335,9 @@ t.style.background = 'none';
 t.style.borderBottom = 'none';
 });
 
-this.style.color = '#00A67E';
+this.style.color = '#0066FF';
 this.style.background = 'white';
-this.style.borderBottom = '2px solid #00A67E';
+this.style.borderBottom = '2px solid #0066FF';
 
 panels.forEach(p => p.style.display = 'none');
 const target = document.querySelector(`[data-panel="${this.dataset.tab}"]`);
@@ -375,7 +375,8 @@ if (submitBtn) {
 submitBtn.style.cssText = `
 width: 100% !important;
 padding: 12px !important;
-background: linear-gradient(135deg, #00A67E, #00D97E) !important;
+background: linear-gradient(135deg, #0047AB, #0066FF) !important;
+box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3) !important; /* Ombre bleue assortie */
 color: white !important;
 border: none !important;
 border-radius: 8px !important;
