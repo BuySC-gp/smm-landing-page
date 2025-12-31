@@ -546,22 +546,22 @@ console.log('✅ [NEW ORDER] Setup complete');
 })();
 })();
 
-// ============================================================================
+// =============================================================================
 // FOOTER GLOBAL — TOUTES LES PAGES (PANEL + LANDING)
-// ============================================================================
+// =============================================================================
 (function() {
-    'use strict';
-    
-    // Éviter double injection
-    if (document.getElementById('gp-footer-global')) {
-        console.log('[GP] Footer déjà présent');
-        return;
-    }
-    
-    console.log('[GP] 🎯 Injection footer global...');
-    
-    const footerHTML = `
-    <!-- FOOTER MEGA -->
+  'use strict';
+  
+  // Éviter double injection
+  if (document.getElementById('gp-footer-global')) {
+    console.log('[GP] Footer déjà présent');
+    return;
+  }
+  
+  console.log('[GP] 🎯 Injection footer global...');
+  
+  const footerHTML = `
+        <!-- FOOTER MEGA -->
 <div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5;">
   <div style="max-width: 1400px; margin: 0 auto;">
     <!-- Top Section: Logo + Colonnes de liens -->
@@ -696,12 +696,59 @@ console.log('✅ [NEW ORDER] Setup complete');
     }
   </style>
 </div>
-    `;
+`;
+  
+  // DÉTECTION INTELLIGENTE : Landing vs Panel
+  const hasSignup = document.querySelector('.block-signin-text .component_card');
+  const hasSidebar = document.querySelector('.sidebar, .component_private_sidebar');
+  
+  if (hasSignup && !hasSidebar) {
+    // === LANDING PAGE ===
+    // Injecter APRÈS tout le contenu landing (avec délai)
+    setTimeout(() => {
+      const landingContainer = document.querySelector('.block-signin-text') || document.body;
+      landingContainer.insertAdjacentHTML('afterend', footerHTML);
+      console.log('✅ [GP] Footer injecté en fin de landing');
+    }, 1000); // Délai pour laisser le contenu landing se charger
     
-    // Injection en fin de body
+  } else if (hasSidebar) {
+    // === PANEL PAGES (avec sidebar) ===
+    // Injecter dans le wrapper principal du panel
+    const mainWrapper = document.querySelector('.wrapper_content, .main-content, [class*="wrapper"]') || document.body;
+    mainWrapper.insertAdjacentHTML('beforeend', footerHTML);
+    
+    // Ajuster le style pour respecter la sidebar
+    setTimeout(() => {
+      const footer = document.getElementById('gp-footer-global');
+      if (footer && hasSidebar) {
+        footer.style.marginLeft = '260px'; // Largeur de la sidebar
+        footer.style.width = 'calc(100% - 260px)';
+        footer.style.boxSizing = 'border-box';
+        
+        // Responsive : retirer le margin sur mobile
+        const mediaQuery = window.matchMedia('(max-width: 768px)');
+        function handleFooterResponsive(e) {
+          if (e.matches) {
+            footer.style.marginLeft = '0';
+            footer.style.width = '100%';
+          } else {
+            footer.style.marginLeft = '260px';
+            footer.style.width = 'calc(100% - 260px)';
+          }
+        }
+        handleFooterResponsive(mediaQuery);
+        mediaQuery.addEventListener('change', handleFooterResponsive);
+      }
+    }, 100);
+    
+    console.log('✅ [GP] Footer injecté dans le panel (avec adaptation sidebar)');
+    
+  } else {
+    // === FALLBACK (autres pages) ===
     document.body.insertAdjacentHTML('beforeend', footerHTML);
-    console.log('✅ [GP] Footer global injecté sur TOUTES les pages');
-    
+    console.log('✅ [GP] Footer injecté (fallback)');
+  }
+  
 })();
 
 // =============================================================================
