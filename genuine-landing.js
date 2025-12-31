@@ -1,5 +1,5 @@
 // =============================================================================
-// NEW ORDER PAGE - LAYOUT 50/50 (FIX FULL WIDTH)
+// NEW ORDER PAGE - LAYOUT 50/50 (FIX POUR WRAPPER)
 // =============================================================================
 (function() {
 setTimeout(() => {
@@ -7,39 +7,56 @@ const searchInput = document.querySelector('input[placeholder*="Search"]');
 const form = searchInput?.closest('form');
 if (form && !form.dataset.fixed) {
 form.dataset.fixed = 'true';
-console.log('🎯 [NEW ORDER] Layout 50/50 FULL WIDTH activé');
+console.log('🎯 [NEW ORDER] Layout 50/50 activé');
 // === 1. CACHER LA DESCRIPTION NATIVE ===
 const nativeDescription = form.querySelector('.form-group:has(#service_description)') ||
 form.querySelector('[id*="description"]')?.closest('.form-group');
 if (nativeDescription) {
 nativeDescription.style.display = 'none';
 }
-// === 2. FORCER TOUS LES PARENTS À 100% WIDTH ===
-let parent = form.parentElement;
-while (parent && parent !== document.body) {
-// Ne pas toucher à la sidebar
-if (!parent.matches('aside, nav, [class*="sidebar"], [class*="side-bar"]')) {
-parent.style.maxWidth = '100%';
-parent.style.width = '100%';
-parent.style.paddingLeft = '0';
-parent.style.paddingRight = '0';
-parent.style.marginLeft = '0';
-parent.style.marginRight = '0';
+// === 2. CIBLER LES WRAPPERS SPÉCIFIQUES DU PANEL ===
+const rowNewOrder = document.querySelector('.row.new-order-form, .new-order-form');
+if (rowNewOrder) {
+rowNewOrder.style.cssText = `
+max-width: 100% !important;
+width: 100% !important;
+padding: 0 24px !important;
+margin: 0 !important;
+box-sizing: border-box !important;
+`;
 }
-parent = parent.parentElement;
+const wrapperContent = document.querySelector('.wrapper_content__footer, [class*="wrapper_content"]');
+if (wrapperContent) {
+wrapperContent.style.cssText = `
+max-width: 100% !important;
+width: 100% !important;
+padding: 0 !important;
+margin: 0 !important;
+`;
 }
-// === 3. CONTAINER PRINCIPAL FLEX ===
+// === 3. FORCER LE MAIN CONTENT AREA ===
+const mainContent = document.querySelector('.main-content, main, [class*="content-wrapper"], [class*="page-content"]');
+if (mainContent) {
+mainContent.style.cssText = `
+max-width: 100% !important;
+width: 100% !important;
+padding: 24px !important;
+margin: 0 !important;
+box-sizing: border-box !important;
+`;
+}
+// === 4. CONTAINER PRINCIPAL FLEX ===
 const container = form.parentElement;
 container.style.cssText = `
 display: flex !important;
 gap: 24px !important;
 width: 100% !important;
 max-width: 100% !important;
-padding: 24px !important;
+padding: 0 !important;
 align-items: flex-start !important;
 box-sizing: border-box !important;
 `;
-// === 4. FORMULAIRE GAUCHE - FLEX GROW ===
+// === 5. FORMULAIRE GAUCHE ===
 form.style.cssText = `
 flex: 1 1 0 !important;
 min-width: 0 !important;
@@ -49,10 +66,8 @@ padding: 32px !important;
 box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
 border: 1px solid #e5e7eb !important;
 box-sizing: border-box !important;
-height: fit-content !important;
-overflow-y: auto !important;
 `;
-// === 5. PANEL DROIT - FLEX GROW ===
+// === 6. PANEL DROIT ===
 let rightPanel = document.getElementById('order-info-panel');
 if (!rightPanel) {
 rightPanel = document.createElement('div');
@@ -69,7 +84,6 @@ border: 1px solid #e5e7eb !important;
 overflow: hidden !important;
 display: flex !important;
 flex-direction: column !important;
-height: fit-content !important;
 box-sizing: border-box !important;
 `;
 
