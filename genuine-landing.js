@@ -396,6 +396,140 @@ mediaQuery.addEventListener('change', handleResponsive);
 console.log('✅ [NEW ORDER] Setup complete');
 }
 }, 300);
+
+/* =============================================================================
+   MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques)
+   ============================================================================= */
+(function() {
+    // 1. CONFIGURATION DES BOUTONS (ICONE + FILTRE)
+    const quickApps = [
+        { name: 'Instagram', filter: 'instagram', color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
+        { name: 'TikTok', filter: 'tiktok', color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3a.5.5 0 0 0-.5.5v14a4.5 4.5 0 1 1-4.5-4.5.5.5 0 0 0 .5-.5V9.8a.5.5 0 0 0-.5-.5 1.5 1.5 0 1 1 0-3 .5.5 0 0 0 .5-.5V3zM15 6a3 3 0 0 1-3-3h3v3z"/></svg>' },
+        { name: 'YouTube', filter: 'youtube', color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
+        { name: 'Spotify', filter: 'spotify', color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
+        { name: 'Telegram', filter: 'telegram', color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
+        { name: 'Everything', filter: 'everything', color: '#6b7280', icon: '⚡' }
+    ];
+    // 2. INJECTION DU HTML (LE VISUEL)
+    function injectQuickSelectors() {
+        const form = document.querySelector('form');
+        const formGroup = form ? form.querySelector('.form-group') : null;
+        
+        // On évite les doublons
+        if (document.getElementById('quick-selectors-bar')) return;
+        if (form && formGroup) {
+            const wrapper = document.createElement('div');
+            wrapper.id = 'quick-selectors-bar';
+            wrapper.style.cssText = `
+                display: flex;
+                gap: 10px;
+                overflow-x: auto;
+                padding-bottom: 12px;
+                margin-bottom: 24px;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE */
+            `;
+            
+            // Masquer la scrollbar
+            const style = document.createElement('style');
+            style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
+            document.head.appendChild(style);
+            // Générer les boutons
+            quickApps.forEach(app => {
+                const btn = document.createElement('button');
+                btn.className = 'quick-selector-btn';
+                btn.dataset.filter = app.filter;
+                btn.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 8px 16px;
+                    background: #f3f4f6;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 50px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #4b5563;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    transition: all 0.2s ease;
+                `;
+                
+                // Icon styling
+                const iconSpan = document.createElement('span');
+                iconSpan.innerHTML = app.icon;
+                iconSpan.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    width: 18px;
+                    height: 18px;
+                    color: ${app.color};
+                `;
+                if(app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
+                btn.prepend(iconSpan);
+                btn.append(app.name);
+                // Hover effects
+                btn.onmouseenter = () => {
+                    btn.style.background = 'white';
+                    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+                    btn.style.borderColor = app.color;
+                    btn.style.color = 'black'; // Text dark on hover
+                    btn.style.transform = 'translateY(-2px)';
+                };
+                btn.onmouseleave = () => {
+                    // Reset style only if not active (add active class logic later if needed)
+                    btn.style.background = '#f3f4f6';
+                    btn.style.boxShadow = 'none';
+                    btn.style.borderColor = '#e5e7eb';
+                    btn.style.color = '#4b5563';
+                    btn.style.transform = 'translateY(0)';
+                };
+                // 3. LOGIQUE DU CLIC (LE LIEN)
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault(); // Empêche le submit du formulaire
+                    
+                    // Animation click
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
+                    const filter = this.dataset.filter.toLowerCase();
+                    const select = document.querySelector('select[name*="category"], #category');
+                    
+                    if (!select) return;
+                    let foundIndex = -1;
+                    if (filter === 'everything') {
+                        foundIndex = 0; // Retour au début
+                    } else {
+                        // Recherche intelligente dans le menu déroulant
+                        for (let i = 0; i < select.options.length; i++) {
+                            const text = select.options[i].text.toLowerCase();
+                            // On cherche si le texte de la catégorie contient "instagram", "tiktok", etc.
+                            if (text.includes(filter)) {
+                                foundIndex = i;
+                                break; // On prend le premier trouvé
+                            }
+                        }
+                    }
+                    if (foundIndex >= 0) {
+                        select.selectedIndex = foundIndex;
+                        // On simule le changement pour que le panel mette à jour les services
+                        select.dispatchEvent(new Event('change', { bubbles: true }));
+                        console.log(`✅ Quick Selector: Switched to ${filter}`);
+                    } else {
+                        console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
+                        // Optionnel: Faire vibrer le bouton en rouge pour dire "Pas dispo"
+                    }
+                });
+                wrapper.appendChild(btn);
+            });
+            // Insérer la barre AVANT les champs du formulaire
+            form.insertBefore(wrapper, form.firstChild);
+            console.log('✅ Quick Selectors Bar injected');
+        }
+    }
+    // Lancer après un court délai pour être sûr que le formulaire est là
+    setTimeout(injectQuickSelectors, 500);
+    setTimeout(injectQuickSelectors, 1500); // 2ème passe de sécurité
+})();
 })();
 
 // =============================================================================
@@ -2689,137 +2823,4 @@ setTimeout(() => {
   console.log('[GENUINE] ✅ Mobile fix applied');
 }, 600);
 
-/* =============================================================================
-   MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques)
-   ============================================================================= */
-(function() {
-    // 1. CONFIGURATION DES BOUTONS (ICONE + FILTRE)
-    const quickApps = [
-        { name: 'Instagram', filter: 'instagram', color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
-        { name: 'TikTok', filter: 'tiktok', color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3a.5.5 0 0 0-.5.5v14a4.5 4.5 0 1 1-4.5-4.5.5.5 0 0 0 .5-.5V9.8a.5.5 0 0 0-.5-.5 1.5 1.5 0 1 1 0-3 .5.5 0 0 0 .5-.5V3zM15 6a3 3 0 0 1-3-3h3v3z"/></svg>' },
-        { name: 'YouTube', filter: 'youtube', color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
-        { name: 'Spotify', filter: 'spotify', color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
-        { name: 'Telegram', filter: 'telegram', color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
-        { name: 'Everything', filter: 'everything', color: '#6b7280', icon: '⚡' }
-    ];
-    // 2. INJECTION DU HTML (LE VISUEL)
-    function injectQuickSelectors() {
-        const form = document.querySelector('form');
-        const formGroup = form ? form.querySelector('.form-group') : null;
-        
-        // On évite les doublons
-        if (document.getElementById('quick-selectors-bar')) return;
-        if (form && formGroup) {
-            const wrapper = document.createElement('div');
-            wrapper.id = 'quick-selectors-bar';
-            wrapper.style.cssText = `
-                display: flex;
-                gap: 10px;
-                overflow-x: auto;
-                padding-bottom: 12px;
-                margin-bottom: 24px;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE */
-            `;
-            
-            // Masquer la scrollbar
-            const style = document.createElement('style');
-            style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
-            document.head.appendChild(style);
-            // Générer les boutons
-            quickApps.forEach(app => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-selector-btn';
-                btn.dataset.filter = app.filter;
-                btn.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 8px 16px;
-                    background: #f3f4f6;
-                    border: 1px solid #e5e7eb;
-                    border-radius: 50px;
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #4b5563;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    transition: all 0.2s ease;
-                `;
-                
-                // Icon styling
-                const iconSpan = document.createElement('span');
-                iconSpan.innerHTML = app.icon;
-                iconSpan.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    width: 18px;
-                    height: 18px;
-                    color: ${app.color};
-                `;
-                if(app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
-                btn.prepend(iconSpan);
-                btn.append(app.name);
-                // Hover effects
-                btn.onmouseenter = () => {
-                    btn.style.background = 'white';
-                    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
-                    btn.style.borderColor = app.color;
-                    btn.style.color = 'black'; // Text dark on hover
-                    btn.style.transform = 'translateY(-2px)';
-                };
-                btn.onmouseleave = () => {
-                    // Reset style only if not active (add active class logic later if needed)
-                    btn.style.background = '#f3f4f6';
-                    btn.style.boxShadow = 'none';
-                    btn.style.borderColor = '#e5e7eb';
-                    btn.style.color = '#4b5563';
-                    btn.style.transform = 'translateY(0)';
-                };
-                // 3. LOGIQUE DU CLIC (LE LIEN)
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // Empêche le submit du formulaire
-                    
-                    // Animation click
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
-                    const filter = this.dataset.filter.toLowerCase();
-                    const select = document.querySelector('select[name*="category"], #category');
-                    
-                    if (!select) return;
-                    let foundIndex = -1;
-                    if (filter === 'everything') {
-                        foundIndex = 0; // Retour au début
-                    } else {
-                        // Recherche intelligente dans le menu déroulant
-                        for (let i = 0; i < select.options.length; i++) {
-                            const text = select.options[i].text.toLowerCase();
-                            // On cherche si le texte de la catégorie contient "instagram", "tiktok", etc.
-                            if (text.includes(filter)) {
-                                foundIndex = i;
-                                break; // On prend le premier trouvé
-                            }
-                        }
-                    }
-                    if (foundIndex >= 0) {
-                        select.selectedIndex = foundIndex;
-                        // On simule le changement pour que le panel mette à jour les services
-                        select.dispatchEvent(new Event('change', { bubbles: true }));
-                        console.log(`✅ Quick Selector: Switched to ${filter}`);
-                    } else {
-                        console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
-                        // Optionnel: Faire vibrer le bouton en rouge pour dire "Pas dispo"
-                    }
-                });
-                wrapper.appendChild(btn);
-            });
-            // Insérer la barre AVANT les champs du formulaire
-            form.insertBefore(wrapper, form.firstChild);
-            console.log('✅ Quick Selectors Bar injected');
-        }
-    }
-    // Lancer après un court délai pour être sûr que le formulaire est là
-    setTimeout(injectQuickSelectors, 500);
-    setTimeout(injectQuickSelectors, 1500); // 2ème passe de sécurité
-})();
 })(); // End IIFE wrapper
