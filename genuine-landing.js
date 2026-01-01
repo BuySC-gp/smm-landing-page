@@ -2941,7 +2941,7 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION - STABLE)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (BRUTE FORCE WIDTH - STABLE)
 // =============================================================================
 (function () {
     'use strict';
@@ -2954,10 +2954,7 @@ setTimeout(() => {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row',
-            wrapperContent: '.wrapper-content',
-            wrapperBody: '.wrapper-content__body',
-            wrapperMain: '.wrapper-sidebar-navbar'
+            nativeSearchRow: '#block_39 .row'
         }
     };
 
@@ -2965,26 +2962,15 @@ setTimeout(() => {
         constructor() {
             this.state = {
                 allServices: [],
-                filteredServices: [],
-                categories: [],
-                currentCategory: 'All',
                 currentPage: 1,
+                currentCategory: 'All',
                 searchTerm: '',
-                totalServices: 0,
+                categories: [],
+                categoryIcons: {},
                 platformCounts: {},
-                categoryServiceCount: {},
-                categoryIcons: {}
+                categoryServiceCount: {}
             };
-            this.dom = {
-                block: null,
-                table: null,
-                container: null,
-                hero: null,
-                toolbar: null,
-                filters: null,
-                grid: null,
-                pagination: null
-            };
+            this.dom = {};
         }
 
         init() {
@@ -2999,202 +2985,112 @@ setTimeout(() => {
             if (this.dom.block.dataset.servicesV2 === 'true') return;
             this.dom.block.dataset.servicesV2 = 'true';
 
-            document.body.classList.add('gp-services-v2-active');
-
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
-            this.fixParentLayout();
 
-            console.log('✅ [SERVICES V2] Initialized.');
+            // --- BRUTE FORCE WIDTH ENFORCER ---
+            this.enforceFullWidth();
+            // Re-apply every 500ms for 5 seconds to kill any competing scripts
+            let attempts = 0;
+            const interval = setInterval(() => {
+                this.enforceFullWidth();
+                if (++attempts > 10) clearInterval(interval);
+            }, 500);
+
+            console.log('✅ [SERVICES V2] Brute Force Width Applied.');
         }
 
         /**
-         * TARGETED FIX: Only target the immediate culprits for width
+         * NUCLEAR OPTION: Walks up from the module to the HTML tag
+         * Forces every single parent to be 100% width and 0 padding.
          */
-        fixParentLayout() {
-            // TRIPLE-LOCK ROOT FIX: Target by Tag, Class AND ID
-            const roots = [
-                document.documentElement,
-                document.body,
-                document.getElementById('theme_21')
-            ].filter(Boolean);
+        enforceFullWidth() {
+            document.body.classList.add('gp-services-v2-active');
 
-            roots.forEach(el => {
-                el.style.setProperty('max-width', 'none', 'important');
-                el.style.setProperty('width', '100%', 'important');
-                el.style.setProperty('overflow-x', 'hidden', 'important');
-                el.style.setProperty('margin', '0', 'important');
-            });
-
-            // Target the identified "Violet" and "Blue" containers
-            const containers = document.querySelectorAll('.wrapper-content, .wrapper-content__body, .wrapper-sidebar-navbar, #block_39');
-            containers.forEach(el => {
+            let el = this.dom.block;
+            while (el && el.tagName !== 'HTML') {
                 el.style.setProperty('max-width', 'none', 'important');
                 el.style.setProperty('width', '100%', 'important');
                 el.style.setProperty('padding-right', '0', 'important');
                 el.style.setProperty('margin-right', '0', 'important');
 
-                // Allow flex grow if it's a flex-item next to the sidebar
+                // If it's a flex-item next to a sidebar, let it grow
+                const computed = window.getComputedStyle(el);
                 if (el.parentElement && window.getComputedStyle(el.parentElement).display === 'flex') {
                     el.style.setProperty('flex', '1', 'important');
                     el.style.setProperty('width', 'auto', 'important');
                 }
-            });
+
+                el = el.parentElement;
+            }
+            // Root level
+            document.documentElement.style.setProperty('max-width', 'none', 'important');
+            document.documentElement.style.setProperty('width', '100%', 'important');
+            document.body.style.setProperty('max-width', 'none', 'important');
+            document.body.style.setProperty('width', '100%', 'important');
         }
 
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
-
-            const styles = `
+            const styleEl = document.createElement('style');
+            styleEl.id = CONFIG.styleId;
+            styleEl.textContent = `
                 .gp-hidden { display: none !important; }
-
-                /* FORCE FULL WIDTH ON ROOT AND WRAPPERS */
-                html, body, 
-                body.gp-services-v2-active .wrapper-content,
-                body.gp-services-v2-active .wrapper-content__body,
-                body.gp-services-v2-active .wrapper-sidebar-navbar {
-                    max-width: none !important;
-                    width: 100% !important;
-                    padding-right: 0 !important; /* CRITICAL: COLLER AU BORD DROIT */
-                    margin-right: 0 !important;
-                }
-
                 #gp-services-v2-container {
                     width: 100%;
                     padding: 24px 40px;
                     box-sizing: border-box;
                     background: transparent;
                 }
-
-                /* --- HERO BANNER --- */
                 .gp-hero-banner {
                     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
                     border-radius: 12px;
                     padding: 48px;
                     margin-bottom: 32px;
+                    color: white;
                     position: relative;
                     overflow: hidden;
-                    color: white;
                     box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
-                    width: 100%;
-                    box-sizing: border-box;
                 }
-                
                 .gp-hero-bg {
-                    position: absolute;
-                    top: 0; right: 0; bottom: 0; left: 0;
-                    background-image: 
-                        radial-gradient(circle at 100% 0%, rgba(255,255,255,0.1) 0%, transparent 25%),
-                        radial-gradient(circle at 0% 100%, rgba(255,255,255,0.05) 0%, transparent 30%);
+                    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+                    background-image: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.1) 0%, transparent 25%);
                 }
-                
                 .gp-hero-content { position: relative; z-index: 1; }
-                .gp-hero-title { font-size: 42px; font-weight: 800; margin-bottom: 8px; color: white; letter-spacing: -1px; }
-                .gp-hero-subtitle { color: rgba(255, 255, 255, 0.9); font-size: 18px; margin-bottom: 32px; font-weight: 400; }
-                
-                .gp-stats-row { display: flex; gap: 48px; border-top: 1px solid rgba(255,255,255,0.15); padding-top: 24px; }
+                .gp-stats-row { display: flex; gap: 48px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; }
                 .gp-stat-item { display: flex; flex-direction: column; }
-                .gp-stat-value { font-size: 32px; font-weight: 700; color: white; }
-                .gp-stat-label { font-size: 12px; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 600; margin-top: 4px; }
-
-                /* --- TOOLBAR & FILTERS --- */
-                .gp-toolbar {
-                    background: white;
-                    padding: 12px;
-                    border-radius: 12px;
-                    border: 1px solid #e2e8f0;
-                    margin-bottom: 32px;
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-                }
+                .gp-stat-value { font-size: 32px; font-weight: 700; }
+                .gp-stat-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; font-weight: 600; }
                 
+                .gp-toolbar { background: white; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
                 .gp-search-container { position: relative; margin-bottom: 12px; }
-                .gp-search-input {
-                    width: 100%;
-                    padding: 14px 16px 14px 48px;
-                    border-radius: 10px;
-                    border: 1px solid #e2e8f0;
-                    background: #f8fafc;
-                    font-size: 15px;
-                    transition: all 0.2s;
-                    box-sizing: border-box;
-                }
-                .gp-search-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); background: white; }
+                .gp-search-input { width: 100%; padding: 14px 14px 14px 44px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 15px; box-sizing: border-box; }
                 .gp-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-
                 .gp-filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 4px; scrollbar-width: none; }
                 .gp-filters-scroll::-webkit-scrollbar { display: none; }
-                
-                .gp-filter-btn {
-                    padding: 10px 18px;
-                    border-radius: 10px;
-                    background: white;
-                    border: 1px solid #e2e8f0;
-                    color: #475569;
-                    font-weight: 600;
-                    font-size: 14px;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    transition: all 0.2s;
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-                .gp-filter-btn:hover { background: #f1f5f9; color: #1e293b; }
+                .gp-filter-btn { padding: 10px 18px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; color: #475569; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
                 .gp-filter-btn.active { background: #1e3a8a; border-color: #1e3a8a; color: white; }
                 .gp-filter-count { background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 6px; font-size: 11px; }
                 .gp-filter-btn.active .gp-filter-count { background: rgba(255,255,255,0.15); }
-
-                /* --- GRID --- */
-                .gp-services-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-                    gap: 24px;
-                }
-
-                .gp-card {
-                    background: white;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 16px;
-                    padding: 24px;
-                    display: flex; flex-direction: column;
-                    transition: all 0.3s ease;
-                }
-                .gp-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); border-color: #93c5fd; }
                 
-                .gp-card-header { margin-bottom: 20px; position: relative; }
+                .gp-services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+                .gp-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative; }
+                .gp-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); border-color: #93c5fd; }
                 .gp-card-category { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-                .gp-card-title { font-size: 17px; font-weight: 700; color: #1e293b; line-height: 1.4; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-
+                .gp-card-title { font-size: 17px; font-weight: 700; color: #1e293b; line-height: 1.4; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin: 0 0 16px; }
                 .gp-price-tag { font-size: 20px; font-weight: 800; color: #2563eb; margin-bottom: 16px; }
                 .gp-card-meta { display: flex; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 20px; }
                 .gp-meta-item { display: flex; flex-direction: column; }
                 .gp-meta-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; }
                 .gp-meta-value { font-size: 14px; font-weight: 600; color: #334155; }
-
-                .gp-btn-buy {
-                    margin-top: auto;
-                    width: 100%; padding: 12px;
-                    background: #2563eb; color: white; border: none;
-                    border-radius: 10px; font-weight: 700; font-size: 14px;
-                    cursor: pointer; transition: all 0.2s;
-                }
+                .gp-btn-buy { margin-top: auto; width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
                 .gp-btn-buy:hover { background: #1e40af; }
-
-                .gp-badge { position: absolute; top: 0; right: 0; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; color: white; text-transform: uppercase; }
-                .gp-badge-hot { background: #ef4444; }
-
-                @media (max-width: 768px) {
-                    #gp-services-v2-container { padding: 20px 16px; }
-                    .gp-hero-banner { padding: 32px; }
-                    .gp-hero-title { font-size: 32px; }
-                    .gp-stats-row { gap: 24px; }
-                }
+                .gp-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; color: white; background: #ef4444; text-transform: uppercase; }
+                
+                @media (max-width: 768px) { #gp-services-v2-container { padding: 20px 16px; } .gp-hero-banner { padding: 32px; } }
             `;
-            const styleEl = document.createElement('style');
-            styleEl.id = CONFIG.styleId;
-            styleEl.textContent = styles;
             document.head.appendChild(styleEl);
         }
 
@@ -3207,9 +3103,7 @@ setTimeout(() => {
                 if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
                     currentCategory = row.textContent.trim().replace(/[\n\r\t]/g, '').trim();
                     const iconEl = row.querySelector('img, i, svg');
-                    if (iconEl && !this.state.categoryIcons[currentCategory]) {
-                        this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
-                    }
+                    if (iconEl) this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
                     if (!this.state.categories.includes(currentCategory)) {
                         this.state.categories.push(currentCategory);
                         this.state.platformCounts[currentCategory] = 0;
@@ -3217,40 +3111,31 @@ setTimeout(() => {
                     }
                     return;
                 }
-
                 const serviceId = row.dataset.filterTableServiceId || row.querySelector('td[data-label="ID"]')?.textContent.trim();
                 const rateCell = row.querySelector('[data-label="Rate per 1000"]');
-
                 if (serviceId || rateCell) {
                     const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
                     const name = row.querySelector('[data-label="Service"]')?.textContent.trim() || 'Service';
-                    const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
-                    const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
-                    const rate = rateCell ? rateCell.textContent.trim() : 'N/A';
-
                     this.state.platformCounts[currentCategory]++;
                     const isFirst = (this.state.categoryServiceCount[currentCategory] === 0);
                     this.state.categoryServiceCount[currentCategory]++;
-
                     this.state.allServices.push({
                         id: serviceId || 'N/A',
                         name: name,
                         category: currentCategory,
-                        rate: rate,
-                        min: min,
-                        max: max,
+                        rate: rateCell ? rateCell.textContent.trim() : 'N/A',
+                        min: row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0',
+                        max: row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞',
                         badge: isFirst ? 'HOT' : null,
                         nativeBtn: buyBtn
                     });
                 }
             });
-            this.state.totalServices = this.state.allServices.length;
         }
 
         buildStructure() {
             const nativeSearch = document.querySelector(CONFIG.selectors.nativeSearchRow);
             if (nativeSearch) nativeSearch.classList.add('gp-hidden');
-
             const tableWr = this.dom.table.closest('.table-responsive, .table-wr');
             if (tableWr) tableWr.classList.add('gp-hidden');
 
@@ -3259,26 +3144,14 @@ setTimeout(() => {
 
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
-            this.renderHero();
+            this.dom.hero.innerHTML = `<div class="gp-hero-bg"></div><div class="gp-hero-content"><h1>Services Catalog</h1><p>Premium SMM services for your business growth.</p></div>`;
 
             this.dom.toolbar = document.createElement('div');
             this.dom.toolbar.className = 'gp-toolbar';
+            this.dom.toolbar.innerHTML = `<div class="gp-search-container"><input type="text" class="gp-search-input" placeholder="Search services..."></div><div class="gp-filters-scroll"></div>`;
+            this.dom.toolbar.querySelector('input').oninput = (e) => { this.state.searchTerm = e.target.value.toLowerCase(); this.state.currentPage = 1; this.applyFilters(); };
 
-            const searchHTML = `<div class="gp-search-container">
-                <div class="gp-search-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></div>
-                <input type="text" class="gp-search-input" placeholder="Search services...">
-            </div>`;
-            this.dom.toolbar.innerHTML = searchHTML;
-            this.dom.toolbar.querySelector('input').oninput = (e) => {
-                this.state.searchTerm = e.target.value.toLowerCase();
-                this.state.currentPage = 1;
-                this.applyFilters();
-            };
-
-            this.dom.filters = document.createElement('div');
-            this.dom.filters.className = 'gp-filters-scroll';
-            this.dom.toolbar.appendChild(this.dom.filters);
-
+            this.dom.filters = this.dom.toolbar.querySelector('.gp-filters-scroll');
             this.dom.grid = document.createElement('div');
             this.dom.grid.className = 'gp-services-grid';
 
@@ -3289,31 +3162,13 @@ setTimeout(() => {
             this.dom.block.prepend(this.dom.container);
         }
 
-        renderHero() {
-            this.dom.hero.innerHTML = `
-                <div class="gp-hero-bg"></div>
-                <div class="gp-hero-content">
-                    <h1 class="gp-hero-title">Services Catalog</h1>
-                    <p class="gp-hero-subtitle">High-quality SMM services for your business growth.</p>
-                    <div class="gp-stats-row">
-                        <div class="gp-stat-item"><span class="gp-stat-value">${this.state.totalServices}</span><span class="gp-stat-label">Services</span></div>
-                        <div class="gp-stat-item"><span class="gp-stat-value">${this.state.categories.length}</span><span class="gp-stat-label">Platforms</span></div>
-                        <div class="gp-stat-item"><span class="gp-stat-value">⚡</span><span class="gp-stat-label">Instant</span></div>
-                    </div>
-                </div>
-            `;
-        }
-
         applyFilters() {
-            const { currentCategory, searchTerm, allServices } = this.state;
-            this.state.filteredServices = allServices.filter(svc => {
-                const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
-                const matchesSearch = svc.name.toLowerCase().includes(searchTerm) || svc.id.includes(searchTerm);
+            this.state.filteredServices = this.state.allServices.filter(svc => {
+                const matchesCat = this.state.currentCategory === 'All' || svc.category === this.state.currentCategory;
+                const matchesSearch = svc.name.toLowerCase().includes(this.state.searchTerm) || svc.id.includes(this.state.searchTerm);
                 return matchesCat && matchesSearch;
             });
-
             this.renderFilters();
-            const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
             const start = (this.state.currentPage - 1) * CONFIG.pageSize;
             this.renderGrid(this.state.filteredServices.slice(start, start + CONFIG.pageSize));
         }
@@ -3323,11 +3178,11 @@ setTimeout(() => {
             const addBtn = (cat, count) => {
                 const btn = document.createElement('button');
                 btn.className = `gp-filter-btn ${this.state.currentCategory === cat ? 'active' : ''}`;
-                btn.innerHTML = `${this.state.categoryIcons[cat] || ''} <span>${cat}</span> <span class="gp-filter-count">${count}</span>`;
+                btn.innerHTML = `<span>${cat}</span> <span class="gp-filter-count">${count}</span>`;
                 btn.onclick = () => { this.state.currentCategory = cat; this.state.currentPage = 1; this.applyFilters(); };
                 this.dom.filters.appendChild(btn);
             };
-            addBtn('All', this.state.totalServices);
+            addBtn('All', this.state.allServices.length);
             this.state.categories.forEach(cat => addBtn(cat, this.state.platformCounts[cat]));
         }
 
@@ -3338,8 +3193,8 @@ setTimeout(() => {
                 card.className = 'gp-card';
                 card.innerHTML = `
                     <div class="gp-card-header">
-                        ${svc.badge ? `<span class="gp-badge gp-badge-hot">${svc.badge}</span>` : ''}
-                        <div class="gp-card-category">${this.state.categoryIcons[svc.category] || ''} ${svc.category}</div>
+                        ${svc.badge ? `<span class="gp-badge">${svc.badge}</span>` : ''}
+                        <div class="gp-card-category">${svc.category}</div>
                         <h3 class="gp-card-title">${svc.name}</h3>
                     </div>
                     <div class="gp-price-tag">${svc.rate}</div>
@@ -3355,9 +3210,5 @@ setTimeout(() => {
         }
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
-    } else {
-        new ServicesApp().init();
-    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => new ServicesApp().init()); } else { new ServicesApp().init(); }
 })();
