@@ -2954,7 +2954,10 @@ setTimeout(() => {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row'
+            nativeSearchRow: '#block_39 .row',
+            wrapperContent: '.wrapper-content',
+            wrapperBody: '.wrapper-content__body',
+            wrapperMain: '.wrapper-sidebar-navbar'
         }
     };
 
@@ -3011,13 +3014,21 @@ setTimeout(() => {
          * TARGETED FIX: Only target the immediate culprits for width
          */
         fixParentLayout() {
-            const containers = document.querySelectorAll('.wrapper-content, .wrapper-content__body, #block_39, .container, .container-fluid');
+            // TARGET ROOT LEVEL - The real bottleneck found in console (895px limit)
+            const roots = [document.documentElement, document.body];
+            roots.forEach(el => {
+                el.style.setProperty('max-width', 'none', 'important');
+                el.style.setProperty('width', '100%', 'important');
+                el.style.setProperty('overflow-x', 'hidden', 'important');
+            });
+
+            // Target the identified "Violet" and "Blue" containers
+            const containers = document.querySelectorAll('.wrapper-content, .wrapper-content__body, .wrapper-sidebar-navbar, #block_39');
             containers.forEach(el => {
-                if (this.dom.block.contains(el) || el.contains(this.dom.block)) {
-                    el.style.setProperty('max-width', 'none', 'important');
-                    el.style.setProperty('width', '100%', 'important');
-                    // We don't touch padding-left here to respect the sidebar
-                }
+                el.style.setProperty('max-width', 'none', 'important');
+                el.style.setProperty('width', '100%', 'important');
+                el.style.setProperty('padding-right', '0', 'important');
+                el.style.setProperty('margin-right', '0', 'important');
             });
         }
 
@@ -3027,11 +3038,15 @@ setTimeout(() => {
             const styles = `
                 .gp-hidden { display: none !important; }
 
-                /* FORCE FULL WIDTH ON RIGHT SIDE */
-                body.gp-services-v2-active .wrapper-content {
+                /* FORCE FULL WIDTH ON ROOT AND WRAPPERS */
+                html, body, 
+                body.gp-services-v2-active .wrapper-content,
+                body.gp-services-v2-active .wrapper-content__body,
+                body.gp-services-v2-active .wrapper-sidebar-navbar {
                     max-width: none !important;
                     width: 100% !important;
-                    padding-right: 0 !important; /* CRITICAL: Remove the 24px gap */
+                    padding-right: 0 !important; /* CRITICAL: COLLER AU BORD DROIT */
+                    margin-right: 0 !important;
                 }
 
                 #gp-services-v2-container {
