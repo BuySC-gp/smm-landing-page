@@ -3014,12 +3014,18 @@ setTimeout(() => {
          * TARGETED FIX: Only target the immediate culprits for width
          */
         fixParentLayout() {
-            // TARGET ROOT LEVEL - The real bottleneck found in console (895px limit)
-            const roots = [document.documentElement, document.body];
+            // TRIPLE-LOCK ROOT FIX: Target by Tag, Class AND ID
+            const roots = [
+                document.documentElement,
+                document.body,
+                document.getElementById('theme_21')
+            ].filter(Boolean);
+
             roots.forEach(el => {
                 el.style.setProperty('max-width', 'none', 'important');
                 el.style.setProperty('width', '100%', 'important');
                 el.style.setProperty('overflow-x', 'hidden', 'important');
+                el.style.setProperty('margin', '0', 'important');
             });
 
             // Target the identified "Violet" and "Blue" containers
@@ -3029,6 +3035,12 @@ setTimeout(() => {
                 el.style.setProperty('width', '100%', 'important');
                 el.style.setProperty('padding-right', '0', 'important');
                 el.style.setProperty('margin-right', '0', 'important');
+
+                // Allow flex grow if it's a flex-item next to the sidebar
+                if (el.parentElement && window.getComputedStyle(el.parentElement).display === 'flex') {
+                    el.style.setProperty('flex', '1', 'important');
+                    el.style.setProperty('width', 'auto', 'important');
+                }
             });
         }
 
