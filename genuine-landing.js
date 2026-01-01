@@ -2941,7 +2941,7 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (PAGINATED & DYNAMIC & REFINED)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (FINAL POLISH)
 // =============================================================================
 (function () {
     'use strict';
@@ -2955,7 +2955,7 @@ setTimeout(() => {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row' // The native search bar row to hide
+            nativeSearchRow: '#block_39 .row'
         }
     };
 
@@ -2973,8 +2973,8 @@ setTimeout(() => {
                 searchTerm: '',
                 totalServices: 0,
                 platformCounts: {},
-                categoryServiceCount: {}, // Track index per category for badges
-                categoryIcons: {} // Store icons extracted from the DOM
+                categoryServiceCount: {},
+                categoryIcons: {}
             };
             this.dom = {
                 block: null,
@@ -2989,7 +2989,7 @@ setTimeout(() => {
         }
 
         init() {
-            console.log('🚀 [SERVICES V2] Initializing Refined Module...');
+            // console.log('🚀 [SERVICES V2] Initializing Premium...');
 
             this.dom.block = document.querySelector(CONFIG.selectors.block);
             this.dom.table = document.querySelector(CONFIG.selectors.table);
@@ -3010,153 +3010,239 @@ setTimeout(() => {
             this.buildStructure();
             this.applyFilters();
 
-            console.log('✅ [SERVICES V2] Ready.');
+            // console.log('✅ [SERVICES V2] Ready.');
         }
 
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
 
-            // Updated Gradient to match Panel Blue style
-            // Using a rich blue gradient common in premium panels
             const styles = `
                 .gp-hidden { display: none !important; }
                 
-                /* --- HERO BANNER --- */
+                /* [LAYOUT FIX] Force Full Width on Block 39 */
+                #block_39 {
+                    max-width: 100% !important;
+                    width: 100% !important;
+                    flex: 0 0 100% !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+                
+                /* [ANIMATIONS] */
+                @keyframes gp-float {
+                    0% { transform: translateY(0px); }
+                    50% { transform: translateY(-10px); }
+                    100% { transform: translateY(0px); }
+                }
+                @keyframes gp-fade-in {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                /* --- HERO BANNER (PREMIUM MESH GRADIENT) --- */
                 .gp-hero-banner {
-                    /* Refined Gradient: Deep Royal Blue */
-                    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-                    border-radius: 16px;
-                    padding: 40px;
-                    margin-bottom: 24px;
+                    background-color: #0f172a;
+                    background-image: 
+                        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+                    border-radius: 20px;
+                    padding: 48px;
+                    margin-bottom: 32px;
                     position: relative;
                     overflow: hidden;
                     color: white;
-                    box-shadow: 0 10px 25px rgba(30, 64, 175, 0.25);
+                    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+                    border: 1px solid rgba(255,255,255,0.05);
                 }
-                .gp-hero-bg {
-                    position: absolute;
-                    top: -50%; right: -20%;
-                    width: 600px; height: 600px;
-                    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-                    pointer-events: none;
-                }
-                .gp-hero-content { position: relative; z-index: 1; }
                 
+                /* Decorative elements */
+                .gp-hero-orb {
+                    position: absolute;
+                    border-radius: 50%;
+                    filter: blur(80px);
+                    opacity: 0.6;
+                    z-index: 0;
+                }
+                .gp-orb-1 { top: -20%; right: -10%; width: 400px; height: 400px; background: #4f46e5; animation: gp-float 8s ease-in-out infinite; }
+                .gp-orb-2 { bottom: -20%; left: -10%; width: 300px; height: 300px; background: #ec4899; animation: gp-float 10s ease-in-out infinite reverse; }
+
+                .gp-hero-content {
+                    position: relative;
+                    z-index: 1;
+                    max-width: 800px;
+                }
+                
+                .gp-hero-label {
+                    display: inline-block;
+                    padding: 6px 12px;
+                    background: rgba(255,255,255,0.1);
+                    backdrop-filter: blur(10px);
+                    border-radius: 30px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    margin-bottom: 16px;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    color: #e2e8f0;
+                }
+
                 .gp-hero-title {
-                    font-size: 36px;
+                    font-size: 42px;
                     font-weight: 800;
-                    margin-bottom: 8px;
+                    margin-bottom: 12px;
                     color: white;
-                    letter-spacing: -0.5px;
+                    line-height: 1.1;
+                    letter-spacing: -1px;
+                    background: linear-gradient(to right, #ffffff, #cbd5e1);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
                 }
                 .gp-hero-subtitle {
-                    color: rgba(255, 255, 255, 0.85);
-                    font-size: 16px;
+                    color: #94a3b8;
+                    font-size: 18px;
+                    margin-bottom: 40px;
+                    line-height: 1.6;
                     max-width: 600px;
-                    margin-bottom: 32px;
-                    line-height: 1.5;
                 }
                 
-                .gp-stats-row { display: flex; gap: 40px; }
-                .gp-stat-item { display: flex; flex-direction: column; }
-                .gp-stat-value { font-size: 28px; font-weight: 800; color: white; line-height: 1.1; }
-                .gp-stat-label { font-size: 11px; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700; margin-top: 4px;}
+                .gp-stats-row {
+                    display: flex;
+                    gap: 24px;
+                }
+                
+                .gp-stat-card {
+                    background: rgba(255,255,255,0.03);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255,255,255,0.05);
+                    padding: 16px 24px;
+                    border-radius: 12px;
+                    min-width: 140px;
+                    transition: transform 0.3s;
+                }
+                .gp-stat-card:hover { 
+                    transform: translateY(-5px); 
+                    background: rgba(255,255,255,0.05);
+                }
+                
+                .gp-stat-value {
+                    font-size: 32px;
+                    font-weight: 800;
+                    color: white;
+                    line-height: 1;
+                    margin-bottom: 4px;
+                    display: block;
+                }
+                .gp-stat-label {
+                    font-size: 11px;
+                    color: #94a3b8;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
 
-                /* --- TOOLBAR (Search + Filter) --- */
+                /* --- TOOLBAR --- */
                 .gp-toolbar {
                     background: white;
-                    padding: 16px;
+                    padding: 8px; /* Compact padding */
                     border-radius: 16px;
-                    border: 1px solid #e5e7eb;
-                    margin-bottom: 24px;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 16px;
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+                    border: 1px solid #e2e8f0;
+                    margin-bottom: 32px;
+                    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
                 }
                 
                 .gp-search-container {
                     position: relative;
-                    width: 100%;
+                    margin-bottom: 12px;
+                    padding: 8px 8px 0 8px;
                 }
                 .gp-search-input {
                     width: 100%;
-                    padding: 14px 16px 14px 48px;
+                    padding: 16px 16px 16px 52px;
                     border-radius: 12px;
-                    border: 1px solid #e2e8f0;
+                    border: 2px solid #f1f5f9;
                     background: #f8fafc;
                     font-size: 15px;
                     transition: all 0.2s;
                     color: #1e293b;
+                    font-weight: 500;
                 }
                 .gp-search-input:focus {
                     outline: none;
                     background: white;
-                    border-color: #3b82f6;
-                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                    border-color: #6366f1;
+                    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
                 }
                 .gp-search-icon {
                     position: absolute;
-                    left: 16px;
+                    left: 24px;
                     top: 50%;
-                    transform: translateY(-50%);
+                    transform: translateY(-35%);
                     color: #94a3b8;
                     pointer-events: none;
                 }
 
-                /* --- CATEGORY TABS --- */
+                /* --- TABS --- */
                 .gp-filters-scroll {
                     display: flex;
-                    gap: 10px;
+                    gap: 8px;
                     overflow-x: auto;
-                    padding-bottom: 4px;
-                    scrollbar-width: none; /* Hide scrollbar for cleaner look */
+                    padding: 8px;
+                    scrollbar-width: none;
                 }
                 .gp-filters-scroll::-webkit-scrollbar { display: none; }
                 
                 .gp-filter-btn {
                     padding: 10px 18px;
-                    border-radius: 12px;
-                    background: #f1f5f9;
-                    border: 1px solid transparent;
+                    border-radius: 10px;
+                    background: white;
+                    border: 1px solid #e2e8f0;
                     color: #64748b;
                     font-weight: 600;
                     font-size: 13px;
                     cursor: pointer;
                     white-space: nowrap;
-                    transition: all 0.2s;
+                    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
                     display: flex;
                     align-items: center;
                     gap: 8px;
                 }
                 .gp-filter-btn img, .gp-filter-btn i {
-                    width: 18px; height: 18px; object-fit: contain;
-                    display: inline-block;
-                    font-style: normal;
+                    width: 16px; height: 16px; object-fit: contain; font-style: normal;
                 }
                 
-                .gp-filter-btn:hover { background: #e2e8f0; color: #334155; }
+                .gp-filter-btn:hover { 
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                    color: #1e293b;
+                }
                 
                 .gp-filter-btn.active {
-                    background: #eff6ff;
-                    border-color: #3b82f6;
-                    color: #2563eb;
+                    background: #1e293b;
+                    border-color: #1e293b;
+                    color: white;
+                    box-shadow: 0 8px 20px -6px rgba(30, 41, 59, 0.5);
+                }
+                .gp-filter-btn.active .gp-filter-count {
+                    background: rgba(255,255,255,0.2);
+                    color: white;
                 }
                 
                 .gp-filter-count {
-                    background: white;
+                    background: #f1f5f9;
                     padding: 2px 6px;
                     border-radius: 6px;
                     font-size: 10px;
-                    color: inherit;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    color: #64748b;
+                    font-weight: 700;
                 }
 
                 /* --- GRID --- */
                 .gp-services-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                    gap: 20px;
+                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                    gap: 24px;
                     margin-bottom: 40px;
                 }
 
@@ -3166,79 +3252,96 @@ setTimeout(() => {
                     border-radius: 16px;
                     padding: 24px;
                     position: relative;
-                    transition: transform 0.2s, box-shadow 0.2s;
+                    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
                     display: flex; flex-direction: column;
+                    animation: gp-fade-in 0.5s ease backwards;
                 }
                 .gp-card:hover {
                     transform: translateY(-4px);
-                    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+                    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
                     border-color: #cbd5e1;
+                    z-index: 2;
                 }
                 
-                .gp-card-header { margin-bottom: 16px; }
+                .gp-card-header { margin-bottom: 20px; }
                 
                 .gp-card-category {
-                    display: inline-flex; align-items: center; gap: 6px;
+                    display: inline-flex; align-items: center; gap: 8px;
                     font-size: 11px; font-weight: 700; color: #64748b;
-                    text-transform: uppercase; margin-bottom: 8px;
+                    text-transform: uppercase; margin-bottom: 12px;
+                    padding: 4px 10px; background: #f8fafc; border-radius: 8px;
                 }
                 .gp-card-category img, .gp-card-category i { width: 14px; height: 14px; object-fit: contain; font-style: normal; }
 
                 .gp-card-badges {
-                    position: absolute; top: 16px; right: 16px;
+                    position: absolute; top: 20px; right: 20px;
                     display: flex; gap: 6px;
                 }
                 .gp-badge {
                     font-size: 10px; font-weight: 800; padding: 4px 8px;
                     border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;
                 }
-                .gp-badge-id { background: #f1f5f9; color: #94a3b8; }
-                .gp-badge-hot { background: #fee2e2; color: #ef4444; }
-                .gp-badge-best { background: #fef3c7; color: #d97706; }
+                .gp-badge-id { background: transparent; border: 1px solid #e2e8f0; color: #94a3b8; }
+                .gp-badge-hot { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; box-shadow: 0 4px 10px rgba(239,68,68,0.3); }
+                .gp-badge-best { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; box-shadow: 0 4px 10px rgba(245,158,11,0.3); }
                 
                 .gp-card-title {
-                    font-size: 15px; font-weight: 700; color: #1e293b;
+                    font-size: 16px; font-weight: 800; color: #0f172a;
                     line-height: 1.5; margin: 0;
                     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-                    height: 46px;
+                    height: 48px;
                 }
 
                 .gp-card-meta {
-                    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-                    background: #f8fafc; border-radius: 12px; padding: 12px;
-                    margin-bottom: 16px;
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+                    background: #f8fafc; border-radius: 12px; 
+                    margin-bottom: 20px; overflow: hidden;
+                    border: 1px solid #f1f5f9;
                 }
-                .gp-meta-col { display: flex; flex-direction: column; }
-                .gp-meta-lbl { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
-                .gp-meta-val { font-size: 13px; font-weight: 700; color: #334155; }
-                .gp-price { color: #2563eb; }
+                .gp-meta-col { 
+                    display: flex; flex-direction: column; padding: 12px 16px;
+                }
+                .gp-meta-col:first-child { border-right: 1px solid #e2e8f0; }
+                
+                .gp-meta-lbl { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+                .gp-meta-val { font-size: 14px; font-weight: 700; color: #334155; }
+                .gp-price { color: #4f46e5; }
 
                 .gp-btn-view {
                     margin-top: auto;
-                    width: 100%; padding: 12px;
-                    background: white; border: 1px solid #e2e8f0;
-                    border-radius: 10px; color: #0f172a; font-weight: 600; font-size: 13px;
+                    width: 100%; padding: 14px;
+                    background: #0f172a; 
+                    border: 1px solid #0f172a;
+                    border-radius: 12px; 
+                    color: white; 
+                    font-weight: 600; font-size: 13px;
                     cursor: pointer; transition: all 0.2s;
-                    display: flex; justify-content: center; align-items: center; gap: 6px;
+                    display: flex; justify-content: center; align-items: center; gap: 8px;
+                    box-shadow: 0 4px 6px -2px rgba(15, 23, 42, 0.2);
                 }
                 .gp-btn-view:hover {
-                    background: #0f172a; border-color: #0f172a; color: white;
+                    background: #1e293b;
+                    transform: translateY(-1px);
+                    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
                 }
 
-                .gp-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+                .gp-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 40px; }
                 .gp-page-btn {
-                    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
-                    border-radius: 8px; border: 1px solid #e2e8f0; background: white;
-                    color: #64748b; font-weight: 600; font-size: 13px; cursor: pointer;
+                    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+                    border-radius: 10px; border: 1px solid #e2e8f0; background: white;
+                    color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer;
+                    transition: all 0.2s;
                 }
-                .gp-page-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
-                .gp-page-btn:hover:not(:disabled) { border-color: #94a3b8; color: #0f172a; }
+                .gp-page-btn.active { background: #4f46e5; color: white; border-color: #4f46e5; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+                .gp-page-btn:hover:not(:disabled) { transform: translateY(-2px); border-color: #cbd5e1; color: #1e293b; }
                 .gp-page-btn:disabled { opacity: 0.5; }
 
                 @media (max-width: 768px) {
                     .gp-services-grid { grid-template-columns: 1fr; }
-                    .gp-stats-row { flex-wrap: wrap; gap: 24px; }
-                    .gp-hero-banner { padding: 24px; }
+                    .gp-hero-banner { padding: 32px 24px; }
+                    .gp-hero-title { font-size: 32px; }
+                    .gp-stats-row { flex-wrap: wrap; }
+                    .gp-stat-card { width: 100%; }
                 }
             `;
             const styleEl = document.createElement('style');
@@ -3257,23 +3360,16 @@ setTimeout(() => {
                     const text = row.textContent.trim();
                     if (text.length > 2) {
                         currentCategory = text.replace(/[\n\r\t]/g, '').trim();
-
-                        // Extract Icon: Check for <img> or <i> inside this row
+                        // Extract Icon
                         const iconEl = row.querySelector('img, i, svg');
-                        let iconHtml = null;
-                        if (iconEl) {
-                            iconHtml = iconEl.outerHTML;
+                        if (iconEl && !this.state.categoryIcons[currentCategory]) {
+                            this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
                         }
 
                         if (!this.state.categories.includes(currentCategory)) {
                             this.state.categories.push(currentCategory);
                             this.state.platformCounts[currentCategory] = 0;
                             this.state.categoryServiceCount[currentCategory] = 0;
-
-                            // Save icon if found
-                            if (iconHtml) {
-                                this.state.categoryIcons[currentCategory] = iconHtml;
-                            }
                         }
                     }
                     return acc;
@@ -3298,8 +3394,8 @@ setTimeout(() => {
                     // Badge Logic
                     const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
                     let badge = null;
-                    if (catIndex === 0) badge = { text: '🔥 Popular', class: 'gp-badge-hot' };
-                    else if (catIndex === 1) badge = { text: '⭐ Best', class: 'gp-badge-best' };
+                    if (catIndex === 0) badge = { text: 'POPULAR', class: 'gp-badge-hot' };
+                    else if (catIndex === 1) badge = { text: 'BEST', class: 'gp-badge-best' };
 
                     this.state.categoryServiceCount[currentCategory] = catIndex + 1;
 
@@ -3322,20 +3418,17 @@ setTimeout(() => {
         }
 
         buildStructure() {
-            // HIDE Native Search/Selector Row
-            // Looking for the row inside block_39
+            // HIDE Native Search/Selector Row & Icon Scrape
             const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
             if (nativeRow) {
                 nativeRow.classList.add('gp-hidden');
 
-                // Try to find icons in the native selector before hiding
-                // This covers cases where icons are in the dropdown but not the table
+                // Icon Scrape from Native Dropdown
                 const nativeFilterItems = nativeRow.querySelectorAll('.dropdown-item, .btn-group button, option, li');
                 nativeFilterItems.forEach(item => {
                     const txt = item.textContent.trim();
                     const icon = item.querySelector('img, i, svg');
                     if (txt && icon) {
-                        // Fuzzy match category name
                         const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
                         if (matchedCat && !this.state.categoryIcons[matchedCat]) {
                             this.state.categoryIcons[matchedCat] = icon.outerHTML;
@@ -3351,16 +3444,16 @@ setTimeout(() => {
             this.dom.container = document.createElement('div');
             this.dom.container.id = CONFIG.containerId;
 
-            // 1. Hero (Top)
+            // 1. Hero
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
             this.renderHero();
 
-            // 2. Toolbar (Search + Filters)
+            // 2. Toolbar
             this.dom.toolbar = document.createElement('div');
             this.dom.toolbar.className = 'gp-toolbar';
 
-            // Custom Search
+            // Search
             const searchContainer = document.createElement('div');
             searchContainer.className = 'gp-search-container';
             searchContainer.innerHTML = `
@@ -3374,7 +3467,7 @@ setTimeout(() => {
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
             searchInput.className = 'gp-search-input';
-            searchInput.placeholder = 'Search services by name or ID...';
+            searchInput.placeholder = 'Search services...';
             searchInput.addEventListener('input', (e) => {
                 this.state.searchTerm = e.target.value.toLowerCase();
                 this.state.currentPage = 1;
@@ -3382,12 +3475,12 @@ setTimeout(() => {
             });
             searchContainer.appendChild(searchInput);
 
-            // Filters Wrapper
+            // Filters
             this.dom.filters = document.createElement('div');
             this.dom.filters.className = 'gp-filters-scroll';
 
             this.dom.toolbar.appendChild(searchContainer);
-            this.dom.toolbar.appendChild(this.dom.filters); // Place filters below search
+            this.dom.toolbar.appendChild(this.dom.filters);
 
             // 3. Grid
             this.dom.grid = document.createElement('div');
@@ -3402,9 +3495,7 @@ setTimeout(() => {
             this.dom.container.appendChild(this.dom.grid);
             this.dom.container.appendChild(this.dom.pagination);
 
-            // Insert at TOP of block, effectively replacing the hidden native row
-            // If nativeRow exists, we submit before it to be super safe, then hide it.
-            // But prepending to block is usually safest if the block contains everything.
+            // Insert TOP
             if (this.dom.block.firstChild) {
                 this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
             } else {
@@ -3414,22 +3505,27 @@ setTimeout(() => {
 
         renderHero() {
             this.dom.hero.innerHTML = `
-                <div class="gp-hero-bg"></div>
+                <div class="gp-hero-bg">
+                    <div class="gp-hero-orb gp-orb-1"></div>
+                    <div class="gp-hero-orb gp-orb-2"></div>
+                </div>
                 <div class="gp-hero-content">
-                    <h1 class="gp-hero-title">Services Catalog</h1>
-                    <p class="gp-hero-subtitle">Browse our premium status of ${this.state.totalServices} active services.</p>
+                    <span class="gp-hero-label">Premium Services</span>
+                    <h1 class="gp-hero-title">Boost Your Presence</h1>
+                    <p class="gp-hero-subtitle">Access the world's most reliable social media growth services. Instant delivery, premium quality, and 24/7 support.</p>
+                    
                     <div class="gp-stats-row">
-                        <div class="gp-stat-item">
+                        <div class="gp-stat-card">
                             <span class="gp-stat-value">${this.state.totalServices}</span>
-                            <span class="gp-stat-label">Services</span>
+                            <span class="gp-stat-label">Active Services</span>
                         </div>
-                        <div class="gp-stat-item">
+                        <div class="gp-stat-card">
                             <span class="gp-stat-value">${this.state.categories.length}</span>
                             <span class="gp-stat-label">Platforms</span>
                         </div>
-                        <div class="gp-stat-item">
-                            <span class="gp-stat-value">⚡</span>
-                            <span class="gp-stat-label">Instant</span>
+                        <div class="gp-stat-card">
+                            <span class="gp-stat-value">0.1s</span>
+                            <span class="gp-stat-label">Avg. Speed</span>
                         </div>
                     </div>
                 </div>
@@ -3455,12 +3551,7 @@ setTimeout(() => {
             const btn = document.createElement('button');
             btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
 
-            // Use custom icon if available, otherwise generic
-            let iconHtml = this.state.categoryIcons[label];
-            if (!iconHtml) {
-                // Fallback icons if not found in DOM
-                iconHtml = this.getFallbackIcon(label);
-            }
+            let iconHtml = this.state.categoryIcons[label] || this.getFallbackIcon(label);
 
             btn.innerHTML = `
                 ${iconHtml}
@@ -3476,15 +3567,16 @@ setTimeout(() => {
         }
 
         getFallbackIcon(label) {
-            // Improved fallback using emojis if no image found.
-            // Ideally we want SVGs but emojis are reliable for now.
             const l = label.toLowerCase();
-            if (l.includes('instagram')) return '<i>📷</i>'; // Temporary fallback
+            // Using system emojis inside <i> to maintain structure
+            if (l.includes('instagram')) return '<i>📷</i>';
             if (l.includes('tiktok')) return '<i>🎵</i>';
             if (l.includes('youtube')) return '<i>▶️</i>';
             if (l.includes('spotify')) return '<i>🎧</i>';
             if (l.includes('twitch')) return '<i>🎮</i>';
             if (l.includes('facebook')) return '<i>👥</i>';
+            if (l.includes('twitter') || l.includes('x')) return '<i>🐦</i>';
+            if (l.includes('telegram')) return '<i>✈️</i>';
             return '<i>📱</i>';
         }
 
@@ -3498,7 +3590,7 @@ setTimeout(() => {
                 return matchesCat && matchesSearch;
             });
 
-            this.renderFilters(); // Re-render to update active class
+            this.renderFilters(); // Update active class/counts
 
             const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
             if (this.state.currentPage > totalPages) this.state.currentPage = 1;
@@ -3513,13 +3605,17 @@ setTimeout(() => {
         renderGrid(services) {
             this.dom.grid.innerHTML = '';
             if (services.length === 0) {
-                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;opacity:0.6">No services found.</div>`;
+                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
+                    <br><h3>No services found matching your criteria.</h3>
+                    <p>Try clearing filters or search term.</p>
+                </div>`;
                 return;
             }
 
-            services.forEach(svc => {
+            services.forEach((svc, index) => {
                 const card = document.createElement('div');
                 card.className = 'gp-card';
+                card.style.animationDelay = `${index * 0.05}s`; // Staggered fade-in
 
                 let iconHtml = this.state.categoryIcons[svc.category] || this.getFallbackIcon(svc.category);
                 const badgeHtml = svc.badge ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>` : '';
@@ -3535,7 +3631,7 @@ setTimeout(() => {
                     </div>
                     <div class="gp-card-meta">
                         <div class="gp-meta-col">
-                            <span class="gp-meta-lbl">Rate / 1000</span>
+                            <span class="gp-meta-lbl">Rate per 1k</span>
                             <span class="gp-meta-val gp-price">${svc.rate}</span>
                         </div>
                         <div class="gp-meta-col">
@@ -3552,7 +3648,6 @@ setTimeout(() => {
                 card.querySelector('.gp-btn-view').onclick = (e) => {
                     e.preventDefault();
                     if (svc.nativeBtn) svc.nativeBtn.click();
-                    else alert('Error: Cannot open order popup.');
                 };
 
                 this.dom.grid.appendChild(card);
@@ -3567,33 +3662,35 @@ setTimeout(() => {
                 const btn = document.createElement('button');
                 btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
                 btn.textContent = lbl || p;
+
                 btn.onclick = () => {
                     this.state.currentPage = p;
                     this.applyFilters();
-                    this.dom.toolbar.scrollIntoView({ behavior: 'smooth' });
+                    // Smooth scroll to grid top
+                    const yOffset = -100;
+                    const y = this.dom.toolbar.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
                 };
                 this.dom.pagination.appendChild(btn);
             };
 
             addBtn(Math.max(1, this.state.currentPage - 1), '←');
 
-            // Simple logic: always show 1, current, last
             if (totalPages > 5) {
                 if (this.state.currentPage > 2) addBtn(1);
                 if (this.state.currentPage > 3) {
-                    const s = document.createElement('span'); s.textContent = '...';
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
                     this.dom.pagination.appendChild(s);
                 }
             }
 
-            // Current neighborhood
             let start = Math.max(1, this.state.currentPage - 1);
             let end = Math.min(totalPages, this.state.currentPage + 1);
             for (let i = start; i <= end; i++) addBtn(i);
 
             if (totalPages > 5) {
                 if (this.state.currentPage < totalPages - 2) {
-                    const s = document.createElement('span'); s.textContent = '...';
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
                     this.dom.pagination.appendChild(s);
                 }
                 if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
