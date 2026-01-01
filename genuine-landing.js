@@ -3035,7 +3035,7 @@ cursor: pointer !important;
       }
 
       if (this.dom.block) {
-        this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important; overflow-x: hidden !important;');
+        this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important; overflow: visible !important;');
       }
 
       console.log('🔧 [SERVICES V2] forceFullWidth applied with overflow-x: hidden');
