@@ -2941,7 +2941,7 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (PAGINATED & DYNAMIC)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (PAGINATED & DYNAMIC & REFINED)
 // =============================================================================
 (function () {
     'use strict';
@@ -2955,13 +2955,12 @@ setTimeout(() => {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            searchRow: '#block_39 .row' // The native search bar row
+            nativeSearchRow: '#block_39 .row' // The native search bar row to hide
         }
     };
 
     /**
      * Services Application Class
-     * Manages state, data extraction, and rendering.
      */
     class ServicesApp {
         constructor() {
@@ -2974,149 +2973,155 @@ setTimeout(() => {
                 searchTerm: '',
                 totalServices: 0,
                 platformCounts: {},
-                categoryServiceCount: {} // Track index per category for badges
+                categoryServiceCount: {}, // Track index per category for badges
+                categoryIcons: {} // Store icons extracted from the DOM
             };
             this.dom = {
                 block: null,
                 table: null,
                 container: null,
                 hero: null,
+                toolbar: null,
                 filters: null,
                 grid: null,
                 pagination: null
             };
         }
 
-        /**
-         * Initialize the transformation
-         */
         init() {
-            console.log('🚀 [SERVICES V2] Initializing...');
+            console.log('🚀 [SERVICES V2] Initializing Refined Module...');
 
             this.dom.block = document.querySelector(CONFIG.selectors.block);
             this.dom.table = document.querySelector(CONFIG.selectors.table);
 
             if (!this.dom.block || !this.dom.table) {
-                console.warn('❌ [SERVICES V2] Block or Table not found. Retrying in 1s...');
                 setTimeout(() => this.init(), 1000);
                 return;
             }
 
             if (this.dom.block.dataset.servicesV2 === 'true') {
-                console.log('⚠️ [SERVICES V2] Already transformed.');
                 return;
             }
 
             this.dom.block.dataset.servicesV2 = 'true';
 
-            // 1. Inject CSS
             this.injectStyles();
-
-            // 2. Extract Data
             this.extractData();
-
-            // 3. Build UI Structure
             this.buildStructure();
-
-            // 4. Initial Render
             this.applyFilters();
 
-            console.log('✅ [SERVICES V2] Transformation Complete.');
+            console.log('✅ [SERVICES V2] Ready.');
         }
 
-        /**
-         * Inject Custom CSS
-         */
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
 
+            // Updated Gradient to match Panel Blue style
+            // Using a rich blue gradient common in premium panels
             const styles = `
-                /* --- UTILITIES --- */
                 .gp-hidden { display: none !important; }
-                .gp-flex { display: flex; }
-                .gp-items-center { align-items: center; }
-                .gp-justify-between { justify-content: space-between; }
-                .gp-gap-2 { gap: 8px; }
                 
                 /* --- HERO BANNER --- */
                 .gp-hero-banner {
-                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                    /* Refined Gradient: Deep Royal Blue */
+                    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
                     border-radius: 16px;
                     padding: 40px;
-                    margin-bottom: 32px;
+                    margin-bottom: 24px;
                     position: relative;
                     overflow: hidden;
                     color: white;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                    box-shadow: 0 10px 25px rgba(30, 64, 175, 0.25);
                 }
                 .gp-hero-bg {
                     position: absolute;
-                    top: 0; right: 0; bottom: 0; left: 0;
-                    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%);
+                    top: -50%; right: -20%;
+                    width: 600px; height: 600px;
+                    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
                     pointer-events: none;
                 }
-                .gp-hero-content {
-                    position: relative;
-                    z-index: 1;
-                }
+                .gp-hero-content { position: relative; z-index: 1; }
+                
                 .gp-hero-title {
-                    font-size: 32px;
+                    font-size: 36px;
                     font-weight: 800;
-                    margin-bottom: 12px;
-                    background: linear-gradient(to right, #ffffff, #94a3b8);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 8px;
+                    color: white;
+                    letter-spacing: -0.5px;
                 }
                 .gp-hero-subtitle {
-                    color: #94a3b8;
+                    color: rgba(255, 255, 255, 0.85);
                     font-size: 16px;
                     max-width: 600px;
                     margin-bottom: 32px;
+                    line-height: 1.5;
                 }
-                .gp-stats-row {
-                    display: flex;
-                    gap: 32px;
-                }
-                .gp-stat-item {
+                
+                .gp-stats-row { display: flex; gap: 40px; }
+                .gp-stat-item { display: flex; flex-direction: column; }
+                .gp-stat-value { font-size: 28px; font-weight: 800; color: white; line-height: 1.1; }
+                .gp-stat-label { font-size: 11px; color: rgba(255,255,255,0.7); text-transform: uppercase; font-weight: 700; margin-top: 4px;}
+
+                /* --- TOOLBAR (Search + Filter) --- */
+                .gp-toolbar {
+                    background: white;
+                    padding: 16px;
+                    border-radius: 16px;
+                    border: 1px solid #e5e7eb;
+                    margin-bottom: 24px;
                     display: flex;
                     flex-direction: column;
+                    gap: 16px;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
                 }
-                .gp-stat-value {
-                    font-size: 24px;
-                    font-weight: 700;
-                    color: white;
+                
+                .gp-search-container {
+                    position: relative;
+                    width: 100%;
                 }
-                .gp-stat-label {
-                    font-size: 12px;
-                    color: #64748b;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
+                .gp-search-input {
+                    width: 100%;
+                    padding: 14px 16px 14px 48px;
+                    border-radius: 12px;
+                    border: 1px solid #e2e8f0;
+                    background: #f8fafc;
+                    font-size: 15px;
+                    transition: all 0.2s;
+                    color: #1e293b;
+                }
+                .gp-search-input:focus {
+                    outline: none;
+                    background: white;
+                    border-color: #3b82f6;
+                    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                }
+                .gp-search-icon {
+                    position: absolute;
+                    left: 16px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #94a3b8;
+                    pointer-events: none;
                 }
 
-                /* --- CATEGORY FILTERS --- */
+                /* --- CATEGORY TABS --- */
                 .gp-filters-scroll {
                     display: flex;
-                    gap: 12px;
+                    gap: 10px;
                     overflow-x: auto;
-                    padding-bottom: 16px;
-                    margin-bottom: 24px;
-                    scrollbar-width: thin;
+                    padding-bottom: 4px;
+                    scrollbar-width: none; /* Hide scrollbar for cleaner look */
                 }
-                .gp-filters-scroll::-webkit-scrollbar {
-                    height: 4px;
-                }
-                .gp-filters-scroll::-webkit-scrollbar-thumb {
-                    background: #cbd5e1;
-                    border-radius: 4px;
-                }
+                .gp-filters-scroll::-webkit-scrollbar { display: none; }
+                
                 .gp-filter-btn {
-                    padding: 10px 20px;
-                    border-radius: 50px;
-                    background: white;
-                    border: 1px solid #e2e8f0;
+                    padding: 10px 18px;
+                    border-radius: 12px;
+                    background: #f1f5f9;
+                    border: 1px solid transparent;
                     color: #64748b;
                     font-weight: 600;
-                    font-size: 14px;
+                    font-size: 13px;
                     cursor: pointer;
                     white-space: nowrap;
                     transition: all 0.2s;
@@ -3124,259 +3129,177 @@ setTimeout(() => {
                     align-items: center;
                     gap: 8px;
                 }
-                .gp-filter-btn:hover {
-                    border-color: #cbd5e1;
-                    color: #334155;
-                    transform: translateY(-1px);
+                .gp-filter-btn img, .gp-filter-btn i {
+                    width: 18px; height: 18px; object-fit: contain;
+                    display: inline-block;
+                    font-style: normal;
                 }
+                
+                .gp-filter-btn:hover { background: #e2e8f0; color: #334155; }
+                
                 .gp-filter-btn.active {
-                    background: #2563eb;
-                    border-color: #2563eb;
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+                    background: #eff6ff;
+                    border-color: #3b82f6;
+                    color: #2563eb;
                 }
+                
                 .gp-filter-count {
-                    background: rgba(0,0,0,0.08);
-                    padding: 2px 8px;
-                    border-radius: 12px;
-                    font-size: 11px;
-                }
-                .gp-filter-btn.active .gp-filter-count {
-                    background: rgba(255,255,255,0.2);
-                    color: white;
+                    background: white;
+                    padding: 2px 6px;
+                    border-radius: 6px;
+                    font-size: 10px;
+                    color: inherit;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
                 }
 
-                /* --- GRID LAYOUT --- */
+                /* --- GRID --- */
                 .gp-services-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                     gap: 20px;
                     margin-bottom: 40px;
                 }
-                
-                /* --- SERVICE CARD --- */
+
                 .gp-card {
                     background: white;
                     border: 1px solid #e2e8f0;
                     border-radius: 16px;
                     padding: 24px;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                     position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    height: 100%;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex; flex-direction: column;
                 }
                 .gp-card:hover {
                     transform: translateY(-4px);
-                    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+                    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
                     border-color: #cbd5e1;
                 }
-                .gp-card-header {
-                    margin-bottom: 16px;
+                
+                .gp-card-header { margin-bottom: 16px; }
+                
+                .gp-card-category {
+                    display: inline-flex; align-items: center; gap: 6px;
+                    font-size: 11px; font-weight: 700; color: #64748b;
+                    text-transform: uppercase; margin-bottom: 8px;
                 }
+                .gp-card-category img, .gp-card-category i { width: 14px; height: 14px; object-fit: contain; font-style: normal; }
+
                 .gp-card-badges {
-                    position: absolute;
-                    top: 16px;
-                    right: 16px;
-                    display: flex;
-                    gap: 6px;
+                    position: absolute; top: 16px; right: 16px;
+                    display: flex; gap: 6px;
                 }
                 .gp-badge {
-                    font-size: 10px;
-                    font-weight: 700;
-                    padding: 4px 10px;
-                    border-radius: 20px;
-                    text-transform: uppercase;
+                    font-size: 10px; font-weight: 800; padding: 4px 8px;
+                    border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;
                 }
-                .gp-badge-id { background: #f1f5f9; color: #64748b; }
-                .gp-badge-hot { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
-                .gp-badge-new { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-
-                .gp-card-category {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 11px;
-                    font-weight: 700;
-                    text-transform: uppercase;
-                    color: #64748b;
-                    margin-bottom: 8px;
-                    background: #f8fafc;
-                    padding: 4px 10px;
-                    border-radius: 6px;
-                }
+                .gp-badge-id { background: #f1f5f9; color: #94a3b8; }
+                .gp-badge-hot { background: #fee2e2; color: #ef4444; }
+                .gp-badge-best { background: #fef3c7; color: #d97706; }
+                
                 .gp-card-title {
-                    font-size: 16px;
-                    font-weight: 700;
-                    color: #1e293b;
-                    line-height: 1.4;
-                    margin-bottom: 0;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    height: 44px; /* Fixed height for title alignment */
+                    font-size: 15px; font-weight: 700; color: #1e293b;
+                    line-height: 1.5; margin: 0;
+                    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+                    height: 46px;
                 }
 
                 .gp-card-meta {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 12px;
-                    margin-bottom: 20px;
-                    padding: 16px;
-                    background: #f8fafc;
-                    border-radius: 12px;
-                    border: 1px solid #f1f5f9;
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+                    background: #f8fafc; border-radius: 12px; padding: 12px;
+                    margin-bottom: 16px;
                 }
-                .gp-meta-item {
-                    display: flex;
-                    flex-direction: column;
-                }
-                .gp-meta-label {
-                    font-size: 10px;
-                    color: #94a3b8;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    margin-bottom: 4px;
-                }
-                .gp-meta-val {
-                    font-size: 14px;
-                    font-weight: 700;
-                    color: #334155;
-                }
-                .gp-price-val {
-                    color: #2563eb;
-                }
+                .gp-meta-col { display: flex; flex-direction: column; }
+                .gp-meta-lbl { font-size: 10px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+                .gp-meta-val { font-size: 13px; font-weight: 700; color: #334155; }
+                .gp-price { color: #2563eb; }
 
-                .gp-card-footer {
-                    margin-top: auto;
-                }
                 .gp-btn-view {
-                    width: 100%;
-                    padding: 12px;
-                    background: white;
-                    border: 1px solid #e2e8f0;
-                    color: #0f172a;
-                    border-radius: 10px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 8px;
+                    margin-top: auto;
+                    width: 100%; padding: 12px;
+                    background: white; border: 1px solid #e2e8f0;
+                    border-radius: 10px; color: #0f172a; font-weight: 600; font-size: 13px;
+                    cursor: pointer; transition: all 0.2s;
+                    display: flex; justify-content: center; align-items: center; gap: 6px;
                 }
                 .gp-btn-view:hover {
-                    background: #0f172a;
-                    border-color: #0f172a;
-                    color: white;
-                }
-                .gp-btn-view svg {
-                    width: 16px;
-                    height: 16px;
+                    background: #0f172a; border-color: #0f172a; color: white;
                 }
 
-                /* --- PAGINATION --- */
-                .gp-pagination {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 8px;
-                    margin-top: 20px;
-                }
+                .gp-pagination { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
                 .gp-page-btn {
-                    min-width: 40px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 8px;
-                    border: 1px solid #e2e8f0;
-                    background: white;
-                    color: #64748b;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
+                    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+                    border-radius: 8px; border: 1px solid #e2e8f0; background: white;
+                    color: #64748b; font-weight: 600; font-size: 13px; cursor: pointer;
                 }
-                .gp-page-btn:hover:not(:disabled) {
-                    border-color: #94a3b8;
-                    color: #0f172a;
-                }
-                .gp-page-btn.active {
-                    background: #0f172a;
-                    color: white;
-                    border-color: #0f172a;
-                }
-                .gp-page-btn:disabled {
-                    opacity: 0.5;
-                    cursor: not-allowed;
-                }
+                .gp-page-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+                .gp-page-btn:hover:not(:disabled) { border-color: #94a3b8; color: #0f172a; }
+                .gp-page-btn:disabled { opacity: 0.5; }
 
                 @media (max-width: 768px) {
                     .gp-services-grid { grid-template-columns: 1fr; }
-                    .gp-stats-row { flex-wrap: wrap; gap: 20px; }
+                    .gp-stats-row { flex-wrap: wrap; gap: 24px; }
                     .gp-hero-banner { padding: 24px; }
                 }
             `;
-
             const styleEl = document.createElement('style');
             styleEl.id = CONFIG.styleId;
             styleEl.textContent = styles;
             document.head.appendChild(styleEl);
         }
 
-        /**
-         * Robustly extract data from the HTML table
-         */
         extractData() {
             const rows = Array.from(document.querySelectorAll(CONFIG.selectors.tableRows));
             let currentCategory = "Other";
 
             this.state.allServices = rows.reduce((acc, row) => {
-                // Case 1: Category Row
+                // Category Row
                 if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
                     const text = row.textContent.trim();
                     if (text.length > 2) {
                         currentCategory = text.replace(/[\n\r\t]/g, '').trim();
-                        // Add to categories set
+
+                        // Extract Icon: Check for <img> or <i> inside this row
+                        const iconEl = row.querySelector('img, i, svg');
+                        let iconHtml = null;
+                        if (iconEl) {
+                            iconHtml = iconEl.outerHTML;
+                        }
+
                         if (!this.state.categories.includes(currentCategory)) {
                             this.state.categories.push(currentCategory);
                             this.state.platformCounts[currentCategory] = 0;
                             this.state.categoryServiceCount[currentCategory] = 0;
+
+                            // Save icon if found
+                            if (iconHtml) {
+                                this.state.categoryIcons[currentCategory] = iconHtml;
+                            }
                         }
                     }
                     return acc;
                 }
 
-                // Case 2: Service Row (Must have a service ID or pricing)
-                // We'll look for specific markers to identify real service rows
+                // Service Row
                 const serviceId = row.dataset.filterTableServiceId ||
                     row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
                     null;
-
-                // Even if no ID, if it has a "Rate" cell, it's likely a service
                 const rateCell = row.querySelector('[data-label="Rate per 1000"]');
 
                 if (serviceId || rateCell) {
-                    // Try to find the native interaction button (Modal trigger)
                     const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
-
                     const nameCell = row.querySelector('[data-label="Service"]');
                     const name = nameCell ? nameCell.textContent.trim() : 'Unknown Service';
-
                     const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
                     const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
-                    const rate = rateCell ? rateCell.textContent.trim() : '$0.00';
+                    const rate = rateCell ? rateCell.textContent.trim() : 'N/A';
 
-                    // Update counts
                     this.state.platformCounts[currentCategory]++;
 
-                    // Determine Badge
+                    // Badge Logic
                     const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
                     let badge = null;
                     if (catIndex === 0) badge = { text: '🔥 Popular', class: 'gp-badge-hot' };
-                    else if (catIndex === 1) badge = { text: '⭐ Best', class: 'gp-badge-new' };
-                    // else if (catIndex === 2) badge = { text: '✨ Top', class: 'gp-badge-id' }; 
+                    else if (catIndex === 1) badge = { text: '⭐ Best', class: 'gp-badge-best' };
 
                     this.state.categoryServiceCount[currentCategory] = catIndex + 1;
 
@@ -3389,36 +3312,82 @@ setTimeout(() => {
                         max: max,
                         badge: badge,
                         originalRow: row,
-                        nativeBtn: buyBtn // Store reference to click later
+                        nativeBtn: buyBtn
                     });
                 }
-
                 return acc;
             }, []);
 
             this.state.totalServices = this.state.allServices.length;
-            console.log(`📊 Extracted ${this.state.totalServices} services across ${this.state.categories.length} categories.`);
         }
 
-        /**
-         * Build the main specific DOM structure
-         */
         buildStructure() {
-            // Hide original table container
+            // HIDE Native Search/Selector Row
+            // Looking for the row inside block_39
+            const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
+            if (nativeRow) {
+                nativeRow.classList.add('gp-hidden');
+
+                // Try to find icons in the native selector before hiding
+                // This covers cases where icons are in the dropdown but not the table
+                const nativeFilterItems = nativeRow.querySelectorAll('.dropdown-item, .btn-group button, option, li');
+                nativeFilterItems.forEach(item => {
+                    const txt = item.textContent.trim();
+                    const icon = item.querySelector('img, i, svg');
+                    if (txt && icon) {
+                        // Fuzzy match category name
+                        const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
+                        if (matchedCat && !this.state.categoryIcons[matchedCat]) {
+                            this.state.categoryIcons[matchedCat] = icon.outerHTML;
+                        }
+                    }
+                });
+            }
+
             const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
             if (tableWrapper) tableWrapper.classList.add('gp-hidden');
 
-            // Create App Container
+            // --- MAIN CONTAINER ---
             this.dom.container = document.createElement('div');
             this.dom.container.id = CONFIG.containerId;
 
-            // 1. Hero
+            // 1. Hero (Top)
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
             this.renderHero();
 
-            // 2. Filters
+            // 2. Toolbar (Search + Filters)
+            this.dom.toolbar = document.createElement('div');
+            this.dom.toolbar.className = 'gp-toolbar';
+
+            // Custom Search
+            const searchContainer = document.createElement('div');
+            searchContainer.className = 'gp-search-container';
+            searchContainer.innerHTML = `
+                <div class="gp-search-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            `;
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.className = 'gp-search-input';
+            searchInput.placeholder = 'Search services by name or ID...';
+            searchInput.addEventListener('input', (e) => {
+                this.state.searchTerm = e.target.value.toLowerCase();
+                this.state.currentPage = 1;
+                this.applyFilters();
+            });
+            searchContainer.appendChild(searchInput);
+
+            // Filters Wrapper
             this.dom.filters = document.createElement('div');
+            this.dom.filters.className = 'gp-filters-scroll';
+
+            this.dom.toolbar.appendChild(searchContainer);
+            this.dom.toolbar.appendChild(this.dom.filters); // Place filters below search
 
             // 3. Grid
             this.dom.grid = document.createElement('div');
@@ -3428,21 +3397,18 @@ setTimeout(() => {
             this.dom.pagination = document.createElement('div');
             this.dom.pagination.className = 'gp-pagination';
 
-            // Assemble
             this.dom.container.appendChild(this.dom.hero);
-            this.dom.container.appendChild(this.dom.filters);
+            this.dom.container.appendChild(this.dom.toolbar);
             this.dom.container.appendChild(this.dom.grid);
             this.dom.container.appendChild(this.dom.pagination);
 
-            // Insert after the native search bar
-            const searchRow = document.querySelector(CONFIG.selectors.searchRow);
-            if (searchRow) {
-                searchRow.parentNode.insertBefore(this.dom.container, searchRow.nextSibling);
-                // Hook into native search if possible, or hide it and build our own.
-                // For now, let's style the native search and attach a listener
-                this.attachSearchListener(searchRow);
-            } else {
+            // Insert at TOP of block, effectively replacing the hidden native row
+            // If nativeRow exists, we submit before it to be super safe, then hide it.
+            // But prepending to block is usually safest if the block contains everything.
+            if (this.dom.block.firstChild) {
                 this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
+            } else {
+                this.dom.block.appendChild(this.dom.container);
             }
         }
 
@@ -3451,20 +3417,19 @@ setTimeout(() => {
                 <div class="gp-hero-bg"></div>
                 <div class="gp-hero-content">
                     <h1 class="gp-hero-title">Services Catalog</h1>
-                    <p class="gp-hero-subtitle">Browse our premium selection of ${this.state.totalServices} high-quality services.</p>
-                    
+                    <p class="gp-hero-subtitle">Browse our premium status of ${this.state.totalServices} active services.</p>
                     <div class="gp-stats-row">
                         <div class="gp-stat-item">
                             <span class="gp-stat-value">${this.state.totalServices}</span>
-                            <span class="gp-stat-label">Total Services</span>
+                            <span class="gp-stat-label">Services</span>
                         </div>
                         <div class="gp-stat-item">
                             <span class="gp-stat-value">${this.state.categories.length}</span>
                             <span class="gp-stat-label">Platforms</span>
                         </div>
                         <div class="gp-stat-item">
-                            <span class="gp-stat-value">⚡ Fast</span>
-                            <span class="gp-stat-label">Delivery</span>
+                            <span class="gp-stat-value">⚡</span>
+                            <span class="gp-stat-label">Instant</span>
                         </div>
                     </div>
                 </div>
@@ -3472,77 +3437,60 @@ setTimeout(() => {
         }
 
         renderFilters() {
-            const scrollContainer = document.createElement('div');
-            scrollContainer.className = 'gp-filters-scroll';
+            this.dom.filters.innerHTML = '';
 
-            // "All" Button
-            const allBtn = this.createFilterBtn('All', this.state.totalServices);
-            scrollContainer.appendChild(allBtn);
+            // All
+            this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
 
-            // Category Buttons
+            // Categories
             this.state.categories.forEach(cat => {
-                const count = this.state.platformCounts[cat] || 0;
+                const count = this.state.platformCounts[cat];
                 if (count > 0) {
-                    scrollContainer.appendChild(this.createFilterBtn(cat, count));
+                    this.dom.filters.appendChild(this.createFilterBtn(cat, count));
                 }
             });
-
-            this.dom.filters.innerHTML = '';
-            this.dom.filters.appendChild(scrollContainer);
         }
 
         createFilterBtn(label, count) {
             const btn = document.createElement('button');
             btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
+
+            // Use custom icon if available, otherwise generic
+            let iconHtml = this.state.categoryIcons[label];
+            if (!iconHtml) {
+                // Fallback icons if not found in DOM
+                iconHtml = this.getFallbackIcon(label);
+            }
+
             btn.innerHTML = `
-                ${this.getIcon(label)}
+                ${iconHtml}
                 <span>${label}</span>
                 <span class="gp-filter-count">${count}</span>
             `;
-            btn.onclick = () => this.handleCategoryChange(label);
+            btn.onclick = () => {
+                this.state.currentCategory = label;
+                this.state.currentPage = 1;
+                this.applyFilters();
+            };
             return btn;
         }
 
-        getIcon(label) {
+        getFallbackIcon(label) {
+            // Improved fallback using emojis if no image found.
+            // Ideally we want SVGs but emojis are reliable for now.
             const l = label.toLowerCase();
-            if (l.includes('instagram')) return '📷';
-            if (l.includes('tiktok')) return '🎵';
-            if (l.includes('youtube')) return '▶️';
-            if (l.includes('spotify')) return '🎧';
-            if (l.includes('facebook')) return '👥';
-            if (l.includes('telegram')) return '✈️';
-            if (l.includes('twitter') || l.includes('x')) return '🐦';
-            if (l.includes('twitch')) return '🎮';
-            return '📱';
+            if (l.includes('instagram')) return '<i>📷</i>'; // Temporary fallback
+            if (l.includes('tiktok')) return '<i>🎵</i>';
+            if (l.includes('youtube')) return '<i>▶️</i>';
+            if (l.includes('spotify')) return '<i>🎧</i>';
+            if (l.includes('twitch')) return '<i>🎮</i>';
+            if (l.includes('facebook')) return '<i>👥</i>';
+            return '<i>📱</i>';
         }
 
-        attachSearchListener(nativeSearchRow) {
-            const input = nativeSearchRow.querySelector('input');
-            if (input) {
-                // Enhance styles
-                nativeSearchRow.style.marginBottom = '20px';
-                input.placeholder = "Search for services...";
-
-                // Debounce input
-                let timeout;
-                input.addEventListener('input', (e) => {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        this.state.searchTerm = e.target.value.toLowerCase();
-                        this.state.currentPage = 1;
-                        this.applyFilters(); // Re-render
-                    }, 300);
-                });
-            }
-        }
-
-        /**
-         * Core Logic: Filtering & Pagination
-         */
         applyFilters() {
             const { currentCategory, searchTerm, allServices } = this.state;
 
-            // 1. Filter
             this.state.filteredServices = allServices.filter(svc => {
                 const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
                 const matchesSearch = svc.name.toLowerCase().includes(searchTerm) ||
@@ -3550,30 +3498,22 @@ setTimeout(() => {
                 return matchesCat && matchesSearch;
             });
 
-            // 2. Paginate
+            this.renderFilters(); // Re-render to update active class
+
             const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
             if (this.state.currentPage > totalPages) this.state.currentPage = 1;
 
             const start = (this.state.currentPage - 1) * CONFIG.pageSize;
             const end = start + CONFIG.pageSize;
-            const pageData = this.state.filteredServices.slice(start, end);
 
-            // 3. Render
-            this.renderFilters(); // Update active state
-            this.renderGrid(pageData);
+            this.renderGrid(this.state.filteredServices.slice(start, end));
             this.renderPagination(totalPages);
         }
 
         renderGrid(services) {
             this.dom.grid.innerHTML = '';
-
             if (services.length === 0) {
-                this.dom.grid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
-                        <h3>No services found</h3>
-                        <p>Try adjusting your search or filters.</p>
-                    </div>
-                `;
+                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;opacity:0.6">No services found.</div>`;
                 return;
             }
 
@@ -3581,61 +3521,38 @@ setTimeout(() => {
                 const card = document.createElement('div');
                 card.className = 'gp-card';
 
-                const badgeHtml = svc.badge
-                    ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>`
-                    : '';
+                let iconHtml = this.state.categoryIcons[svc.category] || this.getFallbackIcon(svc.category);
+                const badgeHtml = svc.badge ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>` : '';
 
                 card.innerHTML = `
                     <div class="gp-card-header">
-                        <div class="gp-card-category">${this.getIcon(svc.category)} ${svc.category}</div>
+                        <div class="gp-card-category">${iconHtml} ${svc.category}</div>
                         <div class="gp-card-badges">
                             ${badgeHtml}
                             <span class="gp-badge gp-badge-id">ID: ${svc.id}</span>
                         </div>
                         <h3 class="gp-card-title">${svc.name}</h3>
                     </div>
-                    
                     <div class="gp-card-meta">
-                        <div class="gp-meta-item">
-                            <span class="gp-meta-label">Rate / 1k</span>
-                            <span class="gp-meta-val gp-price-val">${svc.rate}</span>
+                        <div class="gp-meta-col">
+                            <span class="gp-meta-lbl">Rate / 1000</span>
+                            <span class="gp-meta-val gp-price">${svc.rate}</span>
                         </div>
-                        <div class="gp-meta-item">
-                            <span class="gp-meta-label">Min / Max</span>
+                        <div class="gp-meta-col">
+                            <span class="gp-meta-lbl">Min / Max</span>
                             <span class="gp-meta-val">${svc.min} - ${svc.max}</span>
                         </div>
                     </div>
-
-                    <div class="gp-card-footer">
-                        <button class="gp-btn-view">
-                            <span>View Details</span>
-                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
-                        </button>
-                    </div>
+                    <button class="gp-btn-view">
+                        View Details
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 `;
 
-                // Bind click event to native button
-                const btn = card.querySelector('.gp-btn-view');
-                btn.onclick = (e) => {
+                card.querySelector('.gp-btn-view').onclick = (e) => {
                     e.preventDefault();
-                    if (svc.nativeBtn) {
-                        console.log(`🔗 Triggering native click for Service ${svc.id}`);
-                        svc.nativeBtn.click();
-                    } else {
-                        // Fallback: If no button found, look for global order function or alert
-                        console.warn(`⚠️ No native button found for ${svc.id}. trying generic order.`);
-                        // Try typical SMM patterns
-                        if (window.order && typeof window.order === 'function') {
-                            window.order(svc.id);
-                        } else {
-                            // If it's a link-based system
-                            const link = svc.originalRow.querySelector('a');
-                            if (link) link.click();
-                            else alert('Could not open order window. Please report this.');
-                        }
-                    }
+                    if (svc.nativeBtn) svc.nativeBtn.click();
+                    else alert('Error: Cannot open order popup.');
                 };
 
                 this.dom.grid.appendChild(card);
@@ -3646,64 +3563,46 @@ setTimeout(() => {
             this.dom.pagination.innerHTML = '';
             if (totalPages <= 1) return;
 
-            const createPageBtn = (page, text = page) => {
+            const addBtn = (p, lbl) => {
                 const btn = document.createElement('button');
-                btn.className = `gp-page-btn ${this.state.currentPage === page ? 'active' : ''}`;
-                btn.textContent = text;
+                btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
+                btn.textContent = lbl || p;
                 btn.onclick = () => {
-                    this.state.currentPage = page;
+                    this.state.currentPage = p;
                     this.applyFilters();
-                    this.dom.filters.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    this.dom.toolbar.scrollIntoView({ behavior: 'smooth' });
                 };
-                return btn;
+                this.dom.pagination.appendChild(btn);
             };
 
-            // Prev
-            const prev = createPageBtn(this.state.currentPage - 1, '←');
-            prev.disabled = this.state.currentPage === 1;
-            this.dom.pagination.appendChild(prev);
+            addBtn(Math.max(1, this.state.currentPage - 1), '←');
 
-            // Simple Logic: Show first, last, and current +/- 1
-            if (totalPages <= 7) {
-                for (let i = 1; i <= totalPages; i++) {
-                    this.dom.pagination.appendChild(createPageBtn(i));
-                }
-            } else {
-                // Show condensed
-                this.dom.pagination.appendChild(createPageBtn(1));
+            // Simple logic: always show 1, current, last
+            if (totalPages > 5) {
+                if (this.state.currentPage > 2) addBtn(1);
                 if (this.state.currentPage > 3) {
-                    const span = document.createElement('span'); span.textContent = '...';
-                    this.dom.pagination.appendChild(span);
+                    const s = document.createElement('span'); s.textContent = '...';
+                    this.dom.pagination.appendChild(s);
                 }
-
-                // Middle
-                const start = Math.max(2, this.state.currentPage - 1);
-                const end = Math.min(totalPages - 1, this.state.currentPage + 1);
-                for (let i = start; i <= end; i++) {
-                    this.dom.pagination.appendChild(createPageBtn(i));
-                }
-
-                if (this.state.currentPage < totalPages - 2) {
-                    const span = document.createElement('span'); span.textContent = '...';
-                    this.dom.pagination.appendChild(span);
-                }
-                this.dom.pagination.appendChild(createPageBtn(totalPages));
             }
 
-            // Next
-            const next = createPageBtn(this.state.currentPage + 1, '→');
-            next.disabled = this.state.currentPage === totalPages;
-            this.dom.pagination.appendChild(next);
-        }
+            // Current neighborhood
+            let start = Math.max(1, this.state.currentPage - 1);
+            let end = Math.min(totalPages, this.state.currentPage + 1);
+            for (let i = start; i <= end; i++) addBtn(i);
 
-        handleCategoryChange(category) {
-            this.state.currentCategory = category;
-            this.state.currentPage = 1;
-            this.applyFilters();
+            if (totalPages > 5) {
+                if (this.state.currentPage < totalPages - 2) {
+                    const s = document.createElement('span'); s.textContent = '...';
+                    this.dom.pagination.appendChild(s);
+                }
+                if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
+            }
+
+            addBtn(Math.min(totalPages, this.state.currentPage + 1), '→');
         }
     }
 
-    // Start
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
     } else {
