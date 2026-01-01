@@ -2938,6 +2938,8 @@ setTimeout(() => {
   console.log('[GENUINE] ✅ Mobile fix applied');
 }, 600);
 
+})(); // End IIFE wrapper
+
 // =============================================================================
 // MODULE 4: SERVICES PAGE TRANSFORMATION (VERSION FINALE DEBUGGÉE)
 // =============================================================================
@@ -3329,4 +3331,3 @@ setTimeout(() => {
     }
 })();
 
-})(); // End IIFE wrapper
