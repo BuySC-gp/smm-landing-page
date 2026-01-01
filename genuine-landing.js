@@ -2941,36 +2941,53 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (BRUTE FORCE WIDTH - STABLE)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION)
 // =============================================================================
 (function () {
     'use strict';
 
+    // Configuration
     const CONFIG = {
-        pageSize: 60,
+        pageSize: 60, // Services per page
         containerId: 'gp-services-v2-container',
         styleId: 'gp-services-v2-css',
         selectors: {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row'
+            nativeSearchRow: '#block_39 .row',
+            // Selectors to force full width
+            layoutContainers: '.wrapper-content, .wrapper-content__body, .container-fluid, .container'
         }
     };
 
+    /**
+     * Services Application Class
+     */
     class ServicesApp {
         constructor() {
             this.state = {
                 allServices: [],
-                currentPage: 1,
-                currentCategory: 'All',
-                searchTerm: '',
+                filteredServices: [],
                 categories: [],
-                categoryIcons: {},
+                currentCategory: 'All',
+                currentPage: 1,
+                searchTerm: '',
+                totalServices: 0,
                 platformCounts: {},
-                categoryServiceCount: {}
+                categoryServiceCount: {},
+                categoryIcons: {}
             };
-            this.dom = {};
+            this.dom = {
+                block: null,
+                table: null,
+                container: null,
+                hero: null,
+                toolbar: null,
+                filters: null,
+                grid: null,
+                pagination: null
+            };
         }
 
         init() {
@@ -2982,7 +2999,10 @@ setTimeout(() => {
                 return;
             }
 
-            if (this.dom.block.dataset.servicesV2 === 'true') return;
+            if (this.dom.block.dataset.servicesV2 === 'true') {
+                return;
+            }
+
             this.dom.block.dataset.servicesV2 = 'true';
 
             this.injectStyles();
@@ -2990,225 +3010,654 @@ setTimeout(() => {
             this.buildStructure();
             this.applyFilters();
 
-            // --- BRUTE FORCE WIDTH ENFORCER ---
-            this.enforceFullWidth();
-            // Re-apply every 500ms for 5 seconds to kill any competing scripts
-            let attempts = 0;
-            const interval = setInterval(() => {
-                this.enforceFullWidth();
-                if (++attempts > 10) clearInterval(interval);
-            }, 500);
-
-            console.log('✅ [SERVICES V2] Brute Force Width Applied.');
-        }
-
-        /**
-         * NUCLEAR OPTION: Walks up from the module to the HTML tag
-         * Forces every single parent to be 100% width and 0 padding.
-         */
-        enforceFullWidth() {
-            document.body.classList.add('gp-services-v2-active');
-
-            let el = this.dom.block;
-            while (el && el.tagName !== 'HTML') {
-                el.style.setProperty('max-width', 'none', 'important');
-                el.style.setProperty('width', '100%', 'important');
-                el.style.setProperty('padding-right', '0', 'important');
-                el.style.setProperty('margin-right', '0', 'important');
-
-                // If it's a flex-item next to a sidebar, let it grow
-                const computed = window.getComputedStyle(el);
-                if (el.parentElement && window.getComputedStyle(el.parentElement).display === 'flex') {
-                    el.style.setProperty('flex', '1', 'important');
-                    el.style.setProperty('width', 'auto', 'important');
-                }
-
-                el = el.parentElement;
-            }
-            // Root level
-            document.documentElement.style.setProperty('max-width', 'none', 'important');
-            document.documentElement.style.setProperty('width', '100%', 'important');
-            document.body.style.setProperty('max-width', 'none', 'important');
-            document.body.style.setProperty('width', '100%', 'important');
+            console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
         }
 
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
-            const styleEl = document.createElement('style');
-            styleEl.id = CONFIG.styleId;
-            styleEl.textContent = `
-                .gp-hidden { display: none !important; }
-                #gp-services-v2-container {
-                    width: 100%;
-                    padding: 24px 40px;
-                    box-sizing: border-box;
-                    background: transparent;
-                }
+
+            const styles = `
+             /* =================================================================
+   RESET LAYOUT FIXES - EXACTEMENT COMME NEW ORDER
+   ================================================================= */
+
+.gp-hidden {
+    display: none !important;
+}
+
+/* FORCE New Order logic - Works perfectly */
+#block_39,
+#block_39 .wrapper-content,
+#block_39 .container,
+#block_39 .container-fluid,
+.wrapper-content,
+.wrapper_content__footer,
+[class*="wrapper_content"],
+.main-content,
+.page-content {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Critical: wrapper-content padding like New Order */
+.wrapper-content {
+    padding-right: 24px !important;
+}
+
+/* Container du module */
+#gp-services-v2-container {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+                /* --- HERO BANNER (ROYAL BLUE THEME) --- */
                 .gp-hero-banner {
+                    /* Authentic Royal Blue Gradient - Professional & Clean */
                     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
                     border-radius: 12px;
-                    padding: 48px;
+                    padding: 40px;
                     margin-bottom: 32px;
-                    color: white;
                     position: relative;
                     overflow: hidden;
-                    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.15);
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
                 }
+                
+                /* Subtle abstract background pattern - High End feel */
                 .gp-hero-bg {
-                    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-                    background-image: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.1) 0%, transparent 25%);
+                    position: absolute;
+                    top: 0; right: 0; bottom: 0; left: 0;
+                    background-image: 
+                        radial-gradient(circle at 100% 0%, rgba(255,255,255,0.1) 0%, transparent 25%),
+                        radial-gradient(circle at 0% 100%, rgba(255,255,255,0.05) 0%, transparent 30%);
+                    pointer-events: none;
                 }
+                
                 .gp-hero-content { position: relative; z-index: 1; }
-                .gp-stats-row { display: flex; gap: 48px; margin-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; }
+                
+                .gp-hero-title {
+                    font-size: 38px;
+                    font-weight: 800;
+                    margin-bottom: 12px;
+                    color: white;
+                    letter-spacing: -0.5px;
+                }
+                .gp-hero-subtitle {
+                    color: rgba(255, 255, 255, 0.9);
+                    font-size: 16px;
+                    max-width: 700px;
+                    margin-bottom: 32px;
+                    line-height: 1.5;
+                    font-weight: 400;
+                }
+                
+                .gp-stats-row {
+                    display: flex;
+                    gap: 40px;
+                    border-top: 1px solid rgba(255,255,255,0.1);
+                    padding-top: 24px;
+                }
+                
                 .gp-stat-item { display: flex; flex-direction: column; }
-                .gp-stat-value { font-size: 32px; font-weight: 700; }
-                .gp-stat-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; font-weight: 600; }
+                .gp-stat-value { 
+                    font-size: 28px; 
+                    font-weight: 700; 
+                    color: white; 
+                    line-height: 1.1; 
+                }
+                .gp-stat-label { 
+                    font-size: 11px; 
+                    color: rgba(255,255,255,0.7); 
+                    text-transform: uppercase; 
+                    font-weight: 600; 
+                    margin-top: 6px;
+                    letter-spacing: 0.5px;
+                }
+
+                /* --- TOOLBAR --- */
+                .gp-toolbar {
+                    background: white;
+                    padding: 8px;
+                    border-radius: 12px;
+                    border: 1px solid #e2e8f0;
+                    margin-bottom: 24px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                }
                 
-                .gp-toolbar { background: white; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 32px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-                .gp-search-container { position: relative; margin-bottom: 12px; }
-                .gp-search-input { width: 100%; padding: 14px 14px 14px 44px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 15px; box-sizing: border-box; }
-                .gp-search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-                .gp-filters-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 4px; scrollbar-width: none; }
+                .gp-search-container {
+                    position: relative;
+                    margin-bottom: 8px;
+                    padding: 4px;
+                }
+                .gp-search-input {
+                    width: 100%;
+                    padding: 12px 16px 12px 44px;
+                    border-radius: 8px;
+                    border: 1px solid #e2e8f0;
+                    background: #f8fafc;
+                    font-size: 14px;
+                    transition: all 0.2s;
+                    color: #1e293b;
+                }
+                .gp-search-input:focus {
+                    outline: none;
+                    background: white;
+                    border-color: #2563eb;
+                    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+                }
+                .gp-search-icon {
+                    position: absolute;
+                    left: 18px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #94a3b8;
+                    pointer-events: none;
+                }
+
+                /* --- FILTERS --- */
+                .gp-filters-scroll {
+                    display: flex;
+                    gap: 8px;
+                    overflow-x: auto;
+                    padding: 8px;
+                    scrollbar-width: none;
+                }
                 .gp-filters-scroll::-webkit-scrollbar { display: none; }
-                .gp-filter-btn { padding: 10px 18px; border-radius: 10px; background: white; border: 1px solid #e2e8f0; color: #475569; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
-                .gp-filter-btn.active { background: #1e3a8a; border-color: #1e3a8a; color: white; }
-                .gp-filter-count { background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 6px; font-size: 11px; }
-                .gp-filter-btn.active .gp-filter-count { background: rgba(255,255,255,0.15); }
                 
-                .gp-services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-                .gp-card { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; transition: all 0.3s ease; position: relative; }
-                .gp-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px -5px rgba(0,0,0,0.1); border-color: #93c5fd; }
-                .gp-card-category { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-                .gp-card-title { font-size: 17px; font-weight: 700; color: #1e293b; line-height: 1.4; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin: 0 0 16px; }
-                .gp-price-tag { font-size: 20px; font-weight: 800; color: #2563eb; margin-bottom: 16px; }
-                .gp-card-meta { display: flex; justify-content: space-between; padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 20px; }
-                .gp-meta-item { display: flex; flex-direction: column; }
-                .gp-meta-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; }
-                .gp-meta-value { font-size: 14px; font-weight: 600; color: #334155; }
-                .gp-btn-buy { margin-top: auto; width: 100%; padding: 12px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-                .gp-btn-buy:hover { background: #1e40af; }
-                .gp-badge { position: absolute; top: 12px; right: 12px; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; color: white; background: #ef4444; text-transform: uppercase; }
+                .gp-filter-btn {
+                    padding: 8px 16px;
+                    border-radius: 8px;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    font-weight: 600;
+                    font-size: 13px;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .gp-filter-btn img, .gp-filter-btn i {
+                    width: 16px; height: 16px; object-fit: contain; font-style: normal;
+                }
                 
-                @media (max-width: 768px) { #gp-services-v2-container { padding: 20px 16px; } .gp-hero-banner { padding: 32px; } }
+                .gp-filter-btn:hover { 
+                    background: #f8fafc;
+                    color: #1e293b;
+                    border-color: #cbd5e1;
+                }
+                
+                .gp-filter-btn.active {
+                    background: #1e40af; /* Darker blue for active state */
+                    border-color: #1e40af;
+                    color: white;
+                }
+                .gp-filter-btn.active .gp-filter-count {
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                }
+                
+                .gp-filter-count {
+                    background: #f1f5f9;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    font-size: 10px;
+                    color: #64748b;
+                    font-weight: 700;
+                }
+
+                /* --- GRID --- */
+                .gp-services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 40px;
+                }
+
+                .gp-card {
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 12px;
+                    padding: 20px;
+                    position: relative;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex; flex-direction: column;
+                }
+                .gp-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+                    border-color: #93c5fd; /* Soft blue border on hover */
+                }
+                
+                .gp-card-header { margin-bottom: 16px; }
+                
+                .gp-card-category {
+                    display: inline-flex; align-items: center; gap: 6px;
+                    font-size: 11px; font-weight: 700; color: #64748b;
+                    text-transform: uppercase; margin-bottom: 8px;
+                    padding: 4px 8px; background: #f1f5f9; border-radius: 6px;
+                }
+                .gp-card-category img, .gp-card-category i { width: 14px; height: 14px; object-fit: contain; font-style: normal; }
+
+                .gp-card-badges {
+                    position: absolute; top: 20px; right: 20px;
+                    display: flex; gap: 6px;
+                }
+                .gp-badge {
+                    font-size: 9px; font-weight: 800; padding: 3px 8px;
+                    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+                }
+                .gp-badge-id { background: transparent; border: 1px solid #e2e8f0; color: #94a3b8; }
+                .gp-badge-hot { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+                .gp-badge-best { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+                
+                .gp-card-title {
+                    font-size: 15px; font-weight: 700; color: #1e293b;
+                    line-height: 1.4; margin: 0;
+                    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+                    height: 42px;
+                }
+
+                .gp-card-meta {
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+                    background: #f8fafc; border-radius: 8px; 
+                    margin-bottom: 16px; overflow: hidden;
+                    border: 1px solid #f1f5f9;
+                }
+                .gp-meta-col { 
+                    display: flex; flex-direction: column; padding: 10px 12px;
+                }
+                .gp-meta-col:first-child { border-right: 1px solid #e2e8f0; }
+                
+                .gp-meta-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+                .gp-meta-val { font-size: 13px; font-weight: 700; color: #334155; }
+                .gp-price { color: #2563eb; }
+
+                .gp-btn-view {
+                    margin-top: auto;
+                    width: 100%; padding: 10px;
+                    background: white; 
+                    border: 1px solid #cbd5e1;
+                    border-radius: 8px; 
+                    color: #334155; 
+                    font-weight: 600; font-size: 13px;
+                    cursor: pointer; transition: all 0.2s;
+                    display: flex; justify-content: center; align-items: center; gap: 6px;
+                }
+                .gp-btn-view:hover {
+                    background: #1e40af;
+                    border-color: #1e40af;
+                    color: white;
+                }
+
+                .gp-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 32px; }
+                .gp-page-btn {
+                    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+                    border-radius: 8px; border: 1px solid #e2e8f0; background: white;
+                    color: #64748b; font-weight: 600; font-size: 13px; cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .gp-page-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
+                .gp-page-btn:hover:not(:disabled) { border-color: #94a3b8; color: #1e293b; }
+                .gp-page-btn:disabled { opacity: 0.5; }
+
+                @media (max-width: 768px) {
+                    .gp-services-grid { grid-template-columns: 1fr; }
+                    .gp-hero-banner { padding: 32px 24px; }
+                    .gp-hero-title { font-size: 32px; }
+                    .gp-stats-row { flex-wrap: wrap; gap: 20px; }
+                }
             `;
+            const styleEl = document.createElement('style');
+            styleEl.id = CONFIG.styleId;
+            styleEl.textContent = styles;
             document.head.appendChild(styleEl);
         }
 
         extractData() {
             const rows = Array.from(document.querySelectorAll(CONFIG.selectors.tableRows));
             let currentCategory = "Other";
-            this.state.allServices = [];
 
-            rows.forEach(row => {
+            this.state.allServices = rows.reduce((acc, row) => {
+                // Category Row
                 if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
-                    currentCategory = row.textContent.trim().replace(/[\n\r\t]/g, '').trim();
-                    const iconEl = row.querySelector('img, i, svg');
-                    if (iconEl) this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
-                    if (!this.state.categories.includes(currentCategory)) {
-                        this.state.categories.push(currentCategory);
-                        this.state.platformCounts[currentCategory] = 0;
-                        this.state.categoryServiceCount[currentCategory] = 0;
+                    const text = row.textContent.trim();
+                    if (text.length > 2) {
+                        currentCategory = text.replace(/[\n\r\t]/g, '').trim();
+                        const iconEl = row.querySelector('img, i, svg');
+                        if (iconEl && !this.state.categoryIcons[currentCategory]) {
+                            this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
+                        }
+
+                        if (!this.state.categories.includes(currentCategory)) {
+                            this.state.categories.push(currentCategory);
+                            this.state.platformCounts[currentCategory] = 0;
+                            this.state.categoryServiceCount[currentCategory] = 0;
+                        }
                     }
-                    return;
+                    return acc;
                 }
-                const serviceId = row.dataset.filterTableServiceId || row.querySelector('td[data-label="ID"]')?.textContent.trim();
+
+                // Service Row
+                const serviceId = row.dataset.filterTableServiceId ||
+                    row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
+                    null;
                 const rateCell = row.querySelector('[data-label="Rate per 1000"]');
+
                 if (serviceId || rateCell) {
                     const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
-                    const name = row.querySelector('[data-label="Service"]')?.textContent.trim() || 'Service';
+                    const nameCell = row.querySelector('[data-label="Service"]');
+                    const name = nameCell ? nameCell.textContent.trim() : 'Unknown Service';
+                    const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
+                    const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
+                    const rate = rateCell ? rateCell.textContent.trim() : 'N/A';
+
                     this.state.platformCounts[currentCategory]++;
-                    const isFirst = (this.state.categoryServiceCount[currentCategory] === 0);
-                    this.state.categoryServiceCount[currentCategory]++;
-                    this.state.allServices.push({
+
+                    const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
+                    let badge = null;
+                    if (catIndex === 0) badge = { text: 'POPULAR', class: 'gp-badge-hot' };
+                    // else if (catIndex === 1) badge = { text: 'BEST', class: 'gp-badge-best' };
+
+                    this.state.categoryServiceCount[currentCategory] = catIndex + 1;
+
+                    acc.push({
                         id: serviceId || 'N/A',
                         name: name,
                         category: currentCategory,
-                        rate: rateCell ? rateCell.textContent.trim() : 'N/A',
-                        min: row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0',
-                        max: row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞',
-                        badge: isFirst ? 'HOT' : null,
+                        rate: rate,
+                        min: min,
+                        max: max,
+                        badge: badge,
+                        originalRow: row,
                         nativeBtn: buyBtn
                     });
                 }
-            });
+                return acc;
+            }, []);
+
+            this.state.totalServices = this.state.allServices.length;
         }
 
         buildStructure() {
-            const nativeSearch = document.querySelector(CONFIG.selectors.nativeSearchRow);
-            if (nativeSearch) nativeSearch.classList.add('gp-hidden');
-            const tableWr = this.dom.table.closest('.table-responsive, .table-wr');
-            if (tableWr) tableWr.classList.add('gp-hidden');
+            // HIDE Native Search
+            const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
+            if (nativeRow) {
+                nativeRow.classList.add('gp-hidden');
 
+                const nativeFilterItems = nativeRow.querySelectorAll('.dropdown-item, .btn-group button, option, li');
+                nativeFilterItems.forEach(item => {
+                    const txt = item.textContent.trim();
+                    const icon = item.querySelector('img, i, svg');
+                    if (txt && icon) {
+                        const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
+                        if (matchedCat && !this.state.categoryIcons[matchedCat]) {
+                            this.state.categoryIcons[matchedCat] = icon.outerHTML;
+                        }
+                    }
+                });
+            }
+
+            const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
+            if (tableWrapper) tableWrapper.classList.add('gp-hidden');
+
+            // --- CONTAINER ---
             this.dom.container = document.createElement('div');
             this.dom.container.id = CONFIG.containerId;
 
+            // Hero
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
-            this.dom.hero.innerHTML = `<div class="gp-hero-bg"></div><div class="gp-hero-content"><h1>Services Catalog</h1><p>Premium SMM services for your business growth.</p></div>`;
+            this.renderHero();
 
+            // Toolbar
             this.dom.toolbar = document.createElement('div');
             this.dom.toolbar.className = 'gp-toolbar';
-            this.dom.toolbar.innerHTML = `<div class="gp-search-container"><input type="text" class="gp-search-input" placeholder="Search services..."></div><div class="gp-filters-scroll"></div>`;
-            this.dom.toolbar.querySelector('input').oninput = (e) => { this.state.searchTerm = e.target.value.toLowerCase(); this.state.currentPage = 1; this.applyFilters(); };
 
-            this.dom.filters = this.dom.toolbar.querySelector('.gp-filters-scroll');
+            const searchContainer = document.createElement('div');
+            searchContainer.className = 'gp-search-container';
+            searchContainer.innerHTML = `
+                <div class="gp-search-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+            `;
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.className = 'gp-search-input';
+            searchInput.placeholder = 'Search for services...';
+            searchInput.addEventListener('input', (e) => {
+                this.state.searchTerm = e.target.value.toLowerCase();
+                this.state.currentPage = 1;
+                this.applyFilters();
+            });
+            searchContainer.appendChild(searchInput);
+
+            this.dom.filters = document.createElement('div');
+            this.dom.filters.className = 'gp-filters-scroll';
+
+            this.dom.toolbar.appendChild(searchContainer);
+            this.dom.toolbar.appendChild(this.dom.filters);
+
+            // Grid
             this.dom.grid = document.createElement('div');
             this.dom.grid.className = 'gp-services-grid';
 
+            // Pagination
             this.dom.pagination = document.createElement('div');
-            this.dom.pagination.style.cssText = 'display:flex; justify-content:center; gap:8px; margin-top:40px;';
+            this.dom.pagination.className = 'gp-pagination';
 
-            this.dom.container.append(this.dom.hero, this.dom.toolbar, this.dom.grid, this.dom.pagination);
-            this.dom.block.prepend(this.dom.container);
+            this.dom.container.appendChild(this.dom.hero);
+            this.dom.container.appendChild(this.dom.toolbar);
+            this.dom.container.appendChild(this.dom.grid);
+            this.dom.container.appendChild(this.dom.pagination);
+
+            if (this.dom.block.firstChild) {
+                this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
+            } else {
+                this.dom.block.appendChild(this.dom.container);
+            }
         }
 
-        applyFilters() {
-            this.state.filteredServices = this.state.allServices.filter(svc => {
-                const matchesCat = this.state.currentCategory === 'All' || svc.category === this.state.currentCategory;
-                const matchesSearch = svc.name.toLowerCase().includes(this.state.searchTerm) || svc.id.includes(this.state.searchTerm);
-                return matchesCat && matchesSearch;
-            });
-            this.renderFilters();
-            const start = (this.state.currentPage - 1) * CONFIG.pageSize;
-            this.renderGrid(this.state.filteredServices.slice(start, start + CONFIG.pageSize));
+        renderHero() {
+            this.dom.hero.innerHTML = `
+                <div class="gp-hero-bg"></div>
+                <div class="gp-hero-content">
+                    <h1 class="gp-hero-title">Services Catalog</h1>
+                    <p class="gp-hero-subtitle">Premium quality services ready to boost your presence instantly.</p>
+                    
+                    <div class="gp-stats-row">
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">${this.state.totalServices}</span>
+                            <span class="gp-stat-label">Services</span>
+                        </div>
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">${this.state.categories.length}</span>
+                            <span class="gp-stat-label">Platforms</span>
+                        </div>
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">⚡</span>
+                            <span class="gp-stat-label">Instant</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         renderFilters() {
             this.dom.filters.innerHTML = '';
-            const addBtn = (cat, count) => {
-                const btn = document.createElement('button');
-                btn.className = `gp-filter-btn ${this.state.currentCategory === cat ? 'active' : ''}`;
-                btn.innerHTML = `<span>${cat}</span> <span class="gp-filter-count">${count}</span>`;
-                btn.onclick = () => { this.state.currentCategory = cat; this.state.currentPage = 1; this.applyFilters(); };
-                this.dom.filters.appendChild(btn);
+
+            // All
+            this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
+
+            // Categories
+            this.state.categories.forEach(cat => {
+                const count = this.state.platformCounts[cat];
+                if (count > 0) {
+                    this.dom.filters.appendChild(this.createFilterBtn(cat, count));
+                }
+            });
+        }
+
+        createFilterBtn(label, count) {
+            const btn = document.createElement('button');
+            btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
+
+            let iconHtml = this.state.categoryIcons[label] || this.getFallbackIcon(label);
+
+            btn.innerHTML = `
+                ${iconHtml}
+                <span>${label}</span>
+                <span class="gp-filter-count">${count}</span>
+            `;
+            btn.onclick = () => {
+                this.state.currentCategory = label;
+                this.state.currentPage = 1;
+                this.applyFilters();
             };
-            addBtn('All', this.state.allServices.length);
-            this.state.categories.forEach(cat => addBtn(cat, this.state.platformCounts[cat]));
+            return btn;
+        }
+
+        getFallbackIcon(label) {
+            const l = label.toLowerCase();
+            if (l.includes('instagram')) return '<i>📷</i>';
+            if (l.includes('tiktok')) return '<i>🎵</i>';
+            if (l.includes('youtube')) return '<i>▶️</i>';
+            if (l.includes('spotify')) return '<i>🎧</i>';
+            if (l.includes('twitch')) return '<i>🎮</i>';
+            if (l.includes('facebook')) return '<i>👥</i>';
+            if (l.includes('twitter') || l.includes('x')) return '<i>🐦</i>';
+            if (l.includes('telegram')) return '<i>✈️</i>';
+            return '<i>📱</i>';
+        }
+
+        applyFilters() {
+            const { currentCategory, searchTerm, allServices } = this.state;
+
+            this.state.filteredServices = allServices.filter(svc => {
+                const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
+                const matchesSearch = svc.name.toLowerCase().includes(searchTerm) ||
+                    svc.id.toString().includes(searchTerm);
+                return matchesCat && matchesSearch;
+            });
+
+            this.renderFilters();
+
+            const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
+            if (this.state.currentPage > totalPages) this.state.currentPage = 1;
+
+            const start = (this.state.currentPage - 1) * CONFIG.pageSize;
+            const end = start + CONFIG.pageSize;
+
+            this.renderGrid(this.state.filteredServices.slice(start, end));
+            this.renderPagination(totalPages);
         }
 
         renderGrid(services) {
             this.dom.grid.innerHTML = '';
-            services.forEach(svc => {
+            if (services.length === 0) {
+                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
+                    <br><h3>No services found.</h3>
+                </div>`;
+                return;
+            }
+
+            services.forEach((svc, index) => {
                 const card = document.createElement('div');
                 card.className = 'gp-card';
+
+                let iconHtml = this.state.categoryIcons[svc.category] || this.getFallbackIcon(svc.category);
+                const badgeHtml = svc.badge ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>` : '';
+
                 card.innerHTML = `
                     <div class="gp-card-header">
-                        ${svc.badge ? `<span class="gp-badge">${svc.badge}</span>` : ''}
-                        <div class="gp-card-category">${svc.category}</div>
+                        <div class="gp-card-category">${iconHtml} ${svc.category}</div>
+                        <div class="gp-card-badges">
+                            ${badgeHtml}
+                            <span class="gp-badge gp-badge-id">ID: ${svc.id}</span>
+                        </div>
                         <h3 class="gp-card-title">${svc.name}</h3>
                     </div>
-                    <div class="gp-price-tag">${svc.rate}</div>
                     <div class="gp-card-meta">
-                        <div class="gp-meta-item"><span class="gp-meta-label">ID</span><span class="gp-meta-value">${svc.id}</span></div>
-                        <div class="gp-meta-item"><span class="gp-meta-label">Min/Max</span><span class="gp-meta-value">${svc.min}/${svc.max}</span></div>
+                        <div class="gp-meta-col">
+                            <span class="gp-meta-lbl">Rate / 1k</span>
+                            <span class="gp-meta-val gp-price">${svc.rate}</span>
+                        </div>
+                        <div class="gp-meta-col">
+                            <span class="gp-meta-lbl">Min / Max</span>
+                            <span class="gp-meta-val">${svc.min} - ${svc.max}</span>
+                        </div>
                     </div>
-                    <button class="gp-btn-buy">View Details</button>
+                    <button class="gp-btn-view">
+                        View Details
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 `;
-                card.querySelector('button').onclick = () => svc.nativeBtn && svc.nativeBtn.click();
+
+                card.querySelector('.gp-btn-view').onclick = (e) => {
+                    e.preventDefault();
+                    if (svc.nativeBtn) svc.nativeBtn.click();
+                };
+
                 this.dom.grid.appendChild(card);
             });
         }
+
+        renderPagination(totalPages) {
+            this.dom.pagination.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            const addBtn = (p, lbl) => {
+                const btn = document.createElement('button');
+                btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
+                btn.textContent = lbl || p;
+
+                btn.onclick = () => {
+                    this.state.currentPage = p;
+                    this.applyFilters();
+                    const yOffset = -50;
+                    const y = this.dom.container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                };
+                this.dom.pagination.appendChild(btn);
+            };
+
+            addBtn(Math.max(1, this.state.currentPage - 1), '←');
+
+            if (totalPages > 5) {
+                if (this.state.currentPage > 2) addBtn(1);
+                if (this.state.currentPage > 3) {
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+                    this.dom.pagination.appendChild(s);
+                }
+            }
+
+            let start = Math.max(1, this.state.currentPage - 1);
+            let end = Math.min(totalPages, this.state.currentPage + 1);
+            for (let i = start; i <= end; i++) addBtn(i);
+
+            if (totalPages > 5) {
+                if (this.state.currentPage < totalPages - 2) {
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+                    this.dom.pagination.appendChild(s);
+                }
+                if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
+            }
+
+            addBtn(Math.min(totalPages, this.state.currentPage + 1), '→');
+        }
     }
 
-    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', () => new ServicesApp().init()); } else { new ServicesApp().init(); }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
+    } else {
+        new ServicesApp().init();
+    }
 })();
