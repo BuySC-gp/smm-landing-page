@@ -2941,59 +2941,58 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE TRANSFORMATION (VERSION FINALE DEBUGGÉE)
+// MODULE 4: SERVICES PAGE — TRANSFORMATION PREMIUM V2
 // =============================================================================
 (function() {
-    // Retry mechanism - 3 tentatives
     let attempts = 0;
     const maxAttempts = 3;
     
     function tryTransform() {
         attempts++;
-        console.log(`[SERVICES] Attempt ${attempts}/${maxAttempts}`);
+        console.log(`[SERVICES V2] Attempt ${attempts}/${maxAttempts}`);
         
         const isServicesPage = window.location.pathname.includes('/services') || 
-                               document.querySelector('#service-table-39, .services-list, #block_39');
+                               document.querySelector('#service-table-39, #block_39');
         
         if (!isServicesPage) {
-            console.log('❌ [SERVICES] Not on Services page - skipping');
+            console.log('❌ [SERVICES V2] Not on Services page');
             return;
         }
         
-        console.log('✅ [SERVICES] Page detected');
-        
         const block39 = document.getElementById('block_39');
         if (!block39) {
-            console.error('❌ [SERVICES] #block_39 NOT FOUND');
+            console.error('❌ [SERVICES V2] #block_39 NOT FOUND');
             if (attempts < maxAttempts) {
-                console.log(`⏳ [SERVICES] Retrying in 1000ms...`);
                 setTimeout(tryTransform, 1000);
             }
             return;
         }
         
-        if (block39.dataset.servicesTransformed === 'true') {
-            console.log('⚠️ [SERVICES] Already transformed - skipping');
+        if (block39.dataset.servicesV2 === 'true') {
+            console.log('⚠️ [SERVICES V2] Already transformed');
             return;
         }
         
-        console.log('🚀 [SERVICES] Starting transformation...');
-        block39.dataset.servicesTransformed = 'true';
+        console.log('🚀 [SERVICES V2] Starting...');
+        block39.dataset.servicesV2 = 'true';
         
-        // === 1. INJECTION DU CSS COMPLET ===
-        if (!document.getElementById('gp-services-css')) {
+        // === 1. CSS INJECTION ===
+        if (!document.getElementById('gp-services-v2-css')) {
             const styleTag = document.createElement('style');
-            styleTag.id = 'gp-services-css';
+            styleTag.id = 'gp-services-v2-css';
             styleTag.textContent = `
-                /* HERO BANNER PREMIUM */
+                /* HERO BANNER COMPACT */
                 .gp-hero-banner {
                     background: linear-gradient(135deg, #0047AB 0%, #0066FF 100%);
-                    border-radius: 20px;
-                    padding: 60px 40px;
+                    border-radius: 16px;
+                    padding: 48px 36px;
                     margin-bottom: 32px;
-                    box-shadow: 0 12px 48px rgba(0, 71, 171, 0.25);
+                    box-shadow: 0 8px 32px rgba(0, 71, 171, 0.2);
                     position: relative;
                     overflow: hidden;
+                    max-width: 1400px;
+                    margin-left: auto;
+                    margin-right: auto;
                 }
                 
                 .gp-hero-banner::before {
@@ -3001,9 +3000,9 @@ setTimeout(() => {
                     position: absolute;
                     top: -50%;
                     right: -20%;
-                    width: 600px;
-                    height: 600px;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+                    width: 500px;
+                    height: 500px;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
                     pointer-events: none;
                 }
                 
@@ -3017,11 +3016,11 @@ setTimeout(() => {
                     align-items: center;
                     gap: 8px;
                     font-size: 13px;
-                    margin-bottom: 24px;
+                    margin-bottom: 20px;
                 }
                 
                 .gp-breadcrumb a {
-                    color: rgba(255, 255, 255, 0.8);
+                    color: rgba(255, 255, 255, 0.7);
                     text-decoration: none;
                     font-weight: 600;
                     transition: all 0.2s;
@@ -3032,7 +3031,7 @@ setTimeout(() => {
                 }
                 
                 .gp-breadcrumb-separator {
-                    color: rgba(255, 255, 255, 0.5);
+                    color: rgba(255, 255, 255, 0.4);
                 }
                 
                 .gp-breadcrumb-current {
@@ -3041,80 +3040,258 @@ setTimeout(() => {
                 }
                 
                 .gp-hero-title {
-                    font-size: 48px;
+                    font-size: 40px;
                     font-weight: 800;
                     color: white;
-                    margin-bottom: 16px;
-                    display: flex;
-                    align-items: center;
-                    gap: 16px;
+                    margin-bottom: 12px;
                     letter-spacing: -0.02em;
                 }
                 
-                .gp-hero-icon {
-                    font-size: 52px;
-                }
-                
                 .gp-hero-description {
-                    font-size: 18px;
-                    color: rgba(255, 255, 255, 0.9);
-                    line-height: 1.7;
-                    margin-bottom: 40px;
-                    max-width: 800px;
+                    font-size: 16px;
+                    color: rgba(255, 255, 255, 0.85);
+                    line-height: 1.6;
+                    margin-bottom: 32px;
+                    max-width: 700px;
                 }
                 
                 .gp-hero-stats {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 20px;
+                    gap: 16px;
                 }
                 
                 .gp-stat-card {
-                    background: rgba(255, 255, 255, 0.15);
+                    background: rgba(255, 255, 255, 0.12);
                     backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border: 1px solid rgba(255, 255, 255, 0.18);
                     border-radius: 12px;
-                    padding: 24px;
+                    padding: 20px;
                     display: flex;
                     align-items: center;
-                    gap: 16px;
+                    gap: 14px;
                     transition: all 0.3s ease;
                 }
                 
                 .gp-stat-card:hover {
-                    background: rgba(255, 255, 255, 0.25);
-                    transform: translateY(-4px);
-                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                    background: rgba(255, 255, 255, 0.2);
+                    transform: translateY(-3px);
+                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
                 }
                 
                 .gp-stat-icon {
-                    width: 48px;
-                    height: 48px;
+                    width: 44px;
+                    height: 44px;
                     border-radius: 10px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     flex-shrink: 0;
-                }
-                
-                .gp-stat-content {
-                    flex: 1;
+                    background: rgba(255, 255, 255, 0.15);
                 }
                 
                 .gp-stat-value {
-                    font-size: 28px;
+                    font-size: 24px;
                     font-weight: 800;
                     color: white;
                     line-height: 1.2;
-                    margin-bottom: 4px;
+                    margin-bottom: 2px;
                 }
                 
                 .gp-stat-label {
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.75);
+                    text-transform: uppercase;
+                    letter-spacing: 0.6px;
+                    font-weight: 600;
+                }
+                
+                /* SERVICES CARDS GRID */
+                .gp-services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                    gap: 20px;
+                    margin-top: 24px;
+                }
+                
+                .gp-service-card {
+                    background: white;
+                    border: 1px solid #E5E7EB;
+                    border-radius: 14px;
+                    padding: 24px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .gp-service-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 40px rgba(0, 102, 255, 0.12);
+                    border-color: rgba(0, 102, 255, 0.3);
+                }
+                
+                .gp-service-category {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
                     font-size: 12px;
-                    color: rgba(255, 255, 255, 0.8);
+                    font-weight: 700;
+                    color: #6B7280;
+                    margin-bottom: 12px;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
+                }
+                
+                .gp-service-category-icon {
+                    font-size: 16px;
+                }
+                
+                .gp-service-name {
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: #1F2937;
+                    margin-bottom: 16px;
+                    line-height: 1.3;
+                }
+                
+                .gp-service-badge {
+                    position: absolute;
+                    top: 16px;
+                    right: 16px;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .gp-badge-popular {
+                    background: linear-gradient(135deg, #EF4444, #DC2626);
+                    color: white;
+                }
+                
+                .gp-badge-best {
+                    background: linear-gradient(135deg, #F59E0B, #D97706);
+                    color: white;
+                }
+                
+                .gp-badge-new {
+                    background: linear-gradient(135deg, #10B981, #059669);
+                    color: white;
+                }
+                
+                .gp-service-stats {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 12px;
+                    margin-bottom: 16px;
+                }
+                
+                .gp-service-stat {
+                    background: #F9FAFB;
+                    padding: 12px;
+                    border-radius: 8px;
+                    border: 1px solid #E5E7EB;
+                }
+                
+                .gp-service-stat-label {
+                    font-size: 11px;
+                    color: #6B7280;
                     font-weight: 600;
+                    margin-bottom: 4px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+                
+                .gp-service-stat-value {
+                    font-size: 16px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #00A67E, #00D97E);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                
+                .gp-service-range {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 16px;
+                    padding: 12px;
+                    background: #F9FAFB;
+                    border-radius: 8px;
+                    border: 1px solid #E5E7EB;
+                }
+                
+                .gp-service-range-item {
+                    text-align: center;
+                }
+                
+                .gp-service-range-label {
+                    font-size: 10px;
+                    color: #6B7280;
+                    font-weight: 600;
+                    margin-bottom: 4px;
+                    text-transform: uppercase;
+                }
+                
+                .gp-service-range-value {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #1F2937;
+                }
+                
+                .gp-service-cta {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    width: 100%;
+                    padding: 12px 20px;
+                    background: linear-gradient(135deg, #0047AB, #0066FF);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-weight: 700;
+                    font-size: 14px;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                    box-shadow: 0 4px 12px rgba(0, 71, 171, 0.25);
+                }
+                
+                .gp-service-cta:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(0, 71, 171, 0.35);
+                }
+                
+                .gp-category-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin: 32px 0 20px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid #E5E7EB;
+                }
+                
+                .gp-category-icon {
+                    font-size: 28px;
+                }
+                
+                .gp-category-name {
+                    font-size: 22px;
+                    font-weight: 800;
+                    color: #1F2937;
+                }
+                
+                .gp-category-count {
+                    margin-left: auto;
+                    padding: 6px 12px;
+                    background: #F3F4F6;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #6B7280;
                 }
                 
                 @media (max-width: 1024px) {
@@ -3122,49 +3299,49 @@ setTimeout(() => {
                         grid-template-columns: repeat(2, 1fr);
                     }
                     
-                    .gp-hero-title {
-                        font-size: 36px;
+                    .gp-services-grid {
+                        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                     }
                 }
                 
                 @media (max-width: 768px) {
                     .gp-hero-banner {
-                        padding: 40px 24px;
+                        padding: 32px 24px;
+                    }
+                    
+                    .gp-hero-title {
+                        font-size: 28px;
                     }
                     
                     .gp-hero-stats {
                         grid-template-columns: 1fr;
                     }
                     
-                    .gp-hero-title {
-                        font-size: 28px;
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-                    
-                    .gp-hero-description {
-                        font-size: 16px;
+                    .gp-services-grid {
+                        grid-template-columns: 1fr;
                     }
                 }
             `;
             document.head.appendChild(styleTag);
-            console.log('✅ [SERVICES] CSS injected');
+            console.log('✅ [SERVICES V2] CSS injected');
         }
         
-        // === 2. STATS CALCULATION ===
+        // === 2. COUNT SERVICES AUTOMATICALLY ===
         const servicesTable = document.querySelector('#service-table-39');
         let totalServices = 0;
         let totalCategories = 0;
         
         if (servicesTable) {
-            totalServices = servicesTable.querySelectorAll('tr[data-filter-table-service-id]').length;
-            const platformNames = [...servicesTable.querySelectorAll('[data-platform-name]')].map(el => el.dataset.platformName);
-            totalCategories = new Set(platformNames).size;
-            console.log(`📊 [SERVICES] Found ${totalServices} services, ${totalCategories} categories`);
+            const serviceRows = servicesTable.querySelectorAll('tr[data-filter-table-service-id]');
+            totalServices = serviceRows.length;
+            
+            const platformElements = servicesTable.querySelectorAll('[data-platform-name]');
+            const platforms = new Set([...platformElements].map(el => el.dataset.platformName));
+            totalCategories = platforms.size;
+            
+            console.log(`📊 [SERVICES V2] ${totalServices} services, ${totalCategories} platforms`);
         } else {
-            console.warn('⚠️ [SERVICES] Table not found - using default values');
-            totalServices = 50;
-            totalCategories = 10;
+            console.warn('⚠️ [SERVICES V2] Table not found');
         }
         
         // === 3. CREATE HERO BANNER ===
@@ -3179,20 +3356,16 @@ setTimeout(() => {
                 </div>
                 
                 <div class="gp-hero-text">
-                    <h1 class="gp-hero-title">
-                        <span class="gp-hero-icon">🚀</span>
-                        Browse Our Services
-                    </h1>
+                    <h1 class="gp-hero-title">Premium SMM Services</h1>
                     <p class="gp-hero-description">
-                        Premium social media marketing services with instant delivery and 24/7 support. 
-                        Choose from ${totalServices}+ high-quality services across ${totalCategories}+ platforms.
+                        Professional social media growth services. Trusted by thousands of creators, brands, and agencies worldwide.
                     </p>
                 </div>
                 
                 <div class="gp-hero-stats">
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <div class="gp-stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
                                 <rect x="3" y="3" width="7" height="7"/>
                                 <rect x="14" y="3" width="7" height="7"/>
                                 <rect x="14" y="14" width="7" height="7"/>
@@ -3200,77 +3373,196 @@ setTimeout(() => {
                             </svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">${totalServices}+</div>
+                            <div class="gp-stat-value">${totalServices || '50+'}</div>
                             <div class="gp-stat-label">Services</div>
                         </div>
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <div class="gp-stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                                 <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                             </svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">10K+</div>
-                            <div class="gp-stat-label">Happy Clients</div>
+                            <div class="gp-stat-value">${totalCategories || '10+'}</div>
+                            <div class="gp-stat-label">Platforms</div>
                         </div>
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                                <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        <div class="gp-stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                             </svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">Instant</div>
-                            <div class="gp-stat-label">Delivery</div>
+                            <div class="gp-stat-value">Fast</div>
+                            <div class="gp-stat-label">Processing</div>
                         </div>
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <div class="gp-stat-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                             </svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">100%</div>
-                            <div class="gp-stat-label">Secure</div>
+                            <div class="gp-stat-value">Refill</div>
+                            <div class="gp-stat-label">Guarantee</div>
                         </div>
                     </div>
                 </div>
             </div>
         `;
         
-        // === 4. INSERT BANNER (ROBUST METHOD) ===
+        // === 4. INSERT BANNER ===
         const containerFluid = block39.querySelector('.container-fluid');
-        let inserted = false;
-        
         if (containerFluid && containerFluid.firstChild) {
             containerFluid.insertBefore(heroBanner, containerFluid.firstChild);
-            console.log('✅ [SERVICES] Hero banner inserted (method 1)');
-            inserted = true;
-        } else if (block39.firstChild) {
-            block39.insertBefore(heroBanner, block39.firstChild);
-            console.log('✅ [SERVICES] Hero banner inserted (method 2 - fallback)');
-            inserted = true;
+            console.log('✅ [SERVICES V2] Hero inserted');
         } else {
-            block39.appendChild(heroBanner);
-            console.log('✅ [SERVICES] Hero banner appended (method 3 - last resort)');
-            inserted = true;
+            block39.insertBefore(heroBanner, block39.firstChild);
+            console.log('✅ [SERVICES V2] Hero inserted (fallback)');
         }
         
-        if (!inserted) {
-            console.error('❌ [SERVICES] Failed to insert banner');
-            return;
-        }
+        // === 5. TRANSFORM TABLE TO CARDS ===
+        setTimeout(() => {
+            if (!servicesTable) {
+                console.warn('⚠️ [SERVICES V2] No table to transform');
+                return;
+            }
+            
+            // Hide original table
+            const tableWrapper = servicesTable.closest('.table-responsive, .table-wr');
+            if (tableWrapper) {
+                tableWrapper.style.display = 'none';
+                console.log('✅ [SERVICES V2] Table hidden');
+            }
+            
+            // Get all services
+            const categoryRows = servicesTable.querySelectorAll('.services-list-category-title');
+            const servicesContainer = document.createElement('div');
+            servicesContainer.id = 'gp-services-container';
+            
+            const platformIcons = {
+                'instagram': '📷',
+                'tiktok': '🎵',
+                'youtube': '▶️',
+                'spotify': '🎧',
+                'facebook': '👥',
+                'telegram': '✈️',
+                'twitter': '🐦',
+                'twitch': '🎮'
+            };
+            
+            categoryRows.forEach((catRow, catIndex) => {
+                const platformName = catRow.closest('tr')?.dataset.platformName || 'Other';
+                const platformKey = platformName.toLowerCase();
+                const icon = platformIcons[platformKey] || '📱';
+                
+                // Get services for this category
+                let currentRow = catRow.closest('tr').nextElementSibling;
+                const services = [];
+                
+                while (currentRow && currentRow.dataset.filterTableServiceId) {
+                    services.push(currentRow);
+                    currentRow = currentRow.nextElementSibling;
+                }
+                
+                if (services.length === 0) return;
+                
+                // Create category header
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'gp-category-header';
+                categoryHeader.innerHTML = `
+                    <div class="gp-category-icon">${icon}</div>
+                    <div class="gp-category-name">${platformName}</div>
+                    <div class="gp-category-count">${services.length} services</div>
+                `;
+                servicesContainer.appendChild(categoryHeader);
+                
+                // Create grid
+                const grid = document.createElement('div');
+                grid.className = 'gp-services-grid';
+                
+                services.forEach((serviceRow, index) => {
+                    const serviceId = serviceRow.dataset.filterTableServiceId;
+                    const serviceName = serviceRow.querySelector('[data-label="Service"]')?.textContent.trim() || 'Service';
+                    const rate = serviceRow.querySelector('[data-label="Rate per 1000"]')?.textContent.trim() || 'N/A';
+                    const minOrder = serviceRow.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
+                    const maxOrder = serviceRow.querySelector('[data-label="Max order"]')?.textContent.trim() || '0';
+                    const viewLink = serviceRow.querySelector('a[href*="service"]')?.href || '#';
+                    
+                    // Badge logic: first 3 services get badges
+                    let badge = '';
+                    if (index === 0) {
+                        badge = '<div class="gp-service-badge gp-badge-popular">🔥 Popular</div>';
+                    } else if (index === 1) {
+                        badge = '<div class="gp-service-badge gp-badge-best">⭐ Best</div>';
+                    } else if (index === 2) {
+                        badge = '<div class="gp-service-badge gp-badge-new">✨ Top</div>';
+                    }
+                    
+                    const card = document.createElement('div');
+                    card.className = 'gp-service-card';
+                    card.innerHTML = `
+                        ${badge}
+                        <div class="gp-service-category">
+                            <span class="gp-service-category-icon">${icon}</span>
+                            ${platformName}
+                        </div>
+                        <div class="gp-service-name">${serviceName}</div>
+                        
+                        <div class="gp-service-stats">
+                            <div class="gp-service-stat">
+                                <div class="gp-service-stat-label">Rate / 1000</div>
+                                <div class="gp-service-stat-value">${rate}</div>
+                            </div>
+                            <div class="gp-service-stat">
+                                <div class="gp-service-stat-label">Service ID</div>
+                                <div class="gp-service-stat-value">${serviceId}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="gp-service-range">
+                            <div class="gp-service-range-item">
+                                <div class="gp-service-range-label">Min</div>
+                                <div class="gp-service-range-value">${minOrder}</div>
+                            </div>
+                            <div class="gp-service-range-item">
+                                <div class="gp-service-range-label">Max</div>
+                                <div class="gp-service-range-value">${maxOrder}</div>
+                            </div>
+                        </div>
+                        
+                        <a href="${viewLink}" class="gp-service-cta">
+                            View Details
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+                
+                servicesContainer.appendChild(grid);
+            });
+            
+            // Insert after search bar
+            const searchRow = block39.querySelector('.row');
+            if (searchRow) {
+                searchRow.parentNode.insertBefore(servicesContainer, searchRow.nextSibling);
+                console.log('✅ [SERVICES V2] Cards grid created');
+            }
+            
+        }, 300);
         
-        // === 5. STYLE SEARCH BAR ===
+        // === 6. STYLE SEARCH BAR ===
         setTimeout(() => {
             const searchRow = block39.querySelector('.row');
             if (searchRow) {
@@ -3286,7 +3578,7 @@ setTimeout(() => {
                     gap: 12px !important;
                 `;
                 
-                const searchInput = searchRow.querySelector('input[placeholder*="Search"], input[type="text"]');
+                const searchInput = searchRow.querySelector('input');
                 if (searchInput) {
                     searchInput.style.cssText = `
                         flex: 1 !important;
@@ -3297,31 +3589,13 @@ setTimeout(() => {
                         transition: all 0.2s ease !important;
                         background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 14px center, white !important;
                     `;
-                    console.log('✅ [SERVICES] Search input styled');
-                }
-                
-                const filterBtn = searchRow.querySelector('button');
-                if (filterBtn) {
-                    filterBtn.style.cssText = `
-                        padding: 12px 20px !important;
-                        background: linear-gradient(135deg, #0047AB, #0066FF) !important;
-                        color: white !important;
-                        border: none !important;
-                        border-radius: 10px !important;
-                        font-weight: 600 !important;
-                        cursor: pointer !important;
-                        transition: all 0.3s ease !important;
-                        box-shadow: 0 4px 12px rgba(0,71,171,0.25) !important;
-                    `;
-                    console.log('✅ [SERVICES] Filter button styled');
                 }
             }
         }, 200);
         
-        console.log('🎉 [SERVICES] Transformation COMPLETE!');
+        console.log('🎉 [SERVICES V2] COMPLETE!');
     }
     
-    // Start transformation
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(tryTransform, 800);
@@ -3330,4 +3604,5 @@ setTimeout(() => {
         setTimeout(tryTransform, 800);
     }
 })();
+
 
