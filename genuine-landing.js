@@ -3005,12 +3005,63 @@ setTimeout(() => {
 
             this.dom.block.dataset.servicesV2 = 'true';
 
+            // Activate Full Width Mode globally via Class
+            document.body.classList.add('gp-services-v2-active');
+
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
 
+            // Force Layout Calculation via JS (The Nuclear Option)
+            this.forceFullWidth();
+
+            // PERSISTENCE: Observe changes to ensure style isn't reverted by other scripts
+            this.observeLayout();
+
             console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
+        }
+
+        forceFullWidth() {
+            // 1. Target the specific culprit identified in user's CSS
+            const wrapper = this.dom.block.closest(CONFIG.selectors.wrapperContent) || document.querySelector('.wrapper-content');
+
+            const forceStyle = (el) => {
+                if (!el) return;
+                el.style.setProperty('padding-right', '0', 'important');
+                el.style.setProperty('padding-left', '0', 'important');
+                el.style.setProperty('max-width', 'none', 'important');
+                el.style.setProperty('width', '100%', 'important');
+                el.style.setProperty('margin-right', '0', 'important');
+                el.style.setProperty('margin-left', '0', 'important');
+            };
+
+            forceStyle(wrapper);
+
+            // 2. Recursively walk up from the block to ensure all parents are open
+            let el = this.dom.block.parentElement;
+            let safety = 0;
+            while (el && el.tagName !== 'BODY' && safety < 15) {
+                forceStyle(el);
+                el = el.parentElement;
+                safety++;
+            }
+        }
+
+        observeLayout() {
+            // Watch for style changes on the wrapper and re-apply if needed
+            const wrapper = this.dom.block.closest(CONFIG.selectors.wrapperContent) || document.querySelector('.wrapper-content');
+            if (!wrapper) return;
+
+            const observer = new MutationObserver((mutations) => {
+                // If anything touches the style attribute, re-force our width
+                this.forceFullWidth();
+            });
+
+            observer.observe(wrapper, { attributes: true, attributeFilter: ['style', 'class'] });
+
+            // Also observe body for class changes just in case
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'style'] });
         }
 
         injectStyles() {
