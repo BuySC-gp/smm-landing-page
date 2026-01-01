@@ -2941,12 +2941,11 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIUM V3 (FULL WIDTH FIX)
+// MODULE 4: SERVICES PAGE — PREMIUM V3 (FIX SIDEBAR CORRECT)
 // =============================================================================
 (function () {
     'use strict';
 
-    // Configuration
     const CONFIG = {
         pageSize: 60,
         containerId: 'gp-services-v2-container',
@@ -2994,15 +2993,15 @@ setTimeout(() => {
                 return;
             }
 
-            if (this.dom.block.dataset.servicesV2 === 'true') return;
-            this.dom.block.dataset.servicesV2 = 'true';
+            if (this.dom.block.dataset.servicesV3 === 'true') return;
+            this.dom.block.dataset.servicesV3 = 'true';
 
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
 
-            console.log('✅ [SERVICES V3] Full Width Edition Loaded.');
+            console.log('✅ [SERVICES V3] Loaded successfully');
         }
 
         injectStyles() {
@@ -3010,65 +3009,23 @@ setTimeout(() => {
 
             const styles = `
                 /* =================================================================
-                   FULL WIDTH BREAKOUT - Force le container à occuper 100% viewport
+                   LAYOUT FIX - Travaille DANS le wrapper existant (sidebar-aware)
                    ================================================================= */
                 
                 .gp-hidden { display: none !important; }
                 
-                /* ÉTAPE 1: Forcer le block parent à ne pas contraindre */
+                /* Ne PAS utiliser viewport width breakout - reste dans le wrapper */
                 #block_39 {
                     width: 100% !important;
-                    max-width: none !important;
-                    padding: 0 !important;
-                    margin: 0 !important;
+                    max-width: 100% !important;
                 }
                 
-                /* ÉTAPE 2: Cibler TOUS les containers Bootstrap parents possibles */
-                #block_39 .container,
-                #block_39 .container-fluid,
-                #block_39 .wrapper-content,
-                #block_39 .wrapper-content__body,
-                #block_39 > div[class*="container"] {
-                    max-width: none !important;
-                    width: 100% !important;
-                    padding-left: 0 !important;
-                    padding-right: 0 !important;
-                }
-                
-                /* ÉTAPE 3: Le container principal utilise viewport width breakout */
+                /* Container principal: utilise 100% de l'espace disponible (hors sidebar) */
                 #gp-services-v2-container {
-                    /* Technique CSS-Tricks pour pleine largeur dans container limité */
-                    width: 100vw !important;
-                    position: relative;
-                    left: 50%;
-                    right: 50%;
-                    margin-left: -50vw !important;
-                    margin-right: -50vw !important;
-                    
-                    /* Padding interne pour le contenu */
-                    padding: 20px 40px !important;
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 20px;
                     box-sizing: border-box;
-                    
-                    /* Éviter scroll horizontal */
-                    max-width: 100vw;
-                    overflow-x: hidden;
-                }
-                
-                /* Compensation si sidebar existe (ajuster la valeur selon ton layout) */
-                body.has-sidebar #gp-services-v2-container {
-                    width: calc(100vw - 250px) !important;
-                    margin-left: calc(-50vw + 125px) !important;
-                }
-                
-                /* Mobile: reset pour éviter overflow */
-                @media (max-width: 768px) {
-                    #gp-services-v2-container {
-                        padding: 15px !important;
-                        left: 0 !important;
-                        margin-left: 0 !important;
-                        margin-right: 0 !important;
-                        width: 100% !important;
-                    }
                 }
 
                 /* =================================================================
@@ -3260,28 +3217,24 @@ setTimeout(() => {
                     margin-bottom: 40px;
                 }
                 
-                /* Large screens: 4 colonnes */
                 @media (min-width: 1400px) {
                     .gp-services-grid {
                         grid-template-columns: repeat(4, 1fr);
                     }
                 }
                 
-                /* Medium screens: 3 colonnes */
                 @media (min-width: 1024px) and (max-width: 1399px) {
                     .gp-services-grid {
                         grid-template-columns: repeat(3, 1fr);
                     }
                 }
                 
-                /* Tablets: 2 colonnes */
                 @media (min-width: 768px) and (max-width: 1023px) {
                     .gp-services-grid {
                         grid-template-columns: repeat(2, 1fr);
                     }
                 }
                 
-                /* Mobile: 1 colonne */
                 @media (max-width: 767px) {
                     .gp-services-grid {
                         grid-template-columns: 1fr;
@@ -3360,11 +3313,6 @@ setTimeout(() => {
                     color: #dc2626; 
                     border: 1px solid #fecaca; 
                 }
-                .gp-badge-best { 
-                    background: #fef3c7; 
-                    color: #d97706; 
-                    border: 1px solid #fde68a; 
-                }
                 
                 .gp-card-title {
                     font-size: 15px; 
@@ -3377,7 +3325,7 @@ setTimeout(() => {
                     -webkit-box-orient: vertical; 
                     overflow: hidden;
                     min-height: 42px;
-                    padding-right: 80px; /* Space for badges */
+                    padding-right: 80px;
                 }
 
                 .gp-card-meta {
@@ -3485,7 +3433,7 @@ setTimeout(() => {
                 }
 
                 /* =================================================================
-                   RESPONSIVE ADJUSTMENTS
+                   RESPONSIVE
                    ================================================================= */
                 @media (max-width: 768px) {
                     .gp-hero-banner { 
@@ -3503,6 +3451,9 @@ setTimeout(() => {
                     .gp-toolbar {
                         padding: 12px;
                     }
+                    #gp-services-v2-container {
+                        padding: 15px;
+                    }
                 }
             `;
             const styleEl = document.createElement('style');
@@ -3516,7 +3467,6 @@ setTimeout(() => {
             let currentCategory = "Other";
 
             this.state.allServices = rows.reduce((acc, row) => {
-                // Category Row
                 if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
                     const text = row.textContent.trim();
                     if (text.length > 2) {
@@ -3535,7 +3485,6 @@ setTimeout(() => {
                     return acc;
                 }
 
-                // Service Row
                 const serviceId = row.dataset.filterTableServiceId ||
                     row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
                     null;
@@ -3576,7 +3525,6 @@ setTimeout(() => {
         }
 
         buildStructure() {
-            // Hide native elements
             const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
             if (nativeRow) {
                 nativeRow.classList.add('gp-hidden');
@@ -3600,16 +3548,13 @@ setTimeout(() => {
             const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
             if (tableWrapper) tableWrapper.classList.add('gp-hidden');
 
-            // Create main container
             this.dom.container = document.createElement('div');
             this.dom.container.id = CONFIG.containerId;
 
-            // Hero
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
             this.renderHero();
 
-            // Toolbar
             this.dom.toolbar = document.createElement('div');
             this.dom.toolbar.className = 'gp-toolbar';
 
@@ -3640,11 +3585,9 @@ setTimeout(() => {
             this.dom.toolbar.appendChild(searchContainer);
             this.dom.toolbar.appendChild(this.dom.filters);
 
-            // Grid
             this.dom.grid = document.createElement('div');
             this.dom.grid.className = 'gp-services-grid';
 
-            // Pagination
             this.dom.pagination = document.createElement('div');
             this.dom.pagination.className = 'gp-pagination';
 
@@ -3687,11 +3630,8 @@ setTimeout(() => {
 
         renderFilters() {
             this.dom.filters.innerHTML = '';
-
-            // All button
             this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
 
-            // Category buttons
             this.state.categories.forEach(cat => {
                 const count = this.state.platformCounts[cat];
                 if (count > 0) {
@@ -3834,7 +3774,6 @@ setTimeout(() => {
                     }
                     this.applyFilters();
                     
-                    // Smooth scroll to top of container
                     const yOffset = -20;
                     const y = this.dom.container.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
@@ -3845,12 +3784,8 @@ setTimeout(() => {
             addBtn(null, '←');
 
             if (totalPages <= 7) {
-                // Show all pages if 7 or less
-                for (let i = 1; i <= totalPages; i++) {
-                    addBtn(i);
-                }
+                for (let i = 1; i <= totalPages; i++) addBtn(i);
             } else {
-                // Smart pagination for many pages
                 addBtn(1);
                 
                 if (this.state.currentPage > 3) {
@@ -3863,9 +3798,7 @@ setTimeout(() => {
                 let start = Math.max(2, this.state.currentPage - 1);
                 let end = Math.min(totalPages - 1, this.state.currentPage + 1);
                 
-                for (let i = start; i <= end; i++) {
-                    addBtn(i);
-                }
+                for (let i = start; i <= end; i++) addBtn(i);
                 
                 if (this.state.currentPage < totalPages - 2) {
                     const ellipsis = document.createElement('span');
@@ -3881,11 +3814,9 @@ setTimeout(() => {
         }
     }
 
-    // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
     } else {
         new ServicesApp().init();
     }
 })();
-
