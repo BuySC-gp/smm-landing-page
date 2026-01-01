@@ -1,8 +1,17 @@
-// =============================================================================
 // NEW ORDER PAGE - LAYOUT 50/50 (VERSION CORRIGÉE)
-// =============================================================================
 (function() {
 setTimeout(() => {
+    // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
+    const isNewOrderPage = document.querySelector('#block_206') || 
+                           document.querySelector('.new_order_block') ||
+                           document.querySelector('.row.new-order-form');
+    
+    if (!isNewOrderPage) {
+        console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');
+        return; // ← On sort du module
+    }
+    console.log('✅ [NEW ORDER] Detected - Layout 50/50 activating');
+
 const searchInput = document.querySelector('input[placeholder*="Search"]');
 const form = searchInput?.closest('form');
 if (form && !form.dataset.fixed) {
