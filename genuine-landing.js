@@ -7,6 +7,15 @@ setTimeout(() => {
                            document.querySelector('.row.new-order-form');
     
     if (!isNewOrderPage) {
+        console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');// NEW ORDER PAGE - LAYOUT 50/50 (VERSION CORRIGÉE)
+(function() {
+setTimeout(() => {
+    // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
+    const isNewOrderPage = document.querySelector('#block_206') || 
+                           document.querySelector('.new_order_block') ||
+                           document.querySelector('.row.new-order-form');
+    
+    if (!isNewOrderPage) {
         console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');
         return; // ← On sort du module
     }
@@ -3005,7 +3014,6 @@ setTimeout(() => {
 
             this.dom.block.dataset.servicesV2 = 'true';
 
-            this.forceFullWidth(); // Force full width via JS
             this.injectStyles();
             this.extractData();
             this.buildStructure();
@@ -3014,47 +3022,12 @@ setTimeout(() => {
             console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
         }
 
-        // Force full width by applying inline styles directly (bypasses CSS specificity issues)
-        forceFullWidth() {
-            // Cibler le wrapper principal qui contient la sidebar
-            const wrapper = document.querySelector('.wrapper-sidebar-navbar');
-            const wrapperContent = document.querySelector('.wrapper-content');
-            const wrapperContentBody = document.querySelector('.wrapper-content__body');
-
-            // Force les styles via setAttribute - AJOUTER overflow-x: hidden pour empêcher le débordement
-            if (wrapper) {
-                wrapper.setAttribute('style', 'width: 100vw !important; max-width: 100vw !important; overflow-x: hidden !important;');
-            }
-
-            if (wrapperContent) {
-                wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important; overflow-x: hidden !important;');
-            }
-
-            if (wrapperContentBody) {
-                wrapperContentBody.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; overflow-x: hidden !important;');
-            }
-
-            if (this.dom.block) {
-                this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important; overflow-x: hidden !important;');
-            }
-
-            console.log('🔧 [SERVICES V2] forceFullWidth applied with overflow-x: hidden');
-        }
-
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
 
             const styles = `
                 /* --- RESET & LAYOUT FIXES --- */
                 .gp-hidden { display: none !important; }
-                
-                /* FORCE FULL WIDTH: Override parent containers */
-                .wrapper-content,
-                .wrapper-content__body {
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    flex: 1 1 100% !important;
-                }
                 
                 /* FORCE FULL WIDTH: Override Bootstrap/Theme constraints for this block */
                 #block_39 {
