@@ -3468,13 +3468,35 @@ setTimeout(() => {
                 
                 console.log(`📂 Processing category: ${platformName}`);
                 
-                // Get services for this category
+                // Get services for this category - IMPROVED DETECTION
                 let currentRow = catRow.closest('tr').nextElementSibling;
                 const services = [];
                 
-                while (currentRow && currentRow.dataset.filterTableServiceId) {
-                    services.push(currentRow);
+                console.log('🔍 Analyzing next rows...');
+                let rowIndex = 0;
+                while (currentRow && rowIndex < 10) { // Check max 10 rows
+                    console.log(`  Row ${rowIndex}:`, {
+                        hasServiceId: !!currentRow.dataset.filterTableServiceId,
+                        classList: currentRow.className,
+                        innerHTML: currentRow.innerHTML.substring(0, 100)
+                    });
+                    
+                    // Check if it's a service row (not another category)
+                    if (currentRow.classList.contains('services-list-category-title')) {
+                        console.log('  → Next category found, stopping');
+                        break;
+                    }
+                    
+                    // Try multiple ways to detect service rows
+                    if (currentRow.dataset.filterTableServiceId || 
+                        currentRow.querySelector('[data-label="Service"]') ||
+                        currentRow.querySelector('td')) {
+                        services.push(currentRow);
+                        console.log(`  → Service found!`);
+                    }
+                    
                     currentRow = currentRow.nextElementSibling;
+                    rowIndex++;
                 }
                 
                 console.log(`  ↳ Found ${services.length} services`);
@@ -3622,4 +3644,3 @@ setTimeout(() => {
         setTimeout(tryTransform, 800);
     }
 })();
-
