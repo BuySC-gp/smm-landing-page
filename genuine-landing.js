@@ -2941,7 +2941,7 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION + FULL WIDTH ENFORCER)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION + ULTIMATE WIDTH FIX)
 // =============================================================================
 (function () {
     'use strict';
@@ -2956,6 +2956,7 @@ setTimeout(() => {
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
             nativeSearchRow: '#block_39 .row',
+            wrapperContent: '.wrapper-content', // Targeting the specific culprit
         }
     };
 
@@ -3014,38 +3015,58 @@ setTimeout(() => {
             // Force Layout Calculation via JS (The Nuclear Option)
             this.forceFullWidth();
 
+            // PERSISTENCE: Observe changes to ensure style isn't reverted by other scripts
+            this.observeLayout();
+
             console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
         }
 
         forceFullWidth() {
-            // Recursively walk up the DOM to remove constraints
+            // 1. Target the specific culprit identified in user's CSS
+            const wrapper = document.querySelector(CONFIG.selectors.wrapperContent);
+            if (wrapper) {
+                wrapper.style.setProperty('padding-right', '0', 'important');
+                wrapper.style.setProperty('padding-left', '0', 'important');
+                wrapper.style.setProperty('max-width', '100%', 'important');
+                wrapper.style.setProperty('width', '100%', 'important');
+            }
+
+            // 2. Recursively walk up from the block to ensure all parents are open
             let el = this.dom.block;
             let safety = 0;
             while (el && el.tagName !== 'BODY' && safety < 20) {
-                // Apply inline overrides to ensure they beat any class
                 el.style.maxWidth = 'none';
                 el.style.width = '100%';
+                el.style.paddingLeft = '0';
+                el.style.paddingRight = '0';
+                el.style.marginLeft = '0';
+                el.style.marginRight = '0';
 
-                // If it looks like a container/wrapper, kill the padding
-                if (el.classList.contains('container') ||
-                    el.classList.contains('container-fluid') ||
-                    el.classList.contains('wrapper-content') ||
-                    el.classList.contains('wrapper-content__body')) {
-                    el.style.paddingLeft = '0';
-                    el.style.paddingRight = '0';
-                    el.style.marginLeft = '0';
-                    el.style.marginRight = '0';
+                if (window.getComputedStyle(el).display === 'flex') {
+                    el.style.flex = '1 1 auto';
                 }
-
-                // Check computed style to be sure
-                const style = window.getComputedStyle(el);
-                if (style.display === 'flex') {
-                    el.style.flex = '1 1 auto'; // Allow growth
-                }
-
                 el = el.parentElement;
                 safety++;
             }
+        }
+
+        observeLayout() {
+            // Watch for style changes on the wrapper and re-apply if needed
+            const wrapper = document.querySelector(CONFIG.selectors.wrapperContent);
+            if (!wrapper) return;
+
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        // Check if our styles were removed, if so, re-apply
+                        if (wrapper.style.paddingRight !== '0px') {
+                            this.forceFullWidth();
+                        }
+                    }
+                });
+            });
+
+            observer.observe(wrapper, { attributes: true, attributeFilter: ['style', 'class'] });
         }
 
         injectStyles() {
@@ -3066,25 +3087,24 @@ setTimeout(() => {
                 body.gp-services-v2-active .container {
                     width: 100% !important;
                     max-width: 100% !important;
-                    padding-left: 0 !important; /* Remove side padding */
+                    padding-left: 0 !important;
                     padding-right: 0 !important;
                     margin-left: 0 !important;
                     margin-right: 0 !important;
-                    flex: 1 1 100% !important; /* Ensure flex element expands */
+                    flex: 1 1 100% !important; 
                 }
                 
                 /* Ensure our container has some breathing room but stays wide */
                 #gp-services-v2-container {
                     width: 100%;
-                    max-width: 1600px; /* High max-width for very large screens */
+                    max-width: 1600px;
                     margin: 0 auto;
-                    padding: 24px 32px; /* Internal padding for aesthetics */
+                    padding: 24px 32px;
                     box-sizing: border-box;
                 }
 
                 /* --- HERO BANNER (ROYAL BLUE THEME) --- */
                 .gp-hero-banner {
-                    /* Authentic Royal Blue Gradient */
                     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
                     border-radius: 12px;
                     padding: 40px;
