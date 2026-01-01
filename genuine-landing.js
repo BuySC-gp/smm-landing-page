@@ -2941,7 +2941,7 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION + ULTIMATE WIDTH FIX)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION)
 // =============================================================================
 (function () {
     'use strict';
@@ -2956,7 +2956,8 @@ setTimeout(() => {
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
             nativeSearchRow: '#block_39 .row',
-            wrapperContent: '.wrapper-content', // Targeting the specific culprit
+            // Selectors to force full width
+            layoutContainers: '.wrapper-content, .wrapper-content__body, .container-fluid, .container'
         }
     };
 
@@ -3004,107 +3005,49 @@ setTimeout(() => {
 
             this.dom.block.dataset.servicesV2 = 'true';
 
-            // Activate Full Width Mode globally via Class
-            document.body.classList.add('gp-services-v2-active');
-
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
 
-            // Force Layout Calculation via JS (The Nuclear Option)
-            this.forceFullWidth();
-
-            // PERSISTENCE: Observe changes to ensure style isn't reverted by other scripts
-            this.observeLayout();
-
             console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
-        }
-
-        forceFullWidth() {
-            // 1. Target the specific culprit identified in user's CSS
-            const wrapper = document.querySelector(CONFIG.selectors.wrapperContent);
-            if (wrapper) {
-                wrapper.style.setProperty('padding-right', '0', 'important');
-                wrapper.style.setProperty('padding-left', '0', 'important');
-                wrapper.style.setProperty('max-width', '100%', 'important');
-                wrapper.style.setProperty('width', '100%', 'important');
-            }
-
-            // 2. Recursively walk up from the block to ensure all parents are open
-            let el = this.dom.block;
-            let safety = 0;
-            while (el && el.tagName !== 'BODY' && safety < 20) {
-                el.style.maxWidth = 'none';
-                el.style.width = '100%';
-                el.style.paddingLeft = '0';
-                el.style.paddingRight = '0';
-                el.style.marginLeft = '0';
-                el.style.marginRight = '0';
-
-                if (window.getComputedStyle(el).display === 'flex') {
-                    el.style.flex = '1 1 auto';
-                }
-                el = el.parentElement;
-                safety++;
-            }
-        }
-
-        observeLayout() {
-            // Watch for style changes on the wrapper and re-apply if needed
-            const wrapper = document.querySelector(CONFIG.selectors.wrapperContent);
-            if (!wrapper) return;
-
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                        // Check if our styles were removed, if so, re-apply
-                        if (wrapper.style.paddingRight !== '0px') {
-                            this.forceFullWidth();
-                        }
-                    }
-                });
-            });
-
-            observer.observe(wrapper, { attributes: true, attributeFilter: ['style', 'class'] });
         }
 
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
 
             const styles = `
-                /* --- RESET & LAYOUT OVERRIDES --- */
+                /* --- RESET & LAYOUT FIXES --- */
                 .gp-hidden { display: none !important; }
-
-                /* 
-                   AGGRESSIVE OVERRIDES 
-                   Using body class to ensure we target specific parents 
-                */
-                body.gp-services-v2-active .wrapper-content,
-                body.gp-services-v2-active .wrapper-content__body,
-                body.gp-services-v2-active #block_39,
-                body.gp-services-v2-active .container-fluid,
-                body.gp-services-v2-active .container {
+                
+                /* FORCE FULL WIDTH: Override Bootstrap/Theme constraints for this block */
+                #block_39 {
                     width: 100% !important;
                     max-width: 100% !important;
-                    padding-left: 0 !important;
-                    padding-right: 0 !important;
-                    margin-left: 0 !important;
-                    margin-right: 0 !important;
-                    flex: 1 1 100% !important; 
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    flex: 0 0 100% !important;
                 }
                 
-                /* Ensure our container has some breathing room but stays wide */
+                /* Target parent containers if they are constraining width */
+                #block_39 .container, 
+                #block_39 .container-fluid {
+                    max-width: none !important;
+                    width: 100% !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+
                 #gp-services-v2-container {
                     width: 100%;
-                    max-width: 1600px;
-                    margin: 0 auto;
-                    padding: 24px 32px;
+                    max-width: 100%;
+                    padding: 20px; /* Safe padding for content */
                     box-sizing: border-box;
                 }
 
                 /* --- HERO BANNER (ROYAL BLUE THEME) --- */
                 .gp-hero-banner {
+                    /* Authentic Royal Blue Gradient - Professional & Clean */
                     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
                     border-radius: 12px;
                     padding: 40px;
@@ -3115,6 +3058,7 @@ setTimeout(() => {
                     box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
                 }
                 
+                /* Subtle abstract background pattern - High End feel */
                 .gp-hero-bg {
                     position: absolute;
                     top: 0; right: 0; bottom: 0; left: 0;
@@ -3241,7 +3185,7 @@ setTimeout(() => {
                 }
                 
                 .gp-filter-btn.active {
-                    background: #1e40af; /* Darker blue */
+                    background: #1e40af; /* Darker blue for active state */
                     border-color: #1e40af;
                     color: white;
                 }
@@ -3279,7 +3223,7 @@ setTimeout(() => {
                 .gp-card:hover {
                     transform: translateY(-2px);
                     box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
-                    border-color: #93c5fd;
+                    border-color: #93c5fd; /* Soft blue border on hover */
                 }
                 
                 .gp-card-header { margin-bottom: 16px; }
