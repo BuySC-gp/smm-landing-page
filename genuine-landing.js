@@ -2714,7 +2714,6 @@ window.addEventListener('load', function() {
 </div>
       </div>
     </div>
-  vascript
     `;  // ← Fin de allSectionsHTML
   
   if (footer) {
