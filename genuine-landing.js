@@ -2941,706 +2941,772 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — TRANSFORMATION PREMIUM V2
+// MODULE 4: SERVICES PAGE — PREMIER V2 (PAGINATED & DYNAMIC)
 // =============================================================================
-(function() {
-    let attempts = 0;
-    const maxAttempts = 3;
-    
-    function tryTransform() {
-        attempts++;
-        console.log(`[SERVICES V2] Attempt ${attempts}/${maxAttempts}`);
-        
-        const isServicesPage = window.location.pathname.includes('/services') || 
-                               document.querySelector('#service-table-39, #block_39');
-        
-        if (!isServicesPage) {
-            console.log('❌ [SERVICES V2] Not on Services page');
-            return;
+(function () {
+    'use strict';
+
+    // Configuration
+    const CONFIG = {
+        pageSize: 60, // Services per page
+        containerId: 'gp-services-v2-container',
+        styleId: 'gp-services-v2-css',
+        selectors: {
+            block: '#block_39',
+            table: '#service-table-39',
+            tableRows: '#service-table-39 tbody tr',
+            searchRow: '#block_39 .row' // The native search bar row
         }
-        
-        const block39 = document.getElementById('block_39');
-        if (!block39) {
-            console.error('❌ [SERVICES V2] #block_39 NOT FOUND');
-            if (attempts < maxAttempts) {
-                setTimeout(tryTransform, 1000);
+    };
+
+    /**
+     * Services Application Class
+     * Manages state, data extraction, and rendering.
+     */
+    class ServicesApp {
+        constructor() {
+            this.state = {
+                allServices: [],
+                filteredServices: [],
+                categories: [],
+                currentCategory: 'All',
+                currentPage: 1,
+                searchTerm: '',
+                totalServices: 0,
+                platformCounts: {},
+                categoryServiceCount: {} // Track index per category for badges
+            };
+            this.dom = {
+                block: null,
+                table: null,
+                container: null,
+                hero: null,
+                filters: null,
+                grid: null,
+                pagination: null
+            };
+        }
+
+        /**
+         * Initialize the transformation
+         */
+        init() {
+            console.log('🚀 [SERVICES V2] Initializing...');
+
+            this.dom.block = document.querySelector(CONFIG.selectors.block);
+            this.dom.table = document.querySelector(CONFIG.selectors.table);
+
+            if (!this.dom.block || !this.dom.table) {
+                console.warn('❌ [SERVICES V2] Block or Table not found. Retrying in 1s...');
+                setTimeout(() => this.init(), 1000);
+                return;
             }
-            return;
+
+            if (this.dom.block.dataset.servicesV2 === 'true') {
+                console.log('⚠️ [SERVICES V2] Already transformed.');
+                return;
+            }
+
+            this.dom.block.dataset.servicesV2 = 'true';
+
+            // 1. Inject CSS
+            this.injectStyles();
+
+            // 2. Extract Data
+            this.extractData();
+
+            // 3. Build UI Structure
+            this.buildStructure();
+
+            // 4. Initial Render
+            this.applyFilters();
+
+            console.log('✅ [SERVICES V2] Transformation Complete.');
         }
-        
-        if (block39.dataset.servicesV2 === 'true') {
-            console.log('⚠️ [SERVICES V2] Already transformed');
-            return;
-        }
-        
-        console.log('🚀 [SERVICES V2] Starting...');
-        block39.dataset.servicesV2 = 'true';
-        
-        // === 1. CSS INJECTION ===
-        if (!document.getElementById('gp-services-v2-css')) {
-            const styleTag = document.createElement('style');
-            styleTag.id = 'gp-services-v2-css';
-            styleTag.textContent = `
-                /* HERO BANNER COMPACT */
+
+        /**
+         * Inject Custom CSS
+         */
+        injectStyles() {
+            if (document.getElementById(CONFIG.styleId)) return;
+
+            const styles = `
+                /* --- UTILITIES --- */
+                .gp-hidden { display: none !important; }
+                .gp-flex { display: flex; }
+                .gp-items-center { align-items: center; }
+                .gp-justify-between { justify-content: space-between; }
+                .gp-gap-2 { gap: 8px; }
+                
+                /* --- HERO BANNER --- */
                 .gp-hero-banner {
-                    background: linear-gradient(135deg, #0047AB 0%, #0066FF 100%);
+                    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
                     border-radius: 16px;
-                    padding: 48px 36px;
+                    padding: 40px;
                     margin-bottom: 32px;
-                    box-shadow: 0 8px 32px rgba(0, 71, 171, 0.2);
                     position: relative;
                     overflow: hidden;
-                    max-width: 1400px;
-                    margin-left: auto;
-                    margin-right: auto;
+                    color: white;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
                 }
-                
-                .gp-hero-banner::before {
-                    content: '';
+                .gp-hero-bg {
                     position: absolute;
-                    top: -50%;
-                    right: -20%;
-                    width: 500px;
-                    height: 500px;
-                    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+                    top: 0; right: 0; bottom: 0; left: 0;
+                    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.15), transparent 40%);
                     pointer-events: none;
                 }
-                
                 .gp-hero-content {
                     position: relative;
                     z-index: 1;
                 }
-                
-                .gp-breadcrumb {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    font-size: 13px;
-                    margin-bottom: 20px;
-                }
-                
-                .gp-breadcrumb a {
-                    color: rgba(255, 255, 255, 0.7);
-                    text-decoration: none;
-                    font-weight: 600;
-                    transition: all 0.2s;
-                }
-                
-                .gp-breadcrumb a:hover {
-                    color: white;
-                }
-                
-                .gp-breadcrumb-separator {
-                    color: rgba(255, 255, 255, 0.4);
-                }
-                
-                .gp-breadcrumb-current {
-                    color: white;
-                    font-weight: 600;
-                }
-                
                 .gp-hero-title {
-                    font-size: 40px;
+                    font-size: 32px;
                     font-weight: 800;
-                    color: white;
                     margin-bottom: 12px;
-                    letter-spacing: -0.02em;
+                    background: linear-gradient(to right, #ffffff, #94a3b8);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
                 }
-                
-                .gp-hero-description {
+                .gp-hero-subtitle {
+                    color: #94a3b8;
                     font-size: 16px;
-                    color: rgba(255, 255, 255, 0.85);
-                    line-height: 1.6;
+                    max-width: 600px;
                     margin-bottom: 32px;
-                    max-width: 700px;
                 }
-                
-                .gp-hero-stats {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: 16px;
-                }
-                
-                .gp-stat-card {
-                    background: rgba(255, 255, 255, 0.12);
-                    backdrop-filter: blur(10px);
-                    border: 1px solid rgba(255, 255, 255, 0.18);
-                    border-radius: 12px;
-                    padding: 20px;
+                .gp-stats-row {
                     display: flex;
-                    align-items: center;
-                    gap: 14px;
-                    transition: all 0.3s ease;
+                    gap: 32px;
                 }
-                
-                .gp-stat-card:hover {
-                    background: rgba(255, 255, 255, 0.2);
-                    transform: translateY(-3px);
-                    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-                }
-                
-                .gp-stat-icon {
-                    width: 44px;
-                    height: 44px;
-                    border-radius: 10px;
+                .gp-stat-item {
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-shrink: 0;
-                    background: rgba(255, 255, 255, 0.15);
+                    flex-direction: column;
                 }
-                
                 .gp-stat-value {
                     font-size: 24px;
-                    font-weight: 800;
-                    color: white;
-                    line-height: 1.2;
-                    margin-bottom: 2px;
-                }
-                
-                .gp-stat-label {
-                    font-size: 11px;
-                    color: rgba(255, 255, 255, 0.75);
-                    text-transform: uppercase;
-                    letter-spacing: 0.6px;
-                    font-weight: 600;
-                }
-                
-                /* SERVICES CARDS GRID */
-                .gp-services-grid {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-                    gap: 20px;
-                    margin-top: 24px;
-                }
-                
-                .gp-service-card {
-                    background: white;
-                    border: 1px solid #E5E7EB;
-                    border-radius: 14px;
-                    padding: 24px;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                .gp-service-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 12px 40px rgba(0, 102, 255, 0.12);
-                    border-color: rgba(0, 102, 255, 0.3);
-                }
-                
-                .gp-service-category {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    font-size: 12px;
                     font-weight: 700;
-                    color: #6B7280;
-                    margin-bottom: 12px;
+                    color: white;
+                }
+                .gp-stat-label {
+                    font-size: 12px;
+                    color: #64748b;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }
-                
-                .gp-service-category-icon {
-                    font-size: 16px;
+
+                /* --- CATEGORY FILTERS --- */
+                .gp-filters-scroll {
+                    display: flex;
+                    gap: 12px;
+                    overflow-x: auto;
+                    padding-bottom: 16px;
+                    margin-bottom: 24px;
+                    scrollbar-width: thin;
+                }
+                .gp-filters-scroll::-webkit-scrollbar {
+                    height: 4px;
+                }
+                .gp-filters-scroll::-webkit-scrollbar-thumb {
+                    background: #cbd5e1;
+                    border-radius: 4px;
+                }
+                .gp-filter-btn {
+                    padding: 10px 20px;
+                    border-radius: 50px;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    color: #64748b;
+                    font-weight: 600;
+                    font-size: 14px;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .gp-filter-btn:hover {
+                    border-color: #cbd5e1;
+                    color: #334155;
+                    transform: translateY(-1px);
+                }
+                .gp-filter-btn.active {
+                    background: #2563eb;
+                    border-color: #2563eb;
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+                }
+                .gp-filter-count {
+                    background: rgba(0,0,0,0.08);
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 11px;
+                }
+                .gp-filter-btn.active .gp-filter-count {
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                }
+
+                /* --- GRID LAYOUT --- */
+                .gp-services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 40px;
                 }
                 
-                .gp-service-name {
-                    font-size: 18px;
-                    font-weight: 700;
-                    color: #1F2937;
+                /* --- SERVICE CARD --- */
+                .gp-card {
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 16px;
+                    padding: 24px;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+                }
+                .gp-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+                    border-color: #cbd5e1;
+                }
+                .gp-card-header {
                     margin-bottom: 16px;
-                    line-height: 1.3;
                 }
-                
-                .gp-service-badge {
+                .gp-card-badges {
                     position: absolute;
                     top: 16px;
                     right: 16px;
-                    padding: 6px 12px;
+                    display: flex;
+                    gap: 6px;
+                }
+                .gp-badge {
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 4px 10px;
                     border-radius: 20px;
+                    text-transform: uppercase;
+                }
+                .gp-badge-id { background: #f1f5f9; color: #64748b; }
+                .gp-badge-hot { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+                .gp-badge-new { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+                .gp-card-category {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
                     font-size: 11px;
                     font-weight: 700;
                     text-transform: uppercase;
-                    letter-spacing: 0.5px;
+                    color: #64748b;
+                    margin-bottom: 8px;
+                    background: #f8fafc;
+                    padding: 4px 10px;
+                    border-radius: 6px;
                 }
-                
-                .gp-badge-popular {
-                    background: linear-gradient(135deg, #EF4444, #DC2626);
-                    color: white;
+                .gp-card-title {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #1e293b;
+                    line-height: 1.4;
+                    margin-bottom: 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    height: 44px; /* Fixed height for title alignment */
                 }
-                
-                .gp-badge-best {
-                    background: linear-gradient(135deg, #F59E0B, #D97706);
-                    color: white;
-                }
-                
-                .gp-badge-new {
-                    background: linear-gradient(135deg, #10B981, #059669);
-                    color: white;
-                }
-                
-                .gp-service-stats {
+
+                .gp-card-meta {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
                     gap: 12px;
-                    margin-bottom: 16px;
+                    margin-bottom: 20px;
+                    padding: 16px;
+                    background: #f8fafc;
+                    border-radius: 12px;
+                    border: 1px solid #f1f5f9;
                 }
-                
-                .gp-service-stat {
-                    background: #F9FAFB;
-                    padding: 12px;
-                    border-radius: 8px;
-                    border: 1px solid #E5E7EB;
-                }
-                
-                .gp-service-stat-label {
-                    font-size: 11px;
-                    color: #6B7280;
-                    font-weight: 600;
-                    margin-bottom: 4px;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                }
-                
-                .gp-service-stat-value {
-                    font-size: 16px;
-                    font-weight: 800;
-                    background: linear-gradient(135deg, #00A67E, #00D97E);
-                    -webkit-background-clip: text;
-                    -webkit-text-fill-color: transparent;
-                    background-clip: text;
-                }
-                
-                .gp-service-range {
+                .gp-meta-item {
                     display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 16px;
-                    padding: 12px;
-                    background: #F9FAFB;
-                    border-radius: 8px;
-                    border: 1px solid #E5E7EB;
+                    flex-direction: column;
                 }
-                
-                .gp-service-range-item {
-                    text-align: center;
-                }
-                
-                .gp-service-range-label {
+                .gp-meta-label {
                     font-size: 10px;
-                    color: #6B7280;
+                    color: #94a3b8;
                     font-weight: 600;
-                    margin-bottom: 4px;
                     text-transform: uppercase;
+                    margin-bottom: 4px;
                 }
-                
-                .gp-service-range-value {
+                .gp-meta-val {
                     font-size: 14px;
                     font-weight: 700;
-                    color: #1F2937;
+                    color: #334155;
                 }
-                
-                .gp-service-cta {
+                .gp-price-val {
+                    color: #2563eb;
+                }
+
+                .gp-card-footer {
+                    margin-top: auto;
+                }
+                .gp-btn-view {
+                    width: 100%;
+                    padding: 12px;
+                    background: white;
+                    border: 1px solid #e2e8f0;
+                    color: #0f172a;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .gp-btn-view:hover {
+                    background: #0f172a;
+                    border-color: #0f172a;
+                    color: white;
+                }
+                .gp-btn-view svg {
+                    width: 16px;
+                    height: 16px;
+                }
+
+                /* --- PAGINATION --- */
+                .gp-pagination {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 8px;
+                    margin-top: 20px;
+                }
+                .gp-page-btn {
+                    min-width: 40px;
+                    height: 40px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 8px;
-                    width: 100%;
-                    padding: 12px 20px;
-                    background: linear-gradient(135deg, #0047AB, #0066FF);
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    font-weight: 700;
-                    font-size: 14px;
+                    border-radius: 8px;
+                    border: 1px solid #e2e8f0;
+                    background: white;
+                    color: #64748b;
+                    font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.3s ease;
-                    text-decoration: none;
-                    box-shadow: 0 4px 12px rgba(0, 71, 171, 0.25);
+                    transition: all 0.2s;
                 }
-                
-                .gp-service-cta:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(0, 71, 171, 0.35);
+                .gp-page-btn:hover:not(:disabled) {
+                    border-color: #94a3b8;
+                    color: #0f172a;
                 }
-                
-                .gp-category-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    margin: 32px 0 20px;
-                    padding-bottom: 12px;
-                    border-bottom: 2px solid #E5E7EB;
+                .gp-page-btn.active {
+                    background: #0f172a;
+                    color: white;
+                    border-color: #0f172a;
                 }
-                
-                .gp-category-icon {
-                    font-size: 28px;
+                .gp-page-btn:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
                 }
-                
-                .gp-category-name {
-                    font-size: 22px;
-                    font-weight: 800;
-                    color: #1F2937;
-                }
-                
-                .gp-category-count {
-                    margin-left: auto;
-                    padding: 6px 12px;
-                    background: #F3F4F6;
-                    border-radius: 20px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: #6B7280;
-                }
-                
-                @media (max-width: 1024px) {
-                    .gp-hero-stats {
-                        grid-template-columns: repeat(2, 1fr);
-                    }
-                    
-                    .gp-services-grid {
-                        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                    }
-                }
-                
+
                 @media (max-width: 768px) {
-                    .gp-hero-banner {
-                        padding: 32px 24px;
-                    }
-                    
-                    .gp-hero-title {
-                        font-size: 28px;
-                    }
-                    
-                    .gp-hero-stats {
-                        grid-template-columns: 1fr;
-                    }
-                    
-                    .gp-services-grid {
-                        grid-template-columns: 1fr;
-                    }
+                    .gp-services-grid { grid-template-columns: 1fr; }
+                    .gp-stats-row { flex-wrap: wrap; gap: 20px; }
+                    .gp-hero-banner { padding: 24px; }
                 }
             `;
-            document.head.appendChild(styleTag);
-            console.log('✅ [SERVICES V2] CSS injected');
+
+            const styleEl = document.createElement('style');
+            styleEl.id = CONFIG.styleId;
+            styleEl.textContent = styles;
+            document.head.appendChild(styleEl);
         }
-        
-        // === 2. COUNT SERVICES AUTOMATICALLY ===
-        const servicesTable = document.querySelector('#service-table-39');
-        let totalServices = 0;
-        let totalCategories = 0;
-        
-        if (servicesTable) {
-            const serviceRows = servicesTable.querySelectorAll('tr[data-filter-table-service-id]');
-            totalServices = serviceRows.length;
-            
-            const platformElements = servicesTable.querySelectorAll('[data-platform-name]');
-            const platforms = new Set([...platformElements].map(el => el.dataset.platformName));
-            totalCategories = platforms.size;
-            
-            console.log(`📊 [SERVICES V2] ${totalServices} services, ${totalCategories} platforms`);
-        } else {
-            console.warn('⚠️ [SERVICES V2] Table not found');
+
+        /**
+         * Robustly extract data from the HTML table
+         */
+        extractData() {
+            const rows = Array.from(document.querySelectorAll(CONFIG.selectors.tableRows));
+            let currentCategory = "Other";
+
+            this.state.allServices = rows.reduce((acc, row) => {
+                // Case 1: Category Row
+                if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
+                    const text = row.textContent.trim();
+                    if (text.length > 2) {
+                        currentCategory = text.replace(/[\n\r\t]/g, '').trim();
+                        // Add to categories set
+                        if (!this.state.categories.includes(currentCategory)) {
+                            this.state.categories.push(currentCategory);
+                            this.state.platformCounts[currentCategory] = 0;
+                            this.state.categoryServiceCount[currentCategory] = 0;
+                        }
+                    }
+                    return acc;
+                }
+
+                // Case 2: Service Row (Must have a service ID or pricing)
+                // We'll look for specific markers to identify real service rows
+                const serviceId = row.dataset.filterTableServiceId ||
+                    row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
+                    null;
+
+                // Even if no ID, if it has a "Rate" cell, it's likely a service
+                const rateCell = row.querySelector('[data-label="Rate per 1000"]');
+
+                if (serviceId || rateCell) {
+                    // Try to find the native interaction button (Modal trigger)
+                    const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
+
+                    const nameCell = row.querySelector('[data-label="Service"]');
+                    const name = nameCell ? nameCell.textContent.trim() : 'Unknown Service';
+
+                    const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
+                    const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
+                    const rate = rateCell ? rateCell.textContent.trim() : '$0.00';
+
+                    // Update counts
+                    this.state.platformCounts[currentCategory]++;
+
+                    // Determine Badge
+                    const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
+                    let badge = null;
+                    if (catIndex === 0) badge = { text: '🔥 Popular', class: 'gp-badge-hot' };
+                    else if (catIndex === 1) badge = { text: '⭐ Best', class: 'gp-badge-new' };
+                    // else if (catIndex === 2) badge = { text: '✨ Top', class: 'gp-badge-id' }; 
+
+                    this.state.categoryServiceCount[currentCategory] = catIndex + 1;
+
+                    acc.push({
+                        id: serviceId || 'N/A',
+                        name: name,
+                        category: currentCategory,
+                        rate: rate,
+                        min: min,
+                        max: max,
+                        badge: badge,
+                        originalRow: row,
+                        nativeBtn: buyBtn // Store reference to click later
+                    });
+                }
+
+                return acc;
+            }, []);
+
+            this.state.totalServices = this.state.allServices.length;
+            console.log(`📊 Extracted ${this.state.totalServices} services across ${this.state.categories.length} categories.`);
         }
-        
-        // === 3. CREATE HERO BANNER ===
-        const heroBanner = document.createElement('div');
-        heroBanner.className = 'gp-hero-banner';
-        heroBanner.innerHTML = `
-            <div class="gp-hero-content">
-                <div class="gp-breadcrumb">
-                    <a href="/">Home</a>
-                    <span class="gp-breadcrumb-separator">›</span>
-                    <span class="gp-breadcrumb-current">Services</span>
-                </div>
-                
-                <div class="gp-hero-text">
-                    <h1 class="gp-hero-title">Premium SMM Services</h1>
-                    <p class="gp-hero-description">
-                        Professional social media growth services. Trusted by thousands of creators, brands, and agencies worldwide.
-                    </p>
-                </div>
-                
-                <div class="gp-hero-stats">
-                    <div class="gp-stat-card">
-                        <div class="gp-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-                                <rect x="3" y="3" width="7" height="7"/>
-                                <rect x="14" y="3" width="7" height="7"/>
-                                <rect x="14" y="14" width="7" height="7"/>
-                                <rect x="3" y="14" width="7" height="7"/>
-                            </svg>
-                        </div>
-                        <div class="gp-stat-content">
-                            <div class="gp-stat-value">${totalServices || '50+'}</div>
-                            <div class="gp-stat-label">Services</div>
-                        </div>
-                    </div>
-                    
-                    <div class="gp-stat-card">
-                        <div class="gp-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                            </svg>
-                        </div>
-                        <div class="gp-stat-content">
-                            <div class="gp-stat-value">${totalCategories || '10+'}</div>
-                            <div class="gp-stat-label">Platforms</div>
-                        </div>
-                    </div>
-                    
-                    <div class="gp-stat-card">
-                        <div class="gp-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                            </svg>
-                        </div>
-                        <div class="gp-stat-content">
-                            <div class="gp-stat-value">Fast</div>
-                            <div class="gp-stat-label">Processing</div>
-                        </div>
-                    </div>
-                    
-                    <div class="gp-stat-card">
-                        <div class="gp-stat-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <div class="gp-stat-content">
-                            <div class="gp-stat-value">Refill</div>
-                            <div class="gp-stat-label">Guarantee</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // === 4. INSERT BANNER ===
-        const containerFluid = block39.querySelector('.container-fluid');
-        if (containerFluid && containerFluid.firstChild) {
-            containerFluid.insertBefore(heroBanner, containerFluid.firstChild);
-            console.log('✅ [SERVICES V2] Hero inserted');
-        } else {
-            block39.insertBefore(heroBanner, block39.firstChild);
-            console.log('✅ [SERVICES V2] Hero inserted (fallback)');
+
+        /**
+         * Build the main specific DOM structure
+         */
+        buildStructure() {
+            // Hide original table container
+            const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
+            if (tableWrapper) tableWrapper.classList.add('gp-hidden');
+
+            // Create App Container
+            this.dom.container = document.createElement('div');
+            this.dom.container.id = CONFIG.containerId;
+
+            // 1. Hero
+            this.dom.hero = document.createElement('div');
+            this.dom.hero.className = 'gp-hero-banner';
+            this.renderHero();
+
+            // 2. Filters
+            this.dom.filters = document.createElement('div');
+
+            // 3. Grid
+            this.dom.grid = document.createElement('div');
+            this.dom.grid.className = 'gp-services-grid';
+
+            // 4. Pagination
+            this.dom.pagination = document.createElement('div');
+            this.dom.pagination.className = 'gp-pagination';
+
+            // Assemble
+            this.dom.container.appendChild(this.dom.hero);
+            this.dom.container.appendChild(this.dom.filters);
+            this.dom.container.appendChild(this.dom.grid);
+            this.dom.container.appendChild(this.dom.pagination);
+
+            // Insert after the native search bar
+            const searchRow = document.querySelector(CONFIG.selectors.searchRow);
+            if (searchRow) {
+                searchRow.parentNode.insertBefore(this.dom.container, searchRow.nextSibling);
+                // Hook into native search if possible, or hide it and build our own.
+                // For now, let's style the native search and attach a listener
+                this.attachSearchListener(searchRow);
+            } else {
+                this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
+            }
         }
-        
-        // === 5. TRANSFORM TABLE TO CARDS ===
-        setTimeout(() => {
-            if (!servicesTable) {
-                console.warn('⚠️ [SERVICES V2] No table to transform');
+
+        renderHero() {
+            this.dom.hero.innerHTML = `
+                <div class="gp-hero-bg"></div>
+                <div class="gp-hero-content">
+                    <h1 class="gp-hero-title">Services Catalog</h1>
+                    <p class="gp-hero-subtitle">Browse our premium selection of ${this.state.totalServices} high-quality services.</p>
+                    
+                    <div class="gp-stats-row">
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">${this.state.totalServices}</span>
+                            <span class="gp-stat-label">Total Services</span>
+                        </div>
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">${this.state.categories.length}</span>
+                            <span class="gp-stat-label">Platforms</span>
+                        </div>
+                        <div class="gp-stat-item">
+                            <span class="gp-stat-value">⚡ Fast</span>
+                            <span class="gp-stat-label">Delivery</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        renderFilters() {
+            const scrollContainer = document.createElement('div');
+            scrollContainer.className = 'gp-filters-scroll';
+
+            // "All" Button
+            const allBtn = this.createFilterBtn('All', this.state.totalServices);
+            scrollContainer.appendChild(allBtn);
+
+            // Category Buttons
+            this.state.categories.forEach(cat => {
+                const count = this.state.platformCounts[cat] || 0;
+                if (count > 0) {
+                    scrollContainer.appendChild(this.createFilterBtn(cat, count));
+                }
+            });
+
+            this.dom.filters.innerHTML = '';
+            this.dom.filters.appendChild(scrollContainer);
+        }
+
+        createFilterBtn(label, count) {
+            const btn = document.createElement('button');
+            btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
+            btn.innerHTML = `
+                ${this.getIcon(label)}
+                <span>${label}</span>
+                <span class="gp-filter-count">${count}</span>
+            `;
+            btn.onclick = () => this.handleCategoryChange(label);
+            return btn;
+        }
+
+        getIcon(label) {
+            const l = label.toLowerCase();
+            if (l.includes('instagram')) return '📷';
+            if (l.includes('tiktok')) return '🎵';
+            if (l.includes('youtube')) return '▶️';
+            if (l.includes('spotify')) return '🎧';
+            if (l.includes('facebook')) return '👥';
+            if (l.includes('telegram')) return '✈️';
+            if (l.includes('twitter') || l.includes('x')) return '🐦';
+            if (l.includes('twitch')) return '🎮';
+            return '📱';
+        }
+
+        attachSearchListener(nativeSearchRow) {
+            const input = nativeSearchRow.querySelector('input');
+            if (input) {
+                // Enhance styles
+                nativeSearchRow.style.marginBottom = '20px';
+                input.placeholder = "Search for services...";
+
+                // Debounce input
+                let timeout;
+                input.addEventListener('input', (e) => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        this.state.searchTerm = e.target.value.toLowerCase();
+                        this.state.currentPage = 1;
+                        this.applyFilters(); // Re-render
+                    }, 300);
+                });
+            }
+        }
+
+        /**
+         * Core Logic: Filtering & Pagination
+         */
+        applyFilters() {
+            const { currentCategory, searchTerm, allServices } = this.state;
+
+            // 1. Filter
+            this.state.filteredServices = allServices.filter(svc => {
+                const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
+                const matchesSearch = svc.name.toLowerCase().includes(searchTerm) ||
+                    svc.id.toString().includes(searchTerm);
+                return matchesCat && matchesSearch;
+            });
+
+            // 2. Paginate
+            const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
+            if (this.state.currentPage > totalPages) this.state.currentPage = 1;
+
+            const start = (this.state.currentPage - 1) * CONFIG.pageSize;
+            const end = start + CONFIG.pageSize;
+            const pageData = this.state.filteredServices.slice(start, end);
+
+            // 3. Render
+            this.renderFilters(); // Update active state
+            this.renderGrid(pageData);
+            this.renderPagination(totalPages);
+        }
+
+        renderGrid(services) {
+            this.dom.grid.innerHTML = '';
+
+            if (services.length === 0) {
+                this.dom.grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">
+                        <h3>No services found</h3>
+                        <p>Try adjusting your search or filters.</p>
+                    </div>
+                `;
                 return;
             }
-            
-            console.log('🔍 [SERVICES V2] Starting table transformation...');
-            
-            // Get all services BEFORE hiding table
-            const categoryRows = servicesTable.querySelectorAll('.services-list-category-title');
-            console.log(`📋 Found ${categoryRows.length} category rows`);
-            
-            if (categoryRows.length === 0) {
-                console.error('❌ No categories found! Table structure:');
-                console.log(servicesTable.innerHTML.substring(0, 500));
-            }
-            
-            const servicesContainer = document.createElement('div');
-            servicesContainer.id = 'gp-services-container';
-            
-            const platformIcons = {
-                'instagram': '📷',
-                'tiktok': '🎵',
-                'youtube': '▶️',
-                'spotify': '🎧',
-                'facebook': '👥',
-                'telegram': '✈️',
-                'twitter': '🐦',
-                'twitch': '🎮'
-            };
-            
-            categoryRows.forEach((catRow, catIndex) => {
-                const platformName = catRow.closest('tr')?.dataset.platformName || 
-                                   catRow.textContent.trim() || 'Other';
-                const platformKey = platformName.toLowerCase();
-                const icon = platformIcons[platformKey] || '📱';
-                
-                console.log(`📂 Processing category: ${platformName}`);
-                
-                // Get services for this category - IMPROVED DETECTION
-                let currentRow = catRow.closest('tr').nextElementSibling;
-                const services = [];
-                
-                console.log('🔍 Analyzing next rows...');
-                let rowIndex = 0;
-                while (currentRow && rowIndex < 10) { // Check max 10 rows
-                    console.log(`  Row ${rowIndex}:`, {
-                        hasServiceId: !!currentRow.dataset.filterTableServiceId,
-                        classList: currentRow.className,
-                        innerHTML: currentRow.innerHTML.substring(0, 100)
-                    });
-                    
-                    // Check if it's a service row (not another category)
-                    if (currentRow.classList.contains('services-list-category-title')) {
-                        console.log('  → Next category found, stopping');
-                        break;
-                    }
-                    
-                    // Try multiple ways to detect service rows
-                    if (currentRow.dataset.filterTableServiceId || 
-                        currentRow.querySelector('[data-label="Service"]') ||
-                        currentRow.querySelector('td')) {
-                        services.push(currentRow);
-                        console.log(`  → Service found!`);
-                    }
-                    
-                    currentRow = currentRow.nextElementSibling;
-                    rowIndex++;
-                }
-                
-                console.log(`  ↳ Found ${services.length} services`);
-                
-                if (services.length === 0) return;
-                
-                // Create category header
-                const categoryHeader = document.createElement('div');
-                categoryHeader.className = 'gp-category-header';
-                categoryHeader.innerHTML = `
-                    <div class="gp-category-icon">${icon}</div>
-                    <div class="gp-category-name">${platformName}</div>
-                    <div class="gp-category-count">${services.length} services</div>
-                `;
-                servicesContainer.appendChild(categoryHeader);
-                
-                // Create grid
-                const grid = document.createElement('div');
-                grid.className = 'gp-services-grid';
-                
-                services.forEach((serviceRow, index) => {
-                    const serviceId = serviceRow.dataset.filterTableServiceId;
-                    const serviceName = serviceRow.querySelector('[data-label="Service"]')?.textContent.trim() || 'Service';
-                    const rate = serviceRow.querySelector('[data-label="Rate per 1000"]')?.textContent.trim() || 'N/A';
-                    const minOrder = serviceRow.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
-                    const maxOrder = serviceRow.querySelector('[data-label="Max order"]')?.textContent.trim() || '0';
-                    const viewLink = serviceRow.querySelector('a[href*="service"]')?.href || '#';
-                    
-                    // Badge logic: first 3 services get badges
-                    let badge = '';
-                    if (index === 0) {
-                        badge = '<div class="gp-service-badge gp-badge-popular">🔥 Popular</div>';
-                    } else if (index === 1) {
-                        badge = '<div class="gp-service-badge gp-badge-best">⭐ Best</div>';
-                    } else if (index === 2) {
-                        badge = '<div class="gp-service-badge gp-badge-new">✨ Top</div>';
-                    }
-                    
-                    const card = document.createElement('div');
-                    card.className = 'gp-service-card';
-                    card.innerHTML = `
-                        ${badge}
-                        <div class="gp-service-category">
-                            <span class="gp-service-category-icon">${icon}</span>
-                            ${platformName}
+
+            services.forEach(svc => {
+                const card = document.createElement('div');
+                card.className = 'gp-card';
+
+                const badgeHtml = svc.badge
+                    ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>`
+                    : '';
+
+                card.innerHTML = `
+                    <div class="gp-card-header">
+                        <div class="gp-card-category">${this.getIcon(svc.category)} ${svc.category}</div>
+                        <div class="gp-card-badges">
+                            ${badgeHtml}
+                            <span class="gp-badge gp-badge-id">ID: ${svc.id}</span>
                         </div>
-                        <div class="gp-service-name">${serviceName}</div>
-                        
-                        <div class="gp-service-stats">
-                            <div class="gp-service-stat">
-                                <div class="gp-service-stat-label">Rate / 1000</div>
-                                <div class="gp-service-stat-value">${rate}</div>
-                            </div>
-                            <div class="gp-service-stat">
-                                <div class="gp-service-stat-label">Service ID</div>
-                                <div class="gp-service-stat-value">${serviceId}</div>
-                            </div>
+                        <h3 class="gp-card-title">${svc.name}</h3>
+                    </div>
+                    
+                    <div class="gp-card-meta">
+                        <div class="gp-meta-item">
+                            <span class="gp-meta-label">Rate / 1k</span>
+                            <span class="gp-meta-val gp-price-val">${svc.rate}</span>
                         </div>
-                        
-                        <div class="gp-service-range">
-                            <div class="gp-service-range-item">
-                                <div class="gp-service-range-label">Min</div>
-                                <div class="gp-service-range-value">${minOrder}</div>
-                            </div>
-                            <div class="gp-service-range-item">
-                                <div class="gp-service-range-label">Max</div>
-                                <div class="gp-service-range-value">${maxOrder}</div>
-                            </div>
+                        <div class="gp-meta-item">
+                            <span class="gp-meta-label">Min / Max</span>
+                            <span class="gp-meta-val">${svc.min} - ${svc.max}</span>
                         </div>
-                        
-                        <a href="${viewLink}" class="gp-service-cta">
-                            View Details
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="5" y1="12" x2="19" y2="12"/>
-                                <polyline points="12 5 19 12 12 19"/>
+                    </div>
+
+                    <div class="gp-card-footer">
+                        <button class="gp-btn-view">
+                            <span>View Details</span>
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                             </svg>
-                        </a>
-                    `;
-                    
-                    grid.appendChild(card);
-                });
-                
-                servicesContainer.appendChild(grid);
+                        </button>
+                    </div>
+                `;
+
+                // Bind click event to native button
+                const btn = card.querySelector('.gp-btn-view');
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    if (svc.nativeBtn) {
+                        console.log(`🔗 Triggering native click for Service ${svc.id}`);
+                        svc.nativeBtn.click();
+                    } else {
+                        // Fallback: If no button found, look for global order function or alert
+                        console.warn(`⚠️ No native button found for ${svc.id}. trying generic order.`);
+                        // Try typical SMM patterns
+                        if (window.order && typeof window.order === 'function') {
+                            window.order(svc.id);
+                        } else {
+                            // If it's a link-based system
+                            const link = svc.originalRow.querySelector('a');
+                            if (link) link.click();
+                            else alert('Could not open order window. Please report this.');
+                        }
+                    }
+                };
+
+                this.dom.grid.appendChild(card);
             });
-            
-            // Insert after search bar
-            const searchRow = block39.querySelector('.row');
-            if (searchRow && servicesContainer.children.length > 0) {
-                searchRow.parentNode.insertBefore(servicesContainer, searchRow.nextSibling);
-                console.log(`✅ [SERVICES V2] Cards grid created with ${servicesContainer.children.length / 2} categories`);
-                
-                // NOW hide original table after cards are created
-                const tableWrapper = servicesTable.closest('.table-responsive, .table-wr');
-                if (tableWrapper) {
-                    tableWrapper.style.display = 'none';
-                    console.log('✅ [SERVICES V2] Table hidden');
+        }
+
+        renderPagination(totalPages) {
+            this.dom.pagination.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            const createPageBtn = (page, text = page) => {
+                const btn = document.createElement('button');
+                btn.className = `gp-page-btn ${this.state.currentPage === page ? 'active' : ''}`;
+                btn.textContent = text;
+                btn.onclick = () => {
+                    this.state.currentPage = page;
+                    this.applyFilters();
+                    this.dom.filters.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                return btn;
+            };
+
+            // Prev
+            const prev = createPageBtn(this.state.currentPage - 1, '←');
+            prev.disabled = this.state.currentPage === 1;
+            this.dom.pagination.appendChild(prev);
+
+            // Simple Logic: Show first, last, and current +/- 1
+            if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) {
+                    this.dom.pagination.appendChild(createPageBtn(i));
                 }
             } else {
-                console.error('❌ [SERVICES V2] Failed to create cards - container empty or no search row');
-                console.log(`Container children: ${servicesContainer.children.length}`);
-                console.log(`Search row found: ${!!searchRow}`);
-            }
-            
-        }, 1000); // Increased timeout to 1000ms
-        
-        // === 6. STYLE SEARCH BAR ===
-        setTimeout(() => {
-            const searchRow = block39.querySelector('.row');
-            if (searchRow) {
-                searchRow.style.cssText = `
-                    background: white !important;
-                    border-radius: 12px !important;
-                    padding: 20px !important;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-                    border: 1px solid #E5E7EB !important;
-                    margin-bottom: 24px !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 12px !important;
-                `;
-                
-                const searchInput = searchRow.querySelector('input');
-                if (searchInput) {
-                    searchInput.style.cssText = `
-                        flex: 1 !important;
-                        padding: 12px 16px 12px 44px !important;
-                        border: 1px solid #E5E7EB !important;
-                        border-radius: 10px !important;
-                        font-size: 14px !important;
-                        transition: all 0.2s ease !important;
-                        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 14px center, white !important;
-                    `;
+                // Show condensed
+                this.dom.pagination.appendChild(createPageBtn(1));
+                if (this.state.currentPage > 3) {
+                    const span = document.createElement('span'); span.textContent = '...';
+                    this.dom.pagination.appendChild(span);
                 }
+
+                // Middle
+                const start = Math.max(2, this.state.currentPage - 1);
+                const end = Math.min(totalPages - 1, this.state.currentPage + 1);
+                for (let i = start; i <= end; i++) {
+                    this.dom.pagination.appendChild(createPageBtn(i));
+                }
+
+                if (this.state.currentPage < totalPages - 2) {
+                    const span = document.createElement('span'); span.textContent = '...';
+                    this.dom.pagination.appendChild(span);
+                }
+                this.dom.pagination.appendChild(createPageBtn(totalPages));
             }
-        }, 200);
-        
-        console.log('🎉 [SERVICES V2] COMPLETE!');
+
+            // Next
+            const next = createPageBtn(this.state.currentPage + 1, '→');
+            next.disabled = this.state.currentPage === totalPages;
+            this.dom.pagination.appendChild(next);
+        }
+
+        handleCategoryChange(category) {
+            this.state.currentCategory = category;
+            this.state.currentPage = 1;
+            this.applyFilters();
+        }
     }
-    
+
+    // Start
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(tryTransform, 800);
-        });
+        document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
     } else {
-        setTimeout(tryTransform, 800);
+        new ServicesApp().init();
     }
 })();
