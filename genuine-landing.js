@@ -3435,15 +3435,17 @@ setTimeout(() => {
                 return;
             }
             
-            // Hide original table
-            const tableWrapper = servicesTable.closest('.table-responsive, .table-wr');
-            if (tableWrapper) {
-                tableWrapper.style.display = 'none';
-                console.log('✅ [SERVICES V2] Table hidden');
+            console.log('🔍 [SERVICES V2] Starting table transformation...');
+            
+            // Get all services BEFORE hiding table
+            const categoryRows = servicesTable.querySelectorAll('.services-list-category-title');
+            console.log(`📋 Found ${categoryRows.length} category rows`);
+            
+            if (categoryRows.length === 0) {
+                console.error('❌ No categories found! Table structure:');
+                console.log(servicesTable.innerHTML.substring(0, 500));
             }
             
-            // Get all services
-            const categoryRows = servicesTable.querySelectorAll('.services-list-category-title');
             const servicesContainer = document.createElement('div');
             servicesContainer.id = 'gp-services-container';
             
@@ -3459,9 +3461,12 @@ setTimeout(() => {
             };
             
             categoryRows.forEach((catRow, catIndex) => {
-                const platformName = catRow.closest('tr')?.dataset.platformName || 'Other';
+                const platformName = catRow.closest('tr')?.dataset.platformName || 
+                                   catRow.textContent.trim() || 'Other';
                 const platformKey = platformName.toLowerCase();
                 const icon = platformIcons[platformKey] || '📱';
+                
+                console.log(`📂 Processing category: ${platformName}`);
                 
                 // Get services for this category
                 let currentRow = catRow.closest('tr').nextElementSibling;
@@ -3471,6 +3476,8 @@ setTimeout(() => {
                     services.push(currentRow);
                     currentRow = currentRow.nextElementSibling;
                 }
+                
+                console.log(`  ↳ Found ${services.length} services`);
                 
                 if (services.length === 0) return;
                 
@@ -3555,12 +3562,23 @@ setTimeout(() => {
             
             // Insert after search bar
             const searchRow = block39.querySelector('.row');
-            if (searchRow) {
+            if (searchRow && servicesContainer.children.length > 0) {
                 searchRow.parentNode.insertBefore(servicesContainer, searchRow.nextSibling);
-                console.log('✅ [SERVICES V2] Cards grid created');
+                console.log(`✅ [SERVICES V2] Cards grid created with ${servicesContainer.children.length / 2} categories`);
+                
+                // NOW hide original table after cards are created
+                const tableWrapper = servicesTable.closest('.table-responsive, .table-wr');
+                if (tableWrapper) {
+                    tableWrapper.style.display = 'none';
+                    console.log('✅ [SERVICES V2] Table hidden');
+                }
+            } else {
+                console.error('❌ [SERVICES V2] Failed to create cards - container empty or no search row');
+                console.log(`Container children: ${servicesContainer.children.length}`);
+                console.log(`Search row found: ${!!searchRow}`);
             }
             
-        }, 300);
+        }, 1000); // Increased timeout to 1000ms
         
         // === 6. STYLE SEARCH BAR ===
         setTimeout(() => {
@@ -3604,5 +3622,4 @@ setTimeout(() => {
         setTimeout(tryTransform, 800);
     }
 })();
-
 
