@@ -3016,20 +3016,29 @@ setTimeout(() => {
 
         // Force full width by applying inline styles directly (bypasses CSS specificity issues)
         forceFullWidth() {
+            // Cibler le wrapper principal qui contient la sidebar
+            const wrapper = document.querySelector('.wrapper-sidebar-navbar');
             const wrapperContent = document.querySelector('.wrapper-content');
             const wrapperContentBody = document.querySelector('.wrapper-content__body');
 
+            // Force les styles via setAttribute (plus prioritaire que style.cssText)
+            if (wrapper) {
+                wrapper.setAttribute('style', (wrapper.getAttribute('style') || '') + '; width: 100% !important; max-width: 100% !important;');
+            }
+
             if (wrapperContent) {
-                wrapperContent.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;';
+                wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important;');
             }
 
             if (wrapperContentBody) {
-                wrapperContentBody.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;';
+                wrapperContentBody.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important;');
             }
 
             if (this.dom.block) {
-                this.dom.block.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;';
+                this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important;');
             }
+
+            console.log('🔧 [SERVICES V2] forceFullWidth applied to:', { wrapper, wrapperContent, wrapperContentBody, block: this.dom.block });
         }
 
         injectStyles() {
