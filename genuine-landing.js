@@ -2941,23 +2941,29 @@ setTimeout(() => {
 })(); // End IIFE wrapper
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE — PREMIUM V3 (FIX SIDEBAR CORRECT)
+// MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION)
 // =============================================================================
 (function () {
     'use strict';
 
+    // Configuration
     const CONFIG = {
-        pageSize: 60,
+        pageSize: 60, // Services per page
         containerId: 'gp-services-v2-container',
         styleId: 'gp-services-v2-css',
         selectors: {
             block: '#block_39',
             table: '#service-table-39',
             tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row'
+            nativeSearchRow: '#block_39 .row',
+            // Selectors to force full width
+            layoutContainers: '.wrapper-content, .wrapper-content__body, .container-fluid, .container'
         }
     };
 
+    /**
+     * Services Application Class
+     */
     class ServicesApp {
         constructor() {
             this.state = {
@@ -2993,45 +2999,55 @@ setTimeout(() => {
                 return;
             }
 
-            if (this.dom.block.dataset.servicesV3 === 'true') return;
-            this.dom.block.dataset.servicesV3 = 'true';
+            if (this.dom.block.dataset.servicesV2 === 'true') {
+                return;
+            }
+
+            this.dom.block.dataset.servicesV2 = 'true';
 
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
 
-            console.log('✅ [SERVICES V3] Loaded successfully');
+            console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
         }
 
         injectStyles() {
             if (document.getElementById(CONFIG.styleId)) return;
 
             const styles = `
-                /* =================================================================
-                   LAYOUT FIX - Travaille DANS le wrapper existant (sidebar-aware)
-                   ================================================================= */
-                
+                /* --- RESET & LAYOUT FIXES --- */
                 .gp-hidden { display: none !important; }
                 
-                /* Ne PAS utiliser viewport width breakout - reste dans le wrapper */
+                /* FORCE FULL WIDTH: Override Bootstrap/Theme constraints for this block */
                 #block_39 {
                     width: 100% !important;
                     max-width: 100% !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    flex: 0 0 100% !important;
                 }
                 
-                /* Container principal: utilise 100% de l'espace disponible (hors sidebar) */
+                /* Target parent containers if they are constraining width */
+                #block_39 .container, 
+                #block_39 .container-fluid {
+                    max-width: none !important;
+                    width: 100% !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+
                 #gp-services-v2-container {
                     width: 100%;
                     max-width: 100%;
-                    padding: 20px;
+                    padding: 20px; /* Safe padding for content */
                     box-sizing: border-box;
                 }
 
-                /* =================================================================
-                   HERO BANNER (ROYAL BLUE)
-                   ================================================================= */
+                /* --- HERO BANNER (ROYAL BLUE THEME) --- */
                 .gp-hero-banner {
+                    /* Authentic Royal Blue Gradient - Professional & Clean */
                     background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
                     border-radius: 12px;
                     padding: 40px;
@@ -3042,6 +3058,7 @@ setTimeout(() => {
                     box-shadow: 0 10px 30px rgba(30, 58, 138, 0.2);
                 }
                 
+                /* Subtle abstract background pattern - High End feel */
                 .gp-hero-bg {
                     position: absolute;
                     top: 0; right: 0; bottom: 0; left: 0;
@@ -3066,6 +3083,7 @@ setTimeout(() => {
                     max-width: 700px;
                     margin-bottom: 32px;
                     line-height: 1.5;
+                    font-weight: 400;
                 }
                 
                 .gp-stats-row {
@@ -3073,7 +3091,6 @@ setTimeout(() => {
                     gap: 40px;
                     border-top: 1px solid rgba(255,255,255,0.1);
                     padding-top: 24px;
-                    flex-wrap: wrap;
                 }
                 
                 .gp-stat-item { display: flex; flex-direction: column; }
@@ -3092,9 +3109,7 @@ setTimeout(() => {
                     letter-spacing: 0.5px;
                 }
 
-                /* =================================================================
-                   TOOLBAR & SEARCH
-                   ================================================================= */
+                /* --- TOOLBAR --- */
                 .gp-toolbar {
                     background: white;
                     padding: 8px;
@@ -3134,28 +3149,15 @@ setTimeout(() => {
                     pointer-events: none;
                 }
 
-                /* =================================================================
-                   CATEGORY FILTERS
-                   ================================================================= */
+                /* --- FILTERS --- */
                 .gp-filters-scroll {
                     display: flex;
                     gap: 8px;
                     overflow-x: auto;
                     padding: 8px;
-                    scrollbar-width: thin;
-                    scrollbar-color: #cbd5e1 #f1f5f9;
+                    scrollbar-width: none;
                 }
-                .gp-filters-scroll::-webkit-scrollbar {
-                    height: 6px;
-                }
-                .gp-filters-scroll::-webkit-scrollbar-track {
-                    background: #f1f5f9;
-                    border-radius: 3px;
-                }
-                .gp-filters-scroll::-webkit-scrollbar-thumb {
-                    background: #cbd5e1;
-                    border-radius: 3px;
-                }
+                .gp-filters-scroll::-webkit-scrollbar { display: none; }
                 
                 .gp-filter-btn {
                     padding: 8px 16px;
@@ -3171,27 +3173,21 @@ setTimeout(() => {
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    flex-shrink: 0;
                 }
                 .gp-filter-btn img, .gp-filter-btn i {
-                    width: 16px; 
-                    height: 16px; 
-                    object-fit: contain; 
-                    font-style: normal;
+                    width: 16px; height: 16px; object-fit: contain; font-style: normal;
                 }
                 
                 .gp-filter-btn:hover { 
                     background: #f8fafc;
                     color: #1e293b;
                     border-color: #cbd5e1;
-                    transform: translateY(-1px);
                 }
                 
                 .gp-filter-btn.active {
-                    background: #1e40af;
+                    background: #1e40af; /* Darker blue for active state */
                     border-color: #1e40af;
                     color: white;
-                    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
                 }
                 .gp-filter-btn.active .gp-filter-count {
                     background: rgba(255,255,255,0.2);
@@ -3207,253 +3203,106 @@ setTimeout(() => {
                     font-weight: 700;
                 }
 
-                /* =================================================================
-                   SERVICES GRID - RESPONSIVE
-                   ================================================================= */
+                /* --- GRID --- */
                 .gp-services-grid {
                     display: grid;
-                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                     gap: 20px;
                     margin-bottom: 40px;
                 }
-                
-                @media (min-width: 1400px) {
-                    .gp-services-grid {
-                        grid-template-columns: repeat(4, 1fr);
-                    }
-                }
-                
-                @media (min-width: 1024px) and (max-width: 1399px) {
-                    .gp-services-grid {
-                        grid-template-columns: repeat(3, 1fr);
-                    }
-                }
-                
-                @media (min-width: 768px) and (max-width: 1023px) {
-                    .gp-services-grid {
-                        grid-template-columns: repeat(2, 1fr);
-                    }
-                }
-                
-                @media (max-width: 767px) {
-                    .gp-services-grid {
-                        grid-template-columns: 1fr;
-                    }
-                }
 
-                /* =================================================================
-                   SERVICE CARDS
-                   ================================================================= */
                 .gp-card {
                     background: white;
                     border: 1px solid #e2e8f0;
                     border-radius: 12px;
                     padding: 20px;
                     position: relative;
-                    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-                    display: flex; 
-                    flex-direction: column;
-                    height: 100%;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex; flex-direction: column;
                 }
                 .gp-card:hover {
-                    transform: translateY(-4px);
-                    box-shadow: 0 12px 24px -8px rgba(30, 64, 175, 0.15);
-                    border-color: #93c5fd;
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 20px -5px rgba(0,0,0,0.05);
+                    border-color: #93c5fd; /* Soft blue border on hover */
                 }
                 
                 .gp-card-header { margin-bottom: 16px; }
                 
                 .gp-card-category {
-                    display: inline-flex; 
-                    align-items: center; 
-                    gap: 6px;
-                    font-size: 11px; 
-                    font-weight: 700; 
-                    color: #64748b;
-                    text-transform: uppercase; 
-                    margin-bottom: 8px;
-                    padding: 4px 8px; 
-                    background: #f1f5f9; 
-                    border-radius: 6px;
-                    width: fit-content;
+                    display: inline-flex; align-items: center; gap: 6px;
+                    font-size: 11px; font-weight: 700; color: #64748b;
+                    text-transform: uppercase; margin-bottom: 8px;
+                    padding: 4px 8px; background: #f1f5f9; border-radius: 6px;
                 }
-                .gp-card-category img, .gp-card-category i { 
-                    width: 14px; 
-                    height: 14px; 
-                    object-fit: contain; 
-                    font-style: normal; 
-                }
+                .gp-card-category img, .gp-card-category i { width: 14px; height: 14px; object-fit: contain; font-style: normal; }
 
                 .gp-card-badges {
-                    position: absolute; 
-                    top: 20px; 
-                    right: 20px;
-                    display: flex; 
-                    gap: 6px;
-                    flex-wrap: wrap;
-                    max-width: 50%;
-                    justify-content: flex-end;
+                    position: absolute; top: 20px; right: 20px;
+                    display: flex; gap: 6px;
                 }
                 .gp-badge {
-                    font-size: 9px; 
-                    font-weight: 800; 
-                    padding: 3px 8px;
-                    border-radius: 4px; 
-                    text-transform: uppercase; 
-                    letter-spacing: 0.5px;
-                    white-space: nowrap;
+                    font-size: 9px; font-weight: 800; padding: 3px 8px;
+                    border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
                 }
-                .gp-badge-id { 
-                    background: transparent; 
-                    border: 1px solid #e2e8f0; 
-                    color: #94a3b8; 
-                }
-                .gp-badge-hot { 
-                    background: #fee2e2; 
-                    color: #dc2626; 
-                    border: 1px solid #fecaca; 
-                }
+                .gp-badge-id { background: transparent; border: 1px solid #e2e8f0; color: #94a3b8; }
+                .gp-badge-hot { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; }
+                .gp-badge-best { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
                 
                 .gp-card-title {
-                    font-size: 15px; 
-                    font-weight: 700; 
-                    color: #1e293b;
-                    line-height: 1.4; 
-                    margin: 0;
-                    display: -webkit-box; 
-                    -webkit-line-clamp: 2; 
-                    -webkit-box-orient: vertical; 
-                    overflow: hidden;
-                    min-height: 42px;
-                    padding-right: 80px;
+                    font-size: 15px; font-weight: 700; color: #1e293b;
+                    line-height: 1.4; margin: 0;
+                    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+                    height: 42px;
                 }
 
                 .gp-card-meta {
-                    display: grid; 
-                    grid-template-columns: 1fr 1fr; 
-                    gap: 0;
-                    background: #f8fafc; 
-                    border-radius: 8px; 
-                    margin-bottom: 16px; 
-                    overflow: hidden;
+                    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+                    background: #f8fafc; border-radius: 8px; 
+                    margin-bottom: 16px; overflow: hidden;
                     border: 1px solid #f1f5f9;
-                    flex-grow: 0;
                 }
                 .gp-meta-col { 
-                    display: flex; 
-                    flex-direction: column; 
-                    padding: 10px 12px;
+                    display: flex; flex-direction: column; padding: 10px 12px;
                 }
-                .gp-meta-col:first-child { 
-                    border-right: 1px solid #e2e8f0; 
-                }
+                .gp-meta-col:first-child { border-right: 1px solid #e2e8f0; }
                 
-                .gp-meta-lbl { 
-                    font-size: 9px; 
-                    color: #94a3b8; 
-                    font-weight: 700; 
-                    text-transform: uppercase; 
-                    margin-bottom: 2px; 
-                }
-                .gp-meta-val { 
-                    font-size: 13px; 
-                    font-weight: 700; 
-                    color: #334155; 
-                }
-                .gp-price { 
-                    color: #2563eb; 
-                }
+                .gp-meta-lbl { font-size: 9px; color: #94a3b8; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+                .gp-meta-val { font-size: 13px; font-weight: 700; color: #334155; }
+                .gp-price { color: #2563eb; }
 
                 .gp-btn-view {
                     margin-top: auto;
-                    width: 100%; 
-                    padding: 10px;
+                    width: 100%; padding: 10px;
                     background: white; 
                     border: 1px solid #cbd5e1;
                     border-radius: 8px; 
                     color: #334155; 
-                    font-weight: 600; 
-                    font-size: 13px;
-                    cursor: pointer; 
-                    transition: all 0.2s;
-                    display: flex; 
-                    justify-content: center; 
-                    align-items: center; 
-                    gap: 6px;
+                    font-weight: 600; font-size: 13px;
+                    cursor: pointer; transition: all 0.2s;
+                    display: flex; justify-content: center; align-items: center; gap: 6px;
                 }
                 .gp-btn-view:hover {
                     background: #1e40af;
                     border-color: #1e40af;
                     color: white;
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
                 }
 
-                /* =================================================================
-                   PAGINATION
-                   ================================================================= */
-                .gp-pagination { 
-                    display: flex; 
-                    justify-content: center; 
-                    align-items: center;
-                    gap: 6px; 
-                    margin-top: 32px;
-                    flex-wrap: wrap;
-                }
+                .gp-pagination { display: flex; justify-content: center; gap: 6px; margin-top: 32px; }
                 .gp-page-btn {
-                    min-width: 36px; 
-                    height: 36px; 
-                    display: flex; 
-                    align-items: center; 
-                    justify-content: center;
-                    border-radius: 8px; 
-                    border: 1px solid #e2e8f0; 
-                    background: white;
-                    color: #64748b; 
-                    font-weight: 600; 
-                    font-size: 13px; 
-                    cursor: pointer;
+                    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+                    border-radius: 8px; border: 1px solid #e2e8f0; background: white;
+                    color: #64748b; font-weight: 600; font-size: 13px; cursor: pointer;
                     transition: all 0.2s;
-                    padding: 0 10px;
                 }
-                .gp-page-btn.active { 
-                    background: #1e3a8a; 
-                    color: white; 
-                    border-color: #1e3a8a;
-                    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
-                }
-                .gp-page-btn:hover:not(:disabled):not(.active) { 
-                    border-color: #94a3b8; 
-                    color: #1e293b;
-                    transform: translateY(-1px);
-                }
-                .gp-page-btn:disabled { 
-                    opacity: 0.4;
-                    cursor: not-allowed;
-                }
+                .gp-page-btn.active { background: #1e3a8a; color: white; border-color: #1e3a8a; }
+                .gp-page-btn:hover:not(:disabled) { border-color: #94a3b8; color: #1e293b; }
+                .gp-page-btn:disabled { opacity: 0.5; }
 
-                /* =================================================================
-                   RESPONSIVE
-                   ================================================================= */
                 @media (max-width: 768px) {
-                    .gp-hero-banner { 
-                        padding: 32px 24px; 
-                    }
-                    .gp-hero-title { 
-                        font-size: 28px; 
-                    }
-                    .gp-stats-row { 
-                        gap: 20px; 
-                    }
-                    .gp-card-title {
-                        padding-right: 60px;
-                    }
-                    .gp-toolbar {
-                        padding: 12px;
-                    }
-                    #gp-services-v2-container {
-                        padding: 15px;
-                    }
+                    .gp-services-grid { grid-template-columns: 1fr; }
+                    .gp-hero-banner { padding: 32px 24px; }
+                    .gp-hero-title { font-size: 32px; }
+                    .gp-stats-row { flex-wrap: wrap; gap: 20px; }
                 }
             `;
             const styleEl = document.createElement('style');
@@ -3467,6 +3316,7 @@ setTimeout(() => {
             let currentCategory = "Other";
 
             this.state.allServices = rows.reduce((acc, row) => {
+                // Category Row
                 if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
                     const text = row.textContent.trim();
                     if (text.length > 2) {
@@ -3485,6 +3335,7 @@ setTimeout(() => {
                     return acc;
                 }
 
+                // Service Row
                 const serviceId = row.dataset.filterTableServiceId ||
                     row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
                     null;
@@ -3503,6 +3354,7 @@ setTimeout(() => {
                     const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
                     let badge = null;
                     if (catIndex === 0) badge = { text: 'POPULAR', class: 'gp-badge-hot' };
+                    // else if (catIndex === 1) badge = { text: 'BEST', class: 'gp-badge-best' };
 
                     this.state.categoryServiceCount[currentCategory] = catIndex + 1;
 
@@ -3525,6 +3377,7 @@ setTimeout(() => {
         }
 
         buildStructure() {
+            // HIDE Native Search
             const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
             if (nativeRow) {
                 nativeRow.classList.add('gp-hidden');
@@ -3534,10 +3387,7 @@ setTimeout(() => {
                     const txt = item.textContent.trim();
                     const icon = item.querySelector('img, i, svg');
                     if (txt && icon) {
-                        const matchedCat = this.state.categories.find(c => 
-                            c.toLowerCase().includes(txt.toLowerCase()) || 
-                            txt.toLowerCase().includes(c.toLowerCase())
-                        );
+                        const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
                         if (matchedCat && !this.state.categoryIcons[matchedCat]) {
                             this.state.categoryIcons[matchedCat] = icon.outerHTML;
                         }
@@ -3548,13 +3398,16 @@ setTimeout(() => {
             const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
             if (tableWrapper) tableWrapper.classList.add('gp-hidden');
 
+            // --- CONTAINER ---
             this.dom.container = document.createElement('div');
             this.dom.container.id = CONFIG.containerId;
 
+            // Hero
             this.dom.hero = document.createElement('div');
             this.dom.hero.className = 'gp-hero-banner';
             this.renderHero();
 
+            // Toolbar
             this.dom.toolbar = document.createElement('div');
             this.dom.toolbar.className = 'gp-toolbar';
 
@@ -3585,9 +3438,11 @@ setTimeout(() => {
             this.dom.toolbar.appendChild(searchContainer);
             this.dom.toolbar.appendChild(this.dom.filters);
 
+            // Grid
             this.dom.grid = document.createElement('div');
             this.dom.grid.className = 'gp-services-grid';
 
+            // Pagination
             this.dom.pagination = document.createElement('div');
             this.dom.pagination.className = 'gp-pagination';
 
@@ -3630,8 +3485,11 @@ setTimeout(() => {
 
         renderFilters() {
             this.dom.filters.innerHTML = '';
+
+            // All
             this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
 
+            // Categories
             this.state.categories.forEach(cat => {
                 const count = this.state.platformCounts[cat];
                 if (count > 0) {
@@ -3685,7 +3543,7 @@ setTimeout(() => {
             this.renderFilters();
 
             const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
-            if (this.state.currentPage > totalPages && totalPages > 0) this.state.currentPage = 1;
+            if (this.state.currentPage > totalPages) this.state.currentPage = 1;
 
             const start = (this.state.currentPage - 1) * CONFIG.pageSize;
             const end = start + CONFIG.pageSize;
@@ -3697,20 +3555,13 @@ setTimeout(() => {
         renderGrid(services) {
             this.dom.grid.innerHTML = '';
             if (services.length === 0) {
-                this.dom.grid.innerHTML = `
-                    <div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
-                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 20px;">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <h3 style="margin:0 0 10px;color:#64748b;">No services found</h3>
-                        <p style="margin:0;color:#94a3b8;">Try adjusting your search or filter</p>
-                    </div>
-                `;
+                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
+                    <br><h3>No services found.</h3>
+                </div>`;
                 return;
             }
 
-            services.forEach((svc) => {
+            services.forEach((svc, index) => {
                 const card = document.createElement('div');
                 card.className = 'gp-card';
 
@@ -3738,9 +3589,7 @@ setTimeout(() => {
                     </div>
                     <button class="gp-btn-view">
                         View Details
-                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
                 `;
 
@@ -3761,56 +3610,40 @@ setTimeout(() => {
                 const btn = document.createElement('button');
                 btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
                 btn.textContent = lbl || p;
-                btn.disabled = (lbl === '←' && this.state.currentPage === 1) || 
-                              (lbl === '→' && this.state.currentPage === totalPages);
 
                 btn.onclick = () => {
-                    if (lbl === '←') {
-                        this.state.currentPage = Math.max(1, this.state.currentPage - 1);
-                    } else if (lbl === '→') {
-                        this.state.currentPage = Math.min(totalPages, this.state.currentPage + 1);
-                    } else {
-                        this.state.currentPage = p;
-                    }
+                    this.state.currentPage = p;
                     this.applyFilters();
-                    
-                    const yOffset = -20;
+                    const yOffset = -50;
                     const y = this.dom.container.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({ top: y, behavior: 'smooth' });
                 };
                 this.dom.pagination.appendChild(btn);
             };
 
-            addBtn(null, '←');
+            addBtn(Math.max(1, this.state.currentPage - 1), '←');
 
-            if (totalPages <= 7) {
-                for (let i = 1; i <= totalPages; i++) addBtn(i);
-            } else {
-                addBtn(1);
-                
+            if (totalPages > 5) {
+                if (this.state.currentPage > 2) addBtn(1);
                 if (this.state.currentPage > 3) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.textContent = '...';
-                    ellipsis.style.cssText = 'display:flex;align-items:center;color:#94a3b8;padding:0 4px;';
-                    this.dom.pagination.appendChild(ellipsis);
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+                    this.dom.pagination.appendChild(s);
                 }
-                
-                let start = Math.max(2, this.state.currentPage - 1);
-                let end = Math.min(totalPages - 1, this.state.currentPage + 1);
-                
-                for (let i = start; i <= end; i++) addBtn(i);
-                
-                if (this.state.currentPage < totalPages - 2) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.textContent = '...';
-                    ellipsis.style.cssText = 'display:flex;align-items:center;color:#94a3b8;padding:0 4px;';
-                    this.dom.pagination.appendChild(ellipsis);
-                }
-                
-                addBtn(totalPages);
             }
 
-            addBtn(null, '→');
+            let start = Math.max(1, this.state.currentPage - 1);
+            let end = Math.min(totalPages, this.state.currentPage + 1);
+            for (let i = start; i <= end; i++) addBtn(i);
+
+            if (totalPages > 5) {
+                if (this.state.currentPage < totalPages - 2) {
+                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+                    this.dom.pagination.appendChild(s);
+                }
+                if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
+            }
+
+            addBtn(Math.min(totalPages, this.state.currentPage + 1), '→');
         }
     }
 
