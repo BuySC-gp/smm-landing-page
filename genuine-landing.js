@@ -3023,45 +3023,62 @@ setTimeout(() => {
         }
 
         forceFullWidth() {
-            // 1. Target the specific culprit identified in user's CSS
-            const wrapper = this.dom.block.closest(CONFIG.selectors.wrapperContent) || document.querySelector('.wrapper-content');
+            // 1. Identify the body class for CSS targeting
+            document.body.classList.add('gp-services-v2-active');
 
-            const forceStyle = (el) => {
-                if (!el) return;
-                el.style.setProperty('padding-right', '0', 'important');
-                el.style.setProperty('padding-left', '0', 'important');
+            // 2. Surgical strike on known culprits
+            const targets = [
+                '.wrapper-content',
+                '.wrapper-content__body',
+                '.container-fluid',
+                '.container',
+                '.wrapper',
+                '#block_39'
+            ];
+
+            targets.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    el.style.setProperty('padding-right', '0', 'important');
+                    el.style.setProperty('padding-left', '0', 'important');
+                    el.style.setProperty('max-width', 'none', 'important');
+                    el.style.setProperty('width', '100%', 'important');
+                    el.style.setProperty('margin-right', '0', 'important');
+                });
+            });
+
+            // 3. Recursive walk to be 100% sure
+            let el = this.dom.block;
+            let layers = 0;
+            while (el && el.tagName !== 'BODY' && layers < 15) {
                 el.style.setProperty('max-width', 'none', 'important');
                 el.style.setProperty('width', '100%', 'important');
+                el.style.setProperty('padding-right', '0', 'important');
+                el.style.setProperty('padding-left', '0', 'important');
                 el.style.setProperty('margin-right', '0', 'important');
-                el.style.setProperty('margin-left', '0', 'important');
-            };
 
-            forceStyle(wrapper);
+                // If it's a flex parent, ensure it doesn't shrink
+                if (window.getComputedStyle(el).display === 'flex') {
+                    el.style.setProperty('flex', '1 1 100%', 'important');
+                }
 
-            // 2. Recursively walk up from the block to ensure all parents are open
-            let el = this.dom.block.parentElement;
-            let safety = 0;
-            while (el && el.tagName !== 'BODY' && safety < 15) {
-                forceStyle(el);
                 el = el.parentElement;
-                safety++;
+                layers++;
             }
         }
 
         observeLayout() {
-            // Watch for style changes on the wrapper and re-apply if needed
-            const wrapper = this.dom.block.closest(CONFIG.selectors.wrapperContent) || document.querySelector('.wrapper-content');
-            if (!wrapper) return;
-
-            const observer = new MutationObserver((mutations) => {
-                // If anything touches the style attribute, re-force our width
+            // Watch for any script trying to revert our full-width
+            const observer = new MutationObserver(() => {
                 this.forceFullWidth();
             });
 
-            observer.observe(wrapper, { attributes: true, attributeFilter: ['style', 'class'] });
-
-            // Also observe body for class changes just in case
-            observer.observe(document.body, { attributes: true, attributeFilter: ['class', 'style'] });
+            // Observe the block and its primary parent
+            const wrapper = this.dom.block.parentElement;
+            if (wrapper) {
+                observer.observe(wrapper, { attributes: true, attributeFilter: ['style', 'class'] });
+            }
+            observer.observe(document.body, { attributes: true, attributeFilter: ['style', 'class'] });
         }
 
         injectStyles() {
