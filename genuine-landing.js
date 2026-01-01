@@ -3020,6 +3020,14 @@ setTimeout(() => {
                 /* --- RESET & LAYOUT FIXES --- */
                 .gp-hidden { display: none !important; }
                 
+                /* FORCE FULL WIDTH: Override parent containers */
+                .wrapper-content,
+                .wrapper-content__body {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    flex: 1 1 100% !important;
+                }
+                
                 /* FORCE FULL WIDTH: Override Bootstrap/Theme constraints for this block */
                 #block_39 {
                     width: 100% !important;
