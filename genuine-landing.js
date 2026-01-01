@@ -2939,184 +2939,217 @@ setTimeout(() => {
 }, 600);
 
 // =============================================================================
-// MODULE 4: SERVICES PAGE TRANSFORMATION
+// MODULE 4: SERVICES PAGE TRANSFORMATION (VERSION FINALE DEBUGGÉE)
 // =============================================================================
 (function() {
-    setTimeout(() => {
+    // Retry mechanism - 3 tentatives
+    let attempts = 0;
+    const maxAttempts = 3;
+    
+    function tryTransform() {
+        attempts++;
+        console.log(`[SERVICES] Attempt ${attempts}/${maxAttempts}`);
+        
         const isServicesPage = window.location.pathname.includes('/services') || 
-                               document.querySelector('#service-table-39, .services-list');
+                               document.querySelector('#service-table-39, .services-list, #block_39');
         
         if (!isServicesPage) {
-            console.log('ℹ️ [SERVICES] Not on Services page - skipping');
+            console.log('❌ [SERVICES] Not on Services page - skipping');
             return;
         }
-        console.log('✅ [SERVICES] Page detected - Starting transformation');
+        
+        console.log('✅ [SERVICES] Page detected');
         
         const block39 = document.getElementById('block_39');
         if (!block39) {
             console.error('❌ [SERVICES] #block_39 NOT FOUND');
+            if (attempts < maxAttempts) {
+                console.log(`⏳ [SERVICES] Retrying in 1000ms...`);
+                setTimeout(tryTransform, 1000);
+            }
             return;
         }
         
-        if (block39.dataset.servicesTransformed) {
-            console.log('⚠️ [SERVICES] Already transformed');
+        if (block39.dataset.servicesTransformed === 'true') {
+            console.log('⚠️ [SERVICES] Already transformed - skipping');
             return;
         }
+        
+        console.log('🚀 [SERVICES] Starting transformation...');
         block39.dataset.servicesTransformed = 'true';
         
-        // === 1. INJECTION DU CSS (PRIORITAIRE) ===
-        const styleTag = document.createElement('style');
-        styleTag.id = 'gp-services-css';
-        styleTag.textContent = `
-            /* === HERO BANNER === */
-            .gp-hero-banner {
-                background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 50%, #F0F4FF 100%);
-                padding: 60px 40px;
-                border-radius: 20px;
-                margin-bottom: 32px;
-                border: 1px solid rgba(0,102,255,0.1);
-                box-shadow: 0 8px 32px rgba(0,102,255,0.08);
-            }
-            
-            .gp-breadcrumb {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                font-size: 14px;
-                margin-bottom: 24px;
-                color: #6B7280;
-            }
-            
-            .gp-breadcrumb a {
-                color: #0066FF;
-                text-decoration: none;
-                font-weight: 600;
-                transition: all 0.2s;
-            }
-            
-            .gp-breadcrumb a:hover {
-                color: #0052CC;
-            }
-            
-            .gp-breadcrumb-separator {
-                color: #D1D5DB;
-            }
-            
-            .gp-breadcrumb-current {
-                color: #374151;
-                font-weight: 600;
-            }
-            
-            .gp-hero-title {
-                font-size: 48px;
-                font-weight: 800;
-                color: #1F2937;
-                margin-bottom: 16px;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                letter-spacing: -0.02em;
-            }
-            
-            .gp-hero-icon {
-                font-size: 52px;
-            }
-            
-            .gp-hero-description {
-                font-size: 18px;
-                color: #6B7280;
-                line-height: 1.7;
-                margin-bottom: 40px;
-                max-width: 800px;
-            }
-            
-            .gp-hero-stats {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-            
-            .gp-stat-card {
-                background: white;
-                border: 1px solid #E5E7EB;
-                border-radius: 12px;
-                padding: 24px;
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            }
-            
-            .gp-stat-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 8px 24px rgba(0,102,255,0.12);
-                border-color: rgba(0,102,255,0.3);
-            }
-            
-            .gp-stat-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-            }
-            
-            .gp-stat-content {
-                flex: 1;
-            }
-            
-            .gp-stat-value {
-                font-size: 28px;
-                font-weight: 800;
-                color: #1F2937;
-                line-height: 1;
-                margin-bottom: 4px;
-            }
-            
-            .gp-stat-label {
-                font-size: 13px;
-                color: #6B7280;
-                font-weight: 600;
-            }
-            
-            /* === RESPONSIVE === */
-            @media (max-width: 1024px) {
-                .gp-hero-stats {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-                
-                .gp-hero-title {
-                    font-size: 36px;
-                }
-            }
-            
-            @media (max-width: 768px) {
+        // === 1. INJECTION DU CSS COMPLET ===
+        if (!document.getElementById('gp-services-css')) {
+            const styleTag = document.createElement('style');
+            styleTag.id = 'gp-services-css';
+            styleTag.textContent = `
+                /* HERO BANNER PREMIUM */
                 .gp-hero-banner {
-                    padding: 40px 24px;
+                    background: linear-gradient(135deg, #0047AB 0%, #0066FF 100%);
+                    border-radius: 20px;
+                    padding: 60px 40px;
+                    margin-bottom: 32px;
+                    box-shadow: 0 12px 48px rgba(0, 71, 171, 0.25);
+                    position: relative;
+                    overflow: hidden;
                 }
                 
-                .gp-hero-stats {
-                    grid-template-columns: 1fr;
+                .gp-hero-banner::before {
+                    content: '';
+                    position: absolute;
+                    top: -50%;
+                    right: -20%;
+                    width: 600px;
+                    height: 600px;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+                    pointer-events: none;
+                }
+                
+                .gp-hero-content {
+                    position: relative;
+                    z-index: 1;
+                }
+                
+                .gp-breadcrumb {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 13px;
+                    margin-bottom: 24px;
+                }
+                
+                .gp-breadcrumb a {
+                    color: rgba(255, 255, 255, 0.8);
+                    text-decoration: none;
+                    font-weight: 600;
+                    transition: all 0.2s;
+                }
+                
+                .gp-breadcrumb a:hover {
+                    color: white;
+                }
+                
+                .gp-breadcrumb-separator {
+                    color: rgba(255, 255, 255, 0.5);
+                }
+                
+                .gp-breadcrumb-current {
+                    color: white;
+                    font-weight: 600;
                 }
                 
                 .gp-hero-title {
-                    font-size: 28px;
-                    flex-direction: column;
-                    align-items: flex-start;
+                    font-size: 48px;
+                    font-weight: 800;
+                    color: white;
+                    margin-bottom: 16px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    letter-spacing: -0.02em;
+                }
+                
+                .gp-hero-icon {
+                    font-size: 52px;
                 }
                 
                 .gp-hero-description {
-                    font-size: 16px;
+                    font-size: 18px;
+                    color: rgba(255, 255, 255, 0.9);
+                    line-height: 1.7;
+                    margin-bottom: 40px;
+                    max-width: 800px;
                 }
-            }
-        `;
-        document.head.appendChild(styleTag);
-        console.log('✅ [SERVICES] CSS injected');
+                
+                .gp-hero-stats {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 20px;
+                }
+                
+                .gp-stat-card {
+                    background: rgba(255, 255, 255, 0.15);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 12px;
+                    padding: 24px;
+                    display: flex;
+                    align-items: center;
+                    gap: 16px;
+                    transition: all 0.3s ease;
+                }
+                
+                .gp-stat-card:hover {
+                    background: rgba(255, 255, 255, 0.25);
+                    transform: translateY(-4px);
+                    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+                }
+                
+                .gp-stat-icon {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+                
+                .gp-stat-content {
+                    flex: 1;
+                }
+                
+                .gp-stat-value {
+                    font-size: 28px;
+                    font-weight: 800;
+                    color: white;
+                    line-height: 1.2;
+                    margin-bottom: 4px;
+                }
+                
+                .gp-stat-label {
+                    font-size: 12px;
+                    color: rgba(255, 255, 255, 0.8);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    font-weight: 600;
+                }
+                
+                @media (max-width: 1024px) {
+                    .gp-hero-stats {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                    
+                    .gp-hero-title {
+                        font-size: 36px;
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    .gp-hero-banner {
+                        padding: 40px 24px;
+                    }
+                    
+                    .gp-hero-stats {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .gp-hero-title {
+                        font-size: 28px;
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                    
+                    .gp-hero-description {
+                        font-size: 16px;
+                    }
+                }
+            `;
+            document.head.appendChild(styleTag);
+            console.log('✅ [SERVICES] CSS injected');
+        }
         
-        // === 2. CALCUL DES STATS ===
+        // === 2. STATS CALCULATION ===
         const servicesTable = document.querySelector('#service-table-39');
         let totalServices = 0;
         let totalCategories = 0;
@@ -3125,11 +3158,14 @@ setTimeout(() => {
             totalServices = servicesTable.querySelectorAll('tr[data-filter-table-service-id]').length;
             const platformNames = [...servicesTable.querySelectorAll('[data-platform-name]')].map(el => el.dataset.platformName);
             totalCategories = new Set(platformNames).size;
+            console.log(`📊 [SERVICES] Found ${totalServices} services, ${totalCategories} categories`);
+        } else {
+            console.warn('⚠️ [SERVICES] Table not found - using default values');
+            totalServices = 50;
+            totalCategories = 10;
         }
         
-        console.log(`📊 [SERVICES] ${totalServices} services, ${totalCategories} categories`);
-        
-        // === 3. CRÉATION DU HERO BANNER ===
+        // === 3. CREATE HERO BANNER ===
         const heroBanner = document.createElement('div');
         heroBanner.className = 'gp-hero-banner';
         heroBanner.innerHTML = `
@@ -3147,24 +3183,34 @@ setTimeout(() => {
                     </h1>
                     <p class="gp-hero-description">
                         Premium social media marketing services with instant delivery and 24/7 support. 
-                        Choose from ${totalServices || 50}+ high-quality services across ${totalCategories || 10}+ platforms.
+                        Choose from ${totalServices}+ high-quality services across ${totalCategories}+ platforms.
                     </p>
                 </div>
                 
                 <div class="gp-hero-stats">
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: linear-gradient(135deg, #0066FF, #0047AB);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">${totalServices || 50}+</div>
+                            <div class="gp-stat-value">${totalServices}+</div>
                             <div class="gp-stat-label">Services</div>
                         </div>
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: linear-gradient(135deg, #00A67E, #00D97E);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
                         </div>
                         <div class="gp-stat-content">
                             <div class="gp-stat-value">10K+</div>
@@ -3173,8 +3219,10 @@ setTimeout(() => {
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: linear-gradient(135deg, #F59E0B, #D97706);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
                         </div>
                         <div class="gp-stat-content">
                             <div class="gp-stat-value">Instant</div>
@@ -3183,8 +3231,10 @@ setTimeout(() => {
                     </div>
                     
                     <div class="gp-stat-card">
-                        <div class="gp-stat-icon" style="background: linear-gradient(135deg, #EF4444, #DC2626);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <div class="gp-stat-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
                         </div>
                         <div class="gp-stat-content">
                             <div class="gp-stat-value">100%</div>
@@ -3195,17 +3245,30 @@ setTimeout(() => {
             </div>
         `;
         
-        // === 4. INSERTION (MÉTHODE ROBUSTE) ===
+        // === 4. INSERT BANNER (ROBUST METHOD) ===
         const containerFluid = block39.querySelector('.container-fluid');
+        let inserted = false;
+        
         if (containerFluid && containerFluid.firstChild) {
             containerFluid.insertBefore(heroBanner, containerFluid.firstChild);
-            console.log('✅ [SERVICES] Hero banner inserted');
-        } else {
+            console.log('✅ [SERVICES] Hero banner inserted (method 1)');
+            inserted = true;
+        } else if (block39.firstChild) {
             block39.insertBefore(heroBanner, block39.firstChild);
-            console.log('✅ [SERVICES] Hero banner inserted (fallback method)');
+            console.log('✅ [SERVICES] Hero banner inserted (method 2 - fallback)');
+            inserted = true;
+        } else {
+            block39.appendChild(heroBanner);
+            console.log('✅ [SERVICES] Hero banner appended (method 3 - last resort)');
+            inserted = true;
         }
         
-        // === 5. AMÉLIORATION BARRE DE RECHERCHE ===
+        if (!inserted) {
+            console.error('❌ [SERVICES] Failed to insert banner');
+            return;
+        }
+        
+        // === 5. STYLE SEARCH BAR ===
         setTimeout(() => {
             const searchRow = block39.querySelector('.row');
             if (searchRow) {
@@ -3234,11 +3297,36 @@ setTimeout(() => {
                     `;
                     console.log('✅ [SERVICES] Search input styled');
                 }
+                
+                const filterBtn = searchRow.querySelector('button');
+                if (filterBtn) {
+                    filterBtn.style.cssText = `
+                        padding: 12px 20px !important;
+                        background: linear-gradient(135deg, #0047AB, #0066FF) !important;
+                        color: white !important;
+                        border: none !important;
+                        border-radius: 10px !important;
+                        font-weight: 600 !important;
+                        cursor: pointer !important;
+                        transition: all 0.3s ease !important;
+                        box-shadow: 0 4px 12px rgba(0,71,171,0.25) !important;
+                    `;
+                    console.log('✅ [SERVICES] Filter button styled');
+                }
             }
         }, 200);
         
-        console.log('🎉 [SERVICES] Transformation COMPLETE');
-        
-    }, 1200); // Délai augmenté à 1200ms
+        console.log('🎉 [SERVICES] Transformation COMPLETE!');
+    }
+    
+    // Start transformation
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(tryTransform, 800);
+        });
+    } else {
+        setTimeout(tryTransform, 800);
+    }
 })();
+
 })(); // End IIFE wrapper
