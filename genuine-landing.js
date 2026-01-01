@@ -3021,24 +3021,24 @@ setTimeout(() => {
             const wrapperContent = document.querySelector('.wrapper-content');
             const wrapperContentBody = document.querySelector('.wrapper-content__body');
 
-            // Force les styles via setAttribute (plus prioritaire que style.cssText)
+            // Force les styles via setAttribute - AJOUTER overflow-x: hidden pour empêcher le débordement
             if (wrapper) {
-                wrapper.setAttribute('style', (wrapper.getAttribute('style') || '') + '; width: 100% !important; max-width: 100% !important;');
+                wrapper.setAttribute('style', 'width: 100vw !important; max-width: 100vw !important; overflow-x: hidden !important;');
             }
 
             if (wrapperContent) {
-                wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important;');
+                wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important; overflow-x: hidden !important;');
             }
 
             if (wrapperContentBody) {
-                wrapperContentBody.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important;');
+                wrapperContentBody.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; overflow-x: hidden !important;');
             }
 
             if (this.dom.block) {
-                this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important;');
+                this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important; overflow-x: hidden !important;');
             }
 
-            console.log('🔧 [SERVICES V2] forceFullWidth applied to:', { wrapper, wrapperContent, wrapperContentBody, block: this.dom.block });
+            console.log('🔧 [SERVICES V2] forceFullWidth applied with overflow-x: hidden');
         }
 
         injectStyles() {
