@@ -558,21 +558,23 @@ console.log('✅ [NEW ORDER] Setup complete');
     return;
   }
   
-  console.log('[GP] 🎯 Injection footer global...');
+  console.log('[GP] 🎯 Initialisation footer global...');
   
-  // Détecter si on est sur une page avec sidebar
+  // Détecter le contexte
   const hasSidebar = document.querySelector('.sidebar, .component_private_sidebar, .component-sidebar-wrapper');
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   
-  // Ajouter une classe sur le body pour identifier le contexte
-  if (hasSidebar) {
-    document.body.classList.add('gp-has-sidebar');
-  }
-  if (hasSignup && !hasSidebar) {
-    document.body.classList.add('gp-is-landing');
-  }
-  
-  const footerHTML = `
+  // Fonction d'injection du footer
+  function injectFooter() {
+    // Ajouter classes contextuelles
+    if (hasSidebar) {
+      document.body.classList.add('gp-has-sidebar');
+    }
+    if (hasSignup && !hasSidebar) {
+      document.body.classList.add('gp-is-landing');
+    }
+    
+    const footerHTML = `
     <!-- FOOTER MEGA -->
 <div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5; margin-top: 80px; clear: both;">
   <div style="max-width: 1400px; margin: 0 auto;">
@@ -746,10 +748,21 @@ console.log('✅ [NEW ORDER] Setup complete');
   </style>
 </div>
 `;
+    
+    // INJECTION
+    document.body.insertAdjacentHTML('beforeend', footerHTML);
+    console.log('✅ [GP] Footer global injecté (contexte: ' + (hasSidebar ? 'PANEL avec sidebar' : hasSignup ? 'LANDING' : 'AUTRE') + ')');
+  }
   
-  // INJECTION UNIQUE : toujours en fin de body
-  document.body.insertAdjacentHTML('beforeend', footerHTML);
-  console.log('✅ [GP] Footer global injecté (contexte: ' + (hasSidebar ? 'PANEL avec sidebar' : 'LANDING') + ')');
+  // LOGIQUE D'INJECTION CONDITIONNELLE
+  if (hasSignup && !hasSidebar) {
+    // === LANDING PAGE : attendre que les sections soient chargées ===
+    console.log('[GP] Landing détectée → délai d\'injection footer...');
+    setTimeout(injectFooter, 2000); // Attendre 2 secondes pour laisser le landing se charger
+  } else {
+    // === PANEL OU AUTRES PAGES : injection immédiate ===
+    injectFooter();
+  }
   
 })();
 
