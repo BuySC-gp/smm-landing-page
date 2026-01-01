@@ -2702,7 +2702,7 @@ window.addEventListener('load', function() {
       </div>
     </div>
   vascript
-  `;
+    `;  // ← Fin de allSectionsHTML
   
   if (footer) {
     footer.insertAdjacentHTML('beforebegin', allSectionsHTML);
@@ -2711,20 +2711,6 @@ window.addEventListener('load', function() {
   }
   
   console.log('✅ ALL sections loaded');
-  
-  // ========================================================================
-  // REPOSITIONNER LE FOOTER EN FIN DE LANDING
-  // ========================================================================
-  setTimeout(() => {
-    const footerEl = document.getElementById('gp-footer-global');
-    const landingWrapper = document.querySelector('.block-signin-text') || document.body;
-    
-    if (footerEl && landingWrapper && document.body.classList.contains('gp-is-landing')) {
-      landingWrapper.insertAdjacentElement('afterend', footerEl);
-      console.log('✅ [GP] Footer repositionné après landing');
-    }
-  }, 1000);
-  
 }); // ← Fin de DOMContentLoaded
 
 // =============================================================================
