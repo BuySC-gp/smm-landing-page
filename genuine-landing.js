@@ -2938,14 +2938,11 @@ setTimeout(() => {
   console.log('[GENUINE] ✅ Mobile fix applied');
 }, 600);
 
-/* =============================================================================
-   PAGE SERVICES - TRANSFORMATION COMPLÈTE (BRAIN MODE 160+ IQ)
-   URL: /services
-   Structure: Hero Banner + Search Bar + Services Grid
-============================================================================= */
+// =============================================================================
+// MODULE 4: SERVICES PAGE TRANSFORMATION
+// =============================================================================
 (function() {
     setTimeout(() => {
-        // === DÉTECTION PAGE SERVICES ===
         const isServicesPage = window.location.pathname.includes('/services') || 
                                document.querySelector('#service-table-39, .services-list');
         
@@ -2953,29 +2950,196 @@ setTimeout(() => {
             console.log('ℹ️ [SERVICES] Not on Services page - skipping');
             return;
         }
-        console.log('✅ [SERVICES] Detected - Transformation starting');
+        console.log('✅ [SERVICES] Page detected - Starting transformation');
         
         const block39 = document.getElementById('block_39');
-        if (!block39 || block39.dataset.transformed) return;
-        block39.dataset.transformed = 'true';
+        if (!block39) {
+            console.error('❌ [SERVICES] #block_39 NOT FOUND');
+            return;
+        }
         
-        // === 1. INJECTION HERO BANNER (RÉUTILISABLE) ===
+        if (block39.dataset.servicesTransformed) {
+            console.log('⚠️ [SERVICES] Already transformed');
+            return;
+        }
+        block39.dataset.servicesTransformed = 'true';
+        
+        // === 1. INJECTION DU CSS (PRIORITAIRE) ===
+        const styleTag = document.createElement('style');
+        styleTag.id = 'gp-services-css';
+        styleTag.textContent = `
+            /* === HERO BANNER === */
+            .gp-hero-banner {
+                background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 50%, #F0F4FF 100%);
+                padding: 60px 40px;
+                border-radius: 20px;
+                margin-bottom: 32px;
+                border: 1px solid rgba(0,102,255,0.1);
+                box-shadow: 0 8px 32px rgba(0,102,255,0.08);
+            }
+            
+            .gp-breadcrumb {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                margin-bottom: 24px;
+                color: #6B7280;
+            }
+            
+            .gp-breadcrumb a {
+                color: #0066FF;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.2s;
+            }
+            
+            .gp-breadcrumb a:hover {
+                color: #0052CC;
+            }
+            
+            .gp-breadcrumb-separator {
+                color: #D1D5DB;
+            }
+            
+            .gp-breadcrumb-current {
+                color: #374151;
+                font-weight: 600;
+            }
+            
+            .gp-hero-title {
+                font-size: 48px;
+                font-weight: 800;
+                color: #1F2937;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                letter-spacing: -0.02em;
+            }
+            
+            .gp-hero-icon {
+                font-size: 52px;
+            }
+            
+            .gp-hero-description {
+                font-size: 18px;
+                color: #6B7280;
+                line-height: 1.7;
+                margin-bottom: 40px;
+                max-width: 800px;
+            }
+            
+            .gp-hero-stats {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+            
+            .gp-stat-card {
+                background: white;
+                border: 1px solid #E5E7EB;
+                border-radius: 12px;
+                padding: 24px;
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            }
+            
+            .gp-stat-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(0,102,255,0.12);
+                border-color: rgba(0,102,255,0.3);
+            }
+            
+            .gp-stat-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+            
+            .gp-stat-content {
+                flex: 1;
+            }
+            
+            .gp-stat-value {
+                font-size: 28px;
+                font-weight: 800;
+                color: #1F2937;
+                line-height: 1;
+                margin-bottom: 4px;
+            }
+            
+            .gp-stat-label {
+                font-size: 13px;
+                color: #6B7280;
+                font-weight: 600;
+            }
+            
+            /* === RESPONSIVE === */
+            @media (max-width: 1024px) {
+                .gp-hero-stats {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                
+                .gp-hero-title {
+                    font-size: 36px;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .gp-hero-banner {
+                    padding: 40px 24px;
+                }
+                
+                .gp-hero-stats {
+                    grid-template-columns: 1fr;
+                }
+                
+                .gp-hero-title {
+                    font-size: 28px;
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                
+                .gp-hero-description {
+                    font-size: 16px;
+                }
+            }
+        `;
+        document.head.appendChild(styleTag);
+        console.log('✅ [SERVICES] CSS injected');
+        
+        // === 2. CALCUL DES STATS ===
         const servicesTable = document.querySelector('#service-table-39');
-        const totalServices = servicesTable ? servicesTable.querySelectorAll('tr[data-filter-table-category-id]').length : 0;
-        const totalCategories = servicesTable ? new Set([...servicesTable.querySelectorAll('[data-platform-name]')].map(el => el.dataset.platformName)).size : 0;
+        let totalServices = 0;
+        let totalCategories = 0;
         
+        if (servicesTable) {
+            totalServices = servicesTable.querySelectorAll('tr[data-filter-table-service-id]').length;
+            const platformNames = [...servicesTable.querySelectorAll('[data-platform-name]')].map(el => el.dataset.platformName);
+            totalCategories = new Set(platformNames).size;
+        }
+        
+        console.log(`📊 [SERVICES] ${totalServices} services, ${totalCategories} categories`);
+        
+        // === 3. CRÉATION DU HERO BANNER ===
         const heroBanner = document.createElement('div');
         heroBanner.className = 'gp-hero-banner';
         heroBanner.innerHTML = `
             <div class="gp-hero-content">
-                <!-- Breadcrumb -->
                 <div class="gp-breadcrumb">
                     <a href="/">Home</a>
                     <span class="gp-breadcrumb-separator">›</span>
                     <span class="gp-breadcrumb-current">Services</span>
                 </div>
                 
-                <!-- Titre + Description -->
                 <div class="gp-hero-text">
                     <h1 class="gp-hero-title">
                         <span class="gp-hero-icon">🚀</span>
@@ -2983,18 +3147,17 @@ setTimeout(() => {
                     </h1>
                     <p class="gp-hero-description">
                         Premium social media marketing services with instant delivery and 24/7 support. 
-                        Choose from ${totalServices}+ high-quality services across ${totalCategories}+ platforms.
+                        Choose from ${totalServices || 50}+ high-quality services across ${totalCategories || 10}+ platforms.
                     </p>
                 </div>
                 
-                <!-- Stats Cards -->
                 <div class="gp-hero-stats">
                     <div class="gp-stat-card">
                         <div class="gp-stat-icon" style="background: linear-gradient(135deg, #0066FF, #0047AB);">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                         </div>
                         <div class="gp-stat-content">
-                            <div class="gp-stat-value">${totalServices}+</div>
+                            <div class="gp-stat-value">${totalServices || 50}+</div>
                             <div class="gp-stat-label">Services</div>
                         </div>
                     </div>
@@ -3032,274 +3195,50 @@ setTimeout(() => {
             </div>
         `;
         
-        // Insérer AVANT le contenu actuel
+        // === 4. INSERTION (MÉTHODE ROBUSTE) ===
         const containerFluid = block39.querySelector('.container-fluid');
-        if (containerFluid) {
+        if (containerFluid && containerFluid.firstChild) {
             containerFluid.insertBefore(heroBanner, containerFluid.firstChild);
+            console.log('✅ [SERVICES] Hero banner inserted');
+        } else {
+            block39.insertBefore(heroBanner, block39.firstChild);
+            console.log('✅ [SERVICES] Hero banner inserted (fallback method)');
         }
         
-        // === 2. AMÉLIORATION BARRE DE RECHERCHE ===
-        const searchRow = block39.querySelector('.row');
-        if (searchRow) {
-            searchRow.style.cssText = `
-                background: white !important;
-                border-radius: 12px !important;
-                padding: 20px !important;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-                border: 1px solid #E5E7EB !important;
-                margin-bottom: 24px !important;
-                display: flex !important;
-                align-items: center !important;
-                gap: 12px !important;
-            `;
-            
-            const searchInput = searchRow.querySelector('input[placeholder*="Search"]');
-            if (searchInput) {
-                searchInput.style.cssText = `
-                    flex: 1 !important;
-                    padding: 12px 16px 12px 44px !important;
+        // === 5. AMÉLIORATION BARRE DE RECHERCHE ===
+        setTimeout(() => {
+            const searchRow = block39.querySelector('.row');
+            if (searchRow) {
+                searchRow.style.cssText = `
+                    background: white !important;
+                    border-radius: 12px !important;
+                    padding: 20px !important;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
                     border: 1px solid #E5E7EB !important;
-                    border-radius: 10px !important;
-                    font-size: 14px !important;
-                    transition: all 0.2s ease !important;
-                    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 14px center !important;
-                    background-color: white !important;
+                    margin-bottom: 24px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 12px !important;
                 `;
                 
-                searchInput.addEventListener('focus', function() {
-                    this.style.borderColor = '#0066FF';
-                    this.style.boxShadow = '0 0 0 3px rgba(0,102,255,0.1)';
-                });
-                
-                searchInput.addEventListener('blur', function() {
-                    this.style.borderColor = '#E5E7EB';
-                    this.style.boxShadow = 'none';
-                });
-            }
-            
-            const filterBtn = searchRow.querySelector('button');
-            if (filterBtn) {
-                filterBtn.style.cssText = `
-                    padding: 12px 20px !important;
-                    background: linear-gradient(135deg, #0047AB, #0066FF) !important;
-                    color: white !important;
-                    border: none !important;
-                    border-radius: 10px !important;
-                    font-weight: 600 !important;
-                    cursor: pointer !important;
-                    transition: all 0.3s ease !important;
-                    box-shadow: 0 4px 12px rgba(0,71,171,0.25) !important;
-                `;
-                
-                filterBtn.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 6px 20px rgba(0,71,171,0.35)';
-                });
-                
-                filterBtn.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '0 4px 12px rgba(0,71,171,0.25)';
-                });
-            }
-        }
-        
-        // === 3. TRANSFORMATION DU TABLEAU ===
-        const tableWrapper = block39.querySelector('.table-responsive');
-        if (tableWrapper && servicesTable) {
-            tableWrapper.style.cssText = `
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-            `;
-            
-            servicesTable.style.cssText = `
-                background: transparent !important;
-                border: none !important;
-            `;
-            
-            // Style du header
-            const thead = servicesTable.querySelector('thead');
-            if (thead) {
-                thead.style.cssText = `
-                    background: linear-gradient(135deg, #F8F9FF, #F0F4FF) !important;
-                    border-radius: 12px 12px 0 0 !important;
-                `;
-                
-                const thElements = thead.querySelectorAll('th');
-                thElements.forEach(th => {
-                    th.style.cssText = `
-                        padding: 16px !important;
-                        font-size: 12px !important;
-                        font-weight: 700 !important;
-                        text-transform: uppercase !important;
-                        letter-spacing: 0.5px !important;
-                        color: #4B5563 !important;
-                        border: none !important;
-                    `;
-                });
-            }
-            
-            // Style des catégories
-            const categoryTitles = servicesTable.querySelectorAll('.services-list-category-title');
-            categoryTitles.forEach(cat => {
-                const platformName = cat.closest('tr')?.dataset.platformName || '';
-                let icon = '📱';
-                let color = '#6B7280';
-                
-                if (platformName.toLowerCase().includes('instagram')) {
-                    icon = '📷';
-                    color = '#E4405F';
-                } else if (platformName.toLowerCase().includes('tiktok')) {
-                    icon = '🎵';
-                    color = '#000000';
-                } else if (platformName.toLowerCase().includes('youtube')) {
-                    icon = '▶️';
-                    color = '#FF0000';
-                } else if (platformName.toLowerCase().includes('spotify')) {
-                    icon = '🎧';
-                    color = '#1DB954';
-                } else if (platformName.toLowerCase().includes('telegram')) {
-                    icon = '✈️';
-                    color = '#0088CC';
-                }
-                
-                cat.closest('tr').style.cssText = `
-                    background: white !important;
-                    border-left: 4px solid ${color} !important;
-                `;
-                
-                cat.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; padding: 12px 0;">
-                        <span style="font-size: 24px;">${icon}</span>
-                        <span style="font-size: 18px; font-weight: 700; color: ${color};">${platformName}</span>
-                    </div>
-                `;
-            });
-            
-            // Style des lignes de services
-            const serviceRows = servicesTable.querySelectorAll('tr[data-filter-table-service-id]');
-            serviceRows.forEach((row, index) => {
-                row.style.cssText = `
-                    background: white !important;
-                    border-bottom: 1px solid #F3F4F6 !important;
-                    transition: all 0.3s ease !important;
-                `;
-                
-                row.addEventListener('mouseenter', function() {
-                    this.style.background = '#F9FAFB';
-                    this.style.transform = 'translateX(4px)';
-                    this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
-                });
-                
-                row.addEventListener('mouseleave', function() {
-                    this.style.background = 'white';
-                    this.style.transform = 'translateX(0)';
-                    this.style.boxShadow = 'none';
-                });
-                
-                // Ajouter des badges pour les 3 premiers services
-                if (index === 0) {
-                    const serviceTd = row.querySelector('[data-label="Service"]');
-                    if (serviceTd) {
-                        const badge = document.createElement('span');
-                        badge.innerHTML = '🔥 Popular';
-                        badge.style.cssText = `
-                            display: inline-block;
-                            margin-left: 8px;
-                            padding: 4px 10px;
-                            background: linear-gradient(135deg, #EF4444, #DC2626);
-                            color: white;
-                            border-radius: 20px;
-                            font-size: 10px;
-                            font-weight: 700;
-                            text-transform: uppercase;
-                            letter-spacing: 0.5px;
-                        `;
-                        serviceTd.appendChild(badge);
-                    }
-                } else if (index === 1) {
-                    const serviceTd = row.querySelector('[data-label="Service"]');
-                    if (serviceTd) {
-                        const badge = document.createElement('span');
-                        badge.innerHTML = '⭐ Best Seller';
-                        badge.style.cssText = `
-                            display: inline-block;
-                            margin-left: 8px;
-                            padding: 4px 10px;
-                            background: linear-gradient(135deg, #F59E0B, #D97706);
-                            color: white;
-                            border-radius: 20px;
-                            font-size: 10px;
-                            font-weight: 700;
-                            text-transform: uppercase;
-                            letter-spacing: 0.5px;
-                        `;
-                        serviceTd.appendChild(badge);
-                    }
-                }
-                
-                // Style des cellules
-                const cells = row.querySelectorAll('td');
-                cells.forEach(cell => {
-                    cell.style.cssText = `
-                        padding: 16px !important;
+                const searchInput = searchRow.querySelector('input[placeholder*="Search"], input[type="text"]');
+                if (searchInput) {
+                    searchInput.style.cssText = `
+                        flex: 1 !important;
+                        padding: 12px 16px 12px 44px !important;
+                        border: 1px solid #E5E7EB !important;
+                        border-radius: 10px !important;
                         font-size: 14px !important;
-                        color: #374151 !important;
-                        border: none !important;
+                        transition: all 0.2s ease !important;
+                        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 14px center, white !important;
                     `;
-                });
-                
-                // Style du prix (Rate per 1000)
-                const rateCell = row.querySelector('[data-label="Rate per 1000"]');
-                if (rateCell) {
-                    const priceText = rateCell.textContent.trim();
-                    rateCell.innerHTML = `
-                        <span style="font-size: 18px; font-weight: 700; background: linear-gradient(135deg, #00A67E, #00D97E); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${priceText}</span>
-                    `;
+                    console.log('✅ [SERVICES] Search input styled');
                 }
-                
-                // Style du bouton View
-                const viewBtn = row.querySelector('a[href*="service"]');
-                if (viewBtn) {
-                    viewBtn.style.cssText = `
-                        display: inline-flex !important;
-                        align-items: center !important;
-                        gap: 6px !important;
-                        padding: 8px 20px !important;
-                        background: linear-gradient(135deg, #0047AB, #0066FF) !important;
-                        color: white !important;
-                        border-radius: 8px !important;
-                        font-weight: 600 !important;
-                        font-size: 13px !important;
-                        text-decoration: none !important;
-                        transition: all 0.3s ease !important;
-                        box-shadow: 0 4px 12px rgba(0,71,171,0.25) !important;
-                    `;
-                    
-                    viewBtn.innerHTML = `
-                        View Details
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                            <polyline points="12 5 19 12 12 19"/>
-                        </svg>
-                    `;
-                    
-                    viewBtn.addEventListener('mouseenter', function() {
-                        this.style.transform = 'translateY(-2px)';
-                        this.style.boxShadow = '0 6px 20px rgba(0,71,171,0.35)';
-                    });
-                    
-                    viewBtn.addEventListener('mouseleave', function() {
-                        this.style.transform = 'translateY(0)';
-                        this.style.boxShadow = '0 4px 12px rgba(0,71,171,0.25)';
-                    });
-                }
-            });
-        }
+            }
+        }, 200);
         
-        console.log('✅ [SERVICES] Transformation complete');
+        console.log('🎉 [SERVICES] Transformation COMPLETE');
         
-    }, 800);
+    }, 1200); // Délai augmenté à 1200ms
 })();
-
 })(); // End IIFE wrapper
