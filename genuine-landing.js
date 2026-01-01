@@ -3005,12 +3005,31 @@ setTimeout(() => {
 
             this.dom.block.dataset.servicesV2 = 'true';
 
+            this.forceFullWidth(); // Force full width via JS
             this.injectStyles();
             this.extractData();
             this.buildStructure();
             this.applyFilters();
 
             console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
+        }
+
+        // Force full width by applying inline styles directly (bypasses CSS specificity issues)
+        forceFullWidth() {
+            const wrapperContent = document.querySelector('.wrapper-content');
+            const wrapperContentBody = document.querySelector('.wrapper-content__body');
+
+            if (wrapperContent) {
+                wrapperContent.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;';
+            }
+
+            if (wrapperContentBody) {
+                wrapperContentBody.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;';
+            }
+
+            if (this.dom.block) {
+                this.dom.block.style.cssText += 'width: 100% !important; max-width: 100% !important; flex: 0 0 100% !important;';
+            }
         }
 
         injectStyles() {
