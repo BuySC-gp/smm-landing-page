@@ -1,51 +1,42 @@
 // NEW ORDER PAGE - LAYOUT 50/50 (VERSION CORRIGÉE)
-(function() {
-setTimeout(() => {
+(function () {
+  setTimeout(() => {
     // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
-    const isNewOrderPage = document.querySelector('#block_206') || 
-                           document.querySelector('.new_order_block') ||
-                           document.querySelector('.row.new-order-form');
-    
+    const isNewOrderPage = document.querySelector('#block_206') ||
+      document.querySelector('.new_order_block') ||
+      document.querySelector('.row.new-order-form');
+
     if (!isNewOrderPage) {
-        console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');// NEW ORDER PAGE - LAYOUT 50/50 (VERSION CORRIGÉE)
-(function() {
-setTimeout(() => {
-    // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
-    const isNewOrderPage = document.querySelector('#block_206') || 
-                           document.querySelector('.new_order_block') ||
-                           document.querySelector('.row.new-order-form');
-    
-    if (!isNewOrderPage) {
-        console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');
-        return; // ← On sort du module
+      console.log('ℹ️ [NEW ORDER] Not on New Order page - skipping');
+      return; // ← On sort du module
     }
     console.log('✅ [NEW ORDER] Detected - Layout 50/50 activating');
 
-const searchInput = document.querySelector('input[placeholder*="Search"]');
-const form = searchInput?.closest('form');
-if (form && !form.dataset.fixed) {
-form.dataset.fixed = 'true';
-console.log('🎯 [NEW ORDER] Layout 50/50 activé');
+    const searchInput = document.querySelector('input[placeholder*="Search"]');
+    const form = searchInput?.closest('form');
+    if (form && !form.dataset.fixed) {
+      form.dataset.fixed = 'true';
+      console.log('🎯 [NEW ORDER] Layout 50/50 activé');
 
-// === 1. CACHER LA DESCRIPTION NATIVE ===
-const nativeDescription = form.querySelector('.form-group:has(#service_description)') ||
-form.querySelector('[id*="description"]')?.closest('.form-group');
-if (nativeDescription) {
-nativeDescription.style.display = 'none';
-console.log('✅ Native description hidden');
-}
+      // === 1. CACHER LA DESCRIPTION NATIVE ===
+      const nativeDescription = form.querySelector('.form-group:has(#service_description)') ||
+        form.querySelector('[id*="description"]')?.closest('.form-group');
+      if (nativeDescription) {
+        nativeDescription.style.display = 'none';
+        console.log('✅ Native description hidden');
+      }
 
-// === 2. TROUVER LE VRAI ROW PARENT ===
-const colDiv = form.closest('.col-lg-8, [class*="col-"]');
-const rowDiv = document.querySelector('.row.new-order-form') || colDiv?.parentElement;
-if (!rowDiv) {
-console.error('❌ Row not found');
-return;
-}
-console.log('✅ Row found:', rowDiv);
+      // === 2. TROUVER LE VRAI ROW PARENT ===
+      const colDiv = form.closest('.col-lg-8, [class*="col-"]');
+      const rowDiv = document.querySelector('.row.new-order-form') || colDiv?.parentElement;
+      if (!rowDiv) {
+        console.error('❌ Row not found');
+        return;
+      }
+      console.log('✅ Row found:', rowDiv);
 
-// === 3. TRANSFORMER LE ROW EN FLEX 50/50 ===
-rowDiv.style.cssText = `
+      // === 3. TRANSFORMER LE ROW EN FLEX 50/50 ===
+      rowDiv.style.cssText = `
 display: flex !important;
 flex-wrap: nowrap !important;
 gap: 24px !important;
@@ -55,18 +46,18 @@ padding: 24px !important;
 box-sizing: border-box !important;
 `;
 
-// === 4. COLUMN GAUCHE = 50% ===
-if (colDiv) {
-colDiv.style.cssText = `
+      // === 4. COLUMN GAUCHE = 50% ===
+      if (colDiv) {
+        colDiv.style.cssText = `
 flex: 0 0 50% !important;
 max-width: 50% !important;
 width: 50% !important;
 padding: 0 !important;
 `;
-}
+      }
 
-// === 5. STYLE DU FORM ===
-form.style.cssText = `
+      // === 5. STYLE DU FORM ===
+      form.style.cssText = `
 width: 100% !important;
 background: white !important;
 border-radius: 12px !important;
@@ -76,16 +67,16 @@ border: 1px solid #e5e7eb !important;
 box-sizing: border-box !important;
 `;
 
-// === 6. CRÉER PANEL DROIT (FIX: suppression du doublon) ===
-let rightPanel = document.getElementById('order-info-panel');
-if (!rightPanel) {
-rightPanel = document.createElement('div');
-rightPanel.id = 'order-info-panel';
-rowDiv.appendChild(rightPanel);
-console.log('✅ Right panel created and appended');
-}
+      // === 6. CRÉER PANEL DROIT (FIX: suppression du doublon) ===
+      let rightPanel = document.getElementById('order-info-panel');
+      if (!rightPanel) {
+        rightPanel = document.createElement('div');
+        rightPanel.id = 'order-info-panel';
+        rowDiv.appendChild(rightPanel);
+        console.log('✅ Right panel created and appended');
+      }
 
-rightPanel.style.cssText = `
+      rightPanel.style.cssText = `
 flex: 0 0 calc(50% - 24px) !important;
 max-width: calc(50% - 24px) !important;
 width: calc(50% - 24px) !important;
@@ -99,7 +90,7 @@ flex-direction: column !important;
 box-sizing: border-box !important;
 `;
 
-rightPanel.innerHTML = `
+      rightPanel.innerHTML = `
 <!-- Header Badge GP CLEAN -->
 <div style="background: linear-gradient(135deg, #f8f9ff, #ffffff); padding: 16px 20px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
 <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 250px;">
@@ -210,47 +201,47 @@ Updates
 </div>
 `;
 
-// === 7. FONCTION UPDATE DESCRIPTION ===
-function updateServiceDescription() {
-    console.log('🔍 [UPDATE] Description function called');
+      // === 7. FONCTION UPDATE DESCRIPTION ===
+      function updateServiceDescription() {
+        console.log('🔍 [UPDATE] Description function called');
 
-    const descriptionPanel = 
-        document.querySelector('#service_description .panel-description') ||
-        document.querySelector('.panel-description') ||
-        document.querySelector('#service_description');
+        const descriptionPanel =
+          document.querySelector('#service_description .panel-description') ||
+          document.querySelector('.panel-description') ||
+          document.querySelector('#service_description');
 
-    const descriptionContent = document.getElementById('description-content');
-    const speedValue = document.getElementById('speed-value');
-    const guaranteeValue = document.getElementById('guarantee-value');
+        const descriptionContent = document.getElementById('description-content');
+        const speedValue = document.getElementById('speed-value');
+        const guaranteeValue = document.getElementById('guarantee-value');
 
-    console.log('📋 Description panel:', descriptionPanel);
-    console.log('🎯 Target container:', descriptionContent);
+        console.log('📋 Description panel:', descriptionPanel);
+        console.log('🎯 Target container:', descriptionContent);
 
-    if (!descriptionContent) {
-        console.error('❌ #description-content NOT FOUND');
-        return;
-    }
+        if (!descriptionContent) {
+          console.error('❌ #description-content NOT FOUND');
+          return;
+        }
 
-    if (descriptionPanel) {
-        let descText = descriptionPanel.textContent || descriptionPanel.innerText || '';
-        descText = descText.trim();
+        if (descriptionPanel) {
+          let descText = descriptionPanel.textContent || descriptionPanel.innerText || '';
+          descText = descText.trim();
 
-        console.log('📝 Text length:', descText.length);
-        console.log('📝 Text preview:', descText.substring(0, 200));
+          console.log('📝 Text length:', descText.length);
+          console.log('📝 Text preview:', descText.substring(0, 200));
 
-        if (descText && descText.length > 5) {
+          if (descText && descText.length > 5) {
             const formattedDesc = descText
-                .split('\n')
-                .map(line => {
-                    line = line.trim();
-                    if (!line) return '';
-                    if (line.match(/^(Speed|Refill|Guarantee|Start Time|🌴|🌎|⌚|🔼|🚑|⚠|🍺|🟢|🔴)/i)) {
-                        return `<p style="margin-bottom: 10px; line-height: 1.6;"><strong>${line}</strong></p>`;
-                    }
-                    return `<p style="margin-bottom: 8px; line-height: 1.6;">${line}</p>`;
-                })
-                .filter(Boolean)
-                .join('');
+              .split('\n')
+              .map(line => {
+                line = line.trim();
+                if (!line) return '';
+                if (line.match(/^(Speed|Refill|Guarantee|Start Time|🌴|🌎|⌚|🔼|🚑|⚠|🍺|🟢|🔴)/i)) {
+                  return `<p style="margin-bottom: 10px; line-height: 1.6;"><strong>${line}</strong></p>`;
+                }
+                return `<p style="margin-bottom: 8px; line-height: 1.6;">${line}</p>`;
+              })
+              .filter(Boolean)
+              .join('');
 
             descriptionContent.innerHTML = formattedDesc || descText.replace(/\n/g, '<br>');
             console.log('✅ Description updated!');
@@ -260,124 +251,124 @@ function updateServiceDescription() {
             const speedMatch = descText.match(/Speed[:\s\-]+([^\n]+)/i);
 
             if (speedValue) {
-                let speedText = '';
-                
-                if (startTimeMatch && speedMatch) {
-                    // Les deux présents : "1-24h | 100K Daily"
-                    speedText = `${startTimeMatch[1].trim()} | ${speedMatch[1].trim()}`;
-                } else if (speedMatch) {
-                    // Seulement Speed
-                    speedText = speedMatch[1].trim();
-                } else if (startTimeMatch) {
-                    // Seulement Start Time
-                    speedText = `Start: ${startTimeMatch[1].trim()}`;
-                } else {
-                    speedText = 'N/A';
-                }
-                
-                speedValue.textContent = speedText;
-                console.log('⚡ Speed extracted:', speedText);
+              let speedText = '';
+
+              if (startTimeMatch && speedMatch) {
+                // Les deux présents : "1-24h | 100K Daily"
+                speedText = `${startTimeMatch[1].trim()} | ${speedMatch[1].trim()}`;
+              } else if (speedMatch) {
+                // Seulement Speed
+                speedText = speedMatch[1].trim();
+              } else if (startTimeMatch) {
+                // Seulement Start Time
+                speedText = `Start: ${startTimeMatch[1].trim()}`;
+              } else {
+                speedText = 'N/A';
+              }
+
+              speedValue.textContent = speedText;
+              console.log('⚡ Speed extracted:', speedText);
             }
 
             // === EXTRACTION GUARANTEE (Refill) ===
             const refillMatch = descText.match(/Refill[:\s\-]+([^\n]+)/i);
 
             if (guaranteeValue) {
-                if (refillMatch) {
-                    guaranteeValue.textContent = refillMatch[1].trim();
-                    console.log('🛡️ Guarantee extracted:', refillMatch[1].trim());
-                } else {
-                    // Chercher aussi "Guarantee:" au cas où
-                    const guaranteeMatch = descText.match(/Guarantee[:\s\-]+([^\n]+)/i);
-                    guaranteeValue.textContent = guaranteeMatch ? guaranteeMatch[1].trim() : 'No guarantee';
-                    console.log('🛡️ Guarantee fallback:', guaranteeValue.textContent);
-                }
+              if (refillMatch) {
+                guaranteeValue.textContent = refillMatch[1].trim();
+                console.log('🛡️ Guarantee extracted:', refillMatch[1].trim());
+              } else {
+                // Chercher aussi "Guarantee:" au cas où
+                const guaranteeMatch = descText.match(/Guarantee[:\s\-]+([^\n]+)/i);
+                guaranteeValue.textContent = guaranteeMatch ? guaranteeMatch[1].trim() : 'No guarantee';
+                console.log('🛡️ Guarantee fallback:', guaranteeValue.textContent);
+              }
             }
 
-        } else {
+          } else {
             console.warn('⚠️ Description empty or too short');
             descriptionContent.innerHTML = '<p style="color: #9ca3af; font-style: italic;">Select a service...</p>';
             if (speedValue) speedValue.textContent = 'N/A';
             if (guaranteeValue) guaranteeValue.textContent = '-';
+          }
+        } else {
+          console.error('❌ Description panel NOT FOUND');
+          descriptionContent.innerHTML = '<p style="color: #ff6b6b;">Description not available</p>';
+          if (speedValue) speedValue.textContent = 'N/A';
+          if (guaranteeValue) guaranteeValue.textContent = '-';
         }
-    } else {
-        console.error('❌ Description panel NOT FOUND');
-        descriptionContent.innerHTML = '<p style="color: #ff6b6b;">Description not available</p>';
-        if (speedValue) speedValue.textContent = 'N/A';
-        if (guaranteeValue) guaranteeValue.textContent = '-';
-    }
-}
+      }
 
-// === 8. LISTENERS ===
-const serviceSelect = form.querySelector('select[name*="service"], #service, select');
-if (serviceSelect) {
-console.log('✅ Service select found');
-serviceSelect.addEventListener('change', () => {
-console.log('🔄 Service changed!');
-setTimeout(updateServiceDescription, 600);
-setTimeout(updateServiceDescription, 1500);
-});
-} else {
-console.error('❌ Service select NOT FOUND');
-}
+      // === 8. LISTENERS ===
+      const serviceSelect = form.querySelector('select[name*="service"], #service, select');
+      if (serviceSelect) {
+        console.log('✅ Service select found');
+        serviceSelect.addEventListener('change', () => {
+          console.log('🔄 Service changed!');
+          setTimeout(updateServiceDescription, 600);
+          setTimeout(updateServiceDescription, 1500);
+        });
+      } else {
+        console.error('❌ Service select NOT FOUND');
+      }
 
-// MutationObserver
-const serviceDescDiv = document.getElementById('service_description');
-if (serviceDescDiv) {
-const observer = new MutationObserver(() => {
-console.log('🔍 Mutation detected');
-updateServiceDescription();
-});
-observer.observe(serviceDescDiv, {
-childList: true,
-subtree: true,
-characterData: true
-});
-console.log('✅ MutationObserver active');
-}
+      // MutationObserver
+      const serviceDescDiv = document.getElementById('service_description');
+      if (serviceDescDiv) {
+        const observer = new MutationObserver(() => {
+          console.log('🔍 Mutation detected');
+          updateServiceDescription();
+        });
+        observer.observe(serviceDescDiv, {
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+        console.log('✅ MutationObserver active');
+      }
 
-// Initial calls
-setTimeout(updateServiceDescription, 1000);
-setTimeout(updateServiceDescription, 2500);
+      // Initial calls
+      setTimeout(updateServiceDescription, 1000);
+      setTimeout(updateServiceDescription, 2500);
 
-// === 9. TABS SYSTEM ===
-setTimeout(() => {
-const tabs = document.querySelectorAll('.info-tab');
-const panels = document.querySelectorAll('.tab-panel');
+      // === 9. TABS SYSTEM ===
+      setTimeout(() => {
+        const tabs = document.querySelectorAll('.info-tab');
+        const panels = document.querySelectorAll('.tab-panel');
 
-tabs.forEach(tab => {
-tab.addEventListener('click', function() {
-tabs.forEach(t => {
-t.style.color = '#6b7280';
-t.style.background = 'none';
-t.style.borderBottom = 'none';
-});
+        tabs.forEach(tab => {
+          tab.addEventListener('click', function () {
+            tabs.forEach(t => {
+              t.style.color = '#6b7280';
+              t.style.background = 'none';
+              t.style.borderBottom = 'none';
+            });
 
-this.style.color = '#0066FF';
-this.style.background = 'white';
-this.style.borderBottom = '2px solid #0066FF';
+            this.style.color = '#0066FF';
+            this.style.background = 'white';
+            this.style.borderBottom = '2px solid #0066FF';
 
-panels.forEach(p => p.style.display = 'none');
-const target = document.querySelector(`[data-panel="${this.dataset.tab}"]`);
-if (target) target.style.display = 'block';
-});
-});
+            panels.forEach(p => p.style.display = 'none');
+            const target = document.querySelector(`[data-panel="${this.dataset.tab}"]`);
+            if (target) target.style.display = 'block';
+          });
+        });
 
-if (tabs[0]) {
-tabs[0].style.color = '#00A67E';
-tabs[0].style.background = 'white';
-tabs[0].style.borderBottom = '2px solid #00A67E';
-}
-}, 200);
+        if (tabs[0]) {
+          tabs[0].style.color = '#00A67E';
+          tabs[0].style.background = 'white';
+          tabs[0].style.borderBottom = '2px solid #00A67E';
+        }
+      }, 200);
 
-// === 10. FORM STYLING CORRIGÉ (FIX SEARCH PADDING) ===
-const inputs = form.querySelectorAll('input, select, textarea');
-inputs.forEach(input => {
-    // On vérifie si c'est le champ recherche
-    const isSearch = input.getAttribute('placeholder')?.toLowerCase().includes('search') || 
-                     input.id?.includes('search') ||
-                     input.name?.includes('search');
-    input.style.cssText = `
+      // === 10. FORM STYLING CORRIGÉ (FIX SEARCH PADDING) ===
+      const inputs = form.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        // On vérifie si c'est le champ recherche
+        const isSearch = input.getAttribute('placeholder')?.toLowerCase().includes('search') ||
+          input.id?.includes('search') ||
+          input.name?.includes('search');
+        input.style.cssText = `
         width: 100% !important;
         padding: 10px 12px !important;
         ${isSearch ? 'padding-left: 40px !important;' : ''} /* <--- LE FIX EST ICI */
@@ -386,11 +377,11 @@ inputs.forEach(input => {
         font-size: 13px !important;
         transition: all 0.2s !important;
     `;
-});
+      });
 
-const submitBtn = form.querySelector('button[type="submit"]');
-if (submitBtn) {
-submitBtn.style.cssText = `
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.style.cssText = `
 width: 100% !important;
 padding: 12px !important;
 background: linear-gradient(135deg, #0047AB, #0066FF) !important;
@@ -401,61 +392,61 @@ border-radius: 8px !important;
 font-weight: 700 !important;
 cursor: pointer !important;
 `;
-}
+      }
 
-// === 11. RESPONSIVE ===
-const mediaQuery = window.matchMedia('(max-width: 1100px)');
-function handleResponsive(e) {
-if (e.matches) {
-rowDiv.style.flexDirection = 'column';
-if (colDiv) colDiv.style.maxWidth = '100%';
-rightPanel.style.maxWidth = '100%';
-} else {
-rowDiv.style.flexDirection = 'row';
-}
-}
-handleResponsive(mediaQuery);
-mediaQuery.addEventListener('change', handleResponsive);
+      // === 11. RESPONSIVE ===
+      const mediaQuery = window.matchMedia('(max-width: 1100px)');
+      function handleResponsive(e) {
+        if (e.matches) {
+          rowDiv.style.flexDirection = 'column';
+          if (colDiv) colDiv.style.maxWidth = '100%';
+          rightPanel.style.maxWidth = '100%';
+        } else {
+          rowDiv.style.flexDirection = 'row';
+        }
+      }
+      handleResponsive(mediaQuery);
+      mediaQuery.addEventListener('change', handleResponsive);
 
-console.log('✅ [NEW ORDER] Setup complete');
-}
-}, 300);
+      console.log('✅ [NEW ORDER] Setup complete');
+    }
+  }, 300);
 
-/* MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques) */
-(function() {
+  /* MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques) */
+  (function () {
     // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
-    const isNewOrderPage = document.querySelector('#block_206') || 
-                           document.querySelector('.new_order_block') ||
-                           document.querySelector('.row.new-order-form');
-    
+    const isNewOrderPage = document.querySelector('#block_206') ||
+      document.querySelector('.new_order_block') ||
+      document.querySelector('.row.new-order-form');
+
     if (!isNewOrderPage) {
-        console.log('ℹ️ [QUICK SELECTORS] Not on New Order page - skipping');
-        return; // ← On sort du module
+      console.log('ℹ️ [QUICK SELECTORS] Not on New Order page - skipping');
+      return; // ← On sort du module
     }
     console.log('✅ [QUICK SELECTORS] Detected - Injecting buttons');
-    
+
     // 1. CONFIGURATION DES BOUTONS (ICONE + FILTRE)
     const quickApps = [
-        { name: 'Instagram', filter: 'instagram', color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
-        { name: 'TikTok', filter: 'tiktok', color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3a.5.5 0 0 0-.5.5v14a4.5 4.5 0 1 1-4.5-4.5.5.5 0 0 0 .5-.5V9.8a.5.5 0 0 0-.5-.5 1.5 1.5 0 1 1 0-3 .5.5 0 0 0 .5-.5V3zM15 6a3 3 0 0 1-3-3h3v3z"/></svg>' },
-        { name: 'YouTube', filter: 'youtube', color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
-        { name: 'Spotify', filter: 'spotify', color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
-        { name: 'Telegram', filter: 'telegram', color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
-        { name: 'Everything', filter: 'everything', color: '#6b7280', icon: '⚡' }
+      { name: 'Instagram', filter: 'instagram', color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
+      { name: 'TikTok', filter: 'tiktok', color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3a.5.5 0 0 0-.5.5v14a4.5 4.5 0 1 1-4.5-4.5.5.5 0 0 0 .5-.5V9.8a.5.5 0 0 0-.5-.5 1.5 1.5 0 1 1 0-3 .5.5 0 0 0 .5-.5V3zM15 6a3 3 0 0 1-3-3h3v3z"/></svg>' },
+      { name: 'YouTube', filter: 'youtube', color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
+      { name: 'Spotify', filter: 'spotify', color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
+      { name: 'Telegram', filter: 'telegram', color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
+      { name: 'Everything', filter: 'everything', color: '#6b7280', icon: '⚡' }
     ];
     // 2. INJECTION DU HTML (LE VISUEL)
     function injectQuickSelectors() {
-        const form = document.querySelector('form');
-        
-        // On évite les doublons
-        if (document.getElementById('quick-selectors-bar')) return;
-        
-        // On cherche le conteneur PRINCIPAL (la ligne qui contient colonne gauche + droite)
-        const rowDiv = document.querySelector('.row.new-order-form') || (form ? form.closest('.row') : null);
-        if (rowDiv) {
-            const wrapper = document.createElement('div');
-            wrapper.id = 'quick-selectors-bar';
-            wrapper.style.cssText = `
+      const form = document.querySelector('form');
+
+      // On évite les doublons
+      if (document.getElementById('quick-selectors-bar')) return;
+
+      // On cherche le conteneur PRINCIPAL (la ligne qui contient colonne gauche + droite)
+      const rowDiv = document.querySelector('.row.new-order-form') || (form ? form.closest('.row') : null);
+      if (rowDiv) {
+        const wrapper = document.createElement('div');
+        wrapper.id = 'quick-selectors-bar';
+        wrapper.style.cssText = `
                 display: flex;
                 gap: 10px;
                 overflow-x: auto;
@@ -465,18 +456,18 @@ console.log('✅ [NEW ORDER] Setup complete');
                 scrollbar-width: none; /* Firefox */
                 -ms-overflow-style: none; /* IE */
             `;
-            
-            // Masquer la scrollbar
-            const style = document.createElement('style');
-            style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
-            document.head.appendChild(style);
-            
-            // Générer les boutons
-            quickApps.forEach(app => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-selector-btn';
-                btn.dataset.filter = app.filter;
-                btn.style.cssText = `
+
+        // Masquer la scrollbar
+        const style = document.createElement('style');
+        style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
+        document.head.appendChild(style);
+
+        // Générer les boutons
+        quickApps.forEach(app => {
+          const btn = document.createElement('button');
+          btn.className = 'quick-selector-btn';
+          btn.dataset.filter = app.filter;
+          btn.style.cssText = `
                     display: flex;
                     align-items: center;
                     gap: 8px;
@@ -492,104 +483,104 @@ console.log('✅ [NEW ORDER] Setup complete');
                     transition: all 0.2s ease;
                     box-shadow: 0 2px 6px rgba(0,0,0,0.03);
                 `;
-                
-                // Icon styling
-                const iconSpan = document.createElement('span');
-                iconSpan.innerHTML = app.icon;
-                iconSpan.style.cssText = `
+
+          // Icon styling
+          const iconSpan = document.createElement('span');
+          iconSpan.innerHTML = app.icon;
+          iconSpan.style.cssText = `
                     display: flex;
                     align-items: center;
                     width: 20px;
                     height: 20px;
                     color: ${app.color};
                 `;
-                if(app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
-                btn.prepend(iconSpan);
-                btn.append(app.name);
-                
-                // Hover effects
-                btn.onmouseenter = () => {
-                    btn.style.borderColor = app.color;
-                    btn.style.color = '#1f2937';
-                    btn.style.transform = 'translateY(-2px)';
-                    btn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.08)';
-                };
-                btn.onmouseleave = () => {
-                    btn.style.borderColor = '#e5e7eb';
-                    btn.style.color = '#4b5563';
-                    btn.style.transform = 'translateY(0)';
-                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
-                };
-                
-                // 3. LOGIQUE DU CLIC (LE LIEN)
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault(); // Empêche le submit du formulaire
-                    
-                    // Animation click
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
-                    const filter = this.dataset.filter.toLowerCase();
-                    const select = document.querySelector('select[name*="category"], #category');
-                    
-                    if (!select) return;
-                    let foundIndex = -1;
-                    if (filter === 'everything') {
-                        foundIndex = 0; // Retour au début
-                    } else {
-                        // Recherche intelligente dans le menu déroulant
-                        for (let i = 0; i < select.options.length; i++) {
-                            const text = select.options[i].text.toLowerCase();
-                            // On cherche si le texte de la catégorie contient "instagram", "tiktok", etc.
-                            if (text.includes(filter)) {
-                                foundIndex = i;
-                                break; // On prend le premier trouvé
-                            }
-                        }
-                    }
-                    if (foundIndex >= 0) {
-                        select.selectedIndex = foundIndex;
-                        // On simule le changement pour que le panel mette à jour les services
-                        select.dispatchEvent(new Event('change', { bubbles: true }));
-                        console.log(`✅ Quick Selector: Switched to ${filter}`);
-                    } else {
-                        console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
-                    }
-                });
-                wrapper.appendChild(btn);
-            });
-            
-            // === INSERTION CORRIGÉE (FULL WIDTH) ===
-            // On insère AVANT le conteneur flex "rowDiv" pour qu'il soit au-dessus de tout
-            if(rowDiv.parentNode) {
-                rowDiv.parentNode.insertBefore(wrapper, rowDiv);
-                console.log('✅ Quick Selectors Bar injected (Full Width Mode)');
+          if (app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
+          btn.prepend(iconSpan);
+          btn.append(app.name);
+
+          // Hover effects
+          btn.onmouseenter = () => {
+            btn.style.borderColor = app.color;
+            btn.style.color = '#1f2937';
+            btn.style.transform = 'translateY(-2px)';
+            btn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.08)';
+          };
+          btn.onmouseleave = () => {
+            btn.style.borderColor = '#e5e7eb';
+            btn.style.color = '#4b5563';
+            btn.style.transform = 'translateY(0)';
+            btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
+          };
+
+          // 3. LOGIQUE DU CLIC (LE LIEN)
+          btn.addEventListener('click', function (e) {
+            e.preventDefault(); // Empêche le submit du formulaire
+
+            // Animation click
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
+            const filter = this.dataset.filter.toLowerCase();
+            const select = document.querySelector('select[name*="category"], #category');
+
+            if (!select) return;
+            let foundIndex = -1;
+            if (filter === 'everything') {
+              foundIndex = 0; // Retour au début
+            } else {
+              // Recherche intelligente dans le menu déroulant
+              for (let i = 0; i < select.options.length; i++) {
+                const text = select.options[i].text.toLowerCase();
+                // On cherche si le texte de la catégorie contient "instagram", "tiktok", etc.
+                if (text.includes(filter)) {
+                  foundIndex = i;
+                  break; // On prend le premier trouvé
+                }
+              }
             }
+            if (foundIndex >= 0) {
+              select.selectedIndex = foundIndex;
+              // On simule le changement pour que le panel mette à jour les services
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+              console.log(`✅ Quick Selector: Switched to ${filter}`);
+            } else {
+              console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
+            }
+          });
+          wrapper.appendChild(btn);
+        });
+
+        // === INSERTION CORRIGÉE (FULL WIDTH) ===
+        // On insère AVANT le conteneur flex "rowDiv" pour qu'il soit au-dessus de tout
+        if (rowDiv.parentNode) {
+          rowDiv.parentNode.insertBefore(wrapper, rowDiv);
+          console.log('✅ Quick Selectors Bar injected (Full Width Mode)');
         }
+      }
     }
     // Lancer après un court délai pour être sûr que le layout est prêt
     setTimeout(injectQuickSelectors, 600);
     setTimeout(injectQuickSelectors, 1500); // 2ème passe de sécurité
-})();
+  })();
 })();
 
 // =============================================================================
 // FOOTER GLOBAL — TOUTES LES PAGES (PANEL + LANDING)
 // =============================================================================
-(function() {
+(function () {
   'use strict';
-  
+
   // Éviter double injection
   if (document.getElementById('gp-footer-global')) {
     console.log('[GP] Footer déjà présent');
     return;
   }
-  
+
   console.log('[GP] 🎯 Initialisation footer global...');
-  
+
   // Détecter le contexte
   const hasSidebar = document.querySelector('.sidebar, .component_private_sidebar, .component-sidebar-wrapper');
   const hasSignup = document.querySelector('.block-signin-text .component_card');
-  
+
   // Fonction d'injection du footer
   function injectFooter() {
     // Ajouter classes contextuelles
@@ -599,7 +590,7 @@ console.log('✅ [NEW ORDER] Setup complete');
     if (hasSignup && !hasSidebar) {
       document.body.classList.add('gp-is-landing');
     }
-    
+
     const footerHTML = `
     <!-- FOOTER MEGA -->
 <div id="gp-footer-global" style="background: #F8F9FF; padding: 80px 20px 40px; color: #1a1a1a; border-top: 1px solid #e5e5e5; margin-top: 80px; clear: both;">
@@ -774,12 +765,12 @@ console.log('✅ [NEW ORDER] Setup complete');
   </style>
 </div>
 `;
-    
+
     // INJECTION
     document.body.insertAdjacentHTML('beforeend', footerHTML);
     console.log('✅ [GP] Footer global injecté (contexte: ' + (hasSidebar ? 'PANEL avec sidebar' : hasSignup ? 'LANDING' : 'AUTRE') + ')');
   }
-  
+
   // LOGIQUE D'INJECTION CONDITIONNELLE
   if (hasSignup && !hasSidebar) {
     // === LANDING PAGE : attendre que les sections soient chargées ===
@@ -789,13 +780,13 @@ console.log('✅ [NEW ORDER] Setup complete');
     // === PANEL OU AUTRES PAGES : injection immédiate ===
     injectFooter();
   }
-  
+
 })();
 
 // =============================================================================
 // LANDING PAGE (APRES - SÉPARE)
 // =============================================================================
-(function() {
+(function () {
   // TON CODE LANDING ORIGINAL COMPLET (avec syntaxe corrigée)
   const hasSignup = document.querySelector('.block-signin-text .component_card');
   const hasSidebar = document.querySelector('.sidebar');
@@ -807,15 +798,15 @@ console.log('✅ [NEW ORDER] Setup complete');
   }
 
   console.log('[GENUINE] Landing page detected - loading');
-  
+
   // =============================================================================
   // 3. TON CODE V1 ORIGINAL (COLLÉ ICI EXACTEMENT)
   // =============================================================================
-  document.addEventListener('DOMContentLoaded', function() {
-  
-  // === INJECTION CSS DEPTH & ELEVATION ===
-  const elevationStyles = document.createElement('style');
-  elevationStyles.textContent = `
+  document.addEventListener('DOMContentLoaded', function () {
+
+    // === INJECTION CSS DEPTH & ELEVATION ===
+    const elevationStyles = document.createElement('style');
+    elevationStyles.textContent = `
     /* === DESIGN SYSTEM V2: DEPTH & ELEVATION === */
     :root {
       --shadow-low: 0 2px 8px rgba(0, 102, 255, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -1587,20 +1578,20 @@ console.log('✅ [NEW ORDER] Setup complete');
   border: none !important;
 }
   `;
-  document.head.appendChild(elevationStyles);
+    document.head.appendChild(elevationStyles);
 
-  // === LOGO ===
-  const logo = document.querySelector('.component-navbar-brand');
-  if (logo) logo.textContent = 'GENUINE PROMOTION';
-  
-  // === HERO SECTION SPLIT VERSION ===
-  const heroForm = document.querySelector('.block-signin-text .component_card');
-  if (heroForm && heroForm.parentElement) {
-    const heroContainer = heroForm.parentElement;
-    const nativeImage = document.querySelector('.block-signin-text img');
-    const imageUrl = nativeImage ? nativeImage.src : '';
-    
-    const heroHTML = `
+    // === LOGO ===
+    const logo = document.querySelector('.component-navbar-brand');
+    if (logo) logo.textContent = 'GENUINE PROMOTION';
+
+    // === HERO SECTION SPLIT VERSION ===
+    const heroForm = document.querySelector('.block-signin-text .component_card');
+    if (heroForm && heroForm.parentElement) {
+      const heroContainer = heroForm.parentElement;
+      const nativeImage = document.querySelector('.block-signin-text img');
+      const imageUrl = nativeImage ? nativeImage.src : '';
+
+      const heroHTML = `
   <section class="hero-premium" style="background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FF 100%); padding: 60px 20px; position: relative;">
     <div class="hero-content" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center;">
       <div class="hero-left">
@@ -1647,74 +1638,74 @@ console.log('✅ [NEW ORDER] Setup complete');
     </div>
   </section>
 `;
-    
-    heroContainer.insertAdjacentHTML('beforeend', heroHTML);
-    heroForm.style.display = 'none';
-    
-    // AJOUT 2: Bouton toggle login
-    const toggleBtn = document.getElementById('toggleLoginBtn');
-    if (toggleBtn) {
-      toggleBtn.addEventListener('click', () => {
-        if (heroForm.style.display === 'none') {
-          heroForm.style.display = 'block';
-          heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          toggleBtn.textContent = '✕ Hide';
-        } else {
-          heroForm.style.display = 'none';
-          toggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg> Sign In';
+
+      heroContainer.insertAdjacentHTML('beforeend', heroHTML);
+      heroForm.style.display = 'none';
+
+      // AJOUT 2: Bouton toggle login
+      const toggleBtn = document.getElementById('toggleLoginBtn');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          if (heroForm.style.display === 'none') {
+            heroForm.style.display = 'block';
+            heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            toggleBtn.textContent = '✕ Hide';
+          } else {
+            heroForm.style.display = 'none';
+            toggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg> Sign In';
+          }
+        });
+      }
+
+      // AJOUT 3: Déplace "Forgot password?" et change "Remember me"
+      setTimeout(() => {
+        const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
+        const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label =>
+          label.textContent.trim().toLowerCase() === 'password'
+        );
+
+        if (forgotLink && passwordLabel) {
+          const wrapper = document.createElement('div');
+          wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;'; // ← baseline au lieu de center
+
+          passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
+
+          wrapper.appendChild(passwordLabel);
+          wrapper.appendChild(forgotLink);
+
+          passwordLabel.style.margin = '0';
+          forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;'; // ← Plus petit + nowrap
         }
-      });
-    }
-    
-// AJOUT 3: Déplace "Forgot password?" et change "Remember me"
-setTimeout(() => {
-  const forgotLink = document.querySelector('.block-signin-text a[href*="resetpassword"], .block-signin-text a[href*="forgot"]');
-  const passwordLabel = Array.from(document.querySelectorAll('.block-signin-text label')).find(label => 
-    label.textContent.trim().toLowerCase() === 'password'
-  );
-  
-  if (forgotLink && passwordLabel) {
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: baseline !important; margin-bottom: 6px !important;'; // ← baseline au lieu de center
-    
-    passwordLabel.parentElement.insertBefore(wrapper, passwordLabel);
-    
-    wrapper.appendChild(passwordLabel);
-    wrapper.appendChild(forgotLink);
-    
-    passwordLabel.style.margin = '0';
-    forgotLink.style.cssText = 'font-size: 12px !important; color: #0066FF !important; text-decoration: none !important; font-weight: 500 !important; position: static !important; white-space: nowrap !important;'; // ← Plus petit + nowrap
-  }
-  
-  const labels = document.querySelectorAll('.block-signin-text label');
-  labels.forEach(label => {
-    if (label.textContent.toLowerCase().includes('remember')) {
-      label.textContent = 'Stay signed in';
+
+        const labels = document.querySelectorAll('.block-signin-text label');
+        labels.forEach(label => {
+          if (label.textContent.toLowerCase().includes('remember')) {
+            label.textContent = 'Stay signed in';
+          }
+        });
+      }, 800);
     }
   });
-}, 800);
-  }
-}); 
 
-window.addEventListener('load', function() {
-  const logos = [
-    ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
-    ['#E4405F', 'M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z'], // Instagram
-    ['#FF0000', 'M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z'], // YouTube
-    ['#1DB954', 'M17.9,10.9C14.7,9 9.35,8.8 6.3,9.75C5.8,9.9 5.3,9.6 5.15,9.15C5,8.65 5.3,8.15 5.75,8C9.3,6.95 15.15,7.15 18.85,9.35C19.3,9.6 19.45,10.2 19.2,10.65C18.95,11 18.35,11.15 17.9,10.9M17.8,13.7C17.55,14.05 17.1,14.2 16.75,13.95C14.05,12.3 9.95,11.8 6.8,12.8C6.4,12.9 5.95,12.7 5.85,12.3C5.75,11.9 5.95,11.45 6.35,11.35C10,10.25 14.5,10.8 17.6,12.7C17.9,12.85 18.05,13.35 17.8,13.7M16.6,16.45C16.4,16.75 16.05,16.85 15.75,16.65C13.4,15.2 10.45,14.9 6.95,15.7C6.6,15.8 6.3,15.55 6.2,15.25C6.1,14.9 6.35,14.6 6.65,14.5C10.45,13.65 13.75,14 16.35,15.6C16.7,15.75 16.75,16.15 16.6,16.45M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'], // Spotify
-    ['#1877F2', 'M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z'], // Facebook
-    ['#1DA1F2', 'M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.70,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z'], // Twitter
-    ['#9146FF', 'M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z'], // Twitch
-    ['#5865F2', 'M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z'], // Discord
-    ['#0077B5', 'M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z'], // LinkedIn
-    ['#0088CC', 'M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z'], // Telegram
-    ['#E60023', 'M9.04,21.54C10,21.83 10.97,22 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2A10,10 0 0,0 2,12C2,16.25 4.67,19.9 8.44,21.34C8.35,20.56 8.26,19.27 8.44,18.38L9.59,13.44C9.59,13.44 9.3,12.86 9.3,11.94C9.3,10.56 10.16,9.53 11.14,9.53C12,9.53 12.4,10.16 12.4,10.97C12.4,11.83 11.83,13.06 11.54,14.24C11.37,15.22 12.06,16.08 13.04,16.08C14.8,16.08 16.22,14.18 16.22,11.5C16.22,9.1 14.5,7.46 12.03,7.46C9.21,7.46 7.55,9.56 7.55,11.77C7.55,12.63 7.83,13.5 8.29,14.07C8.38,14.13 8.38,14.21 8.35,14.36L8.06,15.45C8.06,15.62 7.95,15.68 7.78,15.56C6.5,15 5.76,13.18 5.76,11.71C5.76,8.55 8,5.68 12.32,5.68C15.76,5.68 18.44,8.15 18.44,11.43C18.44,14.87 16.31,17.63 13.26,17.63C12.29,17.63 11.34,17.11 11,16.5L10.33,18.87C10.1,19.73 9.47,20.88 9.04,21.57V21.54Z'], // Pinterest
-    ['#FF4500', 'M14.5 15.41C14.58 15.5 14.58 15.69 14.5 15.8C13.77 16.5 12.41 16.56 12 16.56C11.61 16.56 10.25 16.5 9.54 15.8C9.44 15.69 9.44 15.5 9.54 15.41C9.65 15.31 9.82 15.31 9.92 15.41C10.38 15.87 11.33 16 12 16C12.69 16 13.66 15.87 14.1 15.41C14.21 15.31 14.38 15.31 14.5 15.41M10.75 13.04C10.75 12.47 10.28 12 9.71 12C9.14 12 8.67 12.47 8.67 13.04C8.67 13.61 9.14 14.09 9.71 14.09C10.28 14.09 10.75 13.61 10.75 13.04M14.29 12C13.72 12 13.25 12.5 13.25 13.05C13.25 13.62 13.72 14.09 14.29 14.09C14.86 14.09 15.33 13.61 15.33 13.04C15.33 12.47 14.86 12 14.29 12M22 12C22 17.5 17.5 22 12 22S2 17.5 2 12C2 6.5 6.5 2 12 2S22 6.5 22 12M18.67 12C18.67 11.19 18 10.54 17.22 10.54C16.82 10.54 16.46 10.7 16.2 10.95C15.2 10.23 13.83 9.77 12.3 9.71L12.97 6.58L15.14 7.05C15.16 7.6 15.62 8.04 16.18 8.04C16.75 8.04 17.22 7.57 17.22 7C17.22 6.43 16.75 5.96 16.18 5.96C15.77 5.96 15.41 6.2 15.25 6.55L12.82 6.03C12.75 6 12.68 6.03 12.63 6.07C12.57 6.11 12.54 6.17 12.53 6.24L11.79 9.72C10.24 9.77 8.84 10.23 7.82 10.96C7.56 10.71 7.2 10.56 6.81 10.56C6 10.56 5.35 11.21 5.35 12C5.35 12.61 5.71 13.11 6.21 13.34C6.19 13.5 6.18 13.62 6.18 13.78C6.18 16 8.79 17.85 12 17.85C15.23 17.85 17.85 16.03 17.85 13.78C17.85 13.64 17.84 13.5 17.81 13.34C18.31 13.11 18.67 12.6 18.67 12Z'], // Reddit
-    ['#FFFC00', 'M12.206,2.003h0a10.511,10.511,0,0,1,7.42,3.074,10.5,10.5,0,0,1,0,14.846,10.511,10.511,0,0,1-7.42,3.074h0a10.511,10.511,0,0,1-7.42-3.074,10.5,10.5,0,0,1,0-14.846A10.511,10.511,0,0,1,12.206,2.003M8.5,9.5A1.5,1.5,0,1,0,10,11,1.5,1.5,0,0,0,8.5,9.5m7,0A1.5,1.5,0,1,0,17,11,1.5,1.5,0,0,0,15.5,9.5M6.93,14.77c.11-.08.46-.32,1.44.07A5.24,5.24,0,0,0,12,16a5.24,5.24,0,0,0,3.63-1.16c.98-.39,1.33-.15,1.44-.07.52.38.21,1.17-.07,1.57A6.78,6.78,0,0,1,12,18.5a6.78,6.78,0,0,1-5-.16C6.72,15.94,6.41,15.15,6.93,14.77Z'], // Snapchat
-    ['#FF6900', 'M21.93,12.7H21.87C21.88,12.47 21.9,12.24 21.9,12C21.9,11.76 21.88,11.53 21.87,11.3H21.93C22.46,8.84 22.05,6.72 20.86,5.36C19.68,4 17.78,3.43 15.34,3.69C13.85,1.95 12.07,1 10,1C7.93,1 6.15,1.95 4.66,3.69C2.22,3.43 0.32,4 -0.86,5.36C-2.05,6.72 -2.46,8.84 -1.93,11.3H-1.87C-1.88,11.53 -1.9,11.76 -1.9,12C-1.9,12.24 -1.88,12.47 -1.87,12.7H-1.93C-2.46,15.16 -2.05,17.28 -0.86,18.64C0.32,20 2.22,20.57 4.66,20.31C6.15,22.05 7.93,23 10,23C12.07,23 13.85,22.05 15.34,20.31C17.78,20.57 19.68,20 20.86,18.64C22.05,17.28 22.46,15.16 21.93,12.7M20.27,17.5C19.5,18.45 18.09,18.85 16.15,18.66C15.57,17.67 14.84,16.74 14,15.92L14.25,14.77C15.52,15.97 16.62,17.31 17.38,18.71C18.64,18.63 19.38,18.28 19.72,17.71C20.27,16.84 20.08,15.42 19.25,13.64C18.33,11.66 16.76,9.76 14.79,8.23L14,8.77L13.21,8.23C11.24,9.76 9.67,11.66 8.75,13.64C7.92,15.42 7.73,16.84 8.28,17.71C8.66,18.32 9.46,18.7 10.8,18.69C10.82,18.89 10.86,19.08 10.9,19.27C9.12,19.39 7.86,19.09 7.04,18.31C6,17.31 5.65,15.59 6.05,13.39C5.59,11.45 5.76,9.9 6.55,8.88C7.35,7.88 8.76,7.42 10.66,7.59C10.94,7.3 11.22,7 11.5,6.74C9.87,6.43 8.64,6.57 7.89,7.15C7,7.85 6.58,9.05 6.62,10.75L6.46,10.92C4.9,10.64 3.85,10.85 3.3,11.59C2.77,12.3 2.76,13.44 3.23,14.94C4.17,18.03 6.13,20.42 8.91,21.53C11.68,22.64 14.88,22.32 17.5,20.67C19.54,19.38 20.86,17.5 21.28,15.09C21.31,14.95 21.32,14.82 21.34,14.68C21.23,15.71 20.88,16.67 20.27,17.5Z'] // Threads
-  ];
+  window.addEventListener('load', function () {
+    const logos = [
+      ['#000', 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z'], // TikTok
+      ['#E4405F', 'M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z'], // Instagram
+      ['#FF0000', 'M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z'], // YouTube
+      ['#1DB954', 'M17.9,10.9C14.7,9 9.35,8.8 6.3,9.75C5.8,9.9 5.3,9.6 5.15,9.15C5,8.65 5.3,8.15 5.75,8C9.3,6.95 15.15,7.15 18.85,9.35C19.3,9.6 19.45,10.2 19.2,10.65C18.95,11 18.35,11.15 17.9,10.9M17.8,13.7C17.55,14.05 17.1,14.2 16.75,13.95C14.05,12.3 9.95,11.8 6.8,12.8C6.4,12.9 5.95,12.7 5.85,12.3C5.75,11.9 5.95,11.45 6.35,11.35C10,10.25 14.5,10.8 17.6,12.7C17.9,12.85 18.05,13.35 17.8,13.7M16.6,16.45C16.4,16.75 16.05,16.85 15.75,16.65C13.4,15.2 10.45,14.9 6.95,15.7C6.6,15.8 6.3,15.55 6.2,15.25C6.1,14.9 6.35,14.6 6.65,14.5C10.45,13.65 13.75,14 16.35,15.6C16.7,15.75 16.75,16.15 16.6,16.45M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'], // Spotify
+      ['#1877F2', 'M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z'], // Facebook
+      ['#1DA1F2', 'M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.70,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z'], // Twitter
+      ['#9146FF', 'M11.64 5.93h1.43v4.28h-1.43m3.93-4.28H17v4.28h-1.43M7 2L3.43 5.57v12.86h4.28V22l3.58-3.57h2.85L20.57 12V2m-1.43 9.29l-2.85 2.85h-2.86l-2.5 2.5v-2.5H7.71V3.43h11.43Z'], // Twitch
+      ['#5865F2', 'M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z'], // Discord
+      ['#0077B5', 'M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z'], // LinkedIn
+      ['#0088CC', 'M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z'], // Telegram
+      ['#E60023', 'M9.04,21.54C10,21.83 10.97,22 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2A10,10 0 0,0 2,12C2,16.25 4.67,19.9 8.44,21.34C8.35,20.56 8.26,19.27 8.44,18.38L9.59,13.44C9.59,13.44 9.3,12.86 9.3,11.94C9.3,10.56 10.16,9.53 11.14,9.53C12,9.53 12.4,10.16 12.4,10.97C12.4,11.83 11.83,13.06 11.54,14.24C11.37,15.22 12.06,16.08 13.04,16.08C14.8,16.08 16.22,14.18 16.22,11.5C16.22,9.1 14.5,7.46 12.03,7.46C9.21,7.46 7.55,9.56 7.55,11.77C7.55,12.63 7.83,13.5 8.29,14.07C8.38,14.13 8.38,14.21 8.35,14.36L8.06,15.45C8.06,15.62 7.95,15.68 7.78,15.56C6.5,15 5.76,13.18 5.76,11.71C5.76,8.55 8,5.68 12.32,5.68C15.76,5.68 18.44,8.15 18.44,11.43C18.44,14.87 16.31,17.63 13.26,17.63C12.29,17.63 11.34,17.11 11,16.5L10.33,18.87C10.1,19.73 9.47,20.88 9.04,21.57V21.54Z'], // Pinterest
+      ['#FF4500', 'M14.5 15.41C14.58 15.5 14.58 15.69 14.5 15.8C13.77 16.5 12.41 16.56 12 16.56C11.61 16.56 10.25 16.5 9.54 15.8C9.44 15.69 9.44 15.5 9.54 15.41C9.65 15.31 9.82 15.31 9.92 15.41C10.38 15.87 11.33 16 12 16C12.69 16 13.66 15.87 14.1 15.41C14.21 15.31 14.38 15.31 14.5 15.41M10.75 13.04C10.75 12.47 10.28 12 9.71 12C9.14 12 8.67 12.47 8.67 13.04C8.67 13.61 9.14 14.09 9.71 14.09C10.28 14.09 10.75 13.61 10.75 13.04M14.29 12C13.72 12 13.25 12.5 13.25 13.05C13.25 13.62 13.72 14.09 14.29 14.09C14.86 14.09 15.33 13.61 15.33 13.04C15.33 12.47 14.86 12 14.29 12M22 12C22 17.5 17.5 22 12 22S2 17.5 2 12C2 6.5 6.5 2 12 2S22 6.5 22 12M18.67 12C18.67 11.19 18 10.54 17.22 10.54C16.82 10.54 16.46 10.7 16.2 10.95C15.2 10.23 13.83 9.77 12.3 9.71L12.97 6.58L15.14 7.05C15.16 7.6 15.62 8.04 16.18 8.04C16.75 8.04 17.22 7.57 17.22 7C17.22 6.43 16.75 5.96 16.18 5.96C15.77 5.96 15.41 6.2 15.25 6.55L12.82 6.03C12.75 6 12.68 6.03 12.63 6.07C12.57 6.11 12.54 6.17 12.53 6.24L11.79 9.72C10.24 9.77 8.84 10.23 7.82 10.96C7.56 10.71 7.2 10.56 6.81 10.56C6 10.56 5.35 11.21 5.35 12C5.35 12.61 5.71 13.11 6.21 13.34C6.19 13.5 6.18 13.62 6.18 13.78C6.18 16 8.79 17.85 12 17.85C15.23 17.85 17.85 16.03 17.85 13.78C17.85 13.64 17.84 13.5 17.81 13.34C18.31 13.11 18.67 12.6 18.67 12Z'], // Reddit
+      ['#FFFC00', 'M12.206,2.003h0a10.511,10.511,0,0,1,7.42,3.074,10.5,10.5,0,0,1,0,14.846,10.511,10.511,0,0,1-7.42,3.074h0a10.511,10.511,0,0,1-7.42-3.074,10.5,10.5,0,0,1,0-14.846A10.511,10.511,0,0,1,12.206,2.003M8.5,9.5A1.5,1.5,0,1,0,10,11,1.5,1.5,0,0,0,8.5,9.5m7,0A1.5,1.5,0,1,0,17,11,1.5,1.5,0,0,0,15.5,9.5M6.93,14.77c.11-.08.46-.32,1.44.07A5.24,5.24,0,0,0,12,16a5.24,5.24,0,0,0,3.63-1.16c.98-.39,1.33-.15,1.44-.07.52.38.21,1.17-.07,1.57A6.78,6.78,0,0,1,12,18.5a6.78,6.78,0,0,1-5-.16C6.72,15.94,6.41,15.15,6.93,14.77Z'], // Snapchat
+      ['#FF6900', 'M21.93,12.7H21.87C21.88,12.47 21.9,12.24 21.9,12C21.9,11.76 21.88,11.53 21.87,11.3H21.93C22.46,8.84 22.05,6.72 20.86,5.36C19.68,4 17.78,3.43 15.34,3.69C13.85,1.95 12.07,1 10,1C7.93,1 6.15,1.95 4.66,3.69C2.22,3.43 0.32,4 -0.86,5.36C-2.05,6.72 -2.46,8.84 -1.93,11.3H-1.87C-1.88,11.53 -1.9,11.76 -1.9,12C-1.9,12.24 -1.88,12.47 -1.87,12.7H-1.93C-2.46,15.16 -2.05,17.28 -0.86,18.64C0.32,20 2.22,20.57 4.66,20.31C6.15,22.05 7.93,23 10,23C12.07,23 13.85,22.05 15.34,20.31C17.78,20.57 19.68,20 20.86,18.64C22.05,17.28 22.46,15.16 21.93,12.7M20.27,17.5C19.5,18.45 18.09,18.85 16.15,18.66C15.57,17.67 14.84,16.74 14,15.92L14.25,14.77C15.52,15.97 16.62,17.31 17.38,18.71C18.64,18.63 19.38,18.28 19.72,17.71C20.27,16.84 20.08,15.42 19.25,13.64C18.33,11.66 16.76,9.76 14.79,8.23L14,8.77L13.21,8.23C11.24,9.76 9.67,11.66 8.75,13.64C7.92,15.42 7.73,16.84 8.28,17.71C8.66,18.32 9.46,18.7 10.8,18.69C10.82,18.89 10.86,19.08 10.9,19.27C9.12,19.39 7.86,19.09 7.04,18.31C6,17.31 5.65,15.59 6.05,13.39C5.59,11.45 5.76,9.9 6.55,8.88C7.35,7.88 8.76,7.42 10.66,7.59C10.94,7.3 11.22,7 11.5,6.74C9.87,6.43 8.64,6.57 7.89,7.15C7,7.85 6.58,9.05 6.62,10.75L6.46,10.92C4.9,10.64 3.85,10.85 3.3,11.59C2.77,12.3 2.76,13.44 3.23,14.94C4.17,18.03 6.13,20.42 8.91,21.53C11.68,22.64 14.88,22.32 17.5,20.67C19.54,19.38 20.86,17.5 21.28,15.09C21.31,14.95 21.32,14.82 21.34,14.68C21.23,15.71 20.88,16.67 20.27,17.5Z'] // Threads
+    ];
 
-  const trustedHTML = `
+    const trustedHTML = `
     <div style="
       background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 50%, #F0F4FF 100%);
       padding: 32px 0;
@@ -1822,14 +1813,14 @@ window.addEventListener('load', function() {
     </div>
   `;
 
-  const mainContent = document.querySelector('main') || document.body;
-  mainContent.insertAdjacentHTML('beforeend', trustedHTML);
+    const mainContent = document.querySelector('main') || document.body;
+    mainContent.insertAdjacentHTML('beforeend', trustedHTML);
 
-  const container1 = document.getElementById('logosContainer');
-  const container2 = document.getElementById('logosContainer2');
+    const container1 = document.getElementById('logosContainer');
+    const container2 = document.getElementById('logosContainer2');
 
-  logos.forEach(([color, path]) => {
-    const logoHTML = `
+    logos.forEach(([color, path]) => {
+      const logoHTML = `
       <div style="
         width: 48px;
         height: 48px;
@@ -1848,18 +1839,18 @@ window.addEventListener('load', function() {
         </svg>
       </div>
     `;
-    container1.insertAdjacentHTML('beforeend', logoHTML);
-    container2.insertAdjacentHTML('beforeend', logoHTML);
+      container1.insertAdjacentHTML('beforeend', logoHTML);
+      container2.insertAdjacentHTML('beforeend', logoHTML);
 
-  });
-   // === STATS MARQUEE DIAGONAL ===
-  setTimeout(() => {
-    const servicesSection = Array.from(document.querySelectorAll('div')).find(div => 
-      div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
-    );
-    
-    if (servicesSection) {
-      servicesSection.insertAdjacentHTML('afterend', `
+    });
+    // === STATS MARQUEE DIAGONAL ===
+    setTimeout(() => {
+      const servicesSection = Array.from(document.querySelectorAll('div')).find(div =>
+        div.textContent.includes('Top Selling') || div.textContent.includes('Premium Services')
+      );
+
+      if (servicesSection) {
+        servicesSection.insertAdjacentHTML('afterend', `
         <div class="stats-marquee-wrapper">
           <div class="stats-marquee">
             <div class="stats-marquee-track">
@@ -1904,15 +1895,15 @@ window.addEventListener('load', function() {
           </div>
         </div>
       `);
-    }
-  }, 500);
+      }
+    }, 500);
 
-  // === HOW IT WORKS TIMELINE ===
-setTimeout(() => {
-  const statsMarquee = document.querySelector('.stats-marquee-wrapper');
-  
-  if (statsMarquee) {
-    statsMarquee.insertAdjacentHTML('afterend', `
+    // === HOW IT WORKS TIMELINE ===
+    setTimeout(() => {
+      const statsMarquee = document.querySelector('.stats-marquee-wrapper');
+
+      if (statsMarquee) {
+        statsMarquee.insertAdjacentHTML('afterend', `
       <section class="how-it-works-section">
         <div class="how-it-works-container">
           <div class="how-it-works-header">
@@ -2132,31 +2123,31 @@ setTimeout(() => {
         </div>
       </section>
     `);
-    
-    // Tab switching logic
-    const tabs = document.querySelectorAll('.how-tab');
-    const contents = document.querySelectorAll('.how-content');
-    
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const targetTab = tab.dataset.tab;
-        
-        tabs.forEach(t => t.classList.remove('active'));
-        contents.forEach(c => c.classList.remove('active'));
-        
-        tab.classList.add('active');
-        document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
-      });
-    });
-  }
-}, 600);
-});
 
-window.addEventListener('load', function() {
-  const mainContent = document.querySelector('main') || document.body;
-  const footer = document.querySelector('footer');
-  
-  const allSectionsHTML = `
+        // Tab switching logic
+        const tabs = document.querySelectorAll('.how-tab');
+        const contents = document.querySelectorAll('.how-content');
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            tab.classList.add('active');
+            document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
+          });
+        });
+      }
+    }, 600);
+  });
+
+  window.addEventListener('load', function () {
+    const mainContent = document.querySelector('main') || document.body;
+    const footer = document.querySelector('footer');
+
+    const allSectionsHTML = `
     <!-- SERVICES CAROUSEL - PREMIUM VERSION -->
 <div style="background: linear-gradient(180deg, #FFFFFF 0%, #F8F9FF 100%); padding: 100px 0; overflow: hidden; position: relative;">
   <!-- Decorative elements -->
@@ -2741,23 +2732,23 @@ window.addEventListener('load', function() {
       </div>
     </div>
     `;  // ← Fin de allSectionsHTML
-  
-  if (footer) {
-    footer.insertAdjacentHTML('beforebegin', allSectionsHTML);
-  } else {
-    mainContent.insertAdjacentHTML('beforeend', allSectionsHTML);
-  }
-  
-  console.log('✅ ALL sections loaded');
-}); // ← Fin de DOMContentLoaded
 
-// =============================================================================
-// 3. MOBILE RESPONSIVE FIX
-// =============================================================================
+    if (footer) {
+      footer.insertAdjacentHTML('beforebegin', allSectionsHTML);
+    } else {
+      mainContent.insertAdjacentHTML('beforeend', allSectionsHTML);
+    }
 
-setTimeout(() => {
-  const mobileFix = document.createElement('style');
-  mobileFix.textContent = `
+    console.log('✅ ALL sections loaded');
+  }); // ← Fin de DOMContentLoaded
+
+  // =============================================================================
+  // 3. MOBILE RESPONSIVE FIX
+  // =============================================================================
+
+  setTimeout(() => {
+    const mobileFix = document.createElement('style');
+    mobileFix.textContent = `
     /* ================================================================== */
     /* MOBILE RESPONSIVE FIX - Hero Section */
     /* ================================================================== */
@@ -2943,9 +2934,9 @@ setTimeout(() => {
     }
   `;
 
-  document.head.appendChild(mobileFix);
-  console.log('[GENUINE] ✅ Mobile fix applied');
-}, 600);
+    document.head.appendChild(mobileFix);
+    console.log('[GENUINE] ✅ Mobile fix applied');
+  }, 600);
 
 })(); // End IIFE wrapper
 
@@ -2953,81 +2944,117 @@ setTimeout(() => {
 // MODULE 4: SERVICES PAGE — PREMIER V2 (ROYAL EDITION)
 // =============================================================================
 (function () {
-    'use strict';
+  'use strict';
 
-    // Configuration
-    const CONFIG = {
-        pageSize: 60, // Services per page
-        containerId: 'gp-services-v2-container',
-        styleId: 'gp-services-v2-css',
-        selectors: {
-            block: '#block_39',
-            table: '#service-table-39',
-            tableRows: '#service-table-39 tbody tr',
-            nativeSearchRow: '#block_39 .row',
-            // Selectors to force full width
-            layoutContainers: '.wrapper-content, .wrapper-content__body, .container-fluid, .container'
-        }
-    };
+  // Configuration
+  const CONFIG = {
+    pageSize: 60, // Services per page
+    containerId: 'gp-services-v2-container',
+    styleId: 'gp-services-v2-css',
+    selectors: {
+      block: '#block_39',
+      table: '#service-table-39',
+      tableRows: '#service-table-39 tbody tr',
+      nativeSearchRow: '#block_39 .row',
+      // Selectors to force full width
+      layoutContainers: '.wrapper-content, .wrapper-content__body, .container-fluid, .container'
+    }
+  };
 
-    /**
-     * Services Application Class
-     */
-    class ServicesApp {
-        constructor() {
-            this.state = {
-                allServices: [],
-                filteredServices: [],
-                categories: [],
-                currentCategory: 'All',
-                currentPage: 1,
-                searchTerm: '',
-                totalServices: 0,
-                platformCounts: {},
-                categoryServiceCount: {},
-                categoryIcons: {}
-            };
-            this.dom = {
-                block: null,
-                table: null,
-                container: null,
-                hero: null,
-                toolbar: null,
-                filters: null,
-                grid: null,
-                pagination: null
-            };
-        }
+  /**
+   * Services Application Class
+   */
+  class ServicesApp {
+    constructor() {
+      this.state = {
+        allServices: [],
+        filteredServices: [],
+        categories: [],
+        currentCategory: 'All',
+        currentPage: 1,
+        searchTerm: '',
+        totalServices: 0,
+        platformCounts: {},
+        categoryServiceCount: {},
+        categoryIcons: {}
+      };
+      this.dom = {
+        block: null,
+        table: null,
+        container: null,
+        hero: null,
+        toolbar: null,
+        filters: null,
+        grid: null,
+        pagination: null
+      };
+    }
 
-        init() {
-            this.dom.block = document.querySelector(CONFIG.selectors.block);
-            this.dom.table = document.querySelector(CONFIG.selectors.table);
+    init() {
+      this.dom.block = document.querySelector(CONFIG.selectors.block);
+      this.dom.table = document.querySelector(CONFIG.selectors.table);
 
-            if (!this.dom.block || !this.dom.table) {
-                setTimeout(() => this.init(), 1000);
-                return;
-            }
+      if (!this.dom.block || !this.dom.table) {
+        setTimeout(() => this.init(), 1000);
+        return;
+      }
 
-            if (this.dom.block.dataset.servicesV2 === 'true') {
-                return;
-            }
+      if (this.dom.block.dataset.servicesV2 === 'true') {
+        return;
+      }
 
-            this.dom.block.dataset.servicesV2 = 'true';
+      this.dom.block.dataset.servicesV2 = 'true';
 
-            this.injectStyles();
-            this.extractData();
-            this.buildStructure();
-            this.applyFilters();
+      this.forceFullWidth(); // Force full width via JS
+      this.injectStyles();
+      this.extractData();
+      this.buildStructure();
+      this.applyFilters();
 
-            console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
-        }
+      console.log('✅ [SERVICES V2] Royal Blue Edition Loaded.');
+    }
 
-        injectStyles() {
-            if (document.getElementById(CONFIG.styleId)) return;
+    // Force full width by applying inline styles directly (bypasses CSS specificity issues)
+    forceFullWidth() {
+      // Cibler le wrapper principal qui contient la sidebar
+      const wrapper = document.querySelector('.wrapper-sidebar-navbar');
+      const wrapperContent = document.querySelector('.wrapper-content');
+      const wrapperContentBody = document.querySelector('.wrapper-content__body');
 
-            const styles = `
+      // Force les styles via setAttribute - AJOUTER overflow-x: hidden pour empêcher le débordement
+      if (wrapper) {
+        wrapper.setAttribute('style', 'width: 100vw !important; max-width: 100vw !important; overflow-x: hidden !important;');
+      }
+
+      if (wrapperContent) {
+        wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important; overflow-x: hidden !important;');
+      }
+
+      if (wrapperContentBody) {
+        wrapperContentBody.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; overflow-x: hidden !important;');
+      }
+
+      if (this.dom.block) {
+        this.dom.block.setAttribute('style', 'width: 100% !important; max-width: 100% !important; overflow-x: hidden !important;');
+      }
+
+      console.log('🔧 [SERVICES V2] forceFullWidth applied with overflow-x: hidden');
+    }
+
+    injectStyles() {
+      if (document.getElementById(CONFIG.styleId)) return;
+
+      const styles = `
                 /* --- RESET & LAYOUT FIXES --- */
                 .gp-hidden { display: none !important; }
+                
+                /* FORCE FULL WIDTH: Override parent containers */
+                .wrapper-content,
+                .wrapper-content__body {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    flex: 1 1 100% !important;
+                }
                 
                 /* FORCE FULL WIDTH: Override Bootstrap/Theme constraints for this block */
                 #block_39 {
@@ -3314,115 +3341,115 @@ setTimeout(() => {
                     .gp-stats-row { flex-wrap: wrap; gap: 20px; }
                 }
             `;
-            const styleEl = document.createElement('style');
-            styleEl.id = CONFIG.styleId;
-            styleEl.textContent = styles;
-            document.head.appendChild(styleEl);
-        }
+      const styleEl = document.createElement('style');
+      styleEl.id = CONFIG.styleId;
+      styleEl.textContent = styles;
+      document.head.appendChild(styleEl);
+    }
 
-        extractData() {
-            const rows = Array.from(document.querySelectorAll(CONFIG.selectors.tableRows));
-            let currentCategory = "Other";
+    extractData() {
+      const rows = Array.from(document.querySelectorAll(CONFIG.selectors.tableRows));
+      let currentCategory = "Other";
 
-            this.state.allServices = rows.reduce((acc, row) => {
-                // Category Row
-                if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
-                    const text = row.textContent.trim();
-                    if (text.length > 2) {
-                        currentCategory = text.replace(/[\n\r\t]/g, '').trim();
-                        const iconEl = row.querySelector('img, i, svg');
-                        if (iconEl && !this.state.categoryIcons[currentCategory]) {
-                            this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
-                        }
-
-                        if (!this.state.categories.includes(currentCategory)) {
-                            this.state.categories.push(currentCategory);
-                            this.state.platformCounts[currentCategory] = 0;
-                            this.state.categoryServiceCount[currentCategory] = 0;
-                        }
-                    }
-                    return acc;
-                }
-
-                // Service Row
-                const serviceId = row.dataset.filterTableServiceId ||
-                    row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
-                    null;
-                const rateCell = row.querySelector('[data-label="Rate per 1000"]');
-
-                if (serviceId || rateCell) {
-                    const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
-                    const nameCell = row.querySelector('[data-label="Service"]');
-                    const name = nameCell ? nameCell.textContent.trim() : 'Unknown Service';
-                    const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
-                    const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
-                    const rate = rateCell ? rateCell.textContent.trim() : 'N/A';
-
-                    this.state.platformCounts[currentCategory]++;
-
-                    const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
-                    let badge = null;
-                    if (catIndex === 0) badge = { text: 'POPULAR', class: 'gp-badge-hot' };
-                    // else if (catIndex === 1) badge = { text: 'BEST', class: 'gp-badge-best' };
-
-                    this.state.categoryServiceCount[currentCategory] = catIndex + 1;
-
-                    acc.push({
-                        id: serviceId || 'N/A',
-                        name: name,
-                        category: currentCategory,
-                        rate: rate,
-                        min: min,
-                        max: max,
-                        badge: badge,
-                        originalRow: row,
-                        nativeBtn: buyBtn
-                    });
-                }
-                return acc;
-            }, []);
-
-            this.state.totalServices = this.state.allServices.length;
-        }
-
-        buildStructure() {
-            // HIDE Native Search
-            const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
-            if (nativeRow) {
-                nativeRow.classList.add('gp-hidden');
-
-                const nativeFilterItems = nativeRow.querySelectorAll('.dropdown-item, .btn-group button, option, li');
-                nativeFilterItems.forEach(item => {
-                    const txt = item.textContent.trim();
-                    const icon = item.querySelector('img, i, svg');
-                    if (txt && icon) {
-                        const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
-                        if (matchedCat && !this.state.categoryIcons[matchedCat]) {
-                            this.state.categoryIcons[matchedCat] = icon.outerHTML;
-                        }
-                    }
-                });
+      this.state.allServices = rows.reduce((acc, row) => {
+        // Category Row
+        if (row.classList.contains('services-list-category-title') || row.querySelector('strong')) {
+          const text = row.textContent.trim();
+          if (text.length > 2) {
+            currentCategory = text.replace(/[\n\r\t]/g, '').trim();
+            const iconEl = row.querySelector('img, i, svg');
+            if (iconEl && !this.state.categoryIcons[currentCategory]) {
+              this.state.categoryIcons[currentCategory] = iconEl.outerHTML;
             }
 
-            const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
-            if (tableWrapper) tableWrapper.classList.add('gp-hidden');
+            if (!this.state.categories.includes(currentCategory)) {
+              this.state.categories.push(currentCategory);
+              this.state.platformCounts[currentCategory] = 0;
+              this.state.categoryServiceCount[currentCategory] = 0;
+            }
+          }
+          return acc;
+        }
 
-            // --- CONTAINER ---
-            this.dom.container = document.createElement('div');
-            this.dom.container.id = CONFIG.containerId;
+        // Service Row
+        const serviceId = row.dataset.filterTableServiceId ||
+          row.querySelector('td[data-label="ID"]')?.textContent.trim() ||
+          null;
+        const rateCell = row.querySelector('[data-label="Rate per 1000"]');
 
-            // Hero
-            this.dom.hero = document.createElement('div');
-            this.dom.hero.className = 'gp-hero-banner';
-            this.renderHero();
+        if (serviceId || rateCell) {
+          const buyBtn = row.querySelector('.btn-primary, .btn-action, button, a[href*="order"]');
+          const nameCell = row.querySelector('[data-label="Service"]');
+          const name = nameCell ? nameCell.textContent.trim() : 'Unknown Service';
+          const min = row.querySelector('[data-label="Min order"]')?.textContent.trim() || '0';
+          const max = row.querySelector('[data-label="Max order"]')?.textContent.trim() || '∞';
+          const rate = rateCell ? rateCell.textContent.trim() : 'N/A';
 
-            // Toolbar
-            this.dom.toolbar = document.createElement('div');
-            this.dom.toolbar.className = 'gp-toolbar';
+          this.state.platformCounts[currentCategory]++;
 
-            const searchContainer = document.createElement('div');
-            searchContainer.className = 'gp-search-container';
-            searchContainer.innerHTML = `
+          const catIndex = this.state.categoryServiceCount[currentCategory] || 0;
+          let badge = null;
+          if (catIndex === 0) badge = { text: 'POPULAR', class: 'gp-badge-hot' };
+          // else if (catIndex === 1) badge = { text: 'BEST', class: 'gp-badge-best' };
+
+          this.state.categoryServiceCount[currentCategory] = catIndex + 1;
+
+          acc.push({
+            id: serviceId || 'N/A',
+            name: name,
+            category: currentCategory,
+            rate: rate,
+            min: min,
+            max: max,
+            badge: badge,
+            originalRow: row,
+            nativeBtn: buyBtn
+          });
+        }
+        return acc;
+      }, []);
+
+      this.state.totalServices = this.state.allServices.length;
+    }
+
+    buildStructure() {
+      // HIDE Native Search
+      const nativeRow = document.querySelector(CONFIG.selectors.nativeSearchRow);
+      if (nativeRow) {
+        nativeRow.classList.add('gp-hidden');
+
+        const nativeFilterItems = nativeRow.querySelectorAll('.dropdown-item, .btn-group button, option, li');
+        nativeFilterItems.forEach(item => {
+          const txt = item.textContent.trim();
+          const icon = item.querySelector('img, i, svg');
+          if (txt && icon) {
+            const matchedCat = this.state.categories.find(c => c.toLowerCase().includes(txt.toLowerCase()) || txt.toLowerCase().includes(c.toLowerCase()));
+            if (matchedCat && !this.state.categoryIcons[matchedCat]) {
+              this.state.categoryIcons[matchedCat] = icon.outerHTML;
+            }
+          }
+        });
+      }
+
+      const tableWrapper = this.dom.table.closest('.table-responsive, .table-wr');
+      if (tableWrapper) tableWrapper.classList.add('gp-hidden');
+
+      // --- CONTAINER ---
+      this.dom.container = document.createElement('div');
+      this.dom.container.id = CONFIG.containerId;
+
+      // Hero
+      this.dom.hero = document.createElement('div');
+      this.dom.hero.className = 'gp-hero-banner';
+      this.renderHero();
+
+      // Toolbar
+      this.dom.toolbar = document.createElement('div');
+      this.dom.toolbar.className = 'gp-toolbar';
+
+      const searchContainer = document.createElement('div');
+      searchContainer.className = 'gp-search-container';
+      searchContainer.innerHTML = `
                 <div class="gp-search-icon">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
@@ -3430,45 +3457,45 @@ setTimeout(() => {
                     </svg>
                 </div>
             `;
-            const searchInput = document.createElement('input');
-            searchInput.type = 'text';
-            searchInput.className = 'gp-search-input';
-            searchInput.placeholder = 'Search for services...';
-            searchInput.addEventListener('input', (e) => {
-                this.state.searchTerm = e.target.value.toLowerCase();
-                this.state.currentPage = 1;
-                this.applyFilters();
-            });
-            searchContainer.appendChild(searchInput);
+      const searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.className = 'gp-search-input';
+      searchInput.placeholder = 'Search for services...';
+      searchInput.addEventListener('input', (e) => {
+        this.state.searchTerm = e.target.value.toLowerCase();
+        this.state.currentPage = 1;
+        this.applyFilters();
+      });
+      searchContainer.appendChild(searchInput);
 
-            this.dom.filters = document.createElement('div');
-            this.dom.filters.className = 'gp-filters-scroll';
+      this.dom.filters = document.createElement('div');
+      this.dom.filters.className = 'gp-filters-scroll';
 
-            this.dom.toolbar.appendChild(searchContainer);
-            this.dom.toolbar.appendChild(this.dom.filters);
+      this.dom.toolbar.appendChild(searchContainer);
+      this.dom.toolbar.appendChild(this.dom.filters);
 
-            // Grid
-            this.dom.grid = document.createElement('div');
-            this.dom.grid.className = 'gp-services-grid';
+      // Grid
+      this.dom.grid = document.createElement('div');
+      this.dom.grid.className = 'gp-services-grid';
 
-            // Pagination
-            this.dom.pagination = document.createElement('div');
-            this.dom.pagination.className = 'gp-pagination';
+      // Pagination
+      this.dom.pagination = document.createElement('div');
+      this.dom.pagination.className = 'gp-pagination';
 
-            this.dom.container.appendChild(this.dom.hero);
-            this.dom.container.appendChild(this.dom.toolbar);
-            this.dom.container.appendChild(this.dom.grid);
-            this.dom.container.appendChild(this.dom.pagination);
+      this.dom.container.appendChild(this.dom.hero);
+      this.dom.container.appendChild(this.dom.toolbar);
+      this.dom.container.appendChild(this.dom.grid);
+      this.dom.container.appendChild(this.dom.pagination);
 
-            if (this.dom.block.firstChild) {
-                this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
-            } else {
-                this.dom.block.appendChild(this.dom.container);
-            }
-        }
+      if (this.dom.block.firstChild) {
+        this.dom.block.insertBefore(this.dom.container, this.dom.block.firstChild);
+      } else {
+        this.dom.block.appendChild(this.dom.container);
+      }
+    }
 
-        renderHero() {
-            this.dom.hero.innerHTML = `
+    renderHero() {
+      this.dom.hero.innerHTML = `
                 <div class="gp-hero-bg"></div>
                 <div class="gp-hero-content">
                     <h1 class="gp-hero-title">Services Catalog</h1>
@@ -3490,94 +3517,94 @@ setTimeout(() => {
                     </div>
                 </div>
             `;
+    }
+
+    renderFilters() {
+      this.dom.filters.innerHTML = '';
+
+      // All
+      this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
+
+      // Categories
+      this.state.categories.forEach(cat => {
+        const count = this.state.platformCounts[cat];
+        if (count > 0) {
+          this.dom.filters.appendChild(this.createFilterBtn(cat, count));
         }
+      });
+    }
 
-        renderFilters() {
-            this.dom.filters.innerHTML = '';
+    createFilterBtn(label, count) {
+      const btn = document.createElement('button');
+      btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
 
-            // All
-            this.dom.filters.appendChild(this.createFilterBtn('All', this.state.totalServices));
+      let iconHtml = this.state.categoryIcons[label] || this.getFallbackIcon(label);
 
-            // Categories
-            this.state.categories.forEach(cat => {
-                const count = this.state.platformCounts[cat];
-                if (count > 0) {
-                    this.dom.filters.appendChild(this.createFilterBtn(cat, count));
-                }
-            });
-        }
-
-        createFilterBtn(label, count) {
-            const btn = document.createElement('button');
-            btn.className = `gp-filter-btn ${this.state.currentCategory === label ? 'active' : ''}`;
-
-            let iconHtml = this.state.categoryIcons[label] || this.getFallbackIcon(label);
-
-            btn.innerHTML = `
+      btn.innerHTML = `
                 ${iconHtml}
                 <span>${label}</span>
                 <span class="gp-filter-count">${count}</span>
             `;
-            btn.onclick = () => {
-                this.state.currentCategory = label;
-                this.state.currentPage = 1;
-                this.applyFilters();
-            };
-            return btn;
-        }
+      btn.onclick = () => {
+        this.state.currentCategory = label;
+        this.state.currentPage = 1;
+        this.applyFilters();
+      };
+      return btn;
+    }
 
-        getFallbackIcon(label) {
-            const l = label.toLowerCase();
-            if (l.includes('instagram')) return '<i>📷</i>';
-            if (l.includes('tiktok')) return '<i>🎵</i>';
-            if (l.includes('youtube')) return '<i>▶️</i>';
-            if (l.includes('spotify')) return '<i>🎧</i>';
-            if (l.includes('twitch')) return '<i>🎮</i>';
-            if (l.includes('facebook')) return '<i>👥</i>';
-            if (l.includes('twitter') || l.includes('x')) return '<i>🐦</i>';
-            if (l.includes('telegram')) return '<i>✈️</i>';
-            return '<i>📱</i>';
-        }
+    getFallbackIcon(label) {
+      const l = label.toLowerCase();
+      if (l.includes('instagram')) return '<i>📷</i>';
+      if (l.includes('tiktok')) return '<i>🎵</i>';
+      if (l.includes('youtube')) return '<i>▶️</i>';
+      if (l.includes('spotify')) return '<i>🎧</i>';
+      if (l.includes('twitch')) return '<i>🎮</i>';
+      if (l.includes('facebook')) return '<i>👥</i>';
+      if (l.includes('twitter') || l.includes('x')) return '<i>🐦</i>';
+      if (l.includes('telegram')) return '<i>✈️</i>';
+      return '<i>📱</i>';
+    }
 
-        applyFilters() {
-            const { currentCategory, searchTerm, allServices } = this.state;
+    applyFilters() {
+      const { currentCategory, searchTerm, allServices } = this.state;
 
-            this.state.filteredServices = allServices.filter(svc => {
-                const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
-                const matchesSearch = svc.name.toLowerCase().includes(searchTerm) ||
-                    svc.id.toString().includes(searchTerm);
-                return matchesCat && matchesSearch;
-            });
+      this.state.filteredServices = allServices.filter(svc => {
+        const matchesCat = currentCategory === 'All' || svc.category === currentCategory;
+        const matchesSearch = svc.name.toLowerCase().includes(searchTerm) ||
+          svc.id.toString().includes(searchTerm);
+        return matchesCat && matchesSearch;
+      });
 
-            this.renderFilters();
+      this.renderFilters();
 
-            const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
-            if (this.state.currentPage > totalPages) this.state.currentPage = 1;
+      const totalPages = Math.ceil(this.state.filteredServices.length / CONFIG.pageSize);
+      if (this.state.currentPage > totalPages) this.state.currentPage = 1;
 
-            const start = (this.state.currentPage - 1) * CONFIG.pageSize;
-            const end = start + CONFIG.pageSize;
+      const start = (this.state.currentPage - 1) * CONFIG.pageSize;
+      const end = start + CONFIG.pageSize;
 
-            this.renderGrid(this.state.filteredServices.slice(start, end));
-            this.renderPagination(totalPages);
-        }
+      this.renderGrid(this.state.filteredServices.slice(start, end));
+      this.renderPagination(totalPages);
+    }
 
-        renderGrid(services) {
-            this.dom.grid.innerHTML = '';
-            if (services.length === 0) {
-                this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
+    renderGrid(services) {
+      this.dom.grid.innerHTML = '';
+      if (services.length === 0) {
+        this.dom.grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px; color:#94a3b8;">
                     <br><h3>No services found.</h3>
                 </div>`;
-                return;
-            }
+        return;
+      }
 
-            services.forEach((svc, index) => {
-                const card = document.createElement('div');
-                card.className = 'gp-card';
+      services.forEach((svc, index) => {
+        const card = document.createElement('div');
+        card.className = 'gp-card';
 
-                let iconHtml = this.state.categoryIcons[svc.category] || this.getFallbackIcon(svc.category);
-                const badgeHtml = svc.badge ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>` : '';
+        let iconHtml = this.state.categoryIcons[svc.category] || this.getFallbackIcon(svc.category);
+        const badgeHtml = svc.badge ? `<span class="gp-badge ${svc.badge.class}">${svc.badge.text}</span>` : '';
 
-                card.innerHTML = `
+        card.innerHTML = `
                     <div class="gp-card-header">
                         <div class="gp-card-category">${iconHtml} ${svc.category}</div>
                         <div class="gp-card-badges">
@@ -3602,63 +3629,63 @@ setTimeout(() => {
                     </button>
                 `;
 
-                card.querySelector('.gp-btn-view').onclick = (e) => {
-                    e.preventDefault();
-                    if (svc.nativeBtn) svc.nativeBtn.click();
-                };
+        card.querySelector('.gp-btn-view').onclick = (e) => {
+          e.preventDefault();
+          if (svc.nativeBtn) svc.nativeBtn.click();
+        };
 
-                this.dom.grid.appendChild(card);
-            });
-        }
-
-        renderPagination(totalPages) {
-            this.dom.pagination.innerHTML = '';
-            if (totalPages <= 1) return;
-
-            const addBtn = (p, lbl) => {
-                const btn = document.createElement('button');
-                btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
-                btn.textContent = lbl || p;
-
-                btn.onclick = () => {
-                    this.state.currentPage = p;
-                    this.applyFilters();
-                    const yOffset = -50;
-                    const y = this.dom.container.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
-                };
-                this.dom.pagination.appendChild(btn);
-            };
-
-            addBtn(Math.max(1, this.state.currentPage - 1), '←');
-
-            if (totalPages > 5) {
-                if (this.state.currentPage > 2) addBtn(1);
-                if (this.state.currentPage > 3) {
-                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
-                    this.dom.pagination.appendChild(s);
-                }
-            }
-
-            let start = Math.max(1, this.state.currentPage - 1);
-            let end = Math.min(totalPages, this.state.currentPage + 1);
-            for (let i = start; i <= end; i++) addBtn(i);
-
-            if (totalPages > 5) {
-                if (this.state.currentPage < totalPages - 2) {
-                    const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
-                    this.dom.pagination.appendChild(s);
-                }
-                if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
-            }
-
-            addBtn(Math.min(totalPages, this.state.currentPage + 1), '→');
-        }
+        this.dom.grid.appendChild(card);
+      });
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
-    } else {
-        new ServicesApp().init();
+    renderPagination(totalPages) {
+      this.dom.pagination.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      const addBtn = (p, lbl) => {
+        const btn = document.createElement('button');
+        btn.className = `gp-page-btn ${this.state.currentPage === p ? 'active' : ''}`;
+        btn.textContent = lbl || p;
+
+        btn.onclick = () => {
+          this.state.currentPage = p;
+          this.applyFilters();
+          const yOffset = -50;
+          const y = this.dom.container.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        };
+        this.dom.pagination.appendChild(btn);
+      };
+
+      addBtn(Math.max(1, this.state.currentPage - 1), '←');
+
+      if (totalPages > 5) {
+        if (this.state.currentPage > 2) addBtn(1);
+        if (this.state.currentPage > 3) {
+          const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+          this.dom.pagination.appendChild(s);
+        }
+      }
+
+      let start = Math.max(1, this.state.currentPage - 1);
+      let end = Math.min(totalPages, this.state.currentPage + 1);
+      for (let i = start; i <= end; i++) addBtn(i);
+
+      if (totalPages > 5) {
+        if (this.state.currentPage < totalPages - 2) {
+          const s = document.createElement('span'); s.textContent = '...'; s.style.alignSelf = 'center';
+          this.dom.pagination.appendChild(s);
+        }
+        if (this.state.currentPage < totalPages - 1) addBtn(totalPages);
+      }
+
+      addBtn(Math.min(totalPages, this.state.currentPage + 1), '→');
     }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new ServicesApp().init());
+  } else {
+    new ServicesApp().init();
+  }
 })();
