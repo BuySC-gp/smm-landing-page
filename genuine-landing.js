@@ -1642,18 +1642,13 @@ cursor: pointer !important;
       heroContainer.insertAdjacentHTML('beforeend', heroHTML);
       heroForm.style.display = 'none';
 
-      // AJOUT 2: Bouton toggle login
+      // AJOUT 2: Bouton toggle login - ouvre uniquement le popup
       const toggleBtn = document.getElementById('toggleLoginBtn');
       if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-          if (heroForm.style.display === 'none') {
-            heroForm.style.display = 'block';
-            heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            toggleBtn.textContent = '✕ Hide';
-          } else {
-            heroForm.style.display = 'none';
-            toggleBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/></svg> Sign In';
-          }
+          heroForm.style.display = 'block';
+          heroForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Le bouton de fermeture (croix) dans le popup gère la fermeture
         });
       }
 
