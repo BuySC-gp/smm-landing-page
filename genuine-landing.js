@@ -4448,13 +4448,19 @@ cursor: pointer !important;
     let completedCount = 0;
 
     allRows.forEach(row => {
-      const statusCell = row.querySelector('td:last-child, [data-label="Status"], td');
-      const statusText = statusCell?.textContent?.toLowerCase() || '';
+      // Chercher le statut dans TOUTE la ligne (pas juste une cellule)
+      const rowText = row.textContent?.toLowerCase() || '';
 
-      if (statusText.includes('pending') || statusText.includes('processing') || statusText.includes('progress')) {
+      // Chercher aussi dans les badges/spans qui pourraient contenir le statut
+      const statusBadge = row.querySelector('.gp-order-status, [class*="badge"], [class*="status"], span');
+      const badgeText = statusBadge?.textContent?.toLowerCase() || '';
+
+      const fullText = rowText + ' ' + badgeText;
+
+      if (fullText.includes('pending') || fullText.includes('processing') || fullText.includes('in progress')) {
         pendingCount++;
       }
-      if (statusText.includes('completed')) {
+      if (fullText.includes('completed')) {
         completedCount++;
       }
     });
