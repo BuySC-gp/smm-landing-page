@@ -5092,20 +5092,22 @@ cursor: pointer !important;
       cells.forEach((cell, index) => {
         const text = cell.textContent.trim();
 
-        // ID cell
+        // ID cell (première colonne seulement)
         if (index === 0 && !isNaN(parseInt(text))) {
           cell.innerHTML = `<span class="gp-deposit-id">#${text}</span>`;
-        }
-
-        // Amount cell (usually last or contains number with decimals)
-        if (text.match(/^\d+\.?\d*$/)) {
-          cell.innerHTML = `<span class="gp-deposit-amount">$${text}</span>`;
+          return; // Skip autres formatages pour l'ID
         }
 
         // Method cell
         const methods = ['paypal', 'stripe', 'bitcoin', 'crypto', 'bank', 'manual', 'bonus', 'gpay', 'cashu', 'hesabe'];
         if (methods.some(m => text.toLowerCase().includes(m))) {
           cell.innerHTML = `<span class="gp-deposit-method">${text}</span>`;
+          return; // Skip autres formatages
+        }
+
+        // Amount cell (dernière colonne avec nombre décimal) - mais pas l'ID
+        if (index > 0 && text.match(/^\d+\.?\d*$/)) {
+          cell.innerHTML = `<span class="gp-deposit-amount">$${text}</span>`;
         }
       });
     });
