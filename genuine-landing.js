@@ -3802,14 +3802,19 @@ cursor: pointer !important;
       
       /* Hero Banner */
       .gp-orders-hero {
-        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
-        border-radius: 16px;
-        padding: 32px 40px;
-        margin-bottom: 24px;
-        position: relative;
-        overflow: hidden;
-        color: white;
-        box-shadow: 0 10px 40px rgba(30, 58, 138, 0.25);
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%) !important;
+        border-radius: 16px !important;
+        padding: 32px 40px !important;
+        margin-bottom: 24px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 10px 40px rgba(30, 58, 138, 0.25) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        flex: 0 0 100% !important;
+        box-sizing: border-box !important;
       }
       
       .gp-orders-hero::before {
@@ -4417,10 +4422,21 @@ cursor: pointer !important;
   }
 
   function addHeroHeader() {
-    const container = document.querySelector('.gp-orders-tabs')?.parentElement ||
-      document.querySelector('.wrapper-content__body > div, .main-content > div');
+    // Éviter double injection
+    if (document.querySelector('.gp-orders-hero')) return;
 
-    if (!container || document.querySelector('.gp-orders-hero')) return;
+    // Trouver le meilleur conteneur - le bloc principal ou le wrapper content
+    const tabsContainer = document.querySelector('.gp-orders-tabs');
+    const nativeTabs = document.querySelector('.nav-tabs, ul.nav');
+    const targetContainer = tabsContainer?.parentElement ||
+      nativeTabs?.parentElement ||
+      document.querySelector('.wrapper-content__body') ||
+      document.querySelector('[id^="block_"]');
+
+    if (!targetContainer) {
+      console.log('⚠️ [ORDERS] Hero container not found');
+      return;
+    }
 
     // Compter les stats
     const table = document.querySelector('table');
@@ -4428,6 +4444,7 @@ cursor: pointer !important;
 
     const hero = document.createElement('div');
     hero.className = 'gp-orders-hero';
+    hero.style.cssText = 'width: 100% !important; margin-bottom: 24px !important;';
     hero.innerHTML = `
       <div class="gp-orders-hero-content">
         <div>
@@ -4447,7 +4464,9 @@ cursor: pointer !important;
       </div>
     `;
 
-    container.insertBefore(hero, container.firstChild);
+    // Insérer au tout début du conteneur
+    targetContainer.insertBefore(hero, targetContainer.firstChild);
+    console.log('✅ [ORDERS] Hero inserted');
   }
 
   // Initialisation
