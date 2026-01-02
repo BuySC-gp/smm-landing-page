@@ -3027,7 +3027,7 @@ cursor: pointer !important;
       }
 
       if (wrapperContent) {
-        wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important; overflow-x: hidden !important;');
+        wrapperContent.setAttribute('style', 'width: 100% !important; max-width: 100% !important; flex: 1 1 auto !important; flex-grow: 1 !important; overflow: visible !important;');
       }
 
       if (wrapperContentBody) {
