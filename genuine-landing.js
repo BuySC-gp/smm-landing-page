@@ -3689,3 +3689,74 @@ cursor: pointer !important;
     new ServicesApp().init();
   }
 })();
+
+// =============================================================================
+// MODULE: POPUP SIGN IN - BOUTON FERMETURE
+// =============================================================================
+(function () {
+  'use strict';
+
+  function addCloseButton() {
+    // Cibler le popup de connexion
+    const popup = document.querySelector('.block-signin-text .component_card, .w-100.component_card');
+
+    if (!popup || popup.dataset.closeBtn === 'true') return;
+    popup.dataset.closeBtn = 'true';
+
+    // Créer le bouton de fermeture
+    const closeBtn = document.createElement('button');
+    closeBtn.id = 'popup-close-btn';
+    closeBtn.innerHTML = '✕';
+    closeBtn.style.cssText = `
+      position: absolute !important;
+      top: 12px !important;
+      right: 12px !important;
+      width: 32px !important;
+      height: 32px !important;
+      background: #f1f5f9 !important;
+      border: none !important;
+      border-radius: 8px !important;
+      font-size: 16px !important;
+      color: #64748b !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      transition: all 0.2s !important;
+      z-index: 10000 !important;
+    `;
+
+    closeBtn.onmouseenter = () => {
+      closeBtn.style.background = '#e2e8f0';
+      closeBtn.style.color = '#1e293b';
+    };
+    closeBtn.onmouseleave = () => {
+      closeBtn.style.background = '#f1f5f9';
+      closeBtn.style.color = '#64748b';
+    };
+
+    closeBtn.onclick = () => {
+      popup.style.display = 'none';
+    };
+
+    // S'assurer que le popup a position: relative pour le positionnement absolu du bouton
+    popup.style.position = 'fixed';
+    popup.insertBefore(closeBtn, popup.firstChild);
+
+    console.log('✅ [POPUP] Close button added');
+  }
+
+  // Observer pour détecter quand le popup apparaît
+  const observer = new MutationObserver(() => {
+    addCloseButton();
+  });
+
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // Initial check
+  setTimeout(addCloseButton, 1000);
+  setTimeout(addCloseButton, 3000);
+
+})();
