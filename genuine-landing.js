@@ -4933,77 +4933,117 @@ cursor: pointer !important;
 
     if (!form) return;
 
-    // Améliorer le select des méthodes
+    // Améliorer le select des méthodes avec styles inline
     const methodSelect = form.querySelector('select');
     if (methodSelect) {
-      methodSelect.classList.add('gp-method-select');
+      methodSelect.style.cssText = `
+        width: 100% !important;
+        padding: 16px 48px 16px 20px !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        margin-bottom: 20px !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        box-sizing: border-box !important;
+      `;
     }
 
-    // Améliorer l'input amount
-    const amountInput = form.querySelector('input[type="number"], input[name*="amount"], input[placeholder*="amount"]');
-    if (amountInput && !amountInput.closest('.gp-amount-input-wrapper')) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'gp-amount-input-wrapper';
+    // Améliorer l'input amount avec styles inline
+    const amountInput = form.querySelector('input[type="number"], input[type="text"]:not([name*="search"])');
+    if (amountInput && !amountInput.dataset.enhanced) {
+      amountInput.dataset.enhanced = 'true';
 
-      const label = document.createElement('label');
-      label.textContent = 'Amount to deposit';
-
-      const currencySymbol = document.createElement('span');
-      currencySymbol.className = 'gp-amount-currency';
-      currencySymbol.textContent = '$';
-
-      amountInput.parentElement.insertBefore(wrapper, amountInput);
-      wrapper.appendChild(label);
-      wrapper.appendChild(amountInput);
-      wrapper.appendChild(currencySymbol);
-
-      // Ajouter boutons de montant rapide
-      const quickAmounts = document.createElement('div');
-      quickAmounts.className = 'gp-quick-amounts';
-      quickAmounts.innerHTML = `
-        <button type="button" class="gp-quick-amount-btn" data-amount="5">$5</button>
-        <button type="button" class="gp-quick-amount-btn" data-amount="10">$10</button>
-        <button type="button" class="gp-quick-amount-btn" data-amount="25">$25</button>
-        <button type="button" class="gp-quick-amount-btn" data-amount="50">$50</button>
-        <button type="button" class="gp-quick-amount-btn" data-amount="100">$100</button>
+      // Style de l'input
+      amountInput.style.cssText = `
+        width: 100% !important;
+        padding: 18px 20px !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        background: white !important;
+        transition: all 0.2s !important;
+        box-sizing: border-box !important;
+        margin-bottom: 16px !important;
       `;
 
-      wrapper.after(quickAmounts);
+      amountInput.placeholder = 'Enter amount...';
 
-      // Event listeners pour les boutons
-      quickAmounts.querySelectorAll('.gp-quick-amount-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          amountInput.value = btn.dataset.amount;
-          document.querySelectorAll('.gp-quick-amount-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          amountInput.dispatchEvent(new Event('input', { bubbles: true }));
+      // Ajouter boutons de montant rapide après l'input
+      const existingQuick = document.querySelector('.gp-quick-amounts');
+      if (!existingQuick) {
+        const quickAmounts = document.createElement('div');
+        quickAmounts.className = 'gp-quick-amounts';
+        quickAmounts.style.cssText = 'display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;';
+        quickAmounts.innerHTML = `
+          <button type="button" class="gp-quick-amount-btn" data-amount="5" style="padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">$5</button>
+          <button type="button" class="gp-quick-amount-btn" data-amount="10" style="padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">$10</button>
+          <button type="button" class="gp-quick-amount-btn" data-amount="25" style="padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">$25</button>
+          <button type="button" class="gp-quick-amount-btn" data-amount="50" style="padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">$50</button>
+          <button type="button" class="gp-quick-amount-btn" data-amount="100" style="padding: 10px 20px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; color: #64748b; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">$100</button>
+        `;
+
+        // Insérer après le parent de l'input amount
+        const inputParent = amountInput.closest('.form-group') || amountInput.parentElement;
+        if (inputParent && inputParent.parentElement) {
+          inputParent.parentElement.insertBefore(quickAmounts, inputParent.nextSibling);
+        }
+
+        // Event listeners pour les boutons
+        quickAmounts.querySelectorAll('.gp-quick-amount-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            amountInput.value = btn.dataset.amount;
+            quickAmounts.querySelectorAll('.gp-quick-amount-btn').forEach(b => {
+              b.style.background = 'white';
+              b.style.color = '#64748b';
+              b.style.borderColor = '#e2e8f0';
+            });
+            btn.style.background = '#10b981';
+            btn.style.color = 'white';
+            btn.style.borderColor = '#10b981';
+            amountInput.dispatchEvent(new Event('input', { bubbles: true }));
+          });
+
+          // Hover effect
+          btn.addEventListener('mouseenter', () => {
+            if (btn.style.background !== 'rgb(16, 185, 129)') {
+              btn.style.borderColor = '#10b981';
+              btn.style.color = '#10b981';
+            }
+          });
+          btn.addEventListener('mouseleave', () => {
+            if (btn.style.background !== 'rgb(16, 185, 129)') {
+              btn.style.borderColor = '#e2e8f0';
+              btn.style.color = '#64748b';
+            }
+          });
         });
-      });
+      }
     }
 
     // Améliorer le bouton Pay
-    const payBtn = form.querySelector('button[type="submit"], input[type="submit"], button');
-    if (payBtn && payBtn.textContent?.toLowerCase().includes('pay')) {
-      payBtn.className = 'gp-pay-btn';
-      if (payBtn.tagName === 'INPUT') {
-        const newBtn = document.createElement('button');
-        newBtn.type = 'submit';
-        newBtn.className = 'gp-pay-btn';
-        newBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-          Proceed to Payment
-        `;
-        payBtn.replaceWith(newBtn);
-      } else {
-        payBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-          Proceed to Payment
-        `;
-      }
+    const payBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (payBtn) {
+      payBtn.style.cssText = `
+        width: 100% !important;
+        padding: 18px 32px !important;
+        background: linear-gradient(135deg, #059669, #10b981) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        color: white !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.3s !important;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+        margin-top: 16px !important;
+      `;
     }
   }
 
