@@ -4933,34 +4933,58 @@ cursor: pointer !important;
 
     if (!form) return;
 
-    // Améliorer le select des méthodes avec styles inline
+    // Améliorer le select des méthodes - créer un custom dropdown
     const methodSelect = form.querySelector('select');
-    if (methodSelect) {
-      methodSelect.style.cssText = `
-        width: 100% !important;
-        padding: 16px 48px 16px 20px !important;
-        font-size: 15px !important;
-        font-weight: 600 !important;
-        border: 2px solid #e2e8f0 !important;
-        border-radius: 12px !important;
-        background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center !important;
-        cursor: pointer !important;
-        transition: all 0.2s !important;
-        margin-bottom: 20px !important;
-        appearance: none !important;
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        box-sizing: border-box !important;
-        text-overflow: clip !important;
-        white-space: nowrap !important;
-        overflow: visible !important;
+    if (methodSelect && !methodSelect.dataset.enhanced) {
+      methodSelect.dataset.enhanced = 'true';
+
+      // Créer un wrapper pour le custom select
+      const selectWrapper = document.createElement('div');
+      selectWrapper.className = 'gp-custom-select-wrapper';
+      selectWrapper.style.cssText = 'position: relative; width: 100%; margin-bottom: 20px;';
+
+      // Créer le bouton d'affichage
+      const selectDisplay = document.createElement('div');
+      selectDisplay.className = 'gp-custom-select-display';
+      selectDisplay.style.cssText = `
+        width: 100%;
+        padding: 16px 48px 16px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 16px center;
+        cursor: pointer;
+        box-sizing: border-box;
+        color: #1e293b;
       `;
 
-      // Forcer le parent à ne pas tronquer
-      const selectParent = methodSelect.parentElement;
-      if (selectParent) {
-        selectParent.style.cssText = 'overflow: visible !important; width: 100% !important;';
-      }
+      // Afficher la valeur sélectionnée
+      const updateDisplay = () => {
+        const selectedOption = methodSelect.options[methodSelect.selectedIndex];
+        selectDisplay.textContent = selectedOption ? selectedOption.text : 'Select method';
+      };
+      updateDisplay();
+
+      // Cacher le select natif mais le garder fonctionnel
+      methodSelect.style.cssText = `
+        position: absolute !important;
+        opacity: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        top: 0 !important;
+        left: 0 !important;
+        cursor: pointer !important;
+        z-index: 2 !important;
+      `;
+
+      // Insérer le wrapper
+      methodSelect.parentElement.insertBefore(selectWrapper, methodSelect);
+      selectWrapper.appendChild(selectDisplay);
+      selectWrapper.appendChild(methodSelect);
+
+      // Mettre à jour l'affichage quand la sélection change
+      methodSelect.addEventListener('change', updateDisplay);
     }
 
     // Améliorer l'input amount avec styles inline
