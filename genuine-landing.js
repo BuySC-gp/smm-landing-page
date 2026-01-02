@@ -4951,7 +4951,16 @@ cursor: pointer !important;
         -webkit-appearance: none !important;
         -moz-appearance: none !important;
         box-sizing: border-box !important;
+        text-overflow: clip !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
       `;
+
+      // Forcer le parent à ne pas tronquer
+      const selectParent = methodSelect.parentElement;
+      if (selectParent) {
+        selectParent.style.cssText = 'overflow: visible !important; width: 100% !important;';
+      }
     }
 
     // Améliorer l'input amount avec styles inline
