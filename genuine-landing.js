@@ -4521,12 +4521,12 @@ cursor: pointer !important;
       .gp-addfunds-hero {
         background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
         border-radius: 16px !important;
-        padding: 32px 40px !important;
-        margin-bottom: 24px !important;
+        padding: 24px 32px !important;
+        margin-bottom: 20px !important;
         position: relative !important;
         overflow: hidden !important;
         color: white !important;
-        box-shadow: 0 10px 40px rgba(5, 150, 105, 0.25) !important;
+        box-shadow: 0 8px 30px rgba(5, 150, 105, 0.2) !important;
         width: 100% !important;
         box-sizing: border-box !important;
       }
@@ -4536,8 +4536,8 @@ cursor: pointer !important;
         position: absolute;
         top: -100px;
         right: -100px;
-        width: 300px;
-        height: 300px;
+        width: 250px;
+        height: 250px;
         background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
         pointer-events: none;
       }
@@ -4549,13 +4549,13 @@ cursor: pointer !important;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
-        gap: 24px;
+        gap: 16px;
       }
       
       .gp-addfunds-hero-title {
-        font-size: 32px;
+        font-size: 26px;
         font-weight: 800;
-        margin: 0 0 8px 0;
+        margin: 0 0 4px 0;
         letter-spacing: -0.5px;
         display: flex;
         align-items: center;
