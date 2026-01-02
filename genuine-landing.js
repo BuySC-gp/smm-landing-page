@@ -4438,9 +4438,26 @@ cursor: pointer !important;
       return;
     }
 
-    // Compter les stats
+    // Compter les stats dynamiques
     const table = document.querySelector('table');
-    const totalOrders = table ? table.querySelectorAll('tbody tr').length : 0;
+    const allRows = table ? table.querySelectorAll('tbody tr') : [];
+    const totalOrders = allRows.length;
+
+    // Compter les orders par statut
+    let pendingCount = 0;
+    let completedCount = 0;
+
+    allRows.forEach(row => {
+      const statusCell = row.querySelector('td:last-child, [data-label="Status"], td');
+      const statusText = statusCell?.textContent?.toLowerCase() || '';
+
+      if (statusText.includes('pending') || statusText.includes('processing') || statusText.includes('progress')) {
+        pendingCount++;
+      }
+      if (statusText.includes('completed')) {
+        completedCount++;
+      }
+    });
 
     const hero = document.createElement('div');
     hero.className = 'gp-orders-hero';
@@ -4448,7 +4465,16 @@ cursor: pointer !important;
     hero.innerHTML = `
       <div class="gp-orders-hero-content">
         <div>
-          <h1 class="gp-orders-hero-title">📋 My Orders</h1>
+          <h1 class="gp-orders-hero-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 12px;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            My Orders
+          </h1>
           <p class="gp-orders-hero-subtitle">Track and manage all your orders in one place</p>
         </div>
         <div class="gp-orders-stats">
@@ -4456,9 +4482,13 @@ cursor: pointer !important;
             <span class="gp-orders-stat-value">${totalOrders}</span>
             <span class="gp-orders-stat-label">Total Orders</span>
           </div>
-          <div class="gp-orders-stat">
-            <span class="gp-orders-stat-value">⚡</span>
-            <span class="gp-orders-stat-label">Real-time</span>
+          <div class="gp-orders-stat" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
+            <span class="gp-orders-stat-value" style="color: #10b981;">${completedCount}</span>
+            <span class="gp-orders-stat-label">Completed</span>
+          </div>
+          <div class="gp-orders-stat" style="background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3);">
+            <span class="gp-orders-stat-value" style="color: #f59e0b;">${pendingCount}</span>
+            <span class="gp-orders-stat-label">In Progress</span>
           </div>
         </div>
       </div>
