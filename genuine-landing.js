@@ -4333,25 +4333,7 @@ cursor: pointer !important;
       nativeSearch.dispatchEvent(new Event('input', { bubbles: true }));
     });
 
-    // Bouton filtre Refill
-    const refillBtn = document.createElement('button');
-    refillBtn.className = 'gp-orders-filter-btn';
-    refillBtn.id = 'gp-refill-filter';
-    refillBtn.innerHTML = `
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M23 4v6h-6M1 20v-6h6"/>
-        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-      </svg>
-      Refill Available
-    `;
-
-    refillBtn.onclick = () => {
-      refillBtn.classList.toggle('active');
-      filterRefillOrders(refillBtn.classList.contains('active'));
-    };
-
     searchWrapper.appendChild(searchContainer);
-    searchWrapper.appendChild(refillBtn);
 
     // Cacher la recherche native et insérer la nouvelle
     const nativeSearchParent = nativeSearch.closest('.form-group, .search-box, .input-group, div');
@@ -4359,20 +4341,6 @@ cursor: pointer !important;
       nativeSearchParent.style.display = 'none';
       nativeSearchParent.parentElement.insertBefore(searchWrapper, nativeSearchParent);
     }
-  }
-
-  function filterRefillOrders(showOnlyRefill) {
-    const rows = document.querySelectorAll('table tbody tr');
-
-    rows.forEach(row => {
-      const hasRefillBtn = row.querySelector('[class*="refill"], button[onclick*="refill"], a[href*="refill"]');
-
-      if (showOnlyRefill) {
-        row.style.display = hasRefillBtn ? '' : 'none';
-      } else {
-        row.style.display = '';
-      }
-    });
   }
 
   function enhanceTable() {
