@@ -3023,7 +3023,7 @@ cursor: pointer !important;
 
       // Force les styles via setAttribute - AJOUTER overflow-x: hidden pour empêcher le débordement
       if (wrapper) {
-        wrapper.setAttribute('style', 'width: 100vw !important; max-width: 100vw !important; overflow-x: hidden !important;');
+        wrapper.setAttribute('style', 'width: 100vw !important; max-width: 100vw !important; overflow: visible !important;');
       }
 
       if (wrapperContent) {
