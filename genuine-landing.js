@@ -3755,3 +3755,706 @@ cursor: pointer !important;
   setTimeout(addCloseButton, 3000);
 
 })();
+
+// =============================================================================
+// MODULE: ORDERS PAGE REDESIGN — PREMIUM EDITION
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Orders
+  const isOrdersPage = window.location.pathname.includes('/orders') ||
+    document.querySelector('.orders-list, [class*="order-table"], table[id*="order"]');
+
+  if (!isOrdersPage && !window.location.pathname.includes('/orders')) {
+    return;
+  }
+
+  console.log('🎯 [ORDERS] Page detected - Loading Premium Redesign...');
+
+  function initOrdersRedesign() {
+    // Trouver le conteneur principal
+    const mainContainer = document.querySelector('.wrapper-content__body, .main-content, main') ||
+      document.querySelector('[class*="content"]');
+
+    if (!mainContainer) {
+      console.log('⏳ [ORDERS] Waiting for container...');
+      setTimeout(initOrdersRedesign, 500);
+      return;
+    }
+
+    // Éviter double injection
+    if (document.getElementById('gp-orders-redesign')) {
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-orders-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    const styles = document.createElement('style');
+    styles.id = 'gp-orders-styles';
+    styles.textContent = `
+      /* === ORDERS PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner */
+      .gp-orders-hero {
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+        border-radius: 16px;
+        padding: 32px 40px;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+        color: white;
+        box-shadow: 0 10px 40px rgba(30, 58, 138, 0.25);
+      }
+      
+      .gp-orders-hero::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      
+      .gp-orders-hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+      
+      .gp-orders-hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+      }
+      
+      .gp-orders-hero-subtitle {
+        font-size: 15px;
+        color: rgba(255,255,255,0.8);
+        margin: 0;
+      }
+      
+      .gp-orders-stats {
+        display: flex;
+        gap: 32px;
+      }
+      
+      .gp-orders-stat {
+        text-align: center;
+        padding: 16px 24px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.15);
+      }
+      
+      .gp-orders-stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        display: block;
+        line-height: 1;
+      }
+      
+      .gp-orders-stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255,255,255,0.7);
+        margin-top: 6px;
+        display: block;
+      }
+      
+      /* Tabs Premium */
+      .gp-orders-tabs {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow-x: auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-orders-tabs::-webkit-scrollbar { display: none; }
+      
+      .gp-orders-tab {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-orders-tab:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #1e293b;
+      }
+      
+      .gp-orders-tab.active {
+        background: #1e40af;
+        border-color: #1e40af;
+        color: white;
+      }
+      
+      .gp-orders-tab-badge {
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        background: #f1f5f9;
+        color: #64748b;
+      }
+      
+      .gp-orders-tab.active .gp-orders-tab-badge {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+      
+      /* Status badges colors */
+      .gp-status-all { background: #1e40af !important; }
+      .gp-status-pending { background: #f59e0b !important; color: white !important; }
+      .gp-status-inprogress { background: #3b82f6 !important; color: white !important; }
+      .gp-status-completed { background: #10b981 !important; color: white !important; }
+      .gp-status-partial { background: #f97316 !important; color: white !important; }
+      .gp-status-processing { background: #8b5cf6 !important; color: white !important; }
+      .gp-status-canceled { background: #ef4444 !important; color: white !important; }
+      
+      /* Search Bar */
+      .gp-orders-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      
+      .gp-orders-search {
+        flex: 1;
+        min-width: 250px;
+        position: relative;
+      }
+      
+      .gp-orders-search input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        background: white;
+        transition: all 0.2s;
+      }
+      
+      .gp-orders-search input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+      
+      .gp-orders-search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+      }
+      
+      .gp-orders-filter-btn {
+        padding: 14px 20px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-orders-filter-btn:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+      
+      .gp-orders-filter-btn.active {
+        background: #2563eb;
+        border-color: #2563eb;
+        color: white;
+      }
+      
+      /* Table Styles */
+      .gp-orders-table-wrapper {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      }
+      
+      .gp-orders-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      .gp-orders-table th {
+        padding: 16px 20px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      
+      .gp-orders-table td {
+        padding: 16px 20px;
+        font-size: 13px;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+      }
+      
+      .gp-orders-table tr:hover td {
+        background: #f8fafc;
+      }
+      
+      .gp-orders-table tr:last-child td {
+        border-bottom: none;
+      }
+      
+      /* Order ID Badge */
+      .gp-order-id {
+        font-weight: 700;
+        color: #1e40af;
+        font-size: 14px;
+      }
+      
+      /* Date styling */
+      .gp-order-date {
+        color: #64748b;
+        font-size: 12px;
+      }
+      
+      /* Link styling */
+      .gp-order-link {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 12px;
+      }
+      
+      .gp-order-link:hover {
+        text-decoration: underline;
+      }
+      
+      /* Status Badge */
+      .gp-order-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      
+      .gp-order-status-pending { background: #fef3c7; color: #d97706; }
+      .gp-order-status-inprogress { background: #dbeafe; color: #2563eb; }
+      .gp-order-status-completed { background: #d1fae5; color: #059669; }
+      .gp-order-status-partial { background: #ffedd5; color: #ea580c; }
+      .gp-order-status-processing { background: #ede9fe; color: #7c3aed; }
+      .gp-order-status-canceled { background: #fee2e2; color: #dc2626; }
+      
+      /* Service name */
+      .gp-order-service {
+        font-weight: 600;
+        color: #1e293b;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      /* Actions */
+      .gp-order-actions {
+        display: flex;
+        gap: 8px;
+      }
+      
+      .gp-order-action-btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+      
+      .gp-order-action-refill {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+      
+      .gp-order-action-refill:hover {
+        background: #2563eb;
+        color: white;
+      }
+      
+      .gp-order-action-cancel {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      
+      .gp-order-action-cancel:hover {
+        background: #dc2626;
+        color: white;
+      }
+      
+      /* Empty State */
+      .gp-orders-empty {
+        padding: 80px 40px;
+        text-align: center;
+        color: #94a3b8;
+      }
+      
+      .gp-orders-empty svg {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
+        opacity: 0.5;
+      }
+      
+      .gp-orders-empty h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #64748b;
+        margin-bottom: 8px;
+      }
+      
+      /* Pagination */
+      .gp-orders-pagination {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        padding: 24px;
+        background: #f8fafc;
+        border-top: 1px solid #e2e8f0;
+      }
+      
+      .gp-orders-page-btn {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .gp-orders-page-btn:hover {
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+      
+      .gp-orders-page-btn.active {
+        background: #1e40af;
+        border-color: #1e40af;
+        color: white;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-orders-hero {
+          padding: 24px;
+        }
+        
+        .gp-orders-hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .gp-orders-stats {
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .gp-orders-stat {
+          flex: 1;
+          padding: 12px 16px;
+        }
+        
+        .gp-orders-table-wrapper {
+          overflow-x: auto;
+        }
+        
+        .gp-orders-table th,
+        .gp-orders-table td {
+          padding: 12px;
+          font-size: 12px;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+
+    // === AMÉLIORER LES TABS NATIFS ===
+    enhanceNativeTabs();
+
+    // === AMÉLIORER LA BARRE DE RECHERCHE ===
+    enhanceSearchBar();
+
+    // === AMÉLIORER LE TABLEAU ===
+    enhanceTable();
+
+    // === AJOUTER LE HERO HEADER ===
+    addHeroHeader();
+
+    console.log('✅ [ORDERS] Premium Redesign Applied!');
+  }
+
+  function enhanceNativeTabs() {
+    const nativeTabs = document.querySelectorAll('.nav-tabs .nav-link, .tabs .tab, [class*="nav"] a, ul.nav li a');
+
+    if (nativeTabs.length === 0) return;
+
+    // Créer le conteneur de tabs amélioré
+    const tabsContainer = document.createElement('div');
+    tabsContainer.className = 'gp-orders-tabs';
+
+    const statusColors = {
+      'all': 'gp-status-all',
+      'pending': 'gp-status-pending',
+      'in progress': 'gp-status-inprogress',
+      'inprogress': 'gp-status-inprogress',
+      'completed': 'gp-status-completed',
+      'partial': 'gp-status-partial',
+      'processing': 'gp-status-processing',
+      'canceled': 'gp-status-canceled',
+      'cancelled': 'gp-status-canceled'
+    };
+
+    nativeTabs.forEach(tab => {
+      const text = tab.textContent.trim().toLowerCase();
+      const isActive = tab.classList.contains('active') || tab.parentElement?.classList.contains('active');
+
+      const newTab = document.createElement('button');
+      newTab.className = `gp-orders-tab ${isActive ? 'active' : ''} ${statusColors[text] || ''}`;
+      newTab.innerHTML = `
+        <span>${tab.textContent.trim()}</span>
+      `;
+
+      newTab.onclick = () => {
+        tab.click();
+        document.querySelectorAll('.gp-orders-tab').forEach(t => t.classList.remove('active'));
+        newTab.classList.add('active');
+      };
+
+      tabsContainer.appendChild(newTab);
+    });
+
+    // Cacher les tabs natifs et insérer les nouveaux
+    const nativeTabsParent = nativeTabs[0]?.closest('.nav-tabs, .tabs, ul.nav');
+    if (nativeTabsParent) {
+      nativeTabsParent.style.display = 'none';
+      nativeTabsParent.parentElement.insertBefore(tabsContainer, nativeTabsParent);
+    }
+  }
+
+  function enhanceSearchBar() {
+    const nativeSearch = document.querySelector('input[type="search"], input[placeholder*="Search"], input[name*="search"]');
+
+    if (!nativeSearch) return;
+
+    const searchWrapper = document.createElement('div');
+    searchWrapper.className = 'gp-orders-toolbar';
+
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'gp-orders-search';
+    searchContainer.innerHTML = `
+      <div class="gp-orders-search-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+    `;
+
+    // Cloner l'input de recherche
+    const newSearchInput = nativeSearch.cloneNode(true);
+    newSearchInput.style.cssText = '';
+    newSearchInput.placeholder = 'Search orders by ID, link, service...';
+    searchContainer.appendChild(newSearchInput);
+
+    // Sync avec l'original
+    newSearchInput.addEventListener('input', (e) => {
+      nativeSearch.value = e.target.value;
+      nativeSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    // Bouton filtre Refill
+    const refillBtn = document.createElement('button');
+    refillBtn.className = 'gp-orders-filter-btn';
+    refillBtn.id = 'gp-refill-filter';
+    refillBtn.innerHTML = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M23 4v6h-6M1 20v-6h6"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+      Refill Available
+    `;
+
+    refillBtn.onclick = () => {
+      refillBtn.classList.toggle('active');
+      filterRefillOrders(refillBtn.classList.contains('active'));
+    };
+
+    searchWrapper.appendChild(searchContainer);
+    searchWrapper.appendChild(refillBtn);
+
+    // Cacher la recherche native et insérer la nouvelle
+    const nativeSearchParent = nativeSearch.closest('.form-group, .search-box, .input-group, div');
+    if (nativeSearchParent) {
+      nativeSearchParent.style.display = 'none';
+      nativeSearchParent.parentElement.insertBefore(searchWrapper, nativeSearchParent);
+    }
+  }
+
+  function filterRefillOrders(showOnlyRefill) {
+    const rows = document.querySelectorAll('table tbody tr');
+
+    rows.forEach(row => {
+      const hasRefillBtn = row.querySelector('[class*="refill"], button[onclick*="refill"], a[href*="refill"]');
+
+      if (showOnlyRefill) {
+        row.style.display = hasRefillBtn ? '' : 'none';
+      } else {
+        row.style.display = '';
+      }
+    });
+  }
+
+  function enhanceTable() {
+    const table = document.querySelector('table');
+    if (!table) return;
+
+    // Ajouter les classes premium
+    table.classList.add('gp-orders-table');
+
+    // Wrapper le tableau
+    if (!table.parentElement.classList.contains('gp-orders-table-wrapper')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gp-orders-table-wrapper';
+      table.parentElement.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+
+    // Améliorer les cellules
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+
+      cells.forEach((cell, index) => {
+        const text = cell.textContent.trim().toLowerCase();
+
+        // Status cell
+        if (text === 'pending' || text === 'in progress' || text === 'completed' ||
+          text === 'partial' || text === 'processing' || text === 'canceled' || text === 'cancelled') {
+          const statusClass = text.replace(' ', '');
+          cell.innerHTML = `<span class="gp-order-status gp-order-status-${statusClass}">${cell.textContent.trim()}</span>`;
+        }
+
+        // ID cell (usually first or second)
+        if (index === 0 && !isNaN(parseInt(text))) {
+          cell.innerHTML = `<span class="gp-order-id">#${text}</span>`;
+        }
+
+        // Link cell
+        if (cell.querySelector('a') || text.startsWith('http')) {
+          const link = cell.querySelector('a') || cell;
+          if (link.tagName === 'A') {
+            link.classList.add('gp-order-link');
+          }
+        }
+      });
+    });
+  }
+
+  function addHeroHeader() {
+    const container = document.querySelector('.gp-orders-tabs')?.parentElement ||
+      document.querySelector('.wrapper-content__body > div, .main-content > div');
+
+    if (!container || document.querySelector('.gp-orders-hero')) return;
+
+    // Compter les stats
+    const table = document.querySelector('table');
+    const totalOrders = table ? table.querySelectorAll('tbody tr').length : 0;
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-orders-hero';
+    hero.innerHTML = `
+      <div class="gp-orders-hero-content">
+        <div>
+          <h1 class="gp-orders-hero-title">📋 My Orders</h1>
+          <p class="gp-orders-hero-subtitle">Track and manage all your orders in one place</p>
+        </div>
+        <div class="gp-orders-stats">
+          <div class="gp-orders-stat">
+            <span class="gp-orders-stat-value">${totalOrders}</span>
+            <span class="gp-orders-stat-label">Total Orders</span>
+          </div>
+          <div class="gp-orders-stat">
+            <span class="gp-orders-stat-value">⚡</span>
+            <span class="gp-orders-stat-label">Real-time</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.insertBefore(hero, container.firstChild);
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initOrdersRedesign, 500));
+  } else {
+    setTimeout(initOrdersRedesign, 500);
+  }
+
+})();
