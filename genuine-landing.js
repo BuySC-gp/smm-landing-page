@@ -4631,13 +4631,14 @@ cursor: pointer !important;
       
       .gp-amount-input-wrapper input {
         width: 100% !important;
-        padding: 16px 20px 16px 50px !important;
-        font-size: 24px !important;
+        padding: 16px 20px 16px 60px !important;
+        font-size: 20px !important;
         font-weight: 700 !important;
         border: 2px solid #e2e8f0 !important;
         border-radius: 12px !important;
-        background: #f8fafc !important;
+        background: white !important;
         transition: all 0.2s !important;
+        box-sizing: border-box !important;
       }
       
       .gp-amount-input-wrapper input:focus {
@@ -4649,11 +4650,18 @@ cursor: pointer !important;
       
       .gp-amount-currency {
         position: absolute;
-        left: 20px;
-        bottom: 16px;
-        font-size: 24px;
+        left: 16px;
+        bottom: 14px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
         font-weight: 700;
-        color: #94a3b8;
+        color: #10b981;
+        background: #f0fdf4;
+        border-radius: 8px;
       }
       
       /* Quick Amount Buttons */
@@ -4724,12 +4732,27 @@ cursor: pointer !important;
         cursor: pointer !important;
         transition: all 0.2s !important;
         margin-bottom: 20px !important;
+        text-overflow: initial !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 16px center !important;
+        padding-right: 48px !important;
       }
       
       .gp-method-select:focus {
         outline: none !important;
         border-color: #10b981 !important;
         box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
+      }
+      
+      .gp-method-select option {
+        padding: 12px !important;
+        font-size: 14px !important;
       }
       
       /* History Section */
