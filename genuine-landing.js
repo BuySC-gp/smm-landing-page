@@ -4481,3 +4481,569 @@ cursor: pointer !important;
   }
 
 })();
+
+// =============================================================================
+// MODULE: ADD FUNDS PAGE REDESIGN — PREMIUM EDITION
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Add Funds
+  const isAddFundsPage = window.location.pathname.includes('/addfunds') ||
+    window.location.pathname.includes('/add-funds') ||
+    window.location.pathname.includes('/deposit');
+
+  if (!isAddFundsPage) {
+    return;
+  }
+
+  console.log('🎯 [ADD FUNDS] Page detected - Loading Premium Redesign...');
+
+  function initAddFundsRedesign() {
+    // Éviter double injection
+    if (document.getElementById('gp-addfunds-redesign')) {
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-addfunds-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    const styles = document.createElement('style');
+    styles.id = 'gp-addfunds-styles';
+    styles.textContent = `
+      /* === ADD FUNDS PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner */
+      .gp-addfunds-hero {
+        background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+        border-radius: 16px !important;
+        padding: 32px 40px !important;
+        margin-bottom: 24px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 10px 40px rgba(5, 150, 105, 0.25) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      .gp-addfunds-hero::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      
+      .gp-addfunds-hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+      
+      .gp-addfunds-hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      .gp-addfunds-hero-subtitle {
+        font-size: 15px;
+        color: rgba(255,255,255,0.85);
+        margin: 0;
+      }
+      
+      .gp-addfunds-balance {
+        text-align: right;
+        padding: 20px 32px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      
+      .gp-addfunds-balance-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255,255,255,0.8);
+        margin-bottom: 4px;
+      }
+      
+      .gp-addfunds-balance-value {
+        font-size: 36px;
+        font-weight: 800;
+        line-height: 1;
+      }
+      
+      /* Form Container */
+      .gp-addfunds-form-wrapper {
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 32px !important;
+        margin-bottom: 24px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+      
+      .gp-addfunds-form-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 24px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .gp-addfunds-form-title svg {
+        color: #10b981;
+      }
+      
+      /* Amount Input Premium */
+      .gp-amount-input-wrapper {
+        position: relative;
+        margin-bottom: 20px;
+      }
+      
+      .gp-amount-input-wrapper label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+      }
+      
+      .gp-amount-input-wrapper input {
+        width: 100% !important;
+        padding: 16px 20px 16px 50px !important;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        background: #f8fafc !important;
+        transition: all 0.2s !important;
+      }
+      
+      .gp-amount-input-wrapper input:focus {
+        outline: none !important;
+        border-color: #10b981 !important;
+        background: white !important;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
+      }
+      
+      .gp-amount-currency {
+        position: absolute;
+        left: 20px;
+        bottom: 16px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #94a3b8;
+      }
+      
+      /* Quick Amount Buttons */
+      .gp-quick-amounts {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      
+      .gp-quick-amount-btn {
+        padding: 10px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .gp-quick-amount-btn:hover {
+        border-color: #10b981;
+        color: #10b981;
+        background: #f0fdf4;
+      }
+      
+      .gp-quick-amount-btn.active {
+        background: #10b981;
+        border-color: #10b981;
+        color: white;
+      }
+      
+      /* Pay Button */
+      .gp-pay-btn {
+        width: 100% !important;
+        padding: 18px 32px !important;
+        background: linear-gradient(135deg, #059669, #10b981) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        color: white !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.3s !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3) !important;
+      }
+      
+      .gp-pay-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
+      }
+      
+      /* Method Select Premium */
+      .gp-method-select {
+        width: 100% !important;
+        padding: 16px 20px !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        background: white !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        margin-bottom: 20px !important;
+      }
+      
+      .gp-method-select:focus {
+        outline: none !important;
+        border-color: #10b981 !important;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
+      }
+      
+      /* History Section */
+      .gp-addfunds-history {
+        background: white !important;
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+      
+      .gp-addfunds-history-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .gp-addfunds-history-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-addfunds-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      .gp-addfunds-table th {
+        padding: 14px 20px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      
+      .gp-addfunds-table td {
+        padding: 16px 20px;
+        font-size: 14px;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      
+      .gp-addfunds-table tr:hover td {
+        background: #f8fafc;
+      }
+      
+      .gp-addfunds-table tr:last-child td {
+        border-bottom: none;
+      }
+      
+      .gp-deposit-id {
+        font-weight: 700;
+        color: #059669;
+      }
+      
+      .gp-deposit-amount {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 15px;
+      }
+      
+      .gp-deposit-method {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        background: #f0fdf4;
+        color: #059669;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+      
+      /* Instruction styling */
+      .gp-instruction-box {
+        background: #fffbeb;
+        border: 1px solid #fcd34d;
+        border-radius: 10px;
+        padding: 16px 20px;
+        margin-bottom: 20px;
+      }
+      
+      .gp-instruction-box p {
+        margin: 0;
+        color: #92400e;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-addfunds-hero {
+          padding: 24px !important;
+        }
+        
+        .gp-addfunds-hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .gp-addfunds-balance {
+          width: 100%;
+          text-align: center;
+        }
+        
+        .gp-quick-amounts {
+          justify-content: center;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+
+    // === AJOUTER LE HERO HEADER ===
+    addHeroHeader();
+
+    // === AMÉLIORER LE FORMULAIRE ===
+    enhanceForm();
+
+    // === AMÉLIORER LE TABLEAU D'HISTORIQUE ===
+    enhanceHistoryTable();
+
+    console.log('✅ [ADD FUNDS] Premium Redesign Applied!');
+  }
+
+  function addHeroHeader() {
+    // Trouver le conteneur principal
+    const mainContainer = document.querySelector('.wrapper-content__body') ||
+      document.querySelector('[id^="block_"]')?.parentElement ||
+      document.querySelector('main, .main-content');
+
+    if (!mainContainer || document.querySelector('.gp-addfunds-hero')) return;
+
+    // Récupérer le solde depuis le header
+    const balanceElement = document.querySelector('[class*="balance"], .navbar-balance, header span, .user-balance');
+    const balanceText = balanceElement?.textContent?.match(/[\d.,]+/) || ['0.00'];
+    const balance = balanceText[0];
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-addfunds-hero';
+    hero.innerHTML = `
+      <div class="gp-addfunds-hero-content">
+        <div>
+          <h1 class="gp-addfunds-hero-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+              <line x1="1" y1="10" x2="23" y2="10"/>
+            </svg>
+            Add Funds
+          </h1>
+          <p class="gp-addfunds-hero-subtitle">Deposit funds to your account securely and instantly</p>
+        </div>
+        <div class="gp-addfunds-balance">
+          <div class="gp-addfunds-balance-label">Current Balance</div>
+          <div class="gp-addfunds-balance-value">$${balance}</div>
+        </div>
+      </div>
+    `;
+
+    mainContainer.insertBefore(hero, mainContainer.firstChild);
+    console.log('✅ [ADD FUNDS] Hero inserted');
+  }
+
+  function enhanceForm() {
+    // Trouver le formulaire
+    const form = document.querySelector('form') ||
+      document.querySelector('[id^="block_"]');
+
+    if (!form) return;
+
+    // Améliorer le select des méthodes
+    const methodSelect = form.querySelector('select');
+    if (methodSelect) {
+      methodSelect.classList.add('gp-method-select');
+    }
+
+    // Améliorer l'input amount
+    const amountInput = form.querySelector('input[type="number"], input[name*="amount"], input[placeholder*="amount"]');
+    if (amountInput && !amountInput.closest('.gp-amount-input-wrapper')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gp-amount-input-wrapper';
+
+      const label = document.createElement('label');
+      label.textContent = 'Amount to deposit';
+
+      const currencySymbol = document.createElement('span');
+      currencySymbol.className = 'gp-amount-currency';
+      currencySymbol.textContent = '$';
+
+      amountInput.parentElement.insertBefore(wrapper, amountInput);
+      wrapper.appendChild(label);
+      wrapper.appendChild(amountInput);
+      wrapper.appendChild(currencySymbol);
+
+      // Ajouter boutons de montant rapide
+      const quickAmounts = document.createElement('div');
+      quickAmounts.className = 'gp-quick-amounts';
+      quickAmounts.innerHTML = `
+        <button type="button" class="gp-quick-amount-btn" data-amount="5">$5</button>
+        <button type="button" class="gp-quick-amount-btn" data-amount="10">$10</button>
+        <button type="button" class="gp-quick-amount-btn" data-amount="25">$25</button>
+        <button type="button" class="gp-quick-amount-btn" data-amount="50">$50</button>
+        <button type="button" class="gp-quick-amount-btn" data-amount="100">$100</button>
+      `;
+
+      wrapper.after(quickAmounts);
+
+      // Event listeners pour les boutons
+      quickAmounts.querySelectorAll('.gp-quick-amount-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          amountInput.value = btn.dataset.amount;
+          document.querySelectorAll('.gp-quick-amount-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          amountInput.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+      });
+    }
+
+    // Améliorer le bouton Pay
+    const payBtn = form.querySelector('button[type="submit"], input[type="submit"], button');
+    if (payBtn && payBtn.textContent?.toLowerCase().includes('pay')) {
+      payBtn.className = 'gp-pay-btn';
+      if (payBtn.tagName === 'INPUT') {
+        const newBtn = document.createElement('button');
+        newBtn.type = 'submit';
+        newBtn.className = 'gp-pay-btn';
+        newBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          Proceed to Payment
+        `;
+        payBtn.replaceWith(newBtn);
+      } else {
+        payBtn.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+          Proceed to Payment
+        `;
+      }
+    }
+  }
+
+  function enhanceHistoryTable() {
+    const table = document.querySelector('table');
+    if (!table) return;
+
+    // Wrapper le tableau
+    if (!table.closest('.gp-addfunds-history')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gp-addfunds-history';
+
+      const header = document.createElement('div');
+      header.className = 'gp-addfunds-history-header';
+      header.innerHTML = `
+        <h3 class="gp-addfunds-history-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          Payment History
+        </h3>
+      `;
+
+      table.parentElement.insertBefore(wrapper, table);
+      wrapper.appendChild(header);
+      wrapper.appendChild(table);
+    }
+
+    table.classList.add('gp-addfunds-table');
+
+    // Améliorer les cellules
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+
+      cells.forEach((cell, index) => {
+        const text = cell.textContent.trim();
+
+        // ID cell
+        if (index === 0 && !isNaN(parseInt(text))) {
+          cell.innerHTML = `<span class="gp-deposit-id">#${text}</span>`;
+        }
+
+        // Amount cell (usually last or contains number with decimals)
+        if (text.match(/^\d+\.?\d*$/)) {
+          cell.innerHTML = `<span class="gp-deposit-amount">$${text}</span>`;
+        }
+
+        // Method cell
+        const methods = ['paypal', 'stripe', 'bitcoin', 'crypto', 'bank', 'manual', 'bonus', 'gpay', 'cashu', 'hesabe'];
+        if (methods.some(m => text.toLowerCase().includes(m))) {
+          cell.innerHTML = `<span class="gp-deposit-method">${text}</span>`;
+        }
+      });
+    });
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initAddFundsRedesign, 500));
+  } else {
+    setTimeout(initAddFundsRedesign, 500);
+  }
+
+})();
