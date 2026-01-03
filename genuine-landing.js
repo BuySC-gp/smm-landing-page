@@ -6581,6 +6581,536 @@ cursor: pointer !important;
 })();
 
 // =============================================================================
+// MODULE: TICKETS PAGE REDESIGN — PREMIUM SUPPORT EXPERIENCE
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Tickets
+  const isTicketsPage = window.location.pathname.includes('/tickets') ||
+    window.location.pathname.includes('/ticket');
+
+  if (!isTicketsPage) return;
+
+  console.log('🎫 [Tickets] Initializing Premium Redesign...');
+
+  function initTicketsRedesign() {
+    // Éviter double initialisation
+    if (document.querySelector('#gp-tickets-redesign')) return;
+
+    // Attendre que la page soit chargée
+    const table = document.querySelector('table');
+    const form = document.querySelector('form');
+
+    if (!table && !form) {
+      console.log('⏳ [Tickets] Waiting for content...');
+      setTimeout(initTicketsRedesign, 500);
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-tickets-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    injectStyles();
+
+    // === ENHANCE PAGE ===
+    addHeroHeader();
+    enhanceForm();
+    enhanceTable();
+
+    console.log('✅ [Tickets] Premium Redesign Applied!');
+  }
+
+  function injectStyles() {
+    if (document.getElementById('gp-tickets-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'gp-tickets-styles';
+    styles.textContent = `
+      /* === TICKETS PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner - Orange/Amber support gradient */
+      .gp-tickets-hero {
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+        border-radius: 16px !important;
+        padding: 28px 32px !important;
+        margin-bottom: 24px !important;
+        margin-top: 0 !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 10px 40px rgba(245, 158, 11, 0.25) !important;
+      }
+      
+      .gp-tickets-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      
+      .gp-tickets-hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      
+      .gp-tickets-hero-title {
+        font-size: 26px;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: white !important;
+      }
+      
+      .gp-tickets-hero-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin: 6px 0 0 0;
+      }
+      
+      .gp-tickets-hero-stats {
+        display: flex;
+        gap: 16px;
+      }
+      
+      .gp-tickets-stat {
+        background: rgba(255,255,255,0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 14px 20px;
+        text-align: center;
+        min-width: 100px;
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+      
+      .gp-tickets-stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        display: block;
+        color: white;
+      }
+      
+      .gp-tickets-stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.9;
+      }
+      
+      /* Form Card */
+      .gp-tickets-form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-tickets-form-header {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      /* Form Elements */
+      .gp-tickets-form-card select,
+      .gp-tickets-form-card input[type="text"],
+      .gp-tickets-form-card input[type="number"],
+      .gp-tickets-form-card textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.2s;
+        background: #f8fafc;
+      }
+      
+      .gp-tickets-form-card select:focus,
+      .gp-tickets-form-card input:focus,
+      .gp-tickets-form-card textarea:focus {
+        outline: none;
+        border-color: #f59e0b;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      }
+      
+      .gp-tickets-form-card label {
+        display: block;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+        font-size: 13px;
+      }
+      
+      .gp-tickets-form-card .form-group,
+      .gp-tickets-form-card .mb-3 {
+        margin-bottom: 16px;
+      }
+      
+      .gp-tickets-form-card textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+      
+      /* Submit Button */
+      .gp-tickets-form-card button[type="submit"],
+      .gp-tickets-form-card .btn-primary {
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+        border: none !important;
+        padding: 14px 28px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        color: white !important;
+        cursor: pointer;
+        transition: all 0.2s !important;
+        width: 100%;
+      }
+      
+      .gp-tickets-form-card button[type="submit"]:hover,
+      .gp-tickets-form-card .btn-primary:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+      }
+      
+      /* Attach files */
+      .gp-tickets-form-card a[href*="attach"],
+      .gp-tickets-form-card .attach-files {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #f59e0b;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        margin-bottom: 16px;
+      }
+      
+      /* Table Card */
+      .gp-tickets-table-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-tickets-table-header {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      /* Search Bar */
+      .gp-tickets-table-card .input-group,
+      .gp-tickets-table-card form:has(input[type="search"]),
+      .gp-tickets-table-card form:has(input[placeholder*="Search"]) {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      
+      .gp-tickets-table-card input[type="search"],
+      .gp-tickets-table-card input[placeholder*="Search"] {
+        flex: 1;
+        padding: 10px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+      }
+      
+      /* Table Styling */
+      .gp-tickets-table-card table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      
+      .gp-tickets-table-card table thead {
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      }
+      
+      .gp-tickets-table-card table th {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white !important;
+        border: none !important;
+      }
+      
+      .gp-tickets-table-card table th:first-child {
+        border-radius: 10px 0 0 10px;
+      }
+      
+      .gp-tickets-table-card table th:last-child {
+        border-radius: 0 10px 10px 0;
+      }
+      
+      .gp-tickets-table-card table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+        color: #334155;
+      }
+      
+      .gp-tickets-table-card table tr:hover td {
+        background: #fef3c7;
+      }
+      
+      .gp-tickets-table-card table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      /* Status Badges */
+      .gp-ticket-status {
+        display: inline-flex;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .gp-ticket-status.pending {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        color: #92400e;
+        border: 1px solid #fcd34d;
+      }
+      
+      .gp-ticket-status.open,
+      .gp-ticket-status.answered {
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+      }
+      
+      .gp-ticket-status.closed,
+      .gp-ticket-status.resolved {
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        color: #475569;
+        border: 1px solid #cbd5e1;
+      }
+      
+      /* Subject Link */
+      .gp-tickets-table-card table td a {
+        color: #ea580c;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      
+      .gp-tickets-table-card table td a:hover {
+        color: #f59e0b;
+        text-decoration: underline;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-tickets-hero {
+          padding: 20px;
+        }
+        
+        .gp-tickets-hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .gp-tickets-hero-title {
+          font-size: 22px;
+          justify-content: center;
+        }
+        
+        .gp-tickets-hero-stats {
+          justify-content: center;
+        }
+        
+        .gp-tickets-stat {
+          min-width: 80px;
+          padding: 10px 14px;
+        }
+        
+        .gp-tickets-stat-value {
+          font-size: 22px;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+
+  function addHeroHeader() {
+    if (document.querySelector('.gp-tickets-hero')) return;
+
+    // Count tickets from table
+    const table = document.querySelector('table');
+    let totalTickets = 0;
+    let pendingCount = 0;
+
+    if (table) {
+      const rows = table.querySelectorAll('tbody tr');
+      totalTickets = rows.length;
+
+      rows.forEach(row => {
+        const statusCell = row.querySelector('td:nth-child(3)');
+        if (statusCell) {
+          const statusText = statusCell.textContent.toLowerCase().trim();
+          if (statusText.includes('pending') || statusText.includes('waiting')) {
+            pendingCount++;
+          }
+        }
+      });
+    }
+
+    // Find where to insert
+    const mainContent = document.querySelector('.wrapper-content__body') ||
+      document.querySelector('.main-content') ||
+      document.querySelector('.content') ||
+      document.querySelector('main');
+
+    const existingTitle = document.querySelector('h1, h2');
+    const insertPoint = existingTitle || (mainContent ? mainContent.firstElementChild : null);
+
+    if (!insertPoint) return;
+
+    // Hide original title
+    if (existingTitle && existingTitle.textContent.toLowerCase().includes('ticket')) {
+      existingTitle.style.display = 'none';
+    }
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-tickets-hero';
+    hero.innerHTML = `
+      <div class="gp-tickets-hero-content">
+        <div>
+          <h1 class="gp-tickets-hero-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <line x1="10" y1="9" x2="8" y2="9"/>
+            </svg>
+            Support Tickets
+          </h1>
+          <p class="gp-tickets-hero-subtitle">Create and track your support requests</p>
+        </div>
+        <div class="gp-tickets-hero-stats">
+          <div class="gp-tickets-stat">
+            <span class="gp-tickets-stat-value">${totalTickets}</span>
+            <span class="gp-tickets-stat-label">Total Tickets</span>
+          </div>
+          <div class="gp-tickets-stat" style="background: rgba(255,255,255,0.3);">
+            <span class="gp-tickets-stat-value">${pendingCount}</span>
+            <span class="gp-tickets-stat-label">Pending</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    insertPoint.parentElement.insertBefore(hero, insertPoint);
+  }
+
+  function enhanceForm() {
+    const form = document.querySelector('form');
+    if (!form || form.closest('.gp-tickets-form-card')) return;
+
+    // Wrap form in styled card
+    const card = document.createElement('div');
+    card.className = 'gp-tickets-form-card';
+
+    const header = document.createElement('h3');
+    header.className = 'gp-tickets-form-header';
+    header.innerHTML = '✉️ Create New Ticket';
+
+    form.parentElement.insertBefore(card, form);
+    card.appendChild(header);
+    card.appendChild(form);
+  }
+
+  function enhanceTable() {
+    const table = document.querySelector('table');
+    if (!table || table.closest('.gp-tickets-table-card')) return;
+
+    // Find table container
+    let tableContainer = table.parentElement;
+
+    // Wrap in styled card
+    const card = document.createElement('div');
+    card.className = 'gp-tickets-table-card';
+
+    const header = document.createElement('h3');
+    header.className = 'gp-tickets-table-header';
+    header.innerHTML = '📋 Your Tickets';
+
+    tableContainer.insertBefore(card, table);
+    card.appendChild(header);
+
+    // Move search if exists
+    const searchInput = tableContainer.querySelector('input[type="search"], input[placeholder*="Search"]');
+    if (searchInput) {
+      const searchForm = searchInput.closest('form') || searchInput.parentElement;
+      card.appendChild(searchForm);
+    }
+
+    card.appendChild(table);
+
+    // Enhance status cells
+    const statusCells = table.querySelectorAll('tbody td:nth-child(3)');
+    statusCells.forEach(cell => {
+      const text = cell.textContent.trim().toLowerCase();
+      let statusClass = '';
+
+      if (text.includes('pending') || text.includes('waiting')) {
+        statusClass = 'pending';
+      } else if (text.includes('open') || text.includes('answered') || text.includes('reply')) {
+        statusClass = 'open';
+      } else if (text.includes('closed') || text.includes('resolved')) {
+        statusClass = 'closed';
+      }
+
+      if (statusClass) {
+        cell.innerHTML = `<span class="gp-ticket-status ${statusClass}">${cell.textContent.trim()}</span>`;
+      }
+    });
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initTicketsRedesign, 500));
+  } else {
+    setTimeout(initTicketsRedesign, 500);
+  }
+
+})();
+
+// =============================================================================
 // MODULE: ADD FUNDS PAGE REDESIGN — PREMIUM EDITION
 // =============================================================================
 (function () {
