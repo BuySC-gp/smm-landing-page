@@ -459,15 +459,56 @@ cursor: pointer !important;
       if (!select) return [];
 
       const categories = [];
+
+      // Chercher aussi les éléments du dropdown custom (si existe)
+      const dropdownItems = document.querySelectorAll('.dropdown-item, .select2-results__option, [class*="option"]');
+      const iconMap = {};
+
+      // Extraire les icônes depuis le dropdown custom
+      dropdownItems.forEach(item => {
+        const text = item.textContent?.trim();
+        const iconEl = item.querySelector('img, svg, i, [class*="icon"]');
+        if (text && iconEl) {
+          iconMap[text.toLowerCase()] = iconEl.outerHTML;
+        }
+      });
+
       for (let i = 0; i < select.options.length; i++) {
-        const text = select.options[i].text.trim();
+        const option = select.options[i];
+        const text = option.text.trim();
         if (text) {
-          const iconData = getIconForCategory(text);
+          // Chercher l'icône dans le HTML de l'option (si data-content existe)
+          let iconHtml = null;
+          let iconColor = '#6b7280';
+
+          // 1. Essayer de récupérer depuis data-content (Bootstrap Select)
+          const dataContent = option.getAttribute('data-content');
+          if (dataContent) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = dataContent;
+            const iconEl = tempDiv.querySelector('img, svg, i, [class*="icon"]');
+            if (iconEl) {
+              iconHtml = iconEl.outerHTML;
+            }
+          }
+
+          // 2. Sinon, chercher dans le dropdown map
+          if (!iconHtml && iconMap[text.toLowerCase()]) {
+            iconHtml = iconMap[text.toLowerCase()];
+          }
+
+          // 3. Fallback: utiliser nos icônes par défaut
+          if (!iconHtml) {
+            const fallbackData = getIconForCategory(text);
+            iconHtml = fallbackData.icon;
+            iconColor = fallbackData.color;
+          }
+
           categories.push({
             name: text,
             index: i,
-            color: iconData.color,
-            icon: iconData.icon
+            color: iconColor,
+            icon: iconHtml
           });
         }
       }
