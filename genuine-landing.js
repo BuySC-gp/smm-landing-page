@@ -39,18 +39,19 @@
       const isMobile = window.innerWidth <= 768;
       console.log('📱 Mobile detected:', isMobile);
 
-      // === 3. TRANSFORMER LE ROW - RESPONSIVE ===
       if (isMobile) {
-        // MOBILE: Layout vertical empilé
-        rowDiv.style.cssText = `
-display: flex !important;
-flex-direction: column !important;
-gap: 16px !important;
-width: 100% !important;
-max-width: 100% !important;
-padding: 16px !important;
-box-sizing: border-box !important;
-`;
+  // MOBILE: Layout vertical empilé
+  rowDiv.style.cssText = `
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;  // ← ✅ SUPPRIME LE PADDING
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  `;
+}
       } else {
         // DESKTOP: Layout 50/50
         rowDiv.style.cssText = `
@@ -65,15 +66,18 @@ box-sizing: border-box !important;
       }
 
       // === 4. COLUMN GAUCHE - RESPONSIVE ===
-      if (colDiv) {
-        if (isMobile) {
-          colDiv.style.cssText = `
-flex: none !important;
-max-width: 100% !important;
-width: 100% !important;
-padding: 0 !important;
-order: 0 !important;
-`;
+      if (isMobile) {
+  colDiv.style.cssText = `
+    flex: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 10px !important;  // ← ✅ Padding latéral seulement
+    margin: 0 !important;
+    order: 0 !important;
+    box-sizing: border-box !important;
+  `;
+}
+
         } else {
           colDiv.style.cssText = `
 flex: 0 0 50% !important;
@@ -105,36 +109,37 @@ box-sizing: border-box !important;
       }
 
       if (isMobile) {
-        rightPanel.style.cssText = `
-flex: none !important;
-max-width: 100% !important;
-width: 100% !important;
-background: white !important;
-border-radius: 12px !important;
-box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-border: 1px solid #e5e7eb !important;
-overflow: hidden !important;
-display: flex !important;
-flex-direction: column !important;
-box-sizing: border-box !important;
-order: 1 !important;
-margin-top: 16px !important;
-`;
-      } else {
-        rightPanel.style.cssText = `
-flex: 0 0 calc(50% - 24px) !important;
-max-width: calc(50% - 24px) !important;
-width: calc(50% - 24px) !important;
-background: white !important;
-border-radius: 12px !important;
-box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
-border: 1px solid #e5e7eb !important;
-overflow: hidden !important;
-display: flex !important;
-flex-direction: column !important;
-box-sizing: border-box !important;
-`;
-      }
+    rightPanel.style.cssText = `
+        flex: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        background: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e5e7eb !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        order: 1 !important;
+        margin: 12px 10px 0 10px !important;
+        padding: 0 !important;
+    `;
+} else {
+    rightPanel.style.cssText = `
+        flex: 0 0 calc(50% - 24px) !important;
+        max-width: calc(50% - 24px) !important;
+        width: calc(50% - 24px) !important;
+        background: white !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+        border: 1px solid #e5e7eb !important;
+        overflow: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+    `;
+}
 
       rightPanel.innerHTML = `
 <!-- Header Badge GP CLEAN -->
