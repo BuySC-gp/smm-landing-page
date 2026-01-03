@@ -4983,8 +4983,33 @@ cursor: pointer !important;
       selectWrapper.appendChild(selectDisplay);
       selectWrapper.appendChild(methodSelect);
 
+      // Fonction pour cacher/montrer les éléments selon la méthode
+      const toggleAmountElements = () => {
+        const selectedOption = methodSelect.options[methodSelect.selectedIndex];
+        const selectedText = selectedOption ? selectedOption.text.toLowerCase() : '';
+        const isManual = selectedText.includes('manual') || selectedText.includes('crypto');
+
+        // Cacher les quick amounts et l'input amount pour les méthodes manuelles
+        const quickAmounts = document.querySelector('.gp-quick-amounts');
+        const amountInput = form.querySelector('input[type="number"], input[type="text"]:not([name*="search"])');
+        const amountParent = amountInput?.closest('.form-group') || amountInput?.parentElement;
+
+        if (quickAmounts) {
+          quickAmounts.style.display = isManual ? 'none' : 'flex';
+        }
+        if (amountParent) {
+          amountParent.style.display = isManual ? 'none' : 'block';
+        }
+      };
+
       // Mettre à jour l'affichage quand la sélection change
-      methodSelect.addEventListener('change', updateDisplay);
+      methodSelect.addEventListener('change', () => {
+        updateDisplay();
+        toggleAmountElements();
+      });
+
+      // Appliquer au chargement initial
+      setTimeout(toggleAmountElements, 100);
     }
 
     // Améliorer l'input amount avec styles inline
