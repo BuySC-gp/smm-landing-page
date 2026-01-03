@@ -458,31 +458,27 @@ cursor: pointer !important;
       const select = document.querySelector('select[name*="category"], #category');
       if (!select) return [];
 
-      // Ouvrir le dropdown Select2 pour accéder aux icônes
-      const select2Container = select.closest('.form-group')?.querySelector('.select2-container') ||
-        document.querySelector('.select2-container--open') ||
-        document.querySelector('[class*="select2"]');
-
-      // Map des icônes extraites du Select2
-      const iconMap = {};
+      // Map des icônes par INDEX (plus fiable que par texte)
+      const iconByIndex = {};
 
       // Chercher les options Select2 déjà rendues
       const select2Options = document.querySelectorAll('.select2-results__option');
-      select2Options.forEach(opt => {
-        const textContent = opt.textContent?.trim();
+      select2Options.forEach((opt, idx) => {
         const iconContainer = opt.querySelector('.select2-selection__icon');
-        if (textContent && iconContainer) {
+        if (iconContainer) {
           // Extraire l'icône (img ou span avec classe fa)
           const imgEl = iconContainer.querySelector('img');
           const faEl = iconContainer.querySelector('[class*="fa-"]');
 
           if (imgEl) {
-            iconMap[textContent.toLowerCase()] = imgEl.outerHTML;
+            iconByIndex[idx] = imgEl.outerHTML;
           } else if (faEl) {
-            iconMap[textContent.toLowerCase()] = faEl.outerHTML;
+            iconByIndex[idx] = faEl.outerHTML;
           }
         }
       });
+
+      console.log('🔍 [QUICK SELECTORS] Icons extracted:', Object.keys(iconByIndex).length);
 
       const categories = [];
       for (let i = 0; i < select.options.length; i++) {
@@ -492,10 +488,9 @@ cursor: pointer !important;
           let iconHtml = null;
           let iconColor = '#6b7280';
 
-          // Chercher dans le map Select2
-          const textLower = text.toLowerCase();
-          if (iconMap[textLower]) {
-            iconHtml = iconMap[textLower];
+          // Chercher par index dans le map Select2
+          if (iconByIndex[i]) {
+            iconHtml = iconByIndex[i];
           }
 
           // Fallback: utiliser nos icônes par défaut
@@ -5348,4 +5343,3 @@ cursor: pointer !important;
   }
 
 })();
-
