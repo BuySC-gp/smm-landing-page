@@ -4687,6 +4687,571 @@ cursor: pointer !important;
 })();
 
 // =============================================================================
+// MODULE: SUBSCRIPTIONS PAGE REDESIGN — PREMIUM EDITION
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Subscriptions
+  const isSubscriptionsPage = window.location.pathname.includes('/subscriptions') ||
+    document.querySelector('.subscriptions-list, [class*="subscription-table"], table[id*="subscription"]');
+
+  if (!isSubscriptionsPage && !window.location.pathname.includes('/subscriptions')) {
+    return;
+  }
+
+  console.log('🔔 [SUBSCRIPTIONS] Page detected - Loading Premium Redesign...');
+
+  function initSubscriptionsRedesign() {
+    // Trouver le conteneur principal
+    const mainContainer = document.querySelector('.wrapper-content__body, .main-content, main') ||
+      document.querySelector('[class*="content"]');
+
+    if (!mainContainer) {
+      console.log('⏳ [SUBSCRIPTIONS] Waiting for container...');
+      setTimeout(initSubscriptionsRedesign, 500);
+      return;
+    }
+
+    // Éviter double injection
+    if (document.getElementById('gp-subscriptions-redesign')) {
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-subscriptions-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    const styles = document.createElement('style');
+    styles.id = 'gp-subscriptions-styles';
+    styles.textContent = `
+      /* === SUBSCRIPTIONS PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner - Purple gradient for subscriptions */
+      .gp-subscriptions-hero {
+        background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #8b5cf6 100%) !important;
+        border-radius: 16px !important;
+        padding: 32px 40px !important;
+        margin-bottom: 24px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 10px 40px rgba(91, 33, 182, 0.25) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+        flex: 0 0 100% !important;
+        box-sizing: border-box !important;
+      }
+      
+      .gp-subscriptions-hero::before {
+        content: '';
+        position: absolute;
+        top: -100px;
+        right: -100px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      
+      .gp-subscriptions-hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 24px;
+      }
+      
+      .gp-subscriptions-hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+      }
+      
+      .gp-subscriptions-hero-subtitle {
+        font-size: 15px;
+        color: rgba(255,255,255,0.8);
+        margin: 0;
+      }
+      
+      .gp-subscriptions-stats {
+        display: flex;
+        gap: 32px;
+      }
+      
+      .gp-subscriptions-stat {
+        text-align: center;
+        padding: 16px 24px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.15);
+      }
+      
+      .gp-subscriptions-stat-value {
+        font-size: 28px;
+        font-weight: 800;
+        display: block;
+        line-height: 1;
+      }
+      
+      .gp-subscriptions-stat-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgba(255,255,255,0.7);
+        margin-top: 6px;
+        display: block;
+      }
+      
+      /* Tabs Premium */
+      .gp-subscriptions-tabs {
+        display: flex;
+        gap: 8px;
+        padding: 16px 20px;
+        background: white;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        overflow-x: auto;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-subscriptions-tabs::-webkit-scrollbar { display: none; }
+      
+      .gp-subscriptions-tab {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-subscriptions-tab:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+        color: #1e293b;
+      }
+      
+      .gp-subscriptions-tab.active {
+        background: #7c3aed;
+        border-color: #7c3aed;
+        color: white;
+      }
+      
+      /* Status badges colors for subscriptions */
+      .gp-sub-status-all { background: #7c3aed !important; }
+      .gp-sub-status-active { background: #10b981 !important; color: white !important; }
+      .gp-sub-status-paused { background: #f59e0b !important; color: white !important; }
+      .gp-sub-status-completed { background: #6b7280 !important; color: white !important; }
+      .gp-sub-status-expired { background: #ef4444 !important; color: white !important; }
+      .gp-sub-status-canceled { background: #dc2626 !important; color: white !important; }
+      
+      /* Search Bar */
+      .gp-subscriptions-toolbar {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+      
+      .gp-subscriptions-search {
+        flex: 1;
+        min-width: 250px;
+        position: relative;
+      }
+      
+      .gp-subscriptions-search input {
+        width: 100%;
+        padding: 14px 16px 14px 48px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        background: white;
+        transition: all 0.2s;
+      }
+      
+      .gp-subscriptions-search input:focus {
+        outline: none;
+        border-color: #7c3aed;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+      }
+      
+      .gp-subscriptions-search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+      }
+      
+      /* Table Styles */
+      .gp-subscriptions-table-wrapper {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      }
+      
+      .gp-subscriptions-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      
+      .gp-subscriptions-table th {
+        padding: 16px 20px;
+        text-align: left;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      
+      .gp-subscriptions-table td {
+        padding: 16px 20px;
+        font-size: 13px;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+      }
+      
+      .gp-subscriptions-table tr:hover td {
+        background: #f8fafc;
+      }
+      
+      .gp-subscriptions-table tr:last-child td {
+        border-bottom: none;
+      }
+      
+      /* Subscription ID Badge */
+      .gp-sub-id {
+        font-weight: 700;
+        color: #7c3aed;
+        font-size: 14px;
+      }
+      
+      /* Status Badge */
+      .gp-sub-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      
+      .gp-sub-status-badge-active { background: #d1fae5; color: #059669; }
+      .gp-sub-status-badge-paused { background: #fef3c7; color: #d97706; }
+      .gp-sub-status-badge-completed { background: #f3f4f6; color: #6b7280; }
+      .gp-sub-status-badge-expired { background: #fee2e2; color: #dc2626; }
+      .gp-sub-status-badge-canceled { background: #fee2e2; color: #dc2626; }
+      
+      /* Cancel button */
+      .gp-sub-cancel-btn {
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        background: #fee2e2;
+        color: #dc2626;
+      }
+      
+      .gp-sub-cancel-btn:hover {
+        background: #dc2626;
+        color: white;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-subscriptions-hero {
+          padding: 24px;
+        }
+        
+        .gp-subscriptions-hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .gp-subscriptions-stats {
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .gp-subscriptions-stat {
+          flex: 1;
+          padding: 12px 16px;
+        }
+        
+        .gp-subscriptions-table-wrapper {
+          overflow-x: auto;
+        }
+        
+        .gp-subscriptions-table th,
+        .gp-subscriptions-table td {
+          padding: 12px;
+          font-size: 12px;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+
+    // === AMÉLIORER LES TABS NATIFS ===
+    enhanceNativeTabs();
+
+    // === AMÉLIORER LA BARRE DE RECHERCHE ===
+    enhanceSearchBar();
+
+    // === AMÉLIORER LE TABLEAU ===
+    enhanceTable();
+
+    // === AJOUTER LE HERO HEADER ===
+    addHeroHeader();
+
+    console.log('✅ [SUBSCRIPTIONS] Premium Redesign Applied!');
+  }
+
+  function enhanceNativeTabs() {
+    const nativeTabs = document.querySelectorAll('.nav-tabs .nav-link, .tabs .tab, [class*="nav"] a, ul.nav li a');
+
+    if (nativeTabs.length === 0) return;
+
+    // Créer le conteneur de tabs amélioré
+    const tabsContainer = document.createElement('div');
+    tabsContainer.className = 'gp-subscriptions-tabs';
+
+    const statusColors = {
+      'all': 'gp-sub-status-all',
+      'active': 'gp-sub-status-active',
+      'paused': 'gp-sub-status-paused',
+      'completed': 'gp-sub-status-completed',
+      'expired': 'gp-sub-status-expired',
+      'canceled': 'gp-sub-status-canceled',
+      'cancelled': 'gp-sub-status-canceled'
+    };
+
+    nativeTabs.forEach(tab => {
+      const text = tab.textContent.trim().toLowerCase();
+      const isActive = tab.classList.contains('active') || tab.parentElement?.classList.contains('active');
+
+      const newTab = document.createElement('button');
+      newTab.className = `gp-subscriptions-tab ${isActive ? 'active' : ''} ${statusColors[text] || ''}`;
+      newTab.innerHTML = `
+        <span>${tab.textContent.trim()}</span>
+      `;
+
+      newTab.onclick = () => {
+        tab.click();
+        document.querySelectorAll('.gp-subscriptions-tab').forEach(t => t.classList.remove('active'));
+        newTab.classList.add('active');
+      };
+
+      tabsContainer.appendChild(newTab);
+    });
+
+    // Cacher les tabs natifs et insérer les nouveaux
+    const nativeTabsParent = nativeTabs[0]?.closest('.nav-tabs, .tabs, ul.nav');
+    if (nativeTabsParent) {
+      nativeTabsParent.style.display = 'none';
+      nativeTabsParent.parentElement.insertBefore(tabsContainer, nativeTabsParent);
+    }
+  }
+
+  function enhanceSearchBar() {
+    const nativeSearch = document.querySelector('input[type="search"], input[placeholder*="Search"], input[name*="search"]');
+
+    if (!nativeSearch) return;
+
+    const searchWrapper = document.createElement('div');
+    searchWrapper.className = 'gp-subscriptions-toolbar';
+
+    const searchContainer = document.createElement('div');
+    searchContainer.className = 'gp-subscriptions-search';
+    searchContainer.innerHTML = `
+      <div class="gp-subscriptions-search-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
+    `;
+
+    // Cloner l'input de recherche
+    const newSearchInput = nativeSearch.cloneNode(true);
+    newSearchInput.style.cssText = '';
+    newSearchInput.placeholder = 'Search subscriptions by ID, username, service...';
+    searchContainer.appendChild(newSearchInput);
+
+    // Sync avec l'original
+    newSearchInput.addEventListener('input', (e) => {
+      nativeSearch.value = e.target.value;
+      nativeSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    searchWrapper.appendChild(searchContainer);
+
+    // Cacher la recherche native et insérer la nouvelle
+    const nativeSearchParent = nativeSearch.closest('.form-group, .search-box, .input-group, div');
+    if (nativeSearchParent) {
+      nativeSearchParent.style.display = 'none';
+      nativeSearchParent.parentElement.insertBefore(searchWrapper, nativeSearchParent);
+    }
+  }
+
+  function enhanceTable() {
+    const table = document.querySelector('table');
+    if (!table) return;
+
+    // Ajouter les classes premium
+    table.classList.add('gp-subscriptions-table');
+
+    // Wrapper le tableau
+    if (!table.parentElement.classList.contains('gp-subscriptions-table-wrapper')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'gp-subscriptions-table-wrapper';
+      table.parentElement.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+
+    // Améliorer les cellules
+    const rows = table.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+
+      cells.forEach((cell, index) => {
+        const text = cell.textContent.trim().toLowerCase();
+
+        // Status cell
+        if (text === 'active' || text === 'paused' || text === 'completed' ||
+          text === 'expired' || text === 'canceled' || text === 'cancelled') {
+          const statusClass = text.replace(' ', '');
+          cell.innerHTML = `<span class="gp-sub-status gp-sub-status-badge-${statusClass}">${cell.textContent.trim()}</span>`;
+        }
+
+        // ID cell (usually first)
+        if (index === 0 && !isNaN(parseInt(text))) {
+          cell.innerHTML = `<span class="gp-sub-id">#${text}</span>`;
+        }
+
+        // Enhance Cancel buttons
+        const cancelBtn = cell.querySelector('button, a');
+        if (cancelBtn && cancelBtn.textContent.toLowerCase().includes('cancel')) {
+          cancelBtn.classList.add('gp-sub-cancel-btn');
+        }
+      });
+    });
+  }
+
+  function addHeroHeader() {
+    // Éviter double injection
+    if (document.querySelector('.gp-subscriptions-hero')) return;
+
+    // Trouver le meilleur conteneur
+    const tabsContainer = document.querySelector('.gp-subscriptions-tabs');
+    const nativeTabs = document.querySelector('.nav-tabs, ul.nav');
+    const targetContainer = tabsContainer?.parentElement ||
+      nativeTabs?.parentElement ||
+      document.querySelector('.wrapper-content__body') ||
+      document.querySelector('[id^="block_"]');
+
+    if (!targetContainer) {
+      console.log('⚠️ [SUBSCRIPTIONS] Hero container not found');
+      return;
+    }
+
+    // Compter les stats dynamiques
+    const table = document.querySelector('table');
+    const allRows = table ? table.querySelectorAll('tbody tr') : [];
+    const totalSubscriptions = allRows.length;
+
+    // Compter les subscriptions par statut
+    let activeCount = 0;
+    let completedCanceledCount = 0;
+
+    allRows.forEach(row => {
+      const rowText = row.textContent?.toLowerCase() || '';
+      const statusBadge = row.querySelector('.gp-sub-status, [class*="badge"], [class*="status"], span');
+      const badgeText = statusBadge?.textContent?.toLowerCase() || '';
+      const fullText = rowText + ' ' + badgeText;
+
+      if (fullText.includes('active')) {
+        activeCount++;
+      }
+      if (fullText.includes('completed') || fullText.includes('cancel') || fullText.includes('expired')) {
+        completedCanceledCount++;
+      }
+    });
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-subscriptions-hero';
+    hero.style.cssText = 'width: 100% !important; margin-bottom: 24px !important;';
+    hero.innerHTML = `
+      <div class="gp-subscriptions-hero-content">
+        <div>
+          <h1 class="gp-subscriptions-hero-title">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 12px;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            My Subscriptions
+          </h1>
+          <p class="gp-subscriptions-hero-subtitle">Track and manage all your subscriptions in one place</p>
+        </div>
+        <div class="gp-subscriptions-stats">
+          <div class="gp-subscriptions-stat">
+            <span class="gp-subscriptions-stat-value">${totalSubscriptions}</span>
+            <span class="gp-subscriptions-stat-label">Total Subscriptions</span>
+          </div>
+          <div class="gp-subscriptions-stat" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
+            <span class="gp-subscriptions-stat-value" style="color: #10b981;">${activeCount}</span>
+            <span class="gp-subscriptions-stat-label">Active</span>
+          </div>
+          <div class="gp-subscriptions-stat" style="background: rgba(107, 114, 128, 0.15); border-color: rgba(107, 114, 128, 0.3);">
+            <span class="gp-subscriptions-stat-value" style="color: #6b7280;">${completedCanceledCount}</span>
+            <span class="gp-subscriptions-stat-label">Ended</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Insérer au tout début du conteneur
+    targetContainer.insertBefore(hero, targetContainer.firstChild);
+    console.log('✅ [SUBSCRIPTIONS] Hero inserted');
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initSubscriptionsRedesign, 500));
+  } else {
+    setTimeout(initSubscriptionsRedesign, 500);
+  }
+
+})();
+
+// =============================================================================
 // MODULE: ADD FUNDS PAGE REDESIGN — PREMIUM EDITION
 // =============================================================================
 (function () {
