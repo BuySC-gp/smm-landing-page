@@ -72,7 +72,7 @@ flex: none !important;
 max-width: 100% !important;
 width: 100% !important;
 padding: 0 !important;
-order: 1 !important;
+order: 0 !important;
 `;
         } else {
           colDiv.style.cssText = `
@@ -117,8 +117,8 @@ overflow: hidden !important;
 display: flex !important;
 flex-direction: column !important;
 box-sizing: border-box !important;
-order: 0 !important;
-margin-bottom: 16px !important;
+order: 1 !important;
+margin-top: 16px !important;
 `;
       } else {
         rightPanel.style.cssText = `
@@ -5415,4 +5415,3 @@ cursor: pointer !important;
   }
 
 })();
-
