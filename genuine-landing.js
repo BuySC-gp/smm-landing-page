@@ -35,8 +35,25 @@
       }
       console.log('✅ Row found:', rowDiv);
 
-      // === 3. TRANSFORMER LE ROW EN FLEX 50/50 ===
-      rowDiv.style.cssText = `
+      // === DÉTECTION MOBILE ===
+      const isMobile = window.innerWidth <= 768;
+      console.log('📱 Mobile detected:', isMobile);
+
+      // === 3. TRANSFORMER LE ROW - RESPONSIVE ===
+      if (isMobile) {
+        // MOBILE: Layout vertical empilé
+        rowDiv.style.cssText = `
+display: flex !important;
+flex-direction: column !important;
+gap: 16px !important;
+width: 100% !important;
+max-width: 100% !important;
+padding: 16px !important;
+box-sizing: border-box !important;
+`;
+      } else {
+        // DESKTOP: Layout 50/50
+        rowDiv.style.cssText = `
 display: flex !important;
 flex-wrap: nowrap !important;
 gap: 24px !important;
@@ -45,15 +62,26 @@ max-width: 100% !important;
 padding: 24px !important;
 box-sizing: border-box !important;
 `;
+      }
 
-      // === 4. COLUMN GAUCHE = 50% ===
+      // === 4. COLUMN GAUCHE - RESPONSIVE ===
       if (colDiv) {
-        colDiv.style.cssText = `
+        if (isMobile) {
+          colDiv.style.cssText = `
+flex: none !important;
+max-width: 100% !important;
+width: 100% !important;
+padding: 0 !important;
+order: 1 !important;
+`;
+        } else {
+          colDiv.style.cssText = `
 flex: 0 0 50% !important;
 max-width: 50% !important;
 width: 50% !important;
 padding: 0 !important;
 `;
+        }
       }
 
       // === 5. STYLE DU FORM ===
@@ -61,13 +89,13 @@ padding: 0 !important;
 width: 100% !important;
 background: white !important;
 border-radius: 12px !important;
-padding: 32px !important;
+padding: ${isMobile ? '20px' : '32px'} !important;
 box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
 border: 1px solid #e5e7eb !important;
 box-sizing: border-box !important;
 `;
 
-      // === 6. CRÉER PANEL DROIT (FIX: suppression du doublon) ===
+      // === 6. CRÉER PANEL DROIT - RESPONSIVE ===
       let rightPanel = document.getElementById('order-info-panel');
       if (!rightPanel) {
         rightPanel = document.createElement('div');
@@ -76,7 +104,24 @@ box-sizing: border-box !important;
         console.log('✅ Right panel created and appended');
       }
 
-      rightPanel.style.cssText = `
+      if (isMobile) {
+        rightPanel.style.cssText = `
+flex: none !important;
+max-width: 100% !important;
+width: 100% !important;
+background: white !important;
+border-radius: 12px !important;
+box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
+border: 1px solid #e5e7eb !important;
+overflow: hidden !important;
+display: flex !important;
+flex-direction: column !important;
+box-sizing: border-box !important;
+order: 0 !important;
+margin-bottom: 16px !important;
+`;
+      } else {
+        rightPanel.style.cssText = `
 flex: 0 0 calc(50% - 24px) !important;
 max-width: calc(50% - 24px) !important;
 width: calc(50% - 24px) !important;
@@ -89,6 +134,7 @@ display: flex !important;
 flex-direction: column !important;
 box-sizing: border-box !important;
 `;
+      }
 
       rightPanel.innerHTML = `
 <!-- Header Badge GP CLEAN -->
@@ -5369,3 +5415,4 @@ cursor: pointer !important;
   }
 
 })();
+
