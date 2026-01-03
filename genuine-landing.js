@@ -5939,7 +5939,7 @@ cursor: pointer !important;
         background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
         border-radius: 16px;
         padding: 24px;
-        margin: 32px 0;
+        margin: 0 0 24px 0;
         color: white;
       }
       
@@ -6424,12 +6424,9 @@ cursor: pointer !important;
   function addAIUsageSection() {
     if (document.querySelector('.gp-api-ai-section')) return;
 
-    const lastTable = Array.from(document.querySelectorAll('table')).pop();
-    const codeBlocks = document.querySelectorAll('.gp-api-code-block');
-    const lastCodeBlock = codeBlocks[codeBlocks.length - 1];
-    const insertPoint = lastCodeBlock || lastTable;
-
-    if (!insertPoint) return;
+    // Insert after export bar (which is after info cards)
+    const exportBar = document.querySelector('.gp-api-export-bar');
+    if (!exportBar) return;
 
     const aiSection = document.createElement('div');
     aiSection.className = 'gp-api-ai-section';
@@ -6473,7 +6470,7 @@ cursor: pointer !important;
       '</div>' +
       '</div>';
 
-    insertPoint.parentElement.insertBefore(aiSection, insertPoint.nextSibling);
+    exportBar.insertAdjacentElement('afterend', aiSection);
   }
 
   function addStructuredData() {
