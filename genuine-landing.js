@@ -6614,6 +6614,9 @@ cursor: pointer !important;
     marker.style.display = 'none';
     document.body.appendChild(marker);
 
+    // Add body class for CSS targeting
+    document.body.classList.add('gp-account-page');
+
     // === INJECTION CSS ===
     injectStyles();
 
@@ -6778,50 +6781,48 @@ cursor: pointer !important;
         color: #3b82f6;
       }
       
-      /* Form Elements */
-      .gp-account-section input[type="text"],
-      .gp-account-section input[type="email"],
-      .gp-account-section input[type="password"],
-      .gp-account-section select,
-      .gp-account-section textarea {
+      /* Form Elements - Global on account page */
+      body.gp-account-page input[type="text"],
+      body.gp-account-page input[type="email"],
+      body.gp-account-page input[type="password"],
+      body.gp-account-page select,
+      body.gp-account-page textarea {
         width: 100%;
-        padding: 14px 18px;
-        border: 2px solid #e2e8f0;
-        border-radius: 12px;
-        font-size: 14px;
+        padding: 14px 18px !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
         transition: all 0.2s;
-        background: #f8fafc;
+        background: #f8fafc !important;
         margin-bottom: 12px;
       }
       
-      .gp-account-section input:focus,
-      .gp-account-section select:focus,
-      .gp-account-section textarea:focus {
-        outline: none;
-        border-color: #3b82f6;
-        background: white;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      body.gp-account-page input:focus,
+      body.gp-account-page select:focus,
+      body.gp-account-page textarea:focus {
+        outline: none !important;
+        border-color: #3b82f6 !important;
+        background: white !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
       }
       
-      .gp-account-section input[readonly] {
-        background: #f1f5f9;
-        color: #64748b;
+      body.gp-account-page input[readonly] {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
         cursor: not-allowed;
       }
       
-      .gp-account-section label {
+      body.gp-account-page label {
         display: block;
-        font-weight: 600;
-        color: #334155;
+        font-weight: 600 !important;
+        color: #334155 !important;
         margin-bottom: 8px;
         font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
       }
       
-      /* Buttons */
-      .gp-account-section button,
-      .gp-account-section .btn {
+      /* Buttons - Global on account page */
+      body.gp-account-page button:not(.gp-account-hero *),
+      body.gp-account-page .btn:not(.gp-account-hero *) {
         background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
         border: none !important;
         padding: 12px 24px !important;
@@ -6833,8 +6834,8 @@ cursor: pointer !important;
         transition: all 0.2s !important;
       }
       
-      .gp-account-section button:hover,
-      .gp-account-section .btn:hover {
+      body.gp-account-page button:hover,
+      body.gp-account-page .btn:hover {
         transform: translateY(-2px) !important;
         box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4) !important;
       }
@@ -6914,46 +6915,49 @@ cursor: pointer !important;
       }
       
       /* Notifications Table */
-      .gp-account-notif-table {
+      body.gp-account-page table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
       }
       
-      .gp-account-notif-table thead {
+      body.gp-account-page table thead {
         background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
       }
       
-      .gp-account-notif-table th {
-        padding: 14px 16px;
+      body.gp-account-page table th {
+        padding: 14px 16px !important;
         text-align: left;
-        font-weight: 700;
-        font-size: 12px;
+        font-weight: 700 !important;
+        font-size: 12px !important;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        color: white;
+        color: white !important;
+        border: none !important;
       }
       
-      .gp-account-notif-table th:first-child {
+      body.gp-account-page table th:first-child {
         border-radius: 10px 0 0 10px;
       }
       
-      .gp-account-notif-table th:last-child {
+      body.gp-account-page table th:last-child {
         border-radius: 0 10px 10px 0;
       }
       
-      .gp-account-notif-table td {
-        padding: 16px;
-        border-bottom: 1px solid #f1f5f9;
+      body.gp-account-page table td {
+        padding: 16px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
         font-size: 14px;
+        border-left: none !important;
+        border-right: none !important;
       }
       
-      .gp-account-notif-table tr:hover td {
-        background: #f8fafc;
+      body.gp-account-page table tr:hover td {
+        background: #f0f9ff;
       }
       
       /* Styled Checkboxes */
-      .gp-account-notif-table input[type="checkbox"] {
+      body.gp-account-page input[type="checkbox"] {
         width: 20px;
         height: 20px;
         accent-color: #3b82f6;
