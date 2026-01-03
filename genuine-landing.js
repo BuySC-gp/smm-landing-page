@@ -6750,7 +6750,7 @@ cursor: pointer !important;
       /* Submit Button */
       .gp-massorder-form-card button[type="submit"],
       .gp-massorder-form-card .btn-primary {
-        background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%) !important;
         border: none !important;
         padding: 14px 32px !important;
         border-radius: 10px !important;
@@ -6766,7 +6766,7 @@ cursor: pointer !important;
       .gp-massorder-form-card button[type="submit"]:hover,
       .gp-massorder-form-card .btn-primary:hover {
         transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4) !important;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
       }
       
       /* Example line */
