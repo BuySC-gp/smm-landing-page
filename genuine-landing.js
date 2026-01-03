@@ -9042,26 +9042,36 @@ cursor: pointer !important;
     const rows = table ? Array.from(table.querySelectorAll('tbody tr')) : [];
     const services = [];
     const categories = new Map();
+    const categoryIcons = new Map();
+    let currentCategory = 'General';
+    let currentCategoryIcon = '';
 
     rows.forEach(row => {
       const cells = row.querySelectorAll('td');
-      if (cells.length < 5) return;
 
-      // Check if this is a category header row
-      const firstCellText = cells[0]?.textContent?.trim();
-      const colspan = cells[0]?.getAttribute('colspan');
+      // Check if this is a category header row (has icon + colspan)
+      const firstCell = cells[0];
+      const colspan = firstCell?.getAttribute('colspan');
+      const hasIcon = row.querySelector('img, i, svg');
 
-      if (colspan || cells.length < 4) {
-        // Category header
+      if (colspan || (cells.length === 1 && hasIcon)) {
+        // Category header row - extract name and icon
+        currentCategory = firstCell?.textContent?.trim() || 'General';
+
+        // Get icon HTML
+        const iconEl = row.querySelector('img, i, svg');
+        if (iconEl) {
+          if (iconEl.tagName === 'IMG') {
+            currentCategoryIcon = `<img src="${iconEl.src}" alt="">`;
+          } else {
+            currentCategoryIcon = iconEl.outerHTML;
+          }
+          categoryIcons.set(currentCategory, currentCategoryIcon);
+        }
         return;
       }
 
-      // Check for category row (icon + text spanning)
-      const categoryIcon = row.querySelector('img, i');
-      const isCategoryRow = row.classList.contains('category') ||
-        (cells.length === 1 && categoryIcon);
-
-      if (isCategoryRow) return;
+      if (cells.length < 5) return;
 
       const id = cells[0]?.textContent?.trim() || '';
       const name = cells[1]?.textContent?.trim() || '';
@@ -9069,29 +9079,34 @@ cursor: pointer !important;
       const minOrder = cells[3]?.textContent?.trim() || '';
       const maxOrder = cells[4]?.textContent?.trim() || '';
 
-      // Find category from previous row or service name
-      let category = 'General';
-      const prevRow = row.previousElementSibling;
-      if (prevRow && prevRow.querySelector('td[colspan]')) {
-        category = prevRow.textContent.trim();
+      // Use current category or detect from name
+      let category = currentCategory;
+
+      // Fallback: Extract category from service name if not set
+      if (category === 'General') {
+        if (name.toLowerCase().includes('instagram')) category = 'Instagram';
+        else if (name.toLowerCase().includes('tiktok')) category = 'TikTok';
+        else if (name.toLowerCase().includes('youtube')) category = 'YouTube';
+        else if (name.toLowerCase().includes('facebook')) category = 'Facebook';
+        else if (name.toLowerCase().includes('twitter') || name.toLowerCase().includes('x ')) category = 'Twitter/X';
+        else if (name.toLowerCase().includes('spotify')) category = 'Spotify';
+        else if (name.toLowerCase().includes('telegram')) category = 'Telegram';
       }
 
-      // Extract category from service name patterns
-      if (name.toLowerCase().includes('instagram')) category = 'Instagram';
-      else if (name.toLowerCase().includes('tiktok')) category = 'TikTok';
-      else if (name.toLowerCase().includes('youtube')) category = 'YouTube';
-      else if (name.toLowerCase().includes('facebook')) category = 'Facebook';
-      else if (name.toLowerCase().includes('twitter') || name.toLowerCase().includes('x ')) category = 'Twitter/X';
-      else if (name.toLowerCase().includes('spotify')) category = 'Spotify';
-      else if (name.toLowerCase().includes('telegram')) category = 'Telegram';
+      // Get icon for this category
+      const icon = categoryIcons.get(category) || categoryIcons.get(currentCategory) || '';
 
       if (id && name) {
-        services.push({ id, name, rate, minOrder, maxOrder, category });
+        services.push({ id, name, rate, minOrder, maxOrder, category, icon });
         categories.set(category, (categories.get(category) || 0) + 1);
       }
     });
 
-    return { services, categories: Array.from(categories.entries()) };
+    return {
+      services,
+      categories: Array.from(categories.entries()),
+      categoryIcons: Object.fromEntries(categoryIcons)
+    };
   }
 
   function injectStyles() {
@@ -9404,6 +9419,29 @@ cursor: pointer !important;
         display: none !important;
       }
       
+      /* Hide native search bar */
+      #gp-pub-services-container ~ .row,
+      .gp-pub-services-wrapper ~ .row,
+      body:has(#gp-pub-services-container) > .container > .row:first-of-type,
+      body:has(#gp-pub-services-container) .row:has(.btn-primary):has(input),
+      .container > .row:has(input[type="text"]):has(.btn),
+      .row:has(.dropdown):has(input):has(.btn-primary) {
+        display: none !important;
+      }
+      
+      /* Category Icons in pills and cards */
+      .gp-pub-filter-btn img,
+      .gp-pub-card-category img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+      }
+      
+      .gp-pub-filter-btn i,
+      .gp-pub-card-category i {
+        font-size: 14px;
+      }
+      
       /* Responsive */
       @media (max-width: 768px) {
         .gp-pub-hero {
@@ -9428,7 +9466,7 @@ cursor: pointer !important;
   }
 
   function buildNewUI(data) {
-    const { services, categories } = data;
+    const { services, categories, categoryIcons } = data;
 
     // Find and hide original content
     const table = document.querySelector('table');
@@ -9487,12 +9525,13 @@ cursor: pointer !important;
 
     let filtersHTML = '<div class="gp-pub-filters">';
     filtersHTML += `<button class="gp-pub-filter-btn active" data-category="all">
-      All <span class="gp-pub-filter-count">${services.length}</span>
+      📋 All <span class="gp-pub-filter-count">${services.length}</span>
     </button>`;
 
     categories.forEach(([cat, count]) => {
+      const icon = categoryIcons[cat] || '';
       filtersHTML += `<button class="gp-pub-filter-btn" data-category="${cat}">
-        ${cat} <span class="gp-pub-filter-count">${count}</span>
+        ${icon} ${cat} <span class="gp-pub-filter-count">${count}</span>
       </button>`;
     });
     filtersHTML += '</div>';
@@ -9552,7 +9591,7 @@ cursor: pointer !important;
         card.className = 'gp-pub-card';
         card.innerHTML = `
           <div class="gp-pub-card-header">
-            <span class="gp-pub-card-category">${service.category}</span>
+            <span class="gp-pub-card-category">${service.icon || ''} ${service.category}</span>
             <span class="gp-pub-card-id">ID: ${service.id}</span>
           </div>
           <h3 class="gp-pub-card-title">${service.name}</h3>
