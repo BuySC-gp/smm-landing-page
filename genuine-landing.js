@@ -89,7 +89,7 @@ padding: 0 !important;
 width: 100% !important;
 background: white !important;
 border-radius: 12px !important;
-padding: ${isMobile ? '20px' : '32px'} !important;
+padding: ${isMobile ? '16px' : '32px'} !important;
 box-shadow: 0 4px 20px rgba(0,0,0,0.06) !important;
 border: 1px solid #e5e7eb !important;
 box-sizing: border-box !important;
@@ -120,9 +120,12 @@ box-sizing: border-box !important;
 flex: none !important;
 max-width: 100% !important;
 width: 100% !important;
-padding: 0 8px !important;
+padding: 0 !important;
+margin: 0 8px !important;
 order: 0 !important;
-margin-bottom: 0 !important;
+background: transparent !important;
+border: none !important;
+box-shadow: none !important;
 `;
         }
 
