@@ -453,51 +453,52 @@ cursor: pointer !important;
       return platformIcons.default;
     }
 
-    // === FONCTION: Extraire les catégories depuis le <select> natif ===
+    // === FONCTION: Extraire les catégories depuis le <select> natif + icônes du Select2 ===
     function extractCategoriesFromSelect() {
       const select = document.querySelector('select[name*="category"], #category');
       if (!select) return [];
 
-      const categories = [];
+      // Ouvrir le dropdown Select2 pour accéder aux icônes
+      const select2Container = select.closest('.form-group')?.querySelector('.select2-container') ||
+        document.querySelector('.select2-container--open') ||
+        document.querySelector('[class*="select2"]');
 
-      // Chercher aussi les éléments du dropdown custom (si existe)
-      const dropdownItems = document.querySelectorAll('.dropdown-item, .select2-results__option, [class*="option"]');
+      // Map des icônes extraites du Select2
       const iconMap = {};
 
-      // Extraire les icônes depuis le dropdown custom
-      dropdownItems.forEach(item => {
-        const text = item.textContent?.trim();
-        const iconEl = item.querySelector('img, svg, i, [class*="icon"]');
-        if (text && iconEl) {
-          iconMap[text.toLowerCase()] = iconEl.outerHTML;
+      // Chercher les options Select2 déjà rendues
+      const select2Options = document.querySelectorAll('.select2-results__option');
+      select2Options.forEach(opt => {
+        const textContent = opt.textContent?.trim();
+        const iconContainer = opt.querySelector('.select2-selection__icon');
+        if (textContent && iconContainer) {
+          // Extraire l'icône (img ou span avec classe fa)
+          const imgEl = iconContainer.querySelector('img');
+          const faEl = iconContainer.querySelector('[class*="fa-"]');
+
+          if (imgEl) {
+            iconMap[textContent.toLowerCase()] = imgEl.outerHTML;
+          } else if (faEl) {
+            iconMap[textContent.toLowerCase()] = faEl.outerHTML;
+          }
         }
       });
 
+      const categories = [];
       for (let i = 0; i < select.options.length; i++) {
         const option = select.options[i];
         const text = option.text.trim();
         if (text) {
-          // Chercher l'icône dans le HTML de l'option (si data-content existe)
           let iconHtml = null;
           let iconColor = '#6b7280';
 
-          // 1. Essayer de récupérer depuis data-content (Bootstrap Select)
-          const dataContent = option.getAttribute('data-content');
-          if (dataContent) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = dataContent;
-            const iconEl = tempDiv.querySelector('img, svg, i, [class*="icon"]');
-            if (iconEl) {
-              iconHtml = iconEl.outerHTML;
-            }
+          // Chercher dans le map Select2
+          const textLower = text.toLowerCase();
+          if (iconMap[textLower]) {
+            iconHtml = iconMap[textLower];
           }
 
-          // 2. Sinon, chercher dans le dropdown map
-          if (!iconHtml && iconMap[text.toLowerCase()]) {
-            iconHtml = iconMap[text.toLowerCase()];
-          }
-
-          // 3. Fallback: utiliser nos icônes par défaut
+          // Fallback: utiliser nos icônes par défaut
           if (!iconHtml) {
             const fallbackData = getIconForCategory(text);
             iconHtml = fallbackData.icon;
@@ -597,11 +598,43 @@ cursor: pointer !important;
         document.querySelector('form')?.closest('.row');
       if (!rowDiv) return;
 
+      // Ouvrir le Select2 pour extraire les icônes
+      const select2Container = document.querySelector('.select2-container');
+      if (select2Container && !document.querySelector('.select2-results__option')) {
+        // Simuler un clic pour ouvrir le dropdown
+        select2Container.querySelector('.select2-selection')?.click();
+
+        // Attendre que les options soient rendues, puis extraire et refermer
+        setTimeout(() => {
+          const categories = extractCategoriesFromSelect();
+
+          // Refermer le dropdown
+          document.body.click();
+
+          if (categories.length === 0) {
+            console.warn('⚠️ [QUICK SELECTORS] No categories found');
+            return;
+          }
+
+          buildQuickSelectorsBar(rowDiv, categories);
+        }, 200);
+        return;
+      }
+
+      // Si le dropdown est déjà ouvert ou pas de Select2
       const categories = extractCategoriesFromSelect();
       if (categories.length === 0) {
         console.warn('⚠️ [QUICK SELECTORS] No categories found in select');
         return;
       }
+
+      buildQuickSelectorsBar(rowDiv, categories);
+    }
+
+    // Fonction séparée pour construire la barre
+    function buildQuickSelectorsBar(rowDiv, categories) {
+      // Éviter doublons
+      if (document.getElementById('quick-selectors-bar')) return;
 
       // Créer le wrapper
       const wrapper = document.createElement('div');
