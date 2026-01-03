@@ -6850,7 +6850,7 @@ cursor: pointer !important;
         </h1>
         <p class="gp-massorder-hero-subtitle">
           Place multiple orders at once! Enter one order per line using the format: 
-          <strong>service_id | link | quantity</strong>. Perfect for bulk campaigns and resellers.
+          <strong>service_id|link|quantity</strong>. Perfect for bulk campaigns and resellers.
         </p>
       </div>
     `;
@@ -6878,7 +6878,7 @@ cursor: pointer !important;
     const formatGuide = document.createElement('div');
     formatGuide.className = 'gp-massorder-format-guide';
     formatGuide.innerHTML = `
-      <p><strong>Format:</strong> <code>service_id | link | quantity</code></p>
+      <p><strong>Format:</strong> <code>service_id|link|quantity</code></p>
     `;
 
     formElement.parentElement.insertBefore(card, formElement);
@@ -6887,7 +6887,7 @@ cursor: pointer !important;
     card.appendChild(formElement);
 
     // Add placeholder to textarea
-    textarea.placeholder = '100 | https://instagram.com/username | 1000\n101 | https://twitter.com/username | 500\n102 | https://youtube.com/watch?v=xxxxx | 2000';
+    textarea.placeholder = '100|https://instagram.com/username|1000\n101|https://twitter.com/username|500\n102|https://youtube.com/watch?v=xxxxx|2000';
 
     // Add example tip
     const example = document.createElement('div');
