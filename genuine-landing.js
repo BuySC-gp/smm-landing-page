@@ -5491,9 +5491,9 @@ cursor: pointer !important;
 (function () {
   'use strict';
 
-  // Détection page API
-  const isApiPage = window.location.pathname.includes('/api') ||
-    document.querySelector('h1, h2')?.textContent?.toLowerCase().includes('api');
+  // Détection page API - seulement via URL pour éviter faux positifs
+  const isApiPage = window.location.pathname.endsWith('/api') ||
+    window.location.pathname.includes('/api/');
 
   if (!isApiPage) {
     return;
@@ -5502,19 +5502,39 @@ cursor: pointer !important;
   console.log('🔌 [API] Page detected - Loading Premium Redesign...');
 
   function initApiRedesign() {
-    // Trouver le conteneur principal
-    const mainContainer = document.querySelector('.wrapper-content__body, .main-content, main, .content') ||
-      document.querySelector('[class*="content"]') ||
-      document.body;
-
-    if (!mainContainer) {
-      console.log('⏳ [API] Waiting for container...');
-      setTimeout(initApiRedesign, 500);
+    // Éviter double injection
+    if (document.getElementById('gp-api-redesign')) {
       return;
     }
 
-    // Éviter double injection
-    if (document.getElementById('gp-api-redesign')) {
+    // Trouver le conteneur principal - être très spécifique
+    const wrapperContent = document.querySelector('.wrapper-content, .wrapper-content__body');
+    const mainContent = document.querySelector('.main-content, main[role="main"], .content-wrapper');
+    const pageBlock = document.querySelector('[id^="block_"]');
+
+    // Chercher le titre API dans le contenu principal (pas dans la navbar)
+    const allH1H2 = document.querySelectorAll('h1, h2');
+    let apiTitle = null;
+    let targetContainer = null;
+
+    allH1H2.forEach(heading => {
+      if (heading.textContent.trim().toLowerCase() === 'api') {
+        // Vérifier que ce n'est pas dans la navbar
+        if (!heading.closest('nav, header, .navbar, .header')) {
+          apiTitle = heading;
+          targetContainer = heading.parentElement;
+        }
+      }
+    });
+
+    // Fallback au wrapper content
+    if (!targetContainer) {
+      targetContainer = wrapperContent || mainContent || pageBlock;
+    }
+
+    if (!targetContainer) {
+      console.log('⏳ [API] Waiting for container...');
+      setTimeout(initApiRedesign, 500);
       return;
     }
 
@@ -5525,6 +5545,23 @@ cursor: pointer !important;
     document.body.appendChild(marker);
 
     // === INJECTION CSS ===
+    injectStyles();
+
+    // === ENHANCE PAGE ===
+    addHeroHeader(apiTitle, targetContainer);
+    enhanceTables();
+    enhanceCodeBlocks();
+    enhanceDropdowns();
+
+    // === SETUP EVENT DELEGATION FOR COPY BUTTONS ===
+    setupCopyButtons();
+
+    console.log('✅ [API] Premium Redesign Applied!');
+  }
+
+  function injectStyles() {
+    if (document.getElementById('gp-api-styles')) return;
+
     const styles = document.createElement('style');
     styles.id = 'gp-api-styles';
     styles.textContent = `
@@ -5540,8 +5577,6 @@ cursor: pointer !important;
         overflow: hidden !important;
         color: white !important;
         box-shadow: 0 10px 40px rgba(8, 145, 178, 0.25) !important;
-        width: 100% !important;
-        max-width: 100% !important;
       }
       
       .gp-api-hero::before {
@@ -5566,17 +5601,18 @@ cursor: pointer !important;
       }
       
       .gp-api-hero-title {
-        font-size: 32px;
+        font-size: 28px;
         font-weight: 800;
         margin: 0 0 8px 0;
         letter-spacing: -0.5px;
         display: flex;
         align-items: center;
         gap: 12px;
+        color: white !important;
       }
       
       .gp-api-hero-subtitle {
-        font-size: 15px;
+        font-size: 14px;
         color: rgba(255,255,255,0.85);
         margin: 0;
       }
@@ -5609,7 +5645,7 @@ cursor: pointer !important;
       /* Info Cards Row */
       .gp-api-info-cards {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 16px;
         margin-bottom: 24px;
       }
@@ -5642,7 +5678,7 @@ cursor: pointer !important;
       }
       
       .gp-api-copy-btn {
-        padding: 6px 10px;
+        padding: 6px 12px;
         background: #f1f5f9;
         border: 1px solid #e2e8f0;
         border-radius: 6px;
@@ -5661,50 +5697,9 @@ cursor: pointer !important;
       }
       
       .gp-api-copy-btn.copied {
-        background: #10b981;
-        border-color: #10b981;
-        color: white;
-      }
-      
-      /* Section Cards */
-      .gp-api-section {
-        background: white;
-        border-radius: 16px;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 20px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      }
-      
-      .gp-api-section-header {
-        padding: 20px 24px;
-        background: #f8fafc;
-        border-bottom: 1px solid #e2e8f0;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      
-      .gp-api-section-icon {
-        width: 40px;
-        height: 40px;
-        background: linear-gradient(135deg, #0891b2 0%, #0ea5e9 100%);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-      }
-      
-      .gp-api-section-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1e293b;
-        margin: 0;
-      }
-      
-      .gp-api-section-content {
-        padding: 24px;
+        background: #10b981 !important;
+        border-color: #10b981 !important;
+        color: white !important;
       }
       
       /* Enhanced Tables */
@@ -5712,6 +5707,10 @@ cursor: pointer !important;
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 16px;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
       }
       
       .gp-api-table th {
@@ -5751,33 +5750,12 @@ cursor: pointer !important;
         border-radius: 4px;
       }
       
-      .gp-api-required {
-        font-size: 10px;
-        padding: 2px 6px;
-        background: #fee2e2;
-        color: #dc2626;
-        border-radius: 4px;
-        font-weight: 600;
-        margin-left: 8px;
-      }
-      
-      .gp-api-optional {
-        font-size: 10px;
-        padding: 2px 6px;
-        background: #f1f5f9;
-        color: #64748b;
-        border-radius: 4px;
-        font-weight: 600;
-        margin-left: 8px;
-      }
-      
       /* Code Blocks */
       .gp-api-code-block {
         background: #1e293b;
         border-radius: 12px;
         overflow: hidden;
         margin: 16px 0;
-        position: relative;
       }
       
       .gp-api-code-header {
@@ -5807,9 +5785,6 @@ cursor: pointer !important;
         font-weight: 600;
         color: #94a3b8;
         transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
       }
       
       .gp-api-code-copy-btn:hover {
@@ -5818,8 +5793,8 @@ cursor: pointer !important;
       }
       
       .gp-api-code-copy-btn.copied {
-        background: #10b981;
-        color: white;
+        background: #10b981 !important;
+        color: white !important;
       }
       
       .gp-api-code-content {
@@ -5856,15 +5831,41 @@ cursor: pointer !important;
         font-family: monospace;
       }
       
-      .gp-api-method-get {
-        display: inline-block;
-        padding: 4px 10px;
-        background: #d1fae5;
-        color: #059669;
-        font-size: 12px;
+      /* Dropdown/Select Styles */
+      .gp-api-select,
+      select {
+        padding: 12px 16px !important;
+        border-radius: 10px !important;
+        border: 1px solid #e2e8f0 !important;
+        background: white !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #1e293b !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        appearance: none !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 12px center !important;
+        padding-right: 40px !important;
+      }
+      
+      select:hover {
+        border-color: #0ea5e9 !important;
+      }
+      
+      select:focus {
+        outline: none !important;
+        border-color: #0ea5e9 !important;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1) !important;
+      }
+      
+      /* Section Headers */
+      h2, h3, h4 {
+        color: #1e293b;
         font-weight: 700;
-        border-radius: 6px;
-        font-family: monospace;
+        margin-top: 32px;
+        margin-bottom: 16px;
       }
       
       /* Responsive */
@@ -5879,7 +5880,7 @@ cursor: pointer !important;
         }
         
         .gp-api-hero-title {
-          font-size: 24px;
+          font-size: 22px;
           justify-content: center;
         }
         
@@ -5890,43 +5891,16 @@ cursor: pointer !important;
         .gp-api-info-cards {
           grid-template-columns: 1fr;
         }
-        
-        .gp-api-section-header {
-          padding: 16px;
-        }
-        
-        .gp-api-section-content {
-          padding: 16px;
-        }
-        
-        .gp-api-table {
-          display: block;
-          overflow-x: auto;
-        }
       }
     `;
     document.head.appendChild(styles);
-
-    // === ENHANCE PAGE ===
-    addHeroHeader();
-    enhanceTables();
-    enhanceCodeBlocks();
-
-    console.log('✅ [API] Premium Redesign Applied!');
   }
 
-  function addHeroHeader() {
+  function addHeroHeader(apiTitle, targetContainer) {
     // Éviter double injection
     if (document.querySelector('.gp-api-hero')) return;
 
-    // Trouver le titre API existant
-    const existingTitle = document.querySelector('h1, h2');
     const apiUrl = extractApiUrl();
-
-    // Trouver le conteneur pour insérer le hero
-    const targetContainer = existingTitle?.parentElement ||
-      document.querySelector('.wrapper-content__body, .content, main') ||
-      document.body;
 
     const hero = document.createElement('div');
     hero.className = 'gp-api-hero';
@@ -5934,7 +5908,7 @@ cursor: pointer !important;
       <div class="gp-api-hero-content">
         <div>
           <h1 class="gp-api-hero-title">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 17l6-6-6-6"/>
               <path d="M12 19h8"/>
             </svg>
@@ -5955,25 +5929,24 @@ cursor: pointer !important;
       </div>
     `;
 
-    // Cacher le titre original et insérer le hero
-    if (existingTitle && existingTitle.textContent.toLowerCase().includes('api')) {
-      existingTitle.style.display = 'none';
-      existingTitle.parentElement.insertBefore(hero, existingTitle);
+    // Insérer le hero
+    if (apiTitle) {
+      apiTitle.style.display = 'none';
+      apiTitle.parentElement.insertBefore(hero, apiTitle);
     } else {
       targetContainer.insertBefore(hero, targetContainer.firstChild);
     }
 
-    // Ajouter les info cards après le hero
+    // Ajouter les info cards
     if (apiUrl) {
       addInfoCards(hero, apiUrl);
     }
   }
 
   function extractApiUrl() {
-    // Chercher l'URL de l'API dans le contenu de la page
     const allText = document.body.innerText;
     const urlMatch = allText.match(/https?:\/\/[^\s]+\/api[^\s]*/i);
-    return urlMatch ? urlMatch[0] : null;
+    return urlMatch ? urlMatch[0] : 'https://yourpanel.com/api/v2';
   }
 
   function addInfoCards(heroElement, apiUrl) {
@@ -5983,8 +5956,8 @@ cursor: pointer !important;
       <div class="gp-api-info-card">
         <div class="gp-api-info-card-label">API Endpoint</div>
         <div class="gp-api-info-card-value">
-          <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;">${apiUrl}</span>
-          <button class="gp-api-copy-btn" onclick="navigator.clipboard.writeText('${apiUrl}').then(() => { this.textContent = 'Copied!'; this.classList.add('copied'); setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 2000); })">Copy</button>
+          <span id="api-url-text" style="flex: 1; overflow: hidden; text-overflow: ellipsis;">${apiUrl}</span>
+          <button class="gp-api-copy-btn" data-copy="${apiUrl}">Copy</button>
         </div>
       </div>
       <div class="gp-api-info-card">
@@ -5996,14 +5969,14 @@ cursor: pointer !important;
       <div class="gp-api-info-card">
         <div class="gp-api-info-card-label">Response Format</div>
         <div class="gp-api-info-card-value">
-          <span style="color: #0891b2; font-family: monospace;">JSON</span>
+          <span style="color: #0891b2; font-family: monospace; font-weight: 700;">JSON</span>
         </div>
       </div>
       <div class="gp-api-info-card">
         <div class="gp-api-info-card-label">Authentication</div>
         <div class="gp-api-info-card-value">
           <span>API Key required</span>
-          <a href="/account" style="color: #0ea5e9; font-size: 12px; text-decoration: none;">Get Key →</a>
+          <a href="/account" style="color: #0ea5e9; font-size: 12px; text-decoration: none; font-weight: 600;">Get Key →</a>
         </div>
       </div>
     `;
@@ -6011,24 +5984,20 @@ cursor: pointer !important;
   }
 
   function enhanceTables() {
-    // Trouver toutes les tables
     const tables = document.querySelectorAll('table');
 
     tables.forEach(table => {
-      // Éviter les tables déjà stylées
       if (table.classList.contains('gp-api-table')) return;
 
-      // Ajouter la classe premium
       table.classList.add('gp-api-table');
 
-      // Améliorer les cellules de paramètres
       const rows = table.querySelectorAll('tbody tr');
       rows.forEach(row => {
         const firstCell = row.querySelector('td:first-child');
         if (firstCell) {
           const paramName = firstCell.textContent.trim();
           if (paramName && paramName !== 'Parameters') {
-            firstCell.innerHTML = `<span class="gp-api-param">${paramName}</span>`;
+            firstCell.innerHTML = '<span class="gp-api-param">' + paramName + '</span>';
           }
         }
       });
@@ -6036,50 +6005,96 @@ cursor: pointer !important;
   }
 
   function enhanceCodeBlocks() {
-    // Trouver tous les elements qui ressemblent à du code JSON
     const preElements = document.querySelectorAll('pre, code');
 
     preElements.forEach(pre => {
-      // Éviter les blocs déjà styled
       if (pre.closest('.gp-api-code-block')) return;
 
       const text = pre.textContent.trim();
 
-      // Vérifier si c'est du JSON
       if (text.startsWith('[') || text.startsWith('{')) {
         const wrapper = document.createElement('div');
         wrapper.className = 'gp-api-code-block';
 
-        // Formater le JSON avec syntax highlighting
         let formattedCode = text;
         try {
           const parsed = JSON.parse(text);
           formattedCode = JSON.stringify(parsed, null, 2);
         } catch (e) {
-          // Pas du JSON valide, garder tel quel
+          // Keep original
         }
 
-        // Appliquer le syntax highlighting basique
-        const highlighted = formattedCode
+        // Store code for copy button
+        wrapper.dataset.code = formattedCode;
+
+        // Escape HTML
+        const escaped = formattedCode
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        // Syntax highlighting
+        const highlighted = escaped
           .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
           .replace(/: "([^"]*)"/g, ': <span class="json-string">"$1"</span>')
           .replace(/: (\d+)/g, ': <span class="json-number">$1</span>')
           .replace(/: (true|false)/g, ': <span class="json-boolean">$1</span>')
           .replace(/: (null)/g, ': <span class="json-null">$1</span>');
 
-        wrapper.innerHTML = `
-          <div class="gp-api-code-header">
-            <span class="gp-api-code-title">Example Response</span>
-            <button class="gp-api-code-copy-btn" onclick="navigator.clipboard.writeText(\`${formattedCode.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`).then(() => { this.innerHTML = '✓ Copied'; this.classList.add('copied'); setTimeout(() => { this.innerHTML = '📋 Copy'; this.classList.remove('copied'); }, 2000); })">
-              📋 Copy
-            </button>
-          </div>
-          <div class="gp-api-code-content">
-            <pre>${highlighted}</pre>
-          </div>
-        `;
+        wrapper.innerHTML =
+          '<div class="gp-api-code-header">' +
+          '<span class="gp-api-code-title">Example Response</span>' +
+          '<button class="gp-api-code-copy-btn">📋 Copy</button>' +
+          '</div>' +
+          '<div class="gp-api-code-content">' +
+          '<pre>' + highlighted + '</pre>' +
+          '</div>';
 
         pre.parentElement.replaceChild(wrapper, pre);
+      }
+    });
+  }
+
+  function enhanceDropdowns() {
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+      select.classList.add('gp-api-select');
+    });
+  }
+
+  function setupCopyButtons() {
+    document.addEventListener('click', function (e) {
+      // Handle info card copy buttons
+      if (e.target.classList.contains('gp-api-copy-btn')) {
+        const textToCopy = e.target.dataset.copy;
+        if (textToCopy) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            e.target.textContent = 'Copied!';
+            e.target.classList.add('copied');
+            setTimeout(() => {
+              e.target.textContent = 'Copy';
+              e.target.classList.remove('copied');
+            }, 2000);
+          });
+        }
+      }
+
+      // Handle code block copy buttons
+      if (e.target.classList.contains('gp-api-code-copy-btn')) {
+        const codeBlock = e.target.closest('.gp-api-code-block');
+        if (codeBlock) {
+          const code = codeBlock.dataset.code || codeBlock.querySelector('pre')?.textContent;
+          if (code) {
+            navigator.clipboard.writeText(code).then(() => {
+              e.target.textContent = '✓ Copied';
+              e.target.classList.add('copied');
+              setTimeout(() => {
+                e.target.textContent = '📋 Copy';
+                e.target.classList.remove('copied');
+              }, 2000);
+            });
+          }
+        }
       }
     });
   }
