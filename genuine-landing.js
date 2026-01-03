@@ -5553,6 +5553,11 @@ cursor: pointer !important;
     enhanceCodeBlocks();
     enhanceDropdowns();
 
+    // === AI-FRIENDLY FEATURES ===
+    addExportActionsBar();
+    addAIUsageSection();
+    addStructuredData();
+
     // === SETUP EVENT DELEGATION FOR COPY BUTTONS ===
     setupCopyButtons();
 
@@ -5880,6 +5885,143 @@ cursor: pointer !important;
         margin-bottom: 16px;
       }
       
+      /* === AI-FRIENDLY FEATURES === */
+      
+      /* Export Actions Bar */
+      .gp-api-export-bar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+        padding: 16px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-api-export-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .gp-api-export-btn.primary {
+        background: linear-gradient(135deg, #0891b2 0%, #0ea5e9 100%);
+        color: white;
+      }
+      
+      .gp-api-export-btn.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+      }
+      
+      .gp-api-export-btn.secondary {
+        background: white;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-api-export-btn.secondary:hover {
+        background: #f8fafc;
+        border-color: #0ea5e9;
+        color: #0ea5e9;
+      }
+      
+      /* AI Usage Section */
+      .gp-api-ai-section {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+        border-radius: 16px;
+        padding: 24px;
+        margin: 32px 0;
+        color: white;
+      }
+      
+      .gp-api-ai-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      
+      .gp-api-ai-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+      }
+      
+      .gp-api-ai-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+      }
+      
+      .gp-api-ai-subtitle {
+        font-size: 13px;
+        opacity: 0.8;
+        margin: 4px 0 0 0;
+      }
+      
+      .gp-api-ai-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      
+      .gp-api-ai-card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+      
+      .gp-api-ai-card-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-api-ai-card-content {
+        font-size: 12px;
+        line-height: 1.5;
+        opacity: 0.9;
+      }
+      
+      .gp-api-ai-card-content code {
+        background: rgba(0,0,0,0.3);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 11px;
+      }
+      
+      .gp-api-prompt-example {
+        background: rgba(0,0,0,0.3);
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 12px;
+        font-family: monospace;
+        font-size: 11px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        border-left: 3px solid #a78bfa;
+      }
+      
       /* Responsive */
       @media (max-width: 768px) {
         .gp-api-hero {
@@ -6109,6 +6251,255 @@ cursor: pointer !important;
         }
       }
     });
+  }
+
+  // === AI-FRIENDLY FEATURES ===
+
+  function addExportActionsBar() {
+    if (document.querySelector('.gp-api-export-bar')) return;
+
+    const infoCards = document.querySelector('.gp-api-info-cards');
+    if (!infoCards) return;
+
+    const exportBar = document.createElement('div');
+    exportBar.className = 'gp-api-export-bar';
+    exportBar.innerHTML =
+      '<button class="gp-api-export-btn primary" id="gp-export-markdown">' +
+      '<span>📝</span> Download Markdown' +
+      '</button>' +
+      '<button class="gp-api-export-btn secondary" id="gp-export-json">' +
+      '<span>📦</span> Export OpenAPI JSON' +
+      '</button>' +
+      '<button class="gp-api-export-btn secondary" id="gp-copy-for-ai">' +
+      '<span>📋</span> Copy for AI' +
+      '</button>';
+
+    infoCards.insertAdjacentElement('afterend', exportBar);
+
+    // Event handlers
+    document.getElementById('gp-export-markdown').addEventListener('click', exportAsMarkdown);
+    document.getElementById('gp-export-json').addEventListener('click', exportAsOpenAPI);
+    document.getElementById('gp-copy-for-ai').addEventListener('click', copyForAI);
+  }
+
+  function exportAsMarkdown() {
+    const apiUrl = extractApiUrl();
+    const siteName = window.location.hostname;
+
+    let markdown = '# ' + siteName + ' API Documentation\n\n';
+    markdown += '## Overview\n\n';
+    markdown += '- **API URL:** `' + apiUrl + '`\n';
+    markdown += '- **HTTP Method:** POST\n';
+    markdown += '- **Response Format:** JSON\n\n';
+
+    // Get all tables and convert to markdown
+    const tables = document.querySelectorAll('table');
+    tables.forEach((table, idx) => {
+      const headerText = table.previousElementSibling?.textContent || 'Endpoint ' + (idx + 1);
+      markdown += '## ' + headerText.trim() + '\n\n';
+
+      const headers = table.querySelectorAll('th');
+      const rows = table.querySelectorAll('tbody tr');
+
+      if (headers.length) {
+        markdown += '| ' + Array.from(headers).map(h => h.textContent.trim()).join(' | ') + ' |\n';
+        markdown += '| ' + Array.from(headers).map(() => '---').join(' | ') + ' |\n';
+      }
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        markdown += '| ' + Array.from(cells).map(c => c.textContent.trim()).join(' | ') + ' |\n';
+      });
+
+      markdown += '\n';
+    });
+
+    // Get code examples
+    const codeBlocks = document.querySelectorAll('.gp-api-code-block');
+    codeBlocks.forEach((block, idx) => {
+      const code = block.dataset.code || block.querySelector('pre')?.textContent;
+      if (code) {
+        markdown += '### Example Response ' + (idx + 1) + '\n\n';
+        markdown += '```json\n' + code + '\n```\n\n';
+      }
+    });
+
+    // Download
+    const blob = new Blob([markdown], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = siteName.replace(/\./g, '_') + '_api_documentation.md';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function exportAsOpenAPI() {
+    const apiUrl = extractApiUrl();
+    const siteName = window.location.hostname;
+
+    const openApiSpec = {
+      openapi: '3.0.0',
+      info: {
+        title: siteName + ' API',
+        version: '2.0',
+        description: 'SMM Panel API for programmatic service integration'
+      },
+      servers: [{ url: apiUrl }],
+      paths: {
+        '/': {
+          post: {
+            summary: 'Send API Request',
+            requestBody: {
+              required: true,
+              content: {
+                'application/x-www-form-urlencoded': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      key: { type: 'string', description: 'Your API key' },
+                      action: { type: 'string', description: 'Action to perform (services, add, status, etc.)' }
+                    },
+                    required: ['key', 'action']
+                  }
+                }
+              }
+            },
+            responses: {
+              '200': {
+                description: 'Successful response',
+                content: {
+                  'application/json': {
+                    schema: { type: 'object' }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(openApiSpec, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = siteName.replace(/\./g, '_') + '_openapi.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function copyForAI() {
+    const apiUrl = extractApiUrl();
+    const siteName = window.location.hostname;
+
+    let prompt = 'I need help integrating with the ' + siteName + ' API.\n\n';
+    prompt += 'API Details:\n';
+    prompt += '- URL: ' + apiUrl + '\n';
+    prompt += '- Method: POST\n';
+    prompt += '- Format: JSON\n\n';
+    prompt += 'Available Actions:\n';
+
+    // Extract available actions from page
+    const tables = document.querySelectorAll('table');
+    tables.forEach(table => {
+      const headerText = table.previousElementSibling?.textContent || '';
+      if (headerText.toLowerCase().includes('parameters')) return;
+
+      prompt += '- ' + headerText.trim() + '\n';
+    });
+
+    prompt += '\nPlease help me write code to interact with this API.';
+
+    navigator.clipboard.writeText(prompt).then(() => {
+      const btn = document.getElementById('gp-copy-for-ai');
+      btn.innerHTML = '<span>✓</span> Copied!';
+      setTimeout(() => {
+        btn.innerHTML = '<span>📋</span> Copy for AI';
+      }, 2000);
+    });
+  }
+
+  function addAIUsageSection() {
+    if (document.querySelector('.gp-api-ai-section')) return;
+
+    const lastTable = Array.from(document.querySelectorAll('table')).pop();
+    const codeBlocks = document.querySelectorAll('.gp-api-code-block');
+    const lastCodeBlock = codeBlocks[codeBlocks.length - 1];
+    const insertPoint = lastCodeBlock || lastTable;
+
+    if (!insertPoint) return;
+
+    const aiSection = document.createElement('div');
+    aiSection.className = 'gp-api-ai-section';
+    aiSection.innerHTML =
+      '<div class="gp-api-ai-header">' +
+      '<div class="gp-api-ai-icon">🤖</div>' +
+      '<div>' +
+      '<h3 class="gp-api-ai-title">Use with AI Assistants</h3>' +
+      '<p class="gp-api-ai-subtitle">Integrate this API using Claude, ChatGPT, or other AI tools</p>' +
+      '</div>' +
+      '</div>' +
+      '<div class="gp-api-ai-content">' +
+      '<div class="gp-api-ai-card">' +
+      '<h4 class="gp-api-ai-card-title">💬 Example Prompt</h4>' +
+      '<div class="gp-api-ai-card-content">' +
+      'Use this prompt to get AI to help you integrate:' +
+      '<div class="gp-api-prompt-example">' +
+      '"Write a Python script that uses the ' + window.location.hostname + ' API to:\n' +
+      '1. Get the list of available services\n' +
+      '2. Place an order for Instagram followers\n' +
+      '3. Check the order status"' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="gp-api-ai-card">' +
+      '<h4 class="gp-api-ai-card-title">🔌 MCP Integration</h4>' +
+      '<div class="gp-api-ai-card-content">' +
+      'This API can be used with Model Context Protocol (MCP) servers. ' +
+      'Download the OpenAPI spec and use tools like <code>openapi-mcp-server</code> ' +
+      'to create an MCP server that AI assistants can use directly.' +
+      '</div>' +
+      '</div>' +
+      '<div class="gp-api-ai-card">' +
+      '<h4 class="gp-api-ai-card-title">⚡ Quick Tips</h4>' +
+      '<div class="gp-api-ai-card-content">' +
+      '• Always include your API key in requests<br>' +
+      '• Use <code>action=services</code> to see available services<br>' +
+      '• Check order status with <code>action=status</code><br>' +
+      '• All responses are JSON formatted' +
+      '</div>' +
+      '</div>' +
+      '</div>';
+
+    insertPoint.parentElement.insertBefore(aiSection, insertPoint.nextSibling);
+  }
+
+  function addStructuredData() {
+    if (document.querySelector('script[data-gp-api-schema]')) return;
+
+    const apiUrl = extractApiUrl();
+    const siteName = window.location.hostname;
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'WebAPI',
+      name: siteName + ' SMM Panel API',
+      description: 'RESTful API for SMM panel services integration',
+      url: apiUrl,
+      provider: {
+        '@type': 'Organization',
+        name: siteName
+      },
+      documentation: window.location.href,
+      termsOfService: window.location.origin + '/terms'
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.setAttribute('data-gp-api-schema', 'true');
+    script.textContent = JSON.stringify(schema);
+    document.head.appendChild(script);
   }
 
   // Initialisation
