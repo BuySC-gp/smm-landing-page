@@ -100,11 +100,32 @@ box-sizing: border-box !important;
       if (!rightPanel) {
         rightPanel = document.createElement('div');
         rightPanel.id = 'order-info-panel';
-        rowDiv.appendChild(rightPanel);
-        console.log('✅ Right panel created and appended');
+
+        // Sur mobile: insérer APRÈS colDiv (pour que le formulaire soit en premier)
+        // Sur desktop: simplement ajouter à la fin
+        if (isMobile && colDiv && colDiv.nextSibling) {
+          rowDiv.insertBefore(rightPanel, colDiv.nextSibling);
+        } else if (isMobile && colDiv) {
+          rowDiv.appendChild(rightPanel);
+        } else {
+          rowDiv.appendChild(rightPanel);
+        }
+        console.log('✅ Right panel created and inserted');
       }
 
       if (isMobile) {
+        // Mobile: Full width, formulaire EN PREMIER (order: 0), info panel EN SECOND (order: 1)
+        if (colDiv) {
+          colDiv.style.cssText = `
+flex: none !important;
+max-width: 100% !important;
+width: 100% !important;
+padding: 0 8px !important;
+order: 0 !important;
+margin-bottom: 0 !important;
+`;
+        }
+
         rightPanel.style.cssText = `
 flex: none !important;
 max-width: 100% !important;
@@ -119,6 +140,8 @@ flex-direction: column !important;
 box-sizing: border-box !important;
 order: 1 !important;
 margin-top: 16px !important;
+margin-left: 8px !important;
+margin-right: 8px !important;
 `;
       } else {
         rightPanel.style.cssText = `
