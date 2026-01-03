@@ -4412,22 +4412,72 @@ cursor: pointer !important;
       /* Responsive */
       @media (max-width: 768px) {
         .gp-orders-hero {
-          padding: 24px;
+          padding: 16px 20px;
+          margin-bottom: 16px;
         }
         
         .gp-orders-hero-content {
           flex-direction: column;
           text-align: center;
+          gap: 16px;
+        }
+        
+        .gp-orders-hero-title {
+          font-size: 22px;
+        }
+        
+        .gp-orders-hero-title svg {
+          width: 24px;
+          height: 24px;
+          margin-right: 8px;
+        }
+        
+        .gp-orders-hero-subtitle {
+          font-size: 13px;
         }
         
         .gp-orders-stats {
           width: 100%;
           justify-content: center;
+          gap: 12px;
         }
         
         .gp-orders-stat {
           flex: 1;
-          padding: 12px 16px;
+          padding: 10px 12px;
+          min-width: 70px;
+        }
+        
+        .gp-orders-stat-value {
+          font-size: 20px;
+        }
+        
+        .gp-orders-stat-label {
+          font-size: 9px;
+        }
+        
+        /* TABS - FORCE HORIZONTAL SCROLL */
+        .gp-orders-tabs {
+          display: flex !important;
+          flex-direction: row !important;
+          flex-wrap: nowrap !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          padding: 12px;
+          gap: 8px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        
+        .gp-orders-tabs::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .gp-orders-tab {
+          flex: 0 0 auto !important;
+          white-space: nowrap !important;
+          padding: 8px 14px;
+          font-size: 12px;
         }
         
         .gp-orders-table-wrapper {
@@ -4989,22 +5039,72 @@ cursor: pointer !important;
       /* Responsive */
       @media (max-width: 768px) {
         .gp-subscriptions-hero {
-          padding: 24px;
+          padding: 16px 20px;
+          margin-bottom: 16px;
         }
         
         .gp-subscriptions-hero-content {
           flex-direction: column;
           text-align: center;
+          gap: 16px;
+        }
+        
+        .gp-subscriptions-hero-title {
+          font-size: 22px;
+        }
+        
+        .gp-subscriptions-hero-title svg {
+          width: 24px;
+          height: 24px;
+          margin-right: 8px;
+        }
+        
+        .gp-subscriptions-hero-subtitle {
+          font-size: 13px;
         }
         
         .gp-subscriptions-stats {
           width: 100%;
           justify-content: center;
+          gap: 12px;
         }
         
         .gp-subscriptions-stat {
           flex: 1;
-          padding: 12px 16px;
+          padding: 10px 12px;
+          min-width: 70px;
+        }
+        
+        .gp-subscriptions-stat-value {
+          font-size: 20px;
+        }
+        
+        .gp-subscriptions-stat-label {
+          font-size: 9px;
+        }
+        
+        /* TABS - FORCE HORIZONTAL SCROLL */
+        .gp-subscriptions-tabs {
+          display: flex !important;
+          flex-direction: row !important;
+          flex-wrap: nowrap !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          padding: 12px;
+          gap: 8px;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+        
+        .gp-subscriptions-tabs::-webkit-scrollbar {
+          display: none;
+        }
+        
+        .gp-subscriptions-tab {
+          flex: 0 0 auto !important;
+          white-space: nowrap !important;
+          padding: 8px 14px;
+          font-size: 12px;
         }
         
         .gp-subscriptions-table-wrapper {
