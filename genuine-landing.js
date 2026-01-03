@@ -8978,3 +8978,649 @@ cursor: pointer !important;
   }
 
 })();
+
+// =============================================================================
+// MODULE: PUBLIC SERVICES PAGE REDESIGN — MATCHING INTERNAL PANEL DESIGN
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Services publique (pas de sidebar = pas connecté)
+  const isServicesPage = window.location.pathname === '/services' ||
+    window.location.pathname === '/services/';
+  const hasNoSidebar = !document.querySelector('.sidebar, .menu-aside, .wrapper-aside');
+  const isPublicPage = isServicesPage && (hasNoSidebar || document.querySelector('.main-navbar-public, .navbar-guest'));
+
+  // Alternative detection: check if we have a public table structure
+  const hasPublicTable = document.querySelector('table') &&
+    !document.querySelector('#block_39') &&
+    !document.querySelector('#service-table-39');
+
+  if (!isServicesPage) return;
+  if (document.querySelector('#gp-public-services-redesign')) return;
+
+  // Wait for table to load
+  function waitForTable() {
+    const table = document.querySelector('table');
+    if (!table) {
+      setTimeout(waitForTable, 500);
+      return;
+    }
+
+    // Check if internal module already active
+    if (document.querySelector('#gp-services-v2-container')) return;
+
+    initPublicServicesRedesign();
+  }
+
+  console.log('🌐 [Public Services] Checking page...');
+
+  function initPublicServicesRedesign() {
+    // Mark as initialized
+    const marker = document.createElement('div');
+    marker.id = 'gp-public-services-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    console.log('🌐 [Public Services] Initializing Premium Redesign...');
+
+    // Extract data from table
+    const tableData = extractTableData();
+    if (tableData.services.length === 0) return;
+
+    // Inject styles
+    injectStyles();
+
+    // Build new UI
+    buildNewUI(tableData);
+
+    console.log('✅ [Public Services] Premium Redesign Applied!');
+  }
+
+  function extractTableData() {
+    const table = document.querySelector('table');
+    const rows = table ? Array.from(table.querySelectorAll('tbody tr')) : [];
+    const services = [];
+    const categories = new Map();
+
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 5) return;
+
+      // Check if this is a category header row
+      const firstCellText = cells[0]?.textContent?.trim();
+      const colspan = cells[0]?.getAttribute('colspan');
+
+      if (colspan || cells.length < 4) {
+        // Category header
+        return;
+      }
+
+      // Check for category row (icon + text spanning)
+      const categoryIcon = row.querySelector('img, i');
+      const isCategoryRow = row.classList.contains('category') ||
+        (cells.length === 1 && categoryIcon);
+
+      if (isCategoryRow) return;
+
+      const id = cells[0]?.textContent?.trim() || '';
+      const name = cells[1]?.textContent?.trim() || '';
+      const rate = cells[2]?.textContent?.trim() || '';
+      const minOrder = cells[3]?.textContent?.trim() || '';
+      const maxOrder = cells[4]?.textContent?.trim() || '';
+
+      // Find category from previous row or service name
+      let category = 'General';
+      const prevRow = row.previousElementSibling;
+      if (prevRow && prevRow.querySelector('td[colspan]')) {
+        category = prevRow.textContent.trim();
+      }
+
+      // Extract category from service name patterns
+      if (name.toLowerCase().includes('instagram')) category = 'Instagram';
+      else if (name.toLowerCase().includes('tiktok')) category = 'TikTok';
+      else if (name.toLowerCase().includes('youtube')) category = 'YouTube';
+      else if (name.toLowerCase().includes('facebook')) category = 'Facebook';
+      else if (name.toLowerCase().includes('twitter') || name.toLowerCase().includes('x ')) category = 'Twitter/X';
+      else if (name.toLowerCase().includes('spotify')) category = 'Spotify';
+      else if (name.toLowerCase().includes('telegram')) category = 'Telegram';
+
+      if (id && name) {
+        services.push({ id, name, rate, minOrder, maxOrder, category });
+        categories.set(category, (categories.get(category) || 0) + 1);
+      }
+    });
+
+    return { services, categories: Array.from(categories.entries()) };
+  }
+
+  function injectStyles() {
+    if (document.getElementById('gp-public-services-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'gp-public-services-styles';
+    styles.textContent = `
+      /* === PUBLIC SERVICES PAGE PREMIUM STYLES === */
+      
+      .gp-pub-services-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      
+      /* Hero Banner */
+      .gp-pub-hero {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #3b82f6 100%);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 32px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 50px rgba(29, 78, 216, 0.3);
+      }
+      
+      .gp-pub-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 80%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        pointer-events: none;
+      }
+      
+      .gp-pub-hero-content {
+        position: relative;
+        z-index: 1;
+      }
+      
+      .gp-pub-hero-title {
+        font-size: 36px;
+        font-weight: 800;
+        margin: 0 0 8px 0;
+        color: white !important;
+      }
+      
+      .gp-pub-hero-subtitle {
+        font-size: 16px;
+        opacity: 0.9;
+        margin: 0 0 24px 0;
+      }
+      
+      .gp-pub-stats {
+        display: flex;
+        gap: 32px;
+      }
+      
+      .gp-pub-stat {
+        text-align: center;
+      }
+      
+      .gp-pub-stat-value {
+        font-size: 32px;
+        font-weight: 800;
+        display: block;
+      }
+      
+      .gp-pub-stat-label {
+        font-size: 12px;
+        text-transform: uppercase;
+        opacity: 0.8;
+      }
+      
+      /* Search and Filters */
+      .gp-pub-toolbar {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-pub-search {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .gp-pub-search input {
+        flex: 1;
+        padding: 14px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+      
+      .gp-pub-search input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      }
+      
+      .gp-pub-filters {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      
+      .gp-pub-filter-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        border: 1px solid #e2e8f0;
+        border-radius: 30px;
+        background: white;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .gp-pub-filter-btn:hover {
+        border-color: #3b82f6;
+        color: #3b82f6;
+      }
+      
+      .gp-pub-filter-btn.active {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+        border-color: transparent;
+        color: white;
+      }
+      
+      .gp-pub-filter-count {
+        background: rgba(0,0,0,0.1);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 11px;
+      }
+      
+      .gp-pub-filter-btn.active .gp-pub-filter-count {
+        background: rgba(255,255,255,0.2);
+      }
+      
+      /* Services Grid */
+      .gp-pub-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+      
+      .gp-pub-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 20px;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .gp-pub-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        border-color: #93c5fd;
+      }
+      
+      .gp-pub-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      
+      .gp-pub-card-category {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        padding: 4px 10px;
+        background: #f1f5f9;
+        border-radius: 6px;
+      }
+      
+      .gp-pub-card-id {
+        font-size: 10px;
+        color: #94a3b8;
+        padding: 3px 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+      }
+      
+      .gp-pub-card-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 16px 0;
+        line-height: 1.4;
+        min-height: 42px;
+      }
+      
+      .gp-pub-card-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        background: #f8fafc;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        border: 1px solid #f1f5f9;
+      }
+      
+      .gp-pub-meta-item {
+        padding: 12px;
+      }
+      
+      .gp-pub-meta-item:first-child {
+        border-right: 1px solid #e2e8f0;
+      }
+      
+      .gp-pub-meta-label {
+        font-size: 9px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      
+      .gp-pub-meta-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: #334155;
+      }
+      
+      .gp-pub-meta-value.price {
+        color: #2563eb;
+      }
+      
+      .gp-pub-card-btn {
+        margin-top: auto;
+        width: 100%;
+        padding: 12px;
+        background: white;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        color: #334155;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+      }
+      
+      .gp-pub-card-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+        border-color: transparent;
+        color: white;
+      }
+      
+      /* Pagination */
+      .gp-pub-pagination {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 32px;
+      }
+      
+      .gp-pub-page-btn {
+        min-width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .gp-pub-page-btn.active {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%);
+        color: white;
+        border-color: transparent;
+      }
+      
+      .gp-pub-page-btn:hover:not(.active) {
+        border-color: #3b82f6;
+        color: #3b82f6;
+      }
+      
+      /* Hide original table */
+      .gp-pub-original-hidden {
+        display: none !important;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-pub-hero {
+          padding: 24px;
+        }
+        
+        .gp-pub-hero-title {
+          font-size: 28px;
+        }
+        
+        .gp-pub-stats {
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        
+        .gp-pub-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+
+  function buildNewUI(data) {
+    const { services, categories } = data;
+
+    // Find and hide original content
+    const table = document.querySelector('table');
+    const originalContainer = table?.closest('.container, .content, main') || table?.parentElement;
+
+    if (table) {
+      table.classList.add('gp-pub-original-hidden');
+    }
+
+    // Hide original search
+    const originalSearch = document.querySelector('.row:has(input[type="search"]), form:has(input[placeholder*="Search"])');
+    if (originalSearch) {
+      originalSearch.classList.add('gp-pub-original-hidden');
+    }
+
+    // Create wrapper
+    const wrapper = document.createElement('div');
+    wrapper.className = 'gp-pub-services-wrapper';
+    wrapper.id = 'gp-pub-services-container';
+
+    // Build Hero
+    const platformCount = categories.length;
+    const hero = document.createElement('div');
+    hero.className = 'gp-pub-hero';
+    hero.innerHTML = `
+      <div class="gp-pub-hero-content">
+        <h1 class="gp-pub-hero-title">Services Catalog</h1>
+        <p class="gp-pub-hero-subtitle">Premium quality services ready to boost your presence instantly.</p>
+        <div class="gp-pub-stats">
+          <div class="gp-pub-stat">
+            <span class="gp-pub-stat-value">${services.length}</span>
+            <span class="gp-pub-stat-label">Services</span>
+          </div>
+          <div class="gp-pub-stat">
+            <span class="gp-pub-stat-value">${platformCount}</span>
+            <span class="gp-pub-stat-label">Platforms</span>
+          </div>
+          <div class="gp-pub-stat">
+            <span class="gp-pub-stat-value">⚡</span>
+            <span class="gp-pub-stat-label">Instant Start</span>
+          </div>
+        </div>
+      </div>
+    `;
+    wrapper.appendChild(hero);
+
+    // Build Toolbar
+    const toolbar = document.createElement('div');
+    toolbar.className = 'gp-pub-toolbar';
+
+    const searchHTML = `
+      <div class="gp-pub-search">
+        <input type="text" placeholder="Search for services..." id="gp-pub-search-input">
+      </div>
+    `;
+
+    let filtersHTML = '<div class="gp-pub-filters">';
+    filtersHTML += `<button class="gp-pub-filter-btn active" data-category="all">
+      All <span class="gp-pub-filter-count">${services.length}</span>
+    </button>`;
+
+    categories.forEach(([cat, count]) => {
+      filtersHTML += `<button class="gp-pub-filter-btn" data-category="${cat}">
+        ${cat} <span class="gp-pub-filter-count">${count}</span>
+      </button>`;
+    });
+    filtersHTML += '</div>';
+
+    toolbar.innerHTML = searchHTML + filtersHTML;
+    wrapper.appendChild(toolbar);
+
+    // Build Grid
+    const grid = document.createElement('div');
+    grid.className = 'gp-pub-grid';
+    grid.id = 'gp-pub-grid';
+    wrapper.appendChild(grid);
+
+    // Build Pagination
+    const pagination = document.createElement('div');
+    pagination.className = 'gp-pub-pagination';
+    pagination.id = 'gp-pub-pagination';
+    wrapper.appendChild(pagination);
+
+    // Insert wrapper
+    if (originalContainer) {
+      originalContainer.insertBefore(wrapper, originalContainer.firstChild);
+    } else {
+      document.body.insertBefore(wrapper, document.body.firstChild);
+    }
+
+    // State
+    let currentCategory = 'all';
+    let currentPage = 1;
+    let searchTerm = '';
+    const pageSize = 12;
+
+    // Render functions
+    function renderGrid() {
+      let filtered = services;
+
+      if (currentCategory !== 'all') {
+        filtered = filtered.filter(s => s.category === currentCategory);
+      }
+
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filtered = filtered.filter(s =>
+          s.name.toLowerCase().includes(term) ||
+          s.id.includes(term)
+        );
+      }
+
+      const totalPages = Math.ceil(filtered.length / pageSize);
+      const start = (currentPage - 1) * pageSize;
+      const pageServices = filtered.slice(start, start + pageSize);
+
+      grid.innerHTML = '';
+
+      pageServices.forEach(service => {
+        const card = document.createElement('div');
+        card.className = 'gp-pub-card';
+        card.innerHTML = `
+          <div class="gp-pub-card-header">
+            <span class="gp-pub-card-category">${service.category}</span>
+            <span class="gp-pub-card-id">ID: ${service.id}</span>
+          </div>
+          <h3 class="gp-pub-card-title">${service.name}</h3>
+          <div class="gp-pub-card-meta">
+            <div class="gp-pub-meta-item">
+              <div class="gp-pub-meta-label">Rate / 1K</div>
+              <div class="gp-pub-meta-value price">${service.rate}</div>
+            </div>
+            <div class="gp-pub-meta-item">
+              <div class="gp-pub-meta-label">Min / Max</div>
+              <div class="gp-pub-meta-value">${service.minOrder} - ${service.maxOrder}</div>
+            </div>
+          </div>
+          <a href="/signup" class="gp-pub-card-btn">Sign up to Order</a>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Render pagination
+      renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+      pagination.innerHTML = '';
+
+      if (totalPages <= 1) return;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'gp-pub-page-btn' + (i === currentPage ? ' active' : '');
+        btn.textContent = i;
+        btn.onclick = () => {
+          currentPage = i;
+          renderGrid();
+          window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+        };
+        pagination.appendChild(btn);
+      }
+    }
+
+    // Event listeners
+    const searchInput = document.getElementById('gp-pub-search-input');
+    searchInput.addEventListener('input', (e) => {
+      searchTerm = e.target.value;
+      currentPage = 1;
+      renderGrid();
+    });
+
+    const filterBtns = toolbar.querySelectorAll('.gp-pub-filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.dataset.category;
+        currentPage = 1;
+        renderGrid();
+      });
+    });
+
+    // Initial render
+    renderGrid();
+  }
+
+  // Start
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForTable);
+  } else {
+    waitForTable();
+  }
+
+})();
