@@ -6581,6 +6581,334 @@ cursor: pointer !important;
 })();
 
 // =============================================================================
+// MODULE: MASS ORDER PAGE REDESIGN — BULK ORDERING EXPERIENCE
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Mass Order
+  const isMassOrderPage = window.location.pathname.includes('/massorder') ||
+    window.location.pathname.includes('/mass-order') ||
+    window.location.pathname.includes('/bulkorder');
+
+  if (!isMassOrderPage) return;
+
+  console.log('📦 [Mass Order] Initializing Premium Redesign...');
+
+  function initMassOrderRedesign() {
+    // Éviter double initialisation
+    if (document.querySelector('#gp-massorder-redesign')) return;
+
+    // Attendre que la page soit chargée
+    const form = document.querySelector('form') || document.querySelector('textarea');
+
+    if (!form) {
+      console.log('⏳ [Mass Order] Waiting for content...');
+      setTimeout(initMassOrderRedesign, 500);
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-massorder-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    injectStyles();
+
+    // === ENHANCE PAGE ===
+    addHeroHeader();
+    enhanceForm();
+
+    console.log('✅ [Mass Order] Premium Redesign Applied!');
+  }
+
+  function injectStyles() {
+    if (document.getElementById('gp-massorder-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'gp-massorder-styles';
+    styles.textContent = `
+      /* === MASS ORDER PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner - Purple/Indigo bulk theme */
+      .gp-massorder-hero {
+        background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 50%, #6366f1 100%) !important;
+        border-radius: 16px !important;
+        padding: 28px 32px !important;
+        margin-bottom: 24px !important;
+        margin-top: 0 !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 10px 40px rgba(124, 58, 237, 0.25) !important;
+      }
+      
+      .gp-massorder-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      
+      .gp-massorder-hero-content {
+        position: relative;
+        z-index: 1;
+      }
+      
+      .gp-massorder-hero-title {
+        font-size: 26px;
+        font-weight: 800;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: white !important;
+      }
+      
+      .gp-massorder-hero-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin: 8px 0 0 0;
+        max-width: 600px;
+        line-height: 1.5;
+      }
+      
+      /* Form Card */
+      .gp-massorder-form-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-massorder-form-header {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .gp-massorder-format-guide {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border: 1px solid #7dd3fc;
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin-bottom: 16px;
+      }
+      
+      .gp-massorder-format-guide code {
+        background: #0ea5e9;
+        color: white;
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+      
+      .gp-massorder-format-guide p {
+        margin: 0;
+        font-size: 13px;
+        color: #0369a1;
+      }
+      
+      /* Textarea */
+      .gp-massorder-form-card textarea {
+        width: 100%;
+        min-height: 250px;
+        padding: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        font-family: 'Monaco', 'Consolas', monospace;
+        line-height: 1.6;
+        resize: vertical;
+        transition: all 0.2s;
+        background: #f8fafc;
+      }
+      
+      .gp-massorder-form-card textarea:focus {
+        outline: none;
+        border-color: #7c3aed;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+      }
+      
+      .gp-massorder-form-card textarea::placeholder {
+        color: #94a3b8;
+      }
+      
+      /* Submit Button */
+      .gp-massorder-form-card button[type="submit"],
+      .gp-massorder-form-card .btn-primary {
+        background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
+        border: none !important;
+        padding: 14px 32px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        color: white !important;
+        cursor: pointer;
+        transition: all 0.2s !important;
+        width: 100%;
+        margin-top: 16px;
+      }
+      
+      .gp-massorder-form-card button[type="submit"]:hover,
+      .gp-massorder-form-card .btn-primary:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4) !important;
+      }
+      
+      /* Example line */
+      .gp-massorder-example {
+        margin-top: 16px;
+        padding: 12px 16px;
+        background: #fef3c7;
+        border-radius: 8px;
+        border-left: 4px solid #f59e0b;
+        font-size: 12px;
+        color: #92400e;
+      }
+      
+      .gp-massorder-example strong {
+        display: block;
+        margin-bottom: 4px;
+      }
+      
+      .gp-massorder-example code {
+        background: rgba(0,0,0,0.1);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: monospace;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-massorder-hero {
+          padding: 20px;
+        }
+        
+        .gp-massorder-hero-title {
+          font-size: 22px;
+        }
+        
+        .gp-massorder-form-card textarea {
+          min-height: 180px;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+
+  function addHeroHeader() {
+    if (document.querySelector('.gp-massorder-hero')) return;
+
+    // Find where to insert
+    const mainContent = document.querySelector('.wrapper-content__body') ||
+      document.querySelector('.main-content') ||
+      document.querySelector('.content') ||
+      document.querySelector('main');
+
+    const existingTitle = document.querySelector('h1, h2, strong');
+    const insertPoint = existingTitle || (mainContent ? mainContent.firstElementChild : null);
+
+    if (!insertPoint) return;
+
+    // Hide original title/instruction
+    if (existingTitle && (existingTitle.textContent.toLowerCase().includes('order') ||
+      existingTitle.textContent.toLowerCase().includes('format'))) {
+      existingTitle.style.display = 'none';
+      // Also hide the format instruction if separate
+      const formatHint = existingTitle.nextElementSibling;
+      if (formatHint && formatHint.textContent.includes('service_id')) {
+        formatHint.style.display = 'none';
+      }
+    }
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-massorder-hero';
+    hero.innerHTML = `
+      <div class="gp-massorder-hero-content">
+        <h1 class="gp-massorder-hero-title">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          Mass Order
+        </h1>
+        <p class="gp-massorder-hero-subtitle">
+          Place multiple orders at once! Enter one order per line using the format: 
+          <strong>service_id | link | quantity</strong>. Perfect for bulk campaigns and resellers.
+        </p>
+      </div>
+    `;
+
+    insertPoint.parentElement.insertBefore(hero, insertPoint);
+  }
+
+  function enhanceForm() {
+    const form = document.querySelector('form');
+    const textarea = document.querySelector('textarea');
+
+    if (!textarea) return;
+    if (textarea.closest('.gp-massorder-form-card')) return;
+
+    const formElement = form || textarea.parentElement;
+
+    // Wrap in styled card
+    const card = document.createElement('div');
+    card.className = 'gp-massorder-form-card';
+
+    const header = document.createElement('h3');
+    header.className = 'gp-massorder-form-header';
+    header.innerHTML = '📝 Enter Your Orders';
+
+    const formatGuide = document.createElement('div');
+    formatGuide.className = 'gp-massorder-format-guide';
+    formatGuide.innerHTML = `
+      <p><strong>Format:</strong> <code>service_id | link | quantity</code></p>
+    `;
+
+    formElement.parentElement.insertBefore(card, formElement);
+    card.appendChild(header);
+    card.appendChild(formatGuide);
+    card.appendChild(formElement);
+
+    // Add placeholder to textarea
+    textarea.placeholder = '100 | https://instagram.com/username | 1000\n101 | https://twitter.com/username | 500\n102 | https://youtube.com/watch?v=xxxxx | 2000';
+
+    // Add example tip
+    const example = document.createElement('div');
+    example.className = 'gp-massorder-example';
+    example.innerHTML = `
+      <strong>💡 Tip:</strong> 
+      Each line creates one order. Use <code>|</code> (pipe) to separate values.
+    `;
+    card.appendChild(example);
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initMassOrderRedesign, 500));
+  } else {
+    setTimeout(initMassOrderRedesign, 500);
+  }
+
+})();
+
+// =============================================================================
 // MODULE: TICKETS PAGE REDESIGN — PREMIUM SUPPORT EXPERIENCE
 // =============================================================================
 (function () {
