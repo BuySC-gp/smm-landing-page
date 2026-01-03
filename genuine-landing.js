@@ -5965,6 +5965,7 @@ cursor: pointer !important;
         font-size: 20px;
         font-weight: 700;
         margin: 0;
+        color: white !important;
       }
       
       .gp-api-ai-subtitle {
