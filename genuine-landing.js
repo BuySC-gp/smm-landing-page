@@ -4409,6 +4409,68 @@ cursor: pointer !important;
         color: white;
       }
       
+      /* === NATIVE TABS OVERRIDE FOR ORDERS === */
+      /* Force horizontal layout for native tabs */
+      .nav-tabs,
+      ul.nav,
+      .tabs {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 8px !important;
+        padding: 12px 16px !important;
+        background: white !important;
+        border-radius: 12px !important;
+        margin-bottom: 16px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        list-style: none !important;
+      }
+      
+      .nav-tabs::-webkit-scrollbar,
+      ul.nav::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .nav-tabs .nav-link,
+      .nav-tabs .nav-item,
+      ul.nav li,
+      ul.nav li a {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        text-decoration: none !important;
+        border: 1px solid #e2e8f0 !important;
+        background: white !important;
+        color: #64748b !important;
+        transition: all 0.2s !important;
+        display: inline-block !important;
+      }
+      
+      .nav-tabs .nav-link:hover,
+      ul.nav li a:hover {
+        background: #f8fafc !important;
+        border-color: #2563eb !important;
+        color: #2563eb !important;
+      }
+      
+      /* Active tab - BLUE for orders */
+      .nav-tabs .nav-link.active,
+      .nav-tabs .active .nav-link,
+      ul.nav li.active a,
+      ul.nav li a.active {
+        background: #1e40af !important;
+        border-color: #1e40af !important;
+        color: white !important;
+      }
+      
       /* Responsive */
       @media (max-width: 768px) {
         .gp-orders-hero {
@@ -5034,6 +5096,68 @@ cursor: pointer !important;
       .gp-sub-cancel-btn:hover {
         background: #dc2626;
         color: white;
+      }
+      
+      /* === NATIVE TABS OVERRIDE FOR SUBSCRIPTIONS === */
+      /* Force horizontal layout for native tabs */
+      .nav-tabs,
+      ul.nav,
+      .tabs {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 8px !important;
+        padding: 12px 16px !important;
+        background: white !important;
+        border-radius: 12px !important;
+        margin-bottom: 16px !important;
+        border: 1px solid #e2e8f0 !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        list-style: none !important;
+      }
+      
+      .nav-tabs::-webkit-scrollbar,
+      ul.nav::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .nav-tabs .nav-link,
+      .nav-tabs .nav-item,
+      ul.nav li,
+      ul.nav li a {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        text-decoration: none !important;
+        border: 1px solid #e2e8f0 !important;
+        background: white !important;
+        color: #64748b !important;
+        transition: all 0.2s !important;
+        display: inline-block !important;
+      }
+      
+      .nav-tabs .nav-link:hover,
+      ul.nav li a:hover {
+        background: #f8fafc !important;
+        border-color: #7c3aed !important;
+        color: #7c3aed !important;
+      }
+      
+      /* Active tab - PURPLE for subscriptions */
+      .nav-tabs .nav-link.active,
+      .nav-tabs .active .nav-link,
+      ul.nav li.active a,
+      ul.nav li a.active {
+        background: #7c3aed !important;
+        border-color: #7c3aed !important;
+        color: white !important;
       }
       
       /* Responsive */
