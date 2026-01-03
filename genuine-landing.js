@@ -4730,33 +4730,26 @@ cursor: pointer !important;
       return;
     }
 
-    // Cliquer sur "All" tab pour avoir toutes les données
-    const allTab = document.querySelector('.nav-tabs .nav-link, ul.nav li a');
-    if (allTab && !allTab.classList.contains('active')) {
-      allTab.click();
-    }
+    // Compter les stats depuis le tableau (supposer que All est déjà sélectionné par défaut)
+    const table = document.querySelector('table');
+    const allRows = table ? table.querySelectorAll('tbody tr') : [];
+    const totalOrders = allRows.length;
 
-    // Attendre un peu que le tableau se mette à jour, puis compter
-    setTimeout(() => {
-      const table = document.querySelector('table');
-      const allRows = table ? table.querySelectorAll('tbody tr') : [];
-      const totalOrders = allRows.length;
+    // Compter les orders par statut en cherchant dans le texte de chaque ligne
+    let completedCount = 0;
+    let inProgressCount = 0;
 
-      // Compter les orders completed
-      let completedCount = 0;
+    allRows.forEach(row => {
+      const rowText = row.textContent?.toLowerCase() || '';
+      if (rowText.includes('completed')) {
+        completedCount++;
+      }
+      if (rowText.includes('processing') || rowText.includes('in progress') || rowText.includes('pending')) {
+        inProgressCount++;
+      }
+    });
 
-      allRows.forEach(row => {
-        const rowText = row.textContent?.toLowerCase() || '';
-        if (rowText.includes('completed')) {
-          completedCount++;
-        }
-      });
-
-      // In Progress = Total - Completed (simple et toujours correct)
-      const inProgressCount = totalOrders - completedCount;
-
-      injectOrdersHero(targetContainer, totalOrders, completedCount, inProgressCount);
-    }, 300);
+    injectOrdersHero(targetContainer, totalOrders, completedCount, inProgressCount);
   }
 
   function injectOrdersHero(targetContainer, totalOrders, completedCount, inProgressCount) {
@@ -5428,36 +5421,27 @@ cursor: pointer !important;
       return;
     }
 
-    // Cliquer sur "All" tab pour avoir toutes les données
-    const allTab = document.querySelector('.nav-tabs .nav-link, ul.nav li a');
-    if (allTab && !allTab.classList.contains('active')) {
-      allTab.click();
-    }
+    // Compter les stats depuis le tableau (supposer que All est déjà sélectionné par défaut)
+    const table = document.querySelector('table');
+    const allRows = table ? table.querySelectorAll('tbody tr') : [];
+    const totalSubscriptions = allRows.length;
 
-    // Attendre un peu que le tableau se mette à jour, puis compter
-    setTimeout(() => {
-      const table = document.querySelector('table');
-      const allRows = table ? table.querySelectorAll('tbody tr') : [];
-      const totalSubscriptions = allRows.length;
+    // Compter les subscriptions actives - chercher "Active" dans les cellules
+    let activeCount = 0;
 
-      // Compter les subscriptions actives
-      let activeCount = 0;
+    allRows.forEach(row => {
+      // Chercher le statut dans toute la ligne
+      const rowText = row.textContent?.toLowerCase() || '';
+      // Chercher "active" mais pas dans d'autres mots
+      if (rowText.includes('active') && !rowText.includes('inactive')) {
+        activeCount++;
+      }
+    });
 
-      allRows.forEach(row => {
-        const rowText = row.textContent?.toLowerCase() || '';
-        if (rowText.includes('active') && !rowText.includes('cancel') && !rowText.includes('expired') && !rowText.includes('completed') && !rowText.includes('paused')) {
-          activeCount++;
-        }
-      });
-
-      // Ended = Total - Active (simple et toujours correct)
-      const endedCount = totalSubscriptions - activeCount;
-
-      injectHero(targetContainer, totalSubscriptions, activeCount, endedCount);
-    }, 300);
+    injectHero(targetContainer, totalSubscriptions, activeCount);
   }
 
-  function injectHero(targetContainer, totalSubscriptions, activeCount, endedCount) {
+  function injectHero(targetContainer, totalSubscriptions, activeCount) {
     if (document.querySelector('.gp-subscriptions-hero')) return;
 
     const hero = document.createElement('div');
@@ -5482,10 +5466,6 @@ cursor: pointer !important;
           <div class="gp-subscriptions-stat" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.3);">
             <span class="gp-subscriptions-stat-value" style="color: #10b981;">${activeCount}</span>
             <span class="gp-subscriptions-stat-label">Active</span>
-          </div>
-          <div class="gp-subscriptions-stat" style="background: rgba(107, 114, 128, 0.15); border-color: rgba(107, 114, 128, 0.3);">
-            <span class="gp-subscriptions-stat-value" style="color: #6b7280;">${endedCount}</span>
-            <span class="gp-subscriptions-stat-label">Ended</span>
           </div>
         </div>
       </div>
