@@ -6581,6 +6581,540 @@ cursor: pointer !important;
 })();
 
 // =============================================================================
+// MODULE: ACCOUNT & NOTIFICATIONS PAGE REDESIGN — TOP TIER EXPERIENCE
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Détection page Account / Notifications
+  const isAccountPage = window.location.pathname.includes('/account') ||
+    window.location.pathname.includes('/profile') ||
+    window.location.pathname.includes('/settings');
+
+  if (!isAccountPage) return;
+
+  console.log('👤 [Account] Initializing Premium Redesign...');
+
+  function initAccountRedesign() {
+    // Éviter double initialisation
+    if (document.querySelector('#gp-account-redesign')) return;
+
+    // Attendre que la page soit chargée
+    const form = document.querySelector('form') || document.querySelector('input');
+
+    if (!form) {
+      console.log('⏳ [Account] Waiting for content...');
+      setTimeout(initAccountRedesign, 500);
+      return;
+    }
+
+    // Marquer comme initialisé
+    const marker = document.createElement('div');
+    marker.id = 'gp-account-redesign';
+    marker.style.display = 'none';
+    document.body.appendChild(marker);
+
+    // === INJECTION CSS ===
+    injectStyles();
+
+    // === ENHANCE PAGE ===
+    addHeroHeader();
+    enhanceTabs();
+    enhanceFormSections();
+
+    console.log('✅ [Account] Premium Redesign Applied!');
+  }
+
+  function injectStyles() {
+    if (document.getElementById('gp-account-styles')) return;
+
+    const styles = document.createElement('style');
+    styles.id = 'gp-account-styles';
+    styles.textContent = `
+      /* === ACCOUNT PAGE PREMIUM STYLES === */
+      
+      /* Hero Banner - Royal Blue gradient */
+      .gp-account-hero {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #3b82f6 100%) !important;
+        border-radius: 20px !important;
+        padding: 32px !important;
+        margin-bottom: 28px !important;
+        margin-top: 0 !important;
+        position: relative !important;
+        overflow: hidden !important;
+        color: white !important;
+        box-shadow: 0 15px 50px rgba(29, 78, 216, 0.3) !important;
+      }
+      
+      .gp-account-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -30%;
+        width: 80%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        pointer-events: none;
+      }
+      
+      .gp-account-hero-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      
+      .gp-account-hero-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        border: 3px solid rgba(255,255,255,0.4);
+        backdrop-filter: blur(10px);
+      }
+      
+      .gp-account-hero-info {
+        flex: 1;
+      }
+      
+      .gp-account-hero-title {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 0;
+        color: white !important;
+      }
+      
+      .gp-account-hero-subtitle {
+        font-size: 14px;
+        opacity: 0.9;
+        margin: 6px 0 0 0;
+      }
+      
+      .gp-account-hero-email {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 8px 16px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+        font-size: 13px;
+        backdrop-filter: blur(10px);
+      }
+      
+      /* Enhanced Tabs */
+      .gp-account-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        background: #f1f5f9;
+        padding: 6px;
+        border-radius: 14px;
+        width: fit-content;
+      }
+      
+      .gp-account-tabs .nav-link,
+      .gp-account-tabs a {
+        padding: 10px 24px !important;
+        border-radius: 10px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        color: #64748b !important;
+        text-decoration: none !important;
+        transition: all 0.2s !important;
+        border: none !important;
+        background: transparent !important;
+      }
+      
+      .gp-account-tabs .nav-link:hover,
+      .gp-account-tabs a:hover {
+        color: #1d4ed8 !important;
+        background: rgba(29, 78, 216, 0.1) !important;
+      }
+      
+      .gp-account-tabs .nav-link.active,
+      .gp-account-tabs a.active,
+      .gp-account-tabs .active .nav-link {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3) !important;
+      }
+      
+      /* Form Sections */
+      .gp-account-section {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+      }
+      
+      .gp-account-section:hover {
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      }
+      
+      .gp-account-section-header {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f1f5f9;
+      }
+      
+      .gp-account-section-header svg {
+        width: 20px;
+        height: 20px;
+        color: #3b82f6;
+      }
+      
+      /* Form Elements */
+      .gp-account-section input[type="text"],
+      .gp-account-section input[type="email"],
+      .gp-account-section input[type="password"],
+      .gp-account-section select,
+      .gp-account-section textarea {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: all 0.2s;
+        background: #f8fafc;
+        margin-bottom: 12px;
+      }
+      
+      .gp-account-section input:focus,
+      .gp-account-section select:focus,
+      .gp-account-section textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+      }
+      
+      .gp-account-section input[readonly] {
+        background: #f1f5f9;
+        color: #64748b;
+        cursor: not-allowed;
+      }
+      
+      .gp-account-section label {
+        display: block;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 8px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      /* Buttons */
+      .gp-account-section button,
+      .gp-account-section .btn {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%) !important;
+        border: none !important;
+        padding: 12px 24px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        color: white !important;
+        cursor: pointer;
+        transition: all 0.2s !important;
+      }
+      
+      .gp-account-section button:hover,
+      .gp-account-section .btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(29, 78, 216, 0.4) !important;
+      }
+      
+      /* Input Group */
+      .gp-account-input-group {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        margin-bottom: 16px;
+      }
+      
+      .gp-account-input-group > div {
+        flex: 1;
+      }
+      
+      .gp-account-input-group button {
+        flex-shrink: 0;
+      }
+      
+      /* 2FA Section */
+      .gp-account-2fa {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border: 1px solid #86efac;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 16px;
+      }
+      
+      .gp-account-2fa-title {
+        font-weight: 700;
+        color: #166534;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      
+      .gp-account-2fa p {
+        color: #15803d;
+        font-size: 13px;
+        margin: 0 0 12px 0;
+        line-height: 1.5;
+      }
+      
+      .gp-account-2fa button {
+        background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%) !important;
+      }
+      
+      .gp-account-2fa button:hover {
+        box-shadow: 0 6px 20px rgba(22, 163, 74, 0.4) !important;
+      }
+      
+      /* API Key Section */
+      .gp-account-apikey {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        background: #1e293b;
+        border-radius: 10px;
+        font-family: 'Monaco', 'Consolas', monospace;
+        font-size: 13px;
+        color: #10b981;
+        margin-bottom: 12px;
+      }
+      
+      .gp-account-apikey code {
+        flex: 1;
+        word-break: break-all;
+      }
+      
+      .gp-account-apikey button {
+        background: #3b82f6 !important;
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+      }
+      
+      /* Notifications Table */
+      .gp-account-notif-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      
+      .gp-account-notif-table thead {
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+      }
+      
+      .gp-account-notif-table th {
+        padding: 14px 16px;
+        text-align: left;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+      }
+      
+      .gp-account-notif-table th:first-child {
+        border-radius: 10px 0 0 10px;
+      }
+      
+      .gp-account-notif-table th:last-child {
+        border-radius: 0 10px 10px 0;
+      }
+      
+      .gp-account-notif-table td {
+        padding: 16px;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 14px;
+      }
+      
+      .gp-account-notif-table tr:hover td {
+        background: #f8fafc;
+      }
+      
+      /* Styled Checkboxes */
+      .gp-account-notif-table input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #3b82f6;
+        cursor: pointer;
+      }
+      
+      /* Email Confirmation Alert */
+      .gp-account-email-alert {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 1px solid #fcd34d;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      
+      .gp-account-email-alert h4 {
+        color: #92400e;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-account-email-alert p {
+        color: #a16207;
+        font-size: 13px;
+        margin: 0 0 12px 0;
+      }
+      
+      .gp-account-email-alert button {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+      }
+      
+      /* Responsive */
+      @media (max-width: 768px) {
+        .gp-account-hero {
+          padding: 24px;
+        }
+        
+        .gp-account-hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+        
+        .gp-account-hero-avatar {
+          width: 64px;
+          height: 64px;
+          font-size: 28px;
+        }
+        
+        .gp-account-hero-title {
+          font-size: 22px;
+        }
+        
+        .gp-account-tabs {
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .gp-account-input-group {
+          flex-direction: column;
+        }
+        
+        .gp-account-input-group button {
+          width: 100%;
+        }
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+
+  function addHeroHeader() {
+    if (document.querySelector('.gp-account-hero')) return;
+
+    // Get username and email from page
+    const usernameInput = document.querySelector('input[name="username"], input[readonly]');
+    const emailInput = document.querySelector('input[type="email"], input[name="email"]');
+
+    const username = usernameInput?.value || 'User';
+    const email = emailInput?.value || '';
+    const initial = username.charAt(0).toUpperCase();
+
+    // Find where to insert
+    const mainContent = document.querySelector('.wrapper-content__body') ||
+      document.querySelector('.main-content') ||
+      document.querySelector('.content') ||
+      document.querySelector('main');
+
+    const tabs = document.querySelector('.nav-tabs, .nav, ul.nav');
+    const insertPoint = tabs || (mainContent ? mainContent.firstElementChild : null);
+
+    if (!insertPoint) return;
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-account-hero';
+    hero.innerHTML = `
+      <div class="gp-account-hero-content">
+        <div class="gp-account-hero-avatar">
+          ${initial}
+        </div>
+        <div class="gp-account-hero-info">
+          <h1 class="gp-account-hero-title">Account Settings</h1>
+          <p class="gp-account-hero-subtitle">Manage your profile, security, and preferences</p>
+          ${email ? `<div class="gp-account-hero-email">📧 ${email}</div>` : ''}
+        </div>
+      </div>
+    `;
+
+    insertPoint.parentElement.insertBefore(hero, insertPoint);
+  }
+
+  function enhanceTabs() {
+    const tabs = document.querySelector('.nav-tabs, .nav, ul.nav');
+    if (!tabs || tabs.classList.contains('gp-account-tabs')) return;
+
+    tabs.classList.add('gp-account-tabs');
+  }
+
+  function enhanceFormSections() {
+    // Find all form groups and wrap them in sections
+    const formGroups = document.querySelectorAll('.form-group, .mb-3, form > div');
+
+    // Style existing buttons
+    const buttons = document.querySelectorAll('button, .btn');
+    buttons.forEach(btn => {
+      if (btn.closest('.gp-account-hero')) return;
+      btn.classList.add('gp-styled-btn');
+    });
+
+    // Style existing tables (notifications)
+    const tables = document.querySelectorAll('table');
+    tables.forEach(table => {
+      table.classList.add('gp-account-notif-table');
+    });
+
+    // Find and enhance 2FA section
+    const twoFaText = document.body.innerText;
+    if (twoFaText.includes('Two-factor') || twoFaText.includes('2FA')) {
+      const twoFaHeader = Array.from(document.querySelectorAll('strong, h4, h5'))
+        .find(el => el.textContent.includes('Two-factor'));
+
+      if (twoFaHeader) {
+        const twoFaSection = twoFaHeader.closest('div');
+        if (twoFaSection && !twoFaSection.classList.contains('gp-account-2fa')) {
+          twoFaSection.classList.add('gp-account-2fa');
+        }
+      }
+    }
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(initAccountRedesign, 500));
+  } else {
+    setTimeout(initAccountRedesign, 500);
+  }
+
+})();
+
+// =============================================================================
 // MODULE: MASS ORDER PAGE REDESIGN — BULK ORDERING EXPERIENCE
 // =============================================================================
 (function () {
