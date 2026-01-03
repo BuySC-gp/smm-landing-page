@@ -6402,14 +6402,56 @@ cursor: pointer !important;
     prompt += '- Format: JSON\n\n';
     prompt += 'Available Actions:\n';
 
-    // Extract available actions from page
+    // Extract actions from section headers (h2, h3, h4)
+    const headers = document.querySelectorAll('h2, h3, h4');
+    const actionNames = [];
+
+    headers.forEach(header => {
+      const text = header.textContent.trim().toLowerCase();
+      // Skip headers that are part of our injected content
+      if (header.closest('.gp-api-hero') ||
+        header.closest('.gp-api-ai-section') ||
+        header.closest('.gp-api-code-block')) return;
+
+      // Look for action-related headers
+      if (text.includes('service') || text.includes('order') ||
+        text.includes('status') || text.includes('balance') ||
+        text.includes('refill') || text.includes('cancel') ||
+        text.includes('add') || text.includes('list') ||
+        text.includes('error') || text.includes('response')) {
+        actionNames.push(header.textContent.trim());
+      }
+    });
+
+    // Also try to find action values from tables
     const tables = document.querySelectorAll('table');
     tables.forEach(table => {
-      const headerText = table.previousElementSibling?.textContent || '';
-      if (headerText.toLowerCase().includes('parameters')) return;
-
-      prompt += '- ' + headerText.trim() + '\n';
+      const rows = table.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+          const param = cells[0]?.textContent?.trim().toLowerCase();
+          const value = cells[1]?.textContent?.trim();
+          if (param === 'action' && value) {
+            actionNames.push('action=' + value);
+          }
+        }
+      });
     });
+
+    // Remove duplicates and add to prompt
+    const uniqueActions = [...new Set(actionNames)];
+    if (uniqueActions.length > 0) {
+      uniqueActions.forEach(action => {
+        prompt += '- ' + action + '\n';
+      });
+    } else {
+      // Fallback: common SMM panel actions
+      prompt += '- services (get list of services)\n';
+      prompt += '- add (create new order)\n';
+      prompt += '- status (check order status)\n';
+      prompt += '- balance (check account balance)\n';
+    }
 
     prompt += '\nPlease help me write code to interact with this API.';
 
