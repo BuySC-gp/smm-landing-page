@@ -488,8 +488,13 @@ cursor: pointer !important;
           let iconHtml = null;
           let iconColor = '#6b7280';
 
-          // Chercher par index dans le map Select2
-          if (iconByIndex[i]) {
+          // CAS SPÉCIAL: Forcer icône étoile pour "Favorites" (index 0)
+          if (i === 0 && text.toLowerCase().includes('favorite')) {
+            iconHtml = '⭐';
+            iconColor = '#f59e0b';
+          }
+          // Sinon: chercher par index dans le map Select2
+          else if (iconByIndex[i]) {
             iconHtml = iconByIndex[i];
           }
 
