@@ -5556,6 +5556,7 @@ cursor: pointer !important;
     // === AI-FRIENDLY FEATURES ===
     addExportActionsBar();
     addAIUsageSection();
+    relocatePHPExampleButton();
     addStructuredData();
 
     // === SETUP EVENT DELEGATION FOR COPY BUTTONS ===
@@ -6471,6 +6472,34 @@ cursor: pointer !important;
       '</div>';
 
     exportBar.insertAdjacentElement('afterend', aiSection);
+  }
+
+  function relocatePHPExampleButton() {
+    // Find the PHP example button - it's usually a link with "Example of PHP code" text
+    const phpButton = Array.from(document.querySelectorAll('a.btn, a.btn-big-secondary, button'))
+      .find(el => el.textContent.toLowerCase().includes('example of php') ||
+        el.textContent.toLowerCase().includes('php code'));
+
+    if (!phpButton) return;
+
+    // Find the AI section to insert after it
+    const aiSection = document.querySelector('.gp-api-ai-section');
+    if (!aiSection) return;
+
+    // Create a wrapper to style the button nicely
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'margin-bottom: 24px;';
+
+    // Clone and style the button
+    const clonedButton = phpButton.cloneNode(true);
+    clonedButton.style.cssText = 'display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #0891b2 0%, #0ea5e9 100%); color: white; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s;';
+    clonedButton.innerHTML = '📄 ' + clonedButton.textContent.trim();
+
+    wrapper.appendChild(clonedButton);
+    aiSection.insertAdjacentElement('afterend', wrapper);
+
+    // Hide the original button
+    phpButton.style.display = 'none';
   }
 
   function addStructuredData() {
