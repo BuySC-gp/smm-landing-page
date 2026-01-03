@@ -593,18 +593,18 @@ cursor: pointer !important;
         document.querySelector('form')?.closest('.row');
       if (!rowDiv) return;
 
-      // Ouvrir le Select2 pour extraire les icônes
-      const select2Container = document.querySelector('.select2-container');
-      if (select2Container && !document.querySelector('.select2-results__option')) {
-        // Simuler un clic pour ouvrir le dropdown
-        select2Container.querySelector('.select2-selection')?.click();
+      // Ouvrir le Select2 pour extraire les icônes (mousedown fonctionne, pas click)
+      const select2Selection = document.querySelector('.select2-container .select2-selection');
+      if (select2Selection && !document.querySelector('.select2-results__option')) {
+        // Simuler mousedown pour ouvrir le dropdown
+        select2Selection.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
         // Attendre que les options soient rendues, puis extraire et refermer
         setTimeout(() => {
           const categories = extractCategoriesFromSelect();
 
           // Refermer le dropdown
-          document.body.click();
+          document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
           if (categories.length === 0) {
             console.warn('⚠️ [QUICK SELECTORS] No categories found');
@@ -612,7 +612,7 @@ cursor: pointer !important;
           }
 
           buildQuickSelectorsBar(rowDiv, categories);
-        }, 200);
+        }, 300);
         return;
       }
 
