@@ -9419,13 +9419,14 @@ cursor: pointer !important;
         display: none !important;
       }
       
-      /* Hide native search bar */
-      #gp-pub-services-container ~ .row,
-      .gp-pub-services-wrapper ~ .row,
-      body:has(#gp-pub-services-container) > .container > .row:first-of-type,
-      body:has(#gp-pub-services-container) .row:has(.btn-primary):has(input),
-      .container > .row:has(input[type="text"]):has(.btn),
-      .row:has(.dropdown):has(input):has(.btn-primary) {
+      /* Hide native search bar - specific classes */
+      .services-filters,
+      .component_filter_form_group,
+      .component_filter_card,
+      .component_platforms,
+      .component_filter_button,
+      div[class*="services-filters"],
+      div[class*="component_filter"] {
         display: none !important;
       }
       
