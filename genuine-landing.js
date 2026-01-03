@@ -6589,7 +6589,8 @@ cursor: pointer !important;
   // Détection page Account / Notifications
   const isAccountPage = window.location.pathname.includes('/account') ||
     window.location.pathname.includes('/profile') ||
-    window.location.pathname.includes('/settings');
+    window.location.pathname.includes('/settings') ||
+    window.location.pathname.includes('/notifications');
 
   if (!isAccountPage) return;
 
@@ -7052,17 +7053,25 @@ cursor: pointer !important;
 
     if (!insertPoint) return;
 
+    // Detect if notifications page
+    const isNotificationsPage = window.location.pathname.includes('/notifications');
+    const heroTitle = isNotificationsPage ? 'Notifications' : 'Account Settings';
+    const heroSubtitle = isNotificationsPage
+      ? 'Manage your notification preferences and alerts'
+      : 'Manage your profile, security, and preferences';
+    const heroIcon = isNotificationsPage ? '🔔' : initial;
+
     const hero = document.createElement('div');
     hero.className = 'gp-account-hero';
     hero.innerHTML = `
       <div class="gp-account-hero-content">
         <div class="gp-account-hero-avatar">
-          ${initial}
+          ${heroIcon}
         </div>
         <div class="gp-account-hero-info">
-          <h1 class="gp-account-hero-title">Account Settings</h1>
-          <p class="gp-account-hero-subtitle">Manage your profile, security, and preferences</p>
-          ${email ? `<div class="gp-account-hero-email">📧 ${email}</div>` : ''}
+          <h1 class="gp-account-hero-title">${heroTitle}</h1>
+          <p class="gp-account-hero-subtitle">${heroSubtitle}</p>
+          ${!isNotificationsPage && email ? `<div class="gp-account-hero-email">📧 ${email}</div>` : ''}
         </div>
       </div>
     `;
