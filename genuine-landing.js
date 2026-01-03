@@ -6586,9 +6586,12 @@ cursor: pointer !important;
 (function () {
   'use strict';
 
-  // Détection page Tickets
+  // Détection page Tickets (list + conversation view)
   const isTicketsPage = window.location.pathname.includes('/tickets') ||
-    window.location.pathname.includes('/ticket');
+    window.location.pathname.includes('/ticket') ||
+    window.location.pathname.includes('/viewticket');
+
+  const isViewTicketPage = window.location.pathname.includes('/viewticket');
 
   if (!isTicketsPage) return;
 
@@ -6618,9 +6621,17 @@ cursor: pointer !important;
     injectStyles();
 
     // === ENHANCE PAGE ===
-    addHeroHeader();
-    enhanceForm();
-    enhanceTable();
+    if (isViewTicketPage) {
+      // Conversation view
+      addConversationHero();
+      enhanceConversationMessages();
+      enhanceReplyForm();
+    } else {
+      // Tickets list
+      addHeroHeader();
+      enhanceForm();
+      enhanceTable();
+    }
 
     console.log('✅ [Tickets] Premium Redesign Applied!');
   }
@@ -6932,6 +6943,130 @@ cursor: pointer !important;
         text-decoration: underline;
       }
       
+      /* === CONVERSATION VIEW STYLES === */
+      
+      /* Conversation Card */
+      .gp-tickets-conv-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+      }
+      
+      /* Message bubbles */
+      .gp-ticket-message {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-left: 4px solid #3b82f6;
+      }
+      
+      .gp-ticket-message.admin {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left-color: #f59e0b;
+      }
+      
+      .gp-ticket-message-content {
+        color: #1e293b;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      
+      .gp-ticket-message-content a {
+        color: #2563eb;
+        font-weight: 600;
+      }
+      
+      .gp-ticket-message-meta {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(0,0,0,0.1);
+        font-size: 12px;
+        color: #64748b;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .gp-ticket-message-author {
+        font-weight: 600;
+        color: #334155;
+      }
+      
+      /* Reply Form */
+      .gp-tickets-reply-card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+      }
+      
+      .gp-tickets-reply-header {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0 0 16px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .gp-tickets-reply-card textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 14px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        resize: vertical;
+        transition: all 0.2s;
+        background: #f8fafc;
+      }
+      
+      .gp-tickets-reply-card textarea:focus {
+        outline: none;
+        border-color: #f59e0b;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      }
+      
+      .gp-tickets-reply-card button[type="submit"],
+      .gp-tickets-reply-card .btn-primary {
+        background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+        border: none !important;
+        padding: 12px 24px !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        color: white !important;
+        cursor: pointer;
+        transition: all 0.2s !important;
+        width: 100%;
+        margin-top: 12px;
+      }
+      
+      .gp-tickets-reply-card button[type="submit"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4) !important;
+      }
+      
+      /* Attach files in conv */
+      .gp-tickets-reply-card a[href*="attach"],
+      .gp-tickets-conv-card a[href*="attach"] {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #f59e0b;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        margin-bottom: 12px;
+      }
+      
       /* Responsive */
       @media (max-width: 768px) {
         .gp-tickets-hero {
@@ -7099,6 +7234,109 @@ cursor: pointer !important;
         cell.innerHTML = `<span class="gp-ticket-status ${statusClass}">${cell.textContent.trim()}</span>`;
       }
     });
+  }
+
+  // === CONVERSATION PAGE FUNCTIONS ===
+
+  function addConversationHero() {
+    if (document.querySelector('.gp-tickets-hero')) return;
+
+    // Get ticket subject from page title or h1/h2
+    const existingTitle = document.querySelector('h1, h2');
+    const ticketSubject = existingTitle ? existingTitle.textContent.trim() : 'Ticket Conversation';
+
+    // Find where to insert
+    const mainContent = document.querySelector('.wrapper-content__body') ||
+      document.querySelector('.main-content') ||
+      document.querySelector('.content') ||
+      document.querySelector('main');
+
+    const insertPoint = existingTitle || (mainContent ? mainContent.firstElementChild : null);
+
+    if (!insertPoint) return;
+
+    // Hide original title
+    if (existingTitle) {
+      existingTitle.style.display = 'none';
+    }
+
+    const hero = document.createElement('div');
+    hero.className = 'gp-tickets-hero';
+    hero.innerHTML = `
+      <div class="gp-tickets-hero-content">
+        <div style="flex: 1;">
+          <h1 class="gp-tickets-hero-title">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            ${ticketSubject}
+          </h1>
+          <p class="gp-tickets-hero-subtitle">View and reply to your support ticket</p>
+        </div>
+        <a href="/tickets" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 10px; color: white; text-decoration: none; font-weight: 600; font-size: 13px; backdrop-filter: blur(10px);">
+          ← Back to Tickets
+        </a>
+      </div>
+    `;
+
+    insertPoint.parentElement.insertBefore(hero, insertPoint);
+  }
+
+  function enhanceConversationMessages() {
+    // Find message containers - typically divs with background color or specific structure
+    const messageContainers = document.querySelectorAll('div[style*="background"], .message, .ticket-message, .reply');
+
+    messageContainers.forEach(msg => {
+      if (msg.closest('.gp-tickets-hero') || msg.closest('.gp-tickets-reply-card')) return;
+      if (msg.classList.contains('gp-ticket-message')) return;
+
+      // Check if it looks like a message (has text content)
+      const hasText = msg.textContent.trim().length > 0;
+      const hasLink = msg.querySelector('a');
+      const bgStyle = msg.getAttribute('style') || '';
+
+      if (hasText && (bgStyle.includes('background') || hasLink)) {
+        msg.classList.add('gp-ticket-message');
+
+        // Check if admin message
+        const text = msg.textContent.toLowerCase();
+        if (text.includes('admin') || text.includes('support')) {
+          msg.classList.add('admin');
+        }
+      }
+    });
+
+    // Also wrap existing blue message boxes
+    const blueBoxes = document.querySelectorAll('div[style*="#"]');
+    blueBoxes.forEach(box => {
+      const style = box.getAttribute('style') || '';
+      if (style.includes('bfdbfe') || style.includes('dbeafe') || style.includes('93c5fd')) {
+        if (!box.classList.contains('gp-ticket-message')) {
+          box.classList.add('gp-ticket-message');
+        }
+      }
+    });
+  }
+
+  function enhanceReplyForm() {
+    const form = document.querySelector('form');
+    if (!form || form.closest('.gp-tickets-reply-card') || form.closest('.gp-tickets-form-card')) return;
+
+    // Check if this looks like a reply form (has textarea)
+    const textarea = form.querySelector('textarea');
+    if (!textarea) return;
+
+    // Wrap form in styled card
+    const card = document.createElement('div');
+    card.className = 'gp-tickets-reply-card';
+
+    const header = document.createElement('h3');
+    header.className = 'gp-tickets-reply-header';
+    header.innerHTML = '💬 Reply to this ticket';
+
+    form.parentElement.insertBefore(card, form);
+    card.appendChild(header);
+    card.appendChild(form);
   }
 
   // Initialisation
