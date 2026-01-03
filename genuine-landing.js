@@ -5573,6 +5573,7 @@ cursor: pointer !important;
         border-radius: 16px !important;
         padding: 32px 40px !important;
         margin-bottom: 24px !important;
+        margin-top: 0 !important;
         position: relative !important;
         overflow: hidden !important;
         color: white !important;
@@ -5800,6 +5801,7 @@ cursor: pointer !important;
       .gp-api-code-content {
         padding: 20px;
         overflow-x: auto;
+        background: #1e293b !important;
       }
       
       .gp-api-code-content pre {
