@@ -412,154 +412,191 @@ cursor: pointer !important;
     }
   }, 300);
 
-  /* MODULE: QUICK CATEGORY SELECTORS (Les boutons magiques) */
+  /* MODULE: QUICK CATEGORY SELECTORS — VERSION DYNAMIQUE */
   (function () {
-    // === DÉTECTION PAGE NEW ORDER (FIX APPARITION SUR AUTRES PAGES) ===
+    // === DÉTECTION PAGE NEW ORDER ===
     const isNewOrderPage = document.querySelector('#block_206') ||
       document.querySelector('.new_order_block') ||
       document.querySelector('.row.new-order-form');
 
     if (!isNewOrderPage) {
       console.log('ℹ️ [QUICK SELECTORS] Not on New Order page - skipping');
-      return; // ← On sort du module
+      return;
     }
-    console.log('✅ [QUICK SELECTORS] Detected - Injecting buttons');
+    console.log('✅ [QUICK SELECTORS] Detected - Building dynamic buttons');
 
-    // 1. CONFIGURATION DES BOUTONS (ICONE + FILTRE)
-    const quickApps = [
-      { name: 'Instagram', filter: 'instagram', color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
-      { name: 'TikTok', filter: 'tiktok', color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 3a.5.5 0 0 0-.5.5v14a4.5 4.5 0 1 1-4.5-4.5.5.5 0 0 0 .5-.5V9.8a.5.5 0 0 0-.5-.5 1.5 1.5 0 1 1 0-3 .5.5 0 0 0 .5-.5V3zM15 6a3 3 0 0 1-3-3h3v3z"/></svg>' },
-      { name: 'YouTube', filter: 'youtube', color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
-      { name: 'Spotify', filter: 'spotify', color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
-      { name: 'Telegram', filter: 'telegram', color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
-      { name: 'Everything', filter: 'everything', color: '#6b7280', icon: '⚡' }
-    ];
-    // 2. INJECTION DU HTML (LE VISUEL)
-    function injectQuickSelectors() {
-      const form = document.querySelector('form');
+    // === CONFIGURATION DES ICÔNES SVG PAR PLATEFORME ===
+    const platformIcons = {
+      'instagram': { color: '#E4405F', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7.8,2H16.2C19.4,2 22,4.6 22,7.8V16.2A5.8,5.8 0 0,1 16.2,22H7.8C4.6,22 2,19.4 2,16.2V7.8A5.8,5.8 0 0,1 7.8,2M7.6,4A3.6,3.6 0 0,0 4,7.6V16.4C4,18.39 5.61,20 7.6,20H16.4A3.6,3.6 0 0,0 20,16.4V7.6C20,5.61 18.39,4 16.4,4H7.6M17.25,5.5A1.25,1.25 0 0,1 18.5,6.75A1.25,1.25 0 0,1 17.25,8A1.25,1.25 0 0,1 16,6.75A1.25,1.25 0 0,1 17.25,5.5M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9Z"/></svg>' },
+      'tiktok': { color: '#000000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg>' },
+      'youtube': { color: '#FF0000', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>' },
+      'spotify': { color: '#1DB954', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.717.476-1.076.236-2.948-1.8-6.661-2.209-11.033-1.211-.428.093-.826-.165-.92-.583-.094-.419.165-.826.583-.92 4.795-1.096 8.956-.633 12.21 1.341.359.24.476.717.236 1.076zm1.534-3.414c-.302.494-.969.643-1.462.34-3.7-2.274-9.339-2.933-13.712-1.603-.541.164-1.121-.137-1.285-.678-.163-.54.137-1.121.678-1.285 4.966-1.511 11.235-.749 15.441 1.836.494.302.643.97.34 1.462zm.126-3.551c-4.437-2.634-11.751-2.876-15.996-1.587-.621.196-1.29-.153-1.487-.775-.196-.621.153-1.29.775-1.488 4.881-1.481 12.969-1.206 18.045 1.808.56.332.744 1.066.413 1.625-.332.559-1.066.744-1.625.413z"/></svg>' },
+      'telegram': { color: '#0088CC', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' },
+      'twitter': { color: '#1DA1F2', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>' },
+      'facebook': { color: '#1877F2', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>' },
+      'twitch': { color: '#9146FF', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/></svg>' },
+      'discord': { color: '#5865F2', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189z"/></svg>' },
+      'linkedin': { color: '#0A66C2', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>' },
+      'soundcloud': { color: '#FF5500', icon: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.175 12.225c-.051 0-.094.046-.101.1l-.233 2.154.233 2.105c.007.058.05.098.101.098.05 0 .09-.04.099-.098l.255-2.105-.27-2.154c-.009-.054-.048-.1-.084-.1zm-.899.828c-.06 0-.091.037-.104.094L0 14.479l.165 1.308c.014.057.045.094.09.094s.089-.037.099-.094l.194-1.308-.194-1.332c-.01-.057-.044-.094-.09-.094z"/></svg>' },
+      'favorite': { color: '#f59e0b', icon: '⭐' },
+      'default': { color: '#6b7280', icon: '📱' }
+    };
 
-      // On évite les doublons
-      if (document.getElementById('quick-selectors-bar')) return;
-
-      // On cherche le conteneur PRINCIPAL (la ligne qui contient colonne gauche + droite)
-      const rowDiv = document.querySelector('.row.new-order-form') || (form ? form.closest('.row') : null);
-      if (rowDiv) {
-        const wrapper = document.createElement('div');
-        wrapper.id = 'quick-selectors-bar';
-        wrapper.style.cssText = `
-                display: flex;
-                gap: 10px;
-                overflow-x: auto;
-                padding: 4px 10px 16px 10px; /* Un peu de padding */
-                margin-bottom: 24px;
-                width: 100%;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE */
-            `;
-
-        // Masquer la scrollbar
-        const style = document.createElement('style');
-        style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
-        document.head.appendChild(style);
-
-        // Générer les boutons
-        quickApps.forEach(app => {
-          const btn = document.createElement('button');
-          btn.className = 'quick-selector-btn';
-          btn.dataset.filter = app.filter;
-          btn.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 10px 20px;
-                    background: white;
-                    border: 1px solid #e5e7eb;
-                    border-radius: 50px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #4b5563;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    transition: all 0.2s ease;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-                `;
-
-          // Icon styling
-          const iconSpan = document.createElement('span');
-          iconSpan.innerHTML = app.icon;
-          iconSpan.style.cssText = `
-                    display: flex;
-                    align-items: center;
-                    width: 20px;
-                    height: 20px;
-                    color: ${app.color};
-                `;
-          if (app.filter === 'everything') iconSpan.style.fontSize = '16px'; // Emoji fix
-          btn.prepend(iconSpan);
-          btn.append(app.name);
-
-          // Hover effects
-          btn.onmouseenter = () => {
-            btn.style.borderColor = app.color;
-            btn.style.color = '#1f2937';
-            btn.style.transform = 'translateY(-2px)';
-            btn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.08)';
-          };
-          btn.onmouseleave = () => {
-            btn.style.borderColor = '#e5e7eb';
-            btn.style.color = '#4b5563';
-            btn.style.transform = 'translateY(0)';
-            btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
-          };
-
-          // 3. LOGIQUE DU CLIC (LE LIEN)
-          btn.addEventListener('click', function (e) {
-            e.preventDefault(); // Empêche le submit du formulaire
-
-            // Animation click
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
-            const filter = this.dataset.filter.toLowerCase();
-            const select = document.querySelector('select[name*="category"], #category');
-
-            if (!select) return;
-            let foundIndex = -1;
-            if (filter === 'everything') {
-              foundIndex = 0; // Retour au début
-            } else {
-              // Recherche intelligente dans le menu déroulant
-              for (let i = 0; i < select.options.length; i++) {
-                const text = select.options[i].text.toLowerCase();
-                // On cherche si le texte de la catégorie contient "instagram", "tiktok", etc.
-                if (text.includes(filter)) {
-                  foundIndex = i;
-                  break; // On prend le premier trouvé
-                }
-              }
-            }
-            if (foundIndex >= 0) {
-              select.selectedIndex = foundIndex;
-              // On simule le changement pour que le panel mette à jour les services
-              select.dispatchEvent(new Event('change', { bubbles: true }));
-              console.log(`✅ Quick Selector: Switched to ${filter}`);
-            } else {
-              console.warn(`⚠️ Aucune catégorie trouvée pour "${filter}"`);
-            }
-          });
-          wrapper.appendChild(btn);
-        });
-
-        // === INSERTION CORRIGÉE (FULL WIDTH) ===
-        // On insère AVANT le conteneur flex "rowDiv" pour qu'il soit au-dessus de tout
-        if (rowDiv.parentNode) {
-          rowDiv.parentNode.insertBefore(wrapper, rowDiv);
-          console.log('✅ Quick Selectors Bar injected (Full Width Mode)');
+    // === FONCTION: Récupérer l'icône pour une catégorie ===
+    function getIconForCategory(categoryName) {
+      const name = categoryName.toLowerCase();
+      for (const [platform, data] of Object.entries(platformIcons)) {
+        if (name.includes(platform)) {
+          return data;
         }
       }
+      return platformIcons.default;
     }
-    // Lancer après un court délai pour être sûr que le layout est prêt
+
+    // === FONCTION: Extraire les catégories depuis le <select> natif ===
+    function extractCategoriesFromSelect() {
+      const select = document.querySelector('select[name*="category"], #category');
+      if (!select) return [];
+
+      const categories = [];
+      for (let i = 0; i < select.options.length; i++) {
+        const text = select.options[i].text.trim();
+        if (text) {
+          const iconData = getIconForCategory(text);
+          categories.push({
+            name: text,
+            index: i,
+            color: iconData.color,
+            icon: iconData.icon
+          });
+        }
+      }
+      return categories;
+    }
+
+    // === FONCTION: Création d'un bouton ===
+    function createButton(category, isFirst = false) {
+      const btn = document.createElement('button');
+      btn.className = 'quick-selector-btn';
+      btn.dataset.index = category.index;
+      btn.style.cssText = `
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #4b5563;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      `;
+
+      // Icône
+      const iconSpan = document.createElement('span');
+      iconSpan.innerHTML = category.icon;
+      iconSpan.style.cssText = `
+        display: flex;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+        color: ${category.color};
+        ${category.icon.startsWith('<') ? '' : 'font-size: 16px;'}
+      `;
+      btn.appendChild(iconSpan);
+
+      // Label (renommer "Favorite services" en "⭐ Favorites")
+      let displayName = category.name;
+      if (category.name.toLowerCase().includes('favorite')) {
+        displayName = 'Favorites';
+      }
+      btn.appendChild(document.createTextNode(displayName));
+
+      // Hover effects
+      btn.onmouseenter = () => {
+        btn.style.borderColor = category.color;
+        btn.style.color = '#1f2937';
+        btn.style.transform = 'translateY(-2px)';
+        btn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.08)';
+      };
+      btn.onmouseleave = () => {
+        btn.style.borderColor = '#e5e7eb';
+        btn.style.color = '#4b5563';
+        btn.style.transform = 'translateY(0)';
+        btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.03)';
+      };
+
+      // Click action
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => this.style.transform = 'translateY(-2px)', 150);
+
+        const select = document.querySelector('select[name*="category"], #category');
+        if (select) {
+          select.selectedIndex = parseInt(this.dataset.index);
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+          console.log(`✅ Quick Selector: Switched to "${category.name}" (index ${category.index})`);
+        }
+      });
+
+      return btn;
+    }
+
+    // === INJECTION PRINCIPALE ===
+    function injectQuickSelectors() {
+      // Éviter doublons
+      if (document.getElementById('quick-selectors-bar')) return;
+
+      const rowDiv = document.querySelector('.row.new-order-form') ||
+        document.querySelector('form')?.closest('.row');
+      if (!rowDiv) return;
+
+      const categories = extractCategoriesFromSelect();
+      if (categories.length === 0) {
+        console.warn('⚠️ [QUICK SELECTORS] No categories found in select');
+        return;
+      }
+
+      // Créer le wrapper
+      const wrapper = document.createElement('div');
+      wrapper.id = 'quick-selectors-bar';
+      wrapper.style.cssText = `
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 4px 10px 16px 10px;
+        margin-bottom: 24px;
+        width: 100%;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      `;
+
+      // Masquer la scrollbar
+      const style = document.createElement('style');
+      style.textContent = `#quick-selectors-bar::-webkit-scrollbar { display: none; }`;
+      document.head.appendChild(style);
+
+      // Créer les boutons dynamiquement
+      categories.forEach((cat, idx) => {
+        const btn = createButton(cat, idx === 0);
+        wrapper.appendChild(btn);
+      });
+
+      // Insérer avant le formulaire
+      if (rowDiv.parentNode) {
+        rowDiv.parentNode.insertBefore(wrapper, rowDiv);
+        console.log(`✅ [QUICK SELECTORS] Dynamic bar injected with ${categories.length} categories`);
+      }
+    }
+
+    // Lancer après délai
     setTimeout(injectQuickSelectors, 600);
-    setTimeout(injectQuickSelectors, 1500); // 2ème passe de sécurité
+    setTimeout(injectQuickSelectors, 1500); // 2ème passe
   })();
 })();
 
@@ -5237,3 +5274,4 @@ cursor: pointer !important;
   }
 
 })();
+
