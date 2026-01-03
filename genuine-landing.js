@@ -5170,3 +5170,70 @@ cursor: pointer !important;
   }
 
 })();
+
+// =============================================================================
+// MODULE: STATS BAR SVG ICONS INJECTION
+// =============================================================================
+(function () {
+  'use strict';
+
+  // Icônes SVG personnalisées pour chaque carte
+  const statsIcons = {
+    // 1. Username - Icône User moderne
+    user: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>`,
+
+    // 2. Spent Balance - Icône Trending Up
+    spent: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+      <polyline points="17 6 23 6 23 12"/>
+    </svg>`,
+
+    // 3. Account Balance - Icône Wallet
+    wallet: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+      <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+      <path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>
+    </svg>`,
+
+    // 4. Active Services - Icône Activity
+    activity: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>`
+  };
+
+  function injectStatsIcons() {
+    const statsBlock = document.querySelector('#block_206');
+    if (!statsBlock || statsBlock.dataset.iconsInjected) return;
+
+    const cards = statsBlock.querySelectorAll('.row > [class*="col-"]');
+    if (cards.length < 4) return;
+
+    const iconKeys = ['user', 'spent', 'wallet', 'activity'];
+    const iconColors = ['#6366f1', '#f59e0b', '#10b981', '#3b82f6'];
+
+    cards.forEach((card, index) => {
+      if (index >= 4) return;
+
+      const iconContainer = card.querySelector('.totals-block__card-left');
+      if (iconContainer && !iconContainer.dataset.svgInjected) {
+        iconContainer.dataset.svgInjected = 'true';
+        iconContainer.innerHTML = statsIcons[iconKeys[index]];
+        iconContainer.style.color = iconColors[index];
+      }
+    });
+
+    statsBlock.dataset.iconsInjected = 'true';
+    console.log('✅ [STATS BAR] Custom SVG icons injected');
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(injectStatsIcons, 500));
+  } else {
+    setTimeout(injectStatsIcons, 500);
+  }
+
+})();
