@@ -533,17 +533,38 @@ cursor: pointer !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.03);
       `;
 
-      // Icône
+      // Icône - contraindre la taille des images
       const iconSpan = document.createElement('span');
       iconSpan.innerHTML = category.icon;
       iconSpan.style.cssText = `
         display: flex;
         align-items: center;
+        justify-content: center;
         width: 20px;
         height: 20px;
+        min-width: 20px;
+        max-width: 20px;
+        overflow: hidden;
+        flex-shrink: 0;
         color: ${category.color};
         ${category.icon.startsWith('<') ? '' : 'font-size: 16px;'}
       `;
+
+      // Appliquer les styles aux images et SVG enfants
+      const imgChild = iconSpan.querySelector('img');
+      const svgChild = iconSpan.querySelector('svg');
+      const faChild = iconSpan.querySelector('[class*="fa-"]');
+
+      if (imgChild) {
+        imgChild.style.cssText = 'width: 20px; height: 20px; object-fit: contain; border-radius: 4px;';
+      }
+      if (svgChild) {
+        svgChild.style.cssText = 'width: 20px; height: 20px;';
+      }
+      if (faChild) {
+        faChild.style.cssText = 'font-size: 16px;';
+      }
+
       btn.appendChild(iconSpan);
 
       // Label (renommer "Favorite services" en "⭐ Favorites")
