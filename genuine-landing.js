@@ -5812,6 +5812,16 @@ cursor: pointer !important;
         color: #e2e8f0;
         white-space: pre-wrap;
         word-break: break-all;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+      
+      /* Override container padding */
+      [id^="block_api"],
+      #block_api {
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
       }
       
       /* JSON Syntax Highlighting */
